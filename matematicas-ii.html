@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matemàtiques II · 2n Batxillerat · IES CTEIB · Curs 2026-27</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+<style>
+:root{
+  --paper:#F5F7FA; --surface:#fff; --ink:#131F2D; --ink-soft:#4C5A6B;
+  --indigo:#2B4A8B; --deep:#14254A;
+  --amber:#B0700F; --amber-bg:#FCF4E3; --amber-ln:#E7C684;
+  --teal:#0F7A69; --teal-bg:#E7F3F0; --teal-ln:#96D1C6;
+  --rose:#AC3147; --rose-bg:#FBEAED; --rose-ln:#E2A5AF;
+  --mc:#527F33; --mc-bg:#EFF5E7; --mc-ln:#AECB8E;
+  --casio:#5B4B8A; --casio-bg:#F0EDF7; --casio-ln:#BFB2DE;
+  --line:#DBE2EA;
+  --sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --disp:"Space Grotesk",var(--sans);
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:16.5px;line-height:1.63;-webkit-font-smoothing:antialiased}
+
+/* ============ SIDEBAR ============ */
+.sidebar{position:fixed;top:0;left:0;width:272px;height:100vh;overflow-y:auto;
+  background:var(--deep);color:#c9d4e6;padding:24px 16px 48px;z-index:40}
+.brand{padding:0 6px}
+.brand .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#8ba1c9}
+.brand b{display:block;font-family:var(--disp);font-weight:700;font-size:1.3rem;color:#fff;margin-top:5px;line-height:1.08}
+.brand span{display:block;font-size:.73rem;color:#7d92ba;margin-top:6px}
+.prog{margin:16px 6px 4px;background:#20325a;border-radius:20px;height:7px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4d7ec9,#7fc48f);transition:width .4s}
+.progtxt{font-family:var(--mono);font-size:.68rem;color:#8ba1c9;margin:6px 6px 0}
+.srch{margin:14px 6px 2px}
+.srch input{width:100%;background:#1d2e54;border:1px solid #2c4271;color:#e4ebf7;
+  border-radius:8px;padding:8px 11px;font-family:var(--sans);font-size:.83rem}
+.srch input::placeholder{color:#7d92ba}
+.srch input:focus{outline:2px solid #4d7ec9;outline-offset:0}
+.nb{margin-top:20px}
+.nb .nh{font-family:var(--mono);font-size:.67rem;letter-spacing:.11em;text-transform:uppercase;
+  color:#9cb0d6;padding:0 6px 5px;border-bottom:1px solid #26385f;margin-bottom:5px}
+.sidebar a{display:flex;gap:9px;align-items:baseline;color:#bbc8de;text-decoration:none;
+  font-size:.845rem;padding:5px 9px;border-radius:6px;border-left:2px solid transparent;line-height:1.35}
+.sidebar a .n{font-family:var(--mono);font-size:.72rem;color:#7386a9;flex:none;width:15px}
+.sidebar a:hover{background:#22355e;color:#fff}
+.sidebar a.active{background:#22355e;color:#fff;border-left-color:#7fc48f}
+.sidebar a.active .n{color:#7fc48f}
+.sidebar a.done .n::after{content:"✓";color:#7fc48f}
+.sidebar a.done .n{font-size:0}
+.sidebar a.hide{display:none}
+
+/* ============ LAYOUT ============ */
+.wrap{margin-left:272px;padding:0 clamp(18px,5vw,70px)}
+main{max-width:800px;margin:0 auto;padding:56px 0 130px}
+
+/* ============ HERO ============ */
+.hero{padding:10px 0 26px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--indigo)}
+.hero h1{font-family:var(--disp);font-weight:700;font-size:clamp(2.2rem,5.6vw,3.3rem);
+  line-height:1;margin:.3em 0 .16em;letter-spacing:-.015em}
+.hero .lead{font-size:1.04rem;color:var(--ink-soft);max-width:60ch;margin:.2em 0 0}
+.hero .meta{font-family:var(--mono);font-size:.76rem;color:var(--ink-soft);margin-top:16px}
+
+/* ============ EVAL PANEL ============ */
+.evalgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:10px;margin:18px 0}
+.ev{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 14px;position:relative;overflow:hidden}
+.ev .pct{font-family:var(--disp);font-weight:700;font-size:1.65rem;line-height:1;color:var(--indigo)}
+.ev .lb{font-size:.79rem;color:var(--ink-soft);margin-top:5px;line-height:1.38}
+.ev .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--indigo)}
+.ev.a .pct{color:var(--indigo)} .ev.a .bar{background:var(--indigo)}
+.ev.b .pct{color:var(--casio)} .ev.b .bar{background:var(--casio)}
+.ev.c .pct{color:var(--teal)} .ev.c .bar{background:var(--teal)}
+.ev.d .pct{color:var(--amber)} .ev.d .bar{background:var(--amber)}
+
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(144px,1fr));gap:7px;margin:20px 0 6px}
+.legend div{font-size:.79rem;color:var(--ink-soft);padding:6px 10px;border-radius:7px;
+  background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;gap:7px}
+.legend i{width:11px;height:11px;border-radius:3px;flex:none}
+
+/* ============ UNIT HEADERS ============ */
+.unit{margin:64px 0 0;scroll-margin-top:18px}
+.uhead{border-top:1px solid var(--line);padding-top:20px;margin-bottom:6px}
+.ubadge{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ubadge .num{font-family:var(--disp);font-weight:700;font-size:.82rem;background:var(--deep);color:#fff;
+  width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex:none}
+.ubadge .blk{font-family:var(--mono);font-size:.67rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-ln);padding:2px 8px;border-radius:20px}
+.uhead h2{font-family:var(--disp);font-weight:700;font-size:clamp(1.55rem,3.6vw,2.05rem);
+  line-height:1.08;margin:.34em 0 .2em;color:var(--deep);letter-spacing:-.012em}
+.uhead .sub{color:var(--ink-soft);font-size:.95rem;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:13px 0 4px}
+.chips span{font-size:.75rem;font-family:var(--mono);color:var(--indigo);background:#EAF0FB;
+  border:1px solid #C6D6F0;padding:3px 9px;border-radius:20px}
+.udone{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;color:var(--ink-soft);
+  cursor:pointer;margin-top:12px;user-select:none;background:var(--surface);
+  border:1px solid var(--line);padding:5px 12px;border-radius:20px}
+.udone input{accent-color:var(--teal);width:15px;height:15px;cursor:pointer}
+.udone.on{background:var(--teal-bg);border-color:var(--teal-ln);color:var(--teal)}
+
+h4{font-family:var(--disp);font-weight:600;font-size:1.06rem;margin:1.9em 0 .4em;color:var(--deep)}
+p{margin:.68em 0} ul,ol{margin:.55em 0;padding-left:1.35em} li{margin:.3em 0}
+strong{font-weight:600} .muted{color:var(--ink-soft)}
+code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;border-radius:4px;color:var(--deep)}
+
+/* ============ BOXES ============ */
+.box{border-radius:11px;padding:14px 17px 14px 19px;margin:17px 0;border:1px solid var(--line);
+  border-left-width:4px;background:var(--surface)}
+.box .bl{font-family:var(--mono);font-size:.69rem;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.box p:first-of-type{margin-top:0} .box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
+.def{border-left-color:var(--indigo)} .def .bl{color:var(--indigo)}
+.thm{border-left-color:var(--amber);background:#FFFDF7} .thm .bl{color:var(--amber)}
+.method{border-left-color:var(--teal);background:#FAFDFC} .method .bl{color:var(--teal)}
+.method ol{counter-reset:s;list-style:none;padding-left:0;margin-top:.45em}
+.method ol>li{counter-increment:s;position:relative;padding-left:33px;margin:.5em 0}
+.method ol>li::before{content:counter(s);position:absolute;left:0;top:.06em;width:22px;height:22px;
+  background:var(--teal);color:#fff;font-family:var(--mono);font-size:.76rem;border-radius:50%;
+  display:flex;align-items:center;justify-content:center}
+.warn{border-left-color:var(--rose);background:var(--rose-bg)} .warn .bl{color:var(--rose)}
+.tip{border-left-color:var(--amber);background:var(--amber-bg)} .tip .bl{color:var(--amber)}
+.mcb{border-left-color:var(--mc);background:var(--mc-bg)} .mcb .bl{color:#3C6222}
+.mcb .katex{color:#1E3310}
+.blk{width:15px;height:15px;flex:none;border:1.5px solid #2E4A1B;
+  background:linear-gradient(to bottom,#7FC94F 0 42%,#8B5A2B 42% 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28)}
+.cas{border-left-color:var(--casio);background:var(--casio-bg)} .cas .bl{color:var(--casio)}
+.casio-ico{width:15px;height:13px;flex:none;border:1.5px solid var(--casio);border-radius:2px;
+  background:repeating-linear-gradient(to bottom,#fff 0 3px,var(--casio-ln) 3px 4px)}
+
+/* ============ FORMULAS ============ */
+.katex{color:var(--ink)}
+.katex-display{margin:1em 0;overflow-x:auto;overflow-y:hidden;padding:3px 2px}
+.katex-display>.katex{font-size:1.34em}
+.formula{background:var(--amber-bg);border:1px solid var(--amber-ln);border-radius:11px;
+  padding:21px 19px 18px;margin:18px 0;text-align:center;position:relative;overflow-x:auto}
+.formula .fl{position:absolute;top:-9px;left:16px;font-family:var(--mono);font-size:.65rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);padding:0 7px}
+.formula .katex{font-size:1.1em}
+.formula .katex-display>.katex{font-size:1.44em}
+.formula .katex-display{margin:.3em 0}
+
+.ex{border:1px dashed var(--line);border-radius:11px;padding:14px 17px;margin:17px 0;background:#FCFDFE}
+.ex .el{font-family:var(--mono);font-size:.69rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:7px;display:block}
+.ex .el b{color:var(--teal)}
+
+.tbl{width:100%;border-collapse:collapse;margin:15px 0;font-size:.91rem}
+.tbl th,.tbl td{border:1px solid var(--line);padding:7px 11px;text-align:left}
+.tbl th{background:#EDF1F6;font-family:var(--disp);font-weight:600;color:var(--deep);font-size:.87rem}
+.tbl .katex{font-size:1.04em}
+.scroll-x{overflow-x:auto}
+
+/* ============ QUIZ ============ */
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:22px 0}
+.quiz .qh{font-family:var(--mono);font-size:.69rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--indigo);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.quiz .qh .sc{font-family:var(--mono);color:var(--ink-soft);letter-spacing:0;text-transform:none;font-size:.76rem}
+.q{margin:0 0 16px;padding-bottom:14px;border-bottom:1px dashed var(--line)}
+.q:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.q .qt{font-weight:500;margin-bottom:9px;line-height:1.5}
+.q .qt .qn{font-family:var(--mono);color:var(--ink-soft);font-size:.82rem;margin-right:7px}
+.opt{display:block;width:100%;text-align:left;background:#FBFCFD;border:1px solid var(--line);
+  border-radius:8px;padding:8px 13px;margin:5px 0;cursor:pointer;font-family:var(--sans);
+  font-size:.93rem;color:var(--ink);line-height:1.45;transition:.13s}
+.opt:hover:not(:disabled){border-color:var(--indigo);background:#F2F6FD}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--teal-bg);border-color:var(--teal);color:#0B5A4D;font-weight:500}
+.opt.no{background:var(--rose-bg);border-color:var(--rose);color:#8A2439}
+.fb{font-size:.87rem;margin-top:9px;padding:9px 12px;border-radius:8px;display:none;line-height:1.5}
+.fb.show{display:block}
+.fb.ok{background:var(--teal-bg);color:#0B5A4D;border:1px solid var(--teal-ln)}
+.fb.no{background:var(--rose-bg);color:#8A2439;border:1px solid var(--rose-ln)}
+.fb b{font-family:var(--mono);font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:3px}
+
+/* ============ TOOLS ============ */
+.tool{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:17px 19px;margin:20px 0}
+.tool h5{font-family:var(--disp);font-weight:600;font-size:1.02rem;margin:0 0 4px;color:var(--deep)}
+.tool .td{font-size:.85rem;color:var(--ink-soft);margin:0 0 13px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:280px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:380px}
+.tool input[type=number],.tool input[type=text]{width:100%;padding:7px 8px;border:1px solid var(--line);
+  border-radius:7px;font-family:var(--mono);font-size:.88rem;text-align:center;color:var(--ink);background:#FBFCFD}
+.tool input:focus{outline:2px solid var(--indigo);outline-offset:-1px;background:#fff}
+.tool label{font-size:.79rem;color:var(--ink-soft);display:block;margin:11px 0 5px;font-weight:500}
+.btn{background:var(--indigo);color:#fff;border:none;border-radius:8px;padding:9px 18px;
+  font-family:var(--disp);font-weight:600;font-size:.87rem;cursor:pointer;margin-top:13px}
+.btn:hover{background:#1F3A73}
+.btn.gh{background:transparent;color:var(--indigo);border:1px solid var(--line);margin-left:7px}
+.btn.gh:hover{background:#F0F4FB}
+.out{margin-top:13px;padding:13px 15px;background:#F7F9FC;border:1px solid var(--line);
+  border-radius:9px;font-size:.92rem;display:none;line-height:1.7}
+.out.show{display:block}
+.out .r{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.out .r:last-child{border-bottom:none}
+.out .r b{font-weight:600;color:var(--deep)}
+.out .verdict{font-family:var(--disp);font-weight:700;font-size:1.02rem;margin-bottom:7px;color:var(--indigo)}
+.matlbl{font-family:var(--mono);font-size:.76rem;color:var(--ink-soft);margin:9px 0 5px}
+
+/* ============ FLASHCARDS ============ */
+.fcw{background:var(--deep);border-radius:14px;padding:22px;margin:20px 0;text-align:center}
+.fc{background:#fff;border-radius:11px;padding:30px 22px;min-height:172px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.fc .side{font-family:var(--mono);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-soft);position:absolute;top:11px;left:15px}
+.fc .ct{font-size:1.06rem;line-height:1.55}
+.fc .ct .katex-display>.katex{font-size:1.5em}
+.fc .hint{font-family:var(--mono);font-size:.68rem;color:#9AA8B8;position:absolute;bottom:11px;right:15px}
+.fcn{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}
+.fcn button{background:#22355E;color:#CFDBEF;border:none;border-radius:8px;padding:8px 15px;
+  font-family:var(--disp);font-weight:600;font-size:.85rem;cursor:pointer}
+.fcn button:hover{background:#2C4270;color:#fff}
+.fcn .ctr{font-family:var(--mono);font-size:.78rem;color:#8BA1C9}
+
+/* ============ MISC ============ */
+.acc{border:1px solid var(--line);border-radius:10px;margin:14px 0;overflow:hidden;background:var(--surface)}
+.acc>summary{padding:12px 16px;cursor:pointer;font-family:var(--disp);font-weight:600;
+  font-size:.94rem;color:var(--deep);list-style:none;display:flex;justify-content:space-between;align-items:center}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::after{content:"+";font-family:var(--mono);font-size:1.15rem;color:var(--indigo)}
+.acc[open]>summary::after{content:"−"}
+.acc>summary:hover{background:#F5F8FC}
+.acc .accbody{padding:2px 16px 14px;border-top:1px solid var(--line)}
+.menu-btn{display:none;position:fixed;top:13px;left:13px;z-index:60;background:var(--deep);color:#fff;
+  border:none;width:45px;height:45px;border-radius:10px;font-size:1.25rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(9,15,28,.52);z-index:35}
+.nores{font-size:.8rem;color:#8BA1C9;padding:10px 8px;display:none}
+
+@media(max-width:940px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:282px}
+  body.nav-open .sidebar{transform:none}
+  body.nav-open .scrim{display:block}
+  .menu-btn{display:flex;align-items:center;justify-content:center}
+  .wrap{margin-left:0;padding:0 17px}
+  main{padding:72px 0 110px}
+  .grid3,.grid4{max-width:100%}
+}
+@media print{
+  .sidebar,.menu-btn,.scrim,.quiz,.tool,.fcw,.udone,.srch{display:none!important}
+  body{background:#fff;font-size:10.5pt}
+  .wrap{margin:0;padding:0} main{max-width:none;padding:0}
+  .box,.formula,.ex,.unit{break-inside:avoid}
+  .acc{border:none} .acc .accbody{display:block!important}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+
+<button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Menú">☰</button>
+<div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="k">IES CTEIB · 2026-27</div>
+    <b>Matemàtiques II</b>
+    <span>2n Batxillerat · Guia completa d'estudi</span>
+  </div>
+  <div class="prog"><i id="progbar"></i></div>
+  <div class="progtxt" id="progtxt">0 / 10 unitats</div>
+
+  <div class="srch"><input type="search" id="navsearch" placeholder="Buscar tema…" autocomplete="off"></div>
+  <div class="nores" id="nores">Sin resultados</div>
+
+  <div class="nb" id="nb-units">
+    <div class="nh">Unitats didàctiques</div>
+    <a href="#u1"><span class="n">1</span>Matrius i determinants</a>
+    <a href="#u2"><span class="n">2</span>Sistemes d'equacions</a>
+    <a href="#u3"><span class="n">3</span>Límits i continuïtat</a>
+    <a href="#u4"><span class="n">4</span>Derivades</a>
+    <a href="#u5"><span class="n">5</span>Representació de funcions</a>
+    <a href="#u6"><span class="n">6</span>Integrals</a>
+    <a href="#u7"><span class="n">7</span>Vectors en l'espai</a>
+    <a href="#u8"><span class="n">8</span>Geometria de l'espai</a>
+    <a href="#u9"><span class="n">9</span>Probabilitat</a>
+    <a href="#u10"><span class="n">10</span>Distribucions de probabilitat</a>
+  </div>
+
+  <div class="nb" id="nb-extra">
+    <div class="nh">Recursos</div>
+    <a href="#tools"><span class="n">⚙</span>Calculadoras interactivas</a>
+    <a href="#flash"><span class="n">⚡</span>Tarjetas de fórmulas</a>
+    <a href="#casio"><span class="n">🖩</span>Guía Casio fx-991</a>
+    <a href="#tablaz"><span class="n">Z</span>Tabla normal N(0,1)</a>
+    <a href="#examen"><span class="n">★</span>Estrategia de examen</a>
+  </div>
+</nav>
+
+<div class="wrap">
+<main>
+
+  <header class="hero">
+    <div class="eyebrow">Departament de Matemàtiques · Curs 2026-27</div>
+    <h1>Matemàtiques&nbsp;II</h1>
+    <p class="lead">Guía completa de las 10 unidades didácticas de 2n de Batxillerat, con teoría, métodos paso a paso, calculadoras interactivas, autoevaluación y explicaciones en Minecraft.</p>
+    <p class="meta">IES Centre de Tecnificació Esportiva Illes Balears · 2n Batx</p>
+  </header>
+
+  <h4 style="margin-top:26px">Cómo se evalúa la asignatura</h4>
+  <div class="evalgrid">
+    <div class="ev a"><div class="pct">80%</div><div class="lb">Modelizar y resolver problemas, con razonamiento y argumentación. Preferiblemente pruebas escritas.</div><div class="bar" style="width:80%"></div></div>
+    <div class="ev b"><div class="pct">10%</div><div class="lb">Herramientas tecnológicas y pensamiento computacional. Prueba global a final de curso.</div><div class="bar" style="width:10%"></div></div>
+    <div class="ev c"><div class="pct">5%</div><div class="lb">Comunicar ideas con rigor y lenguaje matemático. Tareas y pruebas escritas.</div><div class="bar" style="width:5%"></div></div>
+    <div class="ev d"><div class="pct">5%</div><div class="lb">Actitud, perseverancia, deberes y compromiso con la asignatura.</div><div class="bar" style="width:5%"></div></div>
+  </div>
+
+  <div class="box tip"><span class="bl">Lo que más pesa, en corto</span>
+    <p>El <strong>80%</strong> se juega en las pruebas escritas, y no solo por el resultado: el criterio pide <em>obtener todas las soluciones, describir el proceso y demostrar su validez</em>. Un resultado correcto sin justificar pierde puntos; un procedimiento bien argumentado con un fallo de cuentas conserva la mayoría.</p>
+    <p>La <strong>prueba final de curso</strong> incluye todos los criterios ya evaluados: si algo te quedó flojo, ahí lo recuperas; si no, suma como una nota más. Quien no apruebe en mayo tiene examen extraordinario en junio <strong>más un trabajo</strong> con todos los contenidos.</p>
+  </div>
+
+  <div class="legend">
+    <div><i style="background:var(--indigo)"></i>Definición</div>
+    <div><i style="background:var(--amber)"></i>Teorema / fórmula</div>
+    <div><i style="background:var(--teal)"></i>Método paso a paso</div>
+    <div><i style="background:var(--rose)"></i>Error frecuente</div>
+    <div><i style="background:var(--mc)"></i>En Minecraft</div>
+    <div><i style="background:var(--casio)"></i>Con la Casio</div>
+  </div>
+
+
+<!-- ======================= U1 ======================= -->
+<section class="unit" id="u1">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">1</span><span class="blk">Àlgebra</span></div>
+    <h2>Matrius i determinants</h2>
+    <p class="sub">La herramienta para manejar muchos datos y muchas ecuaciones a la vez.</p>
+    <div class="chips"><span>Operaciones</span><span>Determinantes</span><span>Inversa</span><span>Rango</span><span>Ecuaciones matriciales</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u1"> Unidad dominada</label>
+  </div>
+
+  <div class="box def"><span class="bl">Definición</span>
+    <p>Una <strong>matriz</strong> $A=(a_{ij})$ de orden $m\times n$ es una tabla de $m$ filas y $n$ columnas. El elemento $a_{ij}$ está en la fila $i$, columna $j$.</p>
+  </div>
+
+  <h4>Tipos que debes reconocer</h4>
+  <ul>
+    <li><strong>Cuadrada</strong> ($m=n$) · <strong>identidad</strong> $I$ (unos en la diagonal) · <strong>diagonal</strong> · <strong>triangular</strong>.</li>
+    <li><strong>Traspuesta</strong> $A^{t}$: filas por columnas. <strong>Simétrica</strong> si $A^{t}=A$; <strong>antisimétrica</strong> si $A^{t}=-A$.</li>
+    <li><strong>Regular</strong> si $|A|\neq 0$ (tiene inversa); <strong>singular</strong> si $|A|=0$.</li>
+  </ul>
+
+  <h4>Producto de matrices</h4>
+  <div class="formula"><span class="fl">Fila por columna</span>
+    $$c_{ij}=\sum_{k=1}^{n} a_{ik}\,b_{kj}$$
+  </div>
+  <p>$A_{m\times n}\cdot B_{n\times p}=C_{m\times p}$. Solo se puede si las <strong>columnas de $A$</strong> coinciden con las <strong>filas de $B$</strong>.</p>
+
+  <div class="box warn"><span class="bl">Errores que cuestan puntos</span>
+    <ul>
+      <li>$A\cdot B \neq B\cdot A$ en general: el producto <strong>no es conmutativo</strong>.</li>
+      <li>$A\cdot B=0$ <strong>no</strong> implica $A=0$ ni $B=0$.</li>
+      <li>$(A\cdot B)^{t}=B^{t}\cdot A^{t}$ y $(A\cdot B)^{-1}=B^{-1}\cdot A^{-1}$: el orden <strong>se invierte</strong>.</li>
+    </ul>
+  </div>
+
+  <h4>Determinantes</h4>
+  <div class="formula"><span class="fl">Orden 2</span>
+    $$\begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad-bc$$
+  </div>
+  <div class="formula"><span class="fl">Orden 3 · regla de Sarrus</span>
+    $$\begin{vmatrix} a_1&a_2&a_3 \\ b_1&b_2&b_3 \\ c_1&c_2&c_3 \end{vmatrix}
+    = a_1b_2c_3+a_2b_3c_1+a_3b_1c_2-\big(a_3b_2c_1+a_1b_3c_2+a_2b_1c_3\big)$$
+  </div>
+
+  <div class="box method"><span class="bl">Desarrollo por adjuntos (Laplace)</span>
+    <ol>
+      <li>Elige la fila o columna con <strong>más ceros</strong>.</li>
+      <li>Aplica $|A|=\sum_j a_{ij}\,(-1)^{i+j}M_{ij}$, donde $M_{ij}$ es el menor al tachar fila $i$ y columna $j$.</li>
+      <li>Los signos siguen el tablero $\begin{smallmatrix}+&-&+\\-&+&-\\+&-&+\end{smallmatrix}$.</li>
+      <li>Truco: antes de desarrollar, <strong>haz ceros</strong> sumando a una fila un múltiplo de otra (no cambia el determinante).</li>
+    </ol>
+  </div>
+
+  <h4>Propiedades del determinante</h4>
+  <div class="scroll-x"><table class="tbl">
+    <tr><th>Propiedad</th><th>Consecuencia</th></tr>
+    <tr><td>$|A^{t}|=|A|$</td><td>Puedes trabajar con filas o columnas indistintamente</td></tr>
+    <tr><td>$|A\cdot B|=|A|\cdot|B|$</td><td>De aquí sale $|A^{-1}|=1/|A|$</td></tr>
+    <tr><td>Fila de ceros o dos proporcionales</td><td>$|A|=0$</td></tr>
+    <tr><td>Intercambiar dos filas</td><td>Cambia el <strong>signo</strong></td></tr>
+    <tr><td>Multiplicar una fila por $k$</td><td>El determinante se multiplica por $k$; por eso $|kA|=k^{n}|A|$</td></tr>
+    <tr><td>Sumar a una fila combinación de otras</td><td>$|A|$ <strong>no cambia</strong></td></tr>
+  </table></div>
+
+  <h4>Matriz inversa</h4>
+  <div class="formula"><span class="fl">Inversa por adjuntos</span>
+    $$A^{-1}=\frac{1}{|A|}\,\big(\operatorname{Adj}(A)\big)^{t}$$
+  </div>
+  <div class="box method"><span class="bl">Paso a paso</span>
+    <ol>
+      <li>Calcula $|A|$. Si vale $0$, <strong>no existe inversa</strong> y ahí acaba.</li>
+      <li>Sustituye cada elemento por su adjunto $A_{ij}=(-1)^{i+j}M_{ij}$.</li>
+      <li>Traspón la matriz de adjuntos.</li>
+      <li>Divide todo entre $|A|$.</li>
+      <li>Verifica: $A\cdot A^{-1}$ debe dar $I$.</li>
+    </ol>
+  </div>
+
+  <h4>Rango</h4>
+  <div class="box def"><span class="bl">Definición</span>
+    <p>El <strong>rango</strong> $\operatorname{rg}(A)$ es el orden del mayor menor no nulo, o el número de filas linealmente independientes. Por Gauss: filas no nulas tras escalonar.</p>
+  </div>
+
+  <h4>Ecuaciones matriciales</h4>
+  <p>Multiplica por $A^{-1}$ <strong>por el mismo lado</strong> en el que aparece $A$:</p>
+  <ul>
+    <li>$A X = B \Rightarrow X = A^{-1}B$ &nbsp;(por la izquierda)</li>
+    <li>$X A = B \Rightarrow X = B A^{-1}$ &nbsp;(por la derecha)</li>
+    <li>$A X A = B \Rightarrow X = A^{-1} B A^{-1}$</li>
+  </ul>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>Una matriz es una rejilla, como una capa de un esquema de WorldEdit. Sirven para <strong>transformar construcciones</strong>: cuando haces <code>//rotate 90</code> o <code>//flip</code>, se multiplican las coordenadas de cada bloque por una matriz. Multiplicar dos matrices es encadenar dos transformaciones en una sola —y por eso el orden importa: rotar y luego reflejar no deja la build igual que reflejar y luego rotar.</p>
+    <p>El <strong>determinante</strong> te dice si esa transformación aplasta el espacio: si $|A|=0$, tus tres direcciones caen en un plano y te queda una pared en vez de una sala. La <strong>inversa</strong> es el <code>//undo</code>: solo existe si no destruiste información. Y el <strong>rango</strong> es cuántas dimensiones reales te quedan: 3 = sala con volumen, 2 = pared, 1 = pasillo de un bloque.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p>Menú <code>MENU → 4: Matrix</code>. Define <code>MatA</code> y <code>MatB</code> con sus dimensiones e introduce los valores. Después, desde la pantalla de cálculo: <code>OPTN</code> te da <strong>det(</strong>, <strong>Transpose</strong> y las matrices guardadas. La inversa se saca con <code>MatA</code> seguido de la tecla <code>x⁻¹</code>.</p>
+    <p class="muted">Úsala para <strong>comprobar</strong>, nunca como sustituto del desarrollo: el 80% de la nota valora el proceso escrito. Pero en el 10% de competencia tecnológica esto es exactamente lo que se evalúa.</p>
+  </div>
+
+  <div class="quiz" data-unit="u1"></div>
+</section>
+
+<!-- ======================= U2 ======================= -->
+<section class="unit" id="u2">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">2</span><span class="blk">Àlgebra</span></div>
+    <h2>Sistemes d'equacions</h2>
+    <p class="sub">Clasificar y resolver sistemas lineales, y discutirlos cuando llevan parámetro.</p>
+    <div class="chips"><span>Rouché–Frobenius</span><span>Cramer</span><span>Gauss</span><span>Discusión con parámetro</span><span>Homogéneos</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u2"> Unidad dominada</label>
+  </div>
+
+  <p>Un sistema se escribe $A\cdot X=B$, con matriz de coeficientes $A$ y <strong>matriz ampliada</strong> $A^{*}=(A\mid B)$.</p>
+  <ul>
+    <li><strong>SCD</strong> — compatible determinado: solución única.</li>
+    <li><strong>SCI</strong> — compatible indeterminado: infinitas soluciones.</li>
+    <li><strong>SI</strong> — incompatible: ninguna solución.</li>
+  </ul>
+
+  <div class="box thm"><span class="bl">Teorema de Rouché–Frobenius</span>
+    <p>Con $n$ incógnitas:</p>
+    <ul>
+      <li>$\operatorname{rg}(A)=\operatorname{rg}(A^{*})=n \;\Rightarrow\;$ <strong>SCD</strong></li>
+      <li>$\operatorname{rg}(A)=\operatorname{rg}(A^{*})=r<n \;\Rightarrow\;$ <strong>SCI</strong>, con $n-r$ parámetros libres</li>
+      <li>$\operatorname{rg}(A)\neq\operatorname{rg}(A^{*}) \;\Rightarrow\;$ <strong>SI</strong></li>
+    </ul>
+  </div>
+
+  <div class="formula"><span class="fl">Regla de Cramer · válida si |A| ≠ 0</span>
+    $$x_i=\frac{|A_i|}{|A|}$$
+  </div>
+  <p class="muted">$A_i$ es $A$ con la columna $i$ sustituida por la columna de términos independientes $B$.</p>
+
+  <div class="box method"><span class="bl">Discusión con parámetro · el guion que esperan</span>
+    <ol>
+      <li>Calcula $|A|$ dejándolo <strong>factorizado</strong> en función del parámetro.</li>
+      <li>Resuelve $|A|=0$: esos son los <strong>valores críticos</strong>.</li>
+      <li>Para el resto de valores: $|A|\neq 0 \Rightarrow$ rango máximo $\Rightarrow$ <strong>SCD</strong> (y se puede aplicar Cramer).</li>
+      <li>Sustituye <strong>cada</strong> valor crítico por separado y recalcula $\operatorname{rg}(A)$ y $\operatorname{rg}(A^{*})$.</li>
+      <li>Clasifica cada caso y, si lo piden, resuelve el SCI dejando la solución en función de un parámetro.</li>
+    </ol>
+  </div>
+
+  <div class="box def"><span class="bl">Sistemas homogéneos (B = 0)</span>
+    <p><strong>Siempre son compatibles</strong>, porque $X=0$ siempre es solución. Son <strong>SCD</strong> (solo la trivial) si $|A|\neq 0$, y <strong>SCI</strong> (infinitas) si $|A|=0$. Nunca pueden ser incompatibles.</p>
+  </div>
+
+  <div class="ex"><span class="el"><b>Ejemplo resuelto</b> · discusión</span>
+    <p>Discute el sistema $\begin{cases} x+y+z=1 \\ x+\lambda y+z=2 \\ x+y+\lambda z=1\end{cases}$</p>
+    <p>$|A|=\begin{vmatrix}1&1&1\\1&\lambda&1\\1&1&\lambda\end{vmatrix}=(\lambda-1)^{2}$, que se anula solo en $\lambda=1$.</p>
+    <p><strong>Si $\lambda\neq 1$:</strong> $|A|\neq 0$, luego $\operatorname{rg}(A)=\operatorname{rg}(A^{*})=3=n$ y el sistema es <strong>SCD</strong>.</p>
+    <p><strong>Si $\lambda=1$:</strong> las tres ecuaciones tienen el mismo primer miembro $x+y+z$ pero términos independientes $1$, $2$ y $1$. Entonces $\operatorname{rg}(A)=1$ y $\operatorname{rg}(A^{*})=2$: son distintos, así que el sistema es <strong>SI</strong>.</p>
+  </div>
+
+  <div class="box warn"><span class="bl">Error frecuente</span>
+    <p>Aplicar Cramer sin comprobar antes que $|A|\neq 0$, o <strong>olvidar discutir los valores críticos</strong> uno por uno. Cada valor que anula el determinante es un caso aparte y hay que estudiarlo con su propia matriz ampliada.</p>
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>Piensa en <strong>recetas y recursos</strong>: quieres acabar con exactamente 64 tablones, 32 palos y 16 antorchas partiendo de ciertos materiales. ¿Cuántas veces ejecutas cada receta? Eso es un sistema. <strong>SCD</strong> = hay una única combinación que cuadra; <strong>SCI</strong> = muchas combinaciones sirven (te sobran grados de libertad); <strong>SI</strong> = imposible con esas recetas, te falta algún material base.</p>
+    <p>Geométricamente, cada ecuación es un plano: un suelo, una pared, un techo. <strong>SCD</strong> = los tres se cortan en un único bloque (una esquina); <strong>SCI</strong> = se cortan en toda una arista o comparten cara; <strong>SI</strong> = son paralelos y nunca coinciden, como dos suelos a distinta altura.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p><code>MENU → 1: Equation</code> resuelve sistemas de 2, 3 y 4 incógnitas numéricos al instante. Si el sistema no tiene solución única, la calculadora avisa con <em>Infinite Solutions</em> o <em>No Solution</em>: úsalo para confirmar tu clasificación.</p>
+    <p class="muted">Ojo: <strong>no discute parámetros</strong>. Con $\lambda$ dentro tienes que ir a mano; lo que sí puedes es sustituir cada valor crítico y comprobar el caso numérico.</p>
+  </div>
+
+  <div class="quiz" data-unit="u2"></div>
+</section>
+
+<!-- ======================= U3 ======================= -->
+<section class="unit" id="u3">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">3</span><span class="blk">Anàlisi</span></div>
+    <h2>Límits i continuïtat</h2>
+    <p class="sub">Acercarse a un valor sin llegar a él, y funciones que se dibujan sin levantar el lápiz.</p>
+    <div class="chips"><span>Indeterminaciones</span><span>L'Hôpital</span><span>Asíntotas</span><span>Continuidad</span><span>Bolzano</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u3"> Unidad dominada</label>
+  </div>
+
+  <p>$\displaystyle\lim_{x\to a}f(x)=L$ existe <strong>si y solo si</strong> coinciden los límites laterales: $\displaystyle\lim_{x\to a^{-}}f(x)=\lim_{x\to a^{+}}f(x)=L$.</p>
+
+  <h4>Las 7 indeterminaciones</h4>
+  <div class="formula"><span class="fl">Reconócelas de un vistazo</span>
+    $$\frac{0}{0}\qquad \frac{\infty}{\infty}\qquad \infty-\infty\qquad 0\cdot\infty\qquad 1^{\infty}\qquad 0^{0}\qquad \infty^{0}$$
+  </div>
+
+  <div class="box method"><span class="bl">Qué hacer en cada caso</span>
+    <ol>
+      <li><strong>$\tfrac00$ con polinomios:</strong> factoriza (Ruffini) y simplifica el factor $(x-a)$.</li>
+      <li><strong>$\tfrac00$ con raíces:</strong> multiplica y divide por el <strong>conjugado</strong>.</li>
+      <li><strong>$\tfrac{\infty}{\infty}$ de polinomios:</strong> compara grados. Si el de arriba es mayor, $\pm\infty$; si es menor, $0$; si son iguales, el cociente de los coeficientes principales.</li>
+      <li><strong>$\infty-\infty$:</strong> reduce a común denominador o usa el conjugado para convertirlo en cociente.</li>
+      <li><strong>$0\cdot\infty$:</strong> reescribe como $\tfrac{0}{0}$ o $\tfrac{\infty}{\infty}$ pasando un factor al denominador.</li>
+      <li><strong>$1^{\infty}$:</strong> usa la fórmula del número $e$ (abajo).</li>
+    </ol>
+  </div>
+
+  <div class="formula"><span class="fl">Indeterminación 1 elevado a infinito</span>
+    $$\lim_{x\to a} f(x)^{g(x)}=e^{\,\lim\limits_{x\to a}\,g(x)\,\left(f(x)-1\right)}$$
+  </div>
+
+  <div class="box thm"><span class="bl">Regla de L'Hôpital</span>
+    <p>Si el límite da $\tfrac{0}{0}$ o $\tfrac{\infty}{\infty}$, entonces $\displaystyle\lim\frac{f(x)}{g(x)}=\lim\frac{f'(x)}{g'(x)}$, siempre que este último exista. Se puede aplicar varias veces seguidas.</p>
+    <p class="muted">Deriva numerador y denominador <strong>por separado</strong>: no es la derivada de un cociente.</p>
+  </div>
+
+  <h4>Asíntotas</h4>
+  <div class="scroll-x"><table class="tbl">
+    <tr><th>Tipo</th><th>Condición</th><th>Cómo se calcula</th></tr>
+    <tr><td>Vertical $x=a$</td><td>$\lim\limits_{x\to a}f(x)=\pm\infty$</td><td>Donde se anula el denominador (y no el numerador)</td></tr>
+    <tr><td>Horizontal $y=L$</td><td>$\lim\limits_{x\to\pm\infty}f(x)=L$</td><td>Límite en el infinito</td></tr>
+    <tr><td>Oblicua $y=mx+n$</td><td>Solo si <strong>no</strong> hay horizontal</td><td>$m=\lim\limits_{x\to\infty}\dfrac{f(x)}{x}$, &nbsp; $n=\lim\limits_{x\to\infty}\big(f(x)-mx\big)$</td></tr>
+  </table></div>
+
+  <h4>Continuidad</h4>
+  <div class="box def"><span class="bl">Las tres condiciones</span>
+    <p>$f$ es continua en $x=a$ si: <strong>(1)</strong> existe $f(a)$, <strong>(2)</strong> existe $\lim\limits_{x\to a}f(x)$, y <strong>(3)</strong> ambos coinciden.</p>
+  </div>
+  <ul>
+    <li><strong>Evitable:</strong> el límite existe pero no vale $f(a)$ (o $f(a)$ no está definida).</li>
+    <li><strong>Salto finito:</strong> los laterales existen pero son distintos.</li>
+    <li><strong>Salto infinito (asintótica):</strong> algún lateral es $\pm\infty$.</li>
+  </ul>
+
+  <div class="box thm"><span class="bl">Bolzano · Weierstrass · Darboux</span>
+    <p><strong>Bolzano:</strong> si $f$ es continua en $[a,b]$ y $f(a)\cdot f(b)<0$, existe $c\in(a,b)$ con $f(c)=0$. Es <em>la</em> herramienta para demostrar que una ecuación tiene solución.</p>
+    <p><strong>Weierstrass:</strong> continua en un cerrado $[a,b]$ $\Rightarrow$ alcanza máximo y mínimo absolutos.</p>
+    <p><strong>Darboux:</strong> continua en $[a,b]$ $\Rightarrow$ toma todos los valores intermedios entre $f(a)$ y $f(b)$.</p>
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>Para hacer una <strong>cúpula lisa</strong> colocas bloques en escalera: cuantos más uses y más pequeños sean, más se parece el escalonado a una curva suave —sin llegar nunca a serlo del todo. Eso es un límite: acercarte tanto como quieras sin tocar el valor.</p>
+    <p>Una función <strong>continua</strong> es un camino que recorres sin caerte: sin huecos. Una <strong>discontinuidad evitable</strong> es un único bloque que falta en el suelo; un <strong>salto finito</strong> es un escalón de dos bloques; un <strong>salto infinito</strong> es el borde del vacío. Y <strong>Bolzano</strong>: si en un punto estás bajo el nivel del mar y en otro por encima, en algún sitio cruzaste Y = 63 sí o sí.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p>Para intuir un límite, usa <code>MENU → 3: Table</code> y genera valores acercándote al punto (por ejemplo $x = 1{,}9$; $1{,}99$; $1{,}999$) y por el otro lado. Ves hacia dónde tiende sin resolverlo. Para asíntotas horizontales, evalúa con <code>CALC</code> en $x=10^{6}$.</p>
+    <p class="muted">Es una comprobación numérica, no una demostración: en el examen tienes que escribir el límite resuelto.</p>
+  </div>
+
+  <div class="quiz" data-unit="u3"></div>
+</section>
+
+<!-- ======================= U4 ======================= -->
+<section class="unit" id="u4">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">4</span><span class="blk">Anàlisi</span></div>
+    <h2>Derivades</h2>
+    <p class="sub">La pendiente en cada punto: la unidad más rentable de toda la asignatura.</p>
+    <div class="chips"><span>Definición</span><span>Tabla</span><span>Regla de la cadena</span><span>Derivabilidad</span><span>Optimización</span><span>Rolle · Lagrange</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u4"> Unidad dominada</label>
+  </div>
+
+  <div class="formula"><span class="fl">Definición</span>
+    $$f'(a)=\lim_{h\to 0}\frac{f(a+h)-f(a)}{h}$$
+  </div>
+  <p>$f'(a)$ es la <strong>pendiente de la recta tangente</strong> en $x=a$. La tangente es $y-f(a)=f'(a)(x-a)$, y la <strong>normal</strong> (perpendicular) tiene pendiente $-1/f'(a)$.</p>
+
+  <div class="box def"><span class="bl">Derivabilidad</span>
+    <p>$f$ es derivable en $a$ si las derivadas laterales existen <strong>y coinciden</strong>. Toda función derivable es continua, <strong>pero no al revés</strong>: $f(x)=|x|$ es continua en $0$ y no derivable (pico).</p>
+  </div>
+
+  <h4>Tabla de derivadas</h4>
+  <div class="scroll-x"><table class="tbl">
+    <tr><th>$f(x)$</th><th>$f'(x)$</th><th>$f(x)$</th><th>$f'(x)$</th></tr>
+    <tr><td>$x^{n}$</td><td>$n\,x^{n-1}$</td><td>$\sin x$</td><td>$\cos x$</td></tr>
+    <tr><td>$\sqrt{x}$</td><td>$\dfrac{1}{2\sqrt{x}}$</td><td>$\cos x$</td><td>$-\sin x$</td></tr>
+    <tr><td>$e^{x}$</td><td>$e^{x}$</td><td>$\tan x$</td><td>$\dfrac{1}{\cos^{2}x}=1+\tan^{2}x$</td></tr>
+    <tr><td>$a^{x}$</td><td>$a^{x}\ln a$</td><td>$\arcsin x$</td><td>$\dfrac{1}{\sqrt{1-x^{2}}}$</td></tr>
+    <tr><td>$\ln x$</td><td>$\dfrac{1}{x}$</td><td>$\arccos x$</td><td>$-\dfrac{1}{\sqrt{1-x^{2}}}$</td></tr>
+    <tr><td>$\log_a x$</td><td>$\dfrac{1}{x\ln a}$</td><td>$\arctan x$</td><td>$\dfrac{1}{1+x^{2}}$</td></tr>
+  </table></div>
+
+  <div class="formula"><span class="fl">Reglas de derivación</span>
+    $$(u\cdot v)'=u'v+uv' \qquad \left(\frac{u}{v}\right)'=\frac{u'v-uv'}{v^{2}} \qquad \big(f\circ g\big)'(x)=f'\big(g(x)\big)\cdot g'(x)$$
+  </div>
+
+  <div class="box tip"><span class="bl">Derivación logarítmica · para f(x) elevado a g(x)</span>
+    <p>Si hay variable en la base <em>y</em> en el exponente, toma logaritmos: de $y=f(x)^{g(x)}$ pasa a $\ln y=g(x)\ln f(x)$, deriva los dos lados y despeja $y'$ (recuerda multiplicar al final por $y$).</p>
+  </div>
+
+  <h4>Aplicaciones</h4>
+  <ul>
+    <li>$f'(x)>0 \Rightarrow$ <strong>creciente</strong>; &nbsp; $f'(x)<0 \Rightarrow$ <strong>decreciente</strong>.</li>
+    <li><strong>Extremos relativos:</strong> candidatos donde $f'(x)=0$. Máximo si $f'$ pasa de $+$ a $-$; mínimo si pasa de $-$ a $+$.</li>
+    <li><strong>Criterio de la segunda derivada:</strong> si $f'(a)=0$ y $f''(a)>0$ hay mínimo; si $f''(a)<0$, máximo.</li>
+  </ul>
+
+  <div class="box thm"><span class="bl">Rolle y valor medio (Lagrange)</span>
+    <p><strong>Rolle:</strong> $f$ continua en $[a,b]$, derivable en $(a,b)$ y $f(a)=f(b)$ $\Rightarrow$ existe $c\in(a,b)$ con $f'(c)=0$.</p>
+    <p><strong>Lagrange:</strong> con las mismas hipótesis salvo la igualdad, existe $c$ con $\;f'(c)=\dfrac{f(b)-f(a)}{b-a}$.</p>
+  </div>
+
+  <div class="box method"><span class="bl">Problemas de optimización · receta completa</span>
+    <ol>
+      <li>Nombra las variables y escribe la <strong>función a optimizar</strong>.</li>
+      <li>Usa la condición del enunciado (la ligadura) para dejarla con <strong>una sola variable</strong>.</li>
+      <li>Indica el <strong>dominio</strong> con sentido físico (longitudes positivas, etc.).</li>
+      <li>Deriva, resuelve $f'(x)=0$.</li>
+      <li><strong>Justifica</strong> que es máximo o mínimo (signo de $f'$ o valor de $f''$). Este paso es el que suelen olvidar.</li>
+      <li>Responde a la pregunta concreta, con unidades.</li>
+    </ol>
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>La derivada es la <strong>pendiente del terreno</strong>: cuántos bloques subes por cada bloque que avanzas. Una llanura tiene $f'=0$; una cuesta suave, $f'$ pequeña; un acantilado, $f'$ enorme. La recta tangente es la rampa que roza la ladera justo en ese bloque.</p>
+    <p>Buscar extremos es localizar el <strong>pico más alto o el valle más hondo</strong>: justo donde el terreno se pone plano. Y la optimización es min-maxing puro: "con 100 bloques de valla, ¿qué dimensiones dan la granja más grande?" — máximo espacio con mínimos recursos. La respuesta, por cierto, siempre tiende al cuadrado.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p>La tecla <code>d/dx</code> calcula la derivada <strong>en un punto concreto</strong>: escribe la función, el valor de $x$, y te da $f'(a)$ numérico. Perfecto para verificar la pendiente de una tangente o comprobar que tu $f'(x)$ da lo mismo que la máquina en un par de valores.</p>
+    <p class="muted">No te da la expresión simbólica de $f'(x)$: eso lo escribes tú.</p>
+  </div>
+
+  <div class="quiz" data-unit="u4"></div>
+</section>
+
+<!-- ======================= U5 ======================= -->
+<section class="unit" id="u5">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">5</span><span class="blk">Anàlisi</span></div>
+    <h2>Representació de funcions</h2>
+    <p class="sub">Reunir todo lo anterior para dibujar una gráfica justificada.</p>
+    <div class="chips"><span>Dominio</span><span>Simetrías</span><span>Asíntotas</span><span>Monotonía</span><span>Curvatura</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u5"> Unidad dominada</label>
+  </div>
+
+  <div class="box method"><span class="bl">Estudio completo · el orden que esperan en el examen</span>
+    <ol>
+      <li><strong>Dominio:</strong> quita lo que anula denominadores, negativos dentro de raíces pares y argumentos $\le 0$ en logaritmos.</li>
+      <li><strong>Simetría:</strong> $f(-x)=f(x)$ es <strong>par</strong> (simétrica respecto al eje Y); $f(-x)=-f(x)$ es <strong>impar</strong> (respecto al origen).</li>
+      <li><strong>Cortes:</strong> con el eje X resolviendo $f(x)=0$; con el eje Y calculando $f(0)$.</li>
+      <li><strong>Asíntotas:</strong> verticales, horizontales y oblicuas (recuerda: horizontal y oblicua son excluyentes).</li>
+      <li><strong>Monotonía y extremos</strong> con el signo de $f'$.</li>
+      <li><strong>Curvatura e inflexiones</strong> con el signo de $f''$.</li>
+      <li><strong>Gráfica</strong> reuniendo todo, con los puntos notables etiquetados.</li>
+    </ol>
+  </div>
+
+  <div class="formula"><span class="fl">Curvatura</span>
+    $$f''(x)>0 \;\Rightarrow\; \text{cóncava hacia arriba } (\smile) \qquad\qquad f''(x)<0 \;\Rightarrow\; \text{cóncava hacia abajo } (\frown)$$
+  </div>
+  <p><strong>Punto de inflexión:</strong> donde $f''=0$ <em>y</em> cambia de signo. Que $f''(a)=0$ por sí solo no basta.</p>
+
+  <div class="box tip"><span class="bl">Tabla de signos, tu mejor aliada</span>
+    <p>Coloca en una recta los puntos críticos y los no incluidos en el dominio, y estudia el signo de $f'$ (y de $f''$) en cada intervalo. Con esa tabla, la gráfica sale prácticamente sola y además dejas por escrito la justificación que vale nota.</p>
+  </div>
+
+  <div class="box warn"><span class="bl">Errores frecuentes</span>
+    <ul>
+      <li>Buscar asíntota oblicua cuando ya hay horizontal: son incompatibles en la misma rama.</li>
+      <li>Olvidar que los puntos fuera del dominio también separan intervalos en la tabla de signos.</li>
+      <li>Dibujar la curva cortando una asíntota vertical: imposible, ahí la función no existe.</li>
+    </ul>
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>Es hacer <strong>ingeniería inversa de un bioma</strong>. Con los datos del terreno —dónde existe suelo (dominio), si es simétrico respecto a un eje, dónde cruza el nivel del mar (cortes), dónde sube y baja (monotonía) y cómo se curva (concavidad)— puedes dibujar el perfil completo de la montaña sin colocar un bloque a mano.</p>
+    <p>Las <strong>asíntotas</strong> son bedrock y build limit: bordes que el terreno se acerca pero nunca atraviesa. El <strong>punto de inflexión</strong> es donde la ladera deja de curvarse hacia dentro y empieza a curvarse hacia fuera: el cambio de cóncavo a convexo de una duna.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p><code>MENU → 3: Table</code> con tu $f(x)$: elige inicio, fin y paso, y obtienes una tabla de valores para situar la forma general antes de dibujar. También puedes meter $f'(x)$ como segunda función (<code>f(x)/g(x)</code>) y ver dónde cambia de signo.</p>
+  </div>
+
+  <div class="quiz" data-unit="u5"></div>
+</section>
+
+<!-- ======================= U6 ======================= -->
+<section class="unit" id="u6">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">6</span><span class="blk">Anàlisi</span></div>
+    <h2>Integrals</h2>
+    <p class="sub">Deshacer la derivada y, con ello, medir áreas y volúmenes.</p>
+    <div class="chips"><span>Inmediatas</span><span>Por partes</span><span>Cambio de variable</span><span>Racionales</span><span>Barrow</span><span>Áreas y volúmenes</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u6"> Unidad dominada</label>
+  </div>
+
+  <div class="box def"><span class="bl">Integral indefinida</span>
+    <p>$\displaystyle\int f(x)\,dx=F(x)+C$, donde $F'(x)=f(x)$. La constante $C$ representa <strong>todas</strong> las primitivas posibles: no la olvides nunca en la indefinida.</p>
+  </div>
+
+  <h4>Integrales inmediatas</h4>
+  <div class="scroll-x"><table class="tbl">
+    <tr><th>Integral</th><th>Resultado</th><th>Integral</th><th>Resultado</th></tr>
+    <tr><td>$\displaystyle\int x^{n}dx$</td><td>$\dfrac{x^{n+1}}{n+1}+C$ &nbsp;$(n\neq -1)$</td><td>$\displaystyle\int \sin x\,dx$</td><td>$-\cos x+C$</td></tr>
+    <tr><td>$\displaystyle\int \frac{1}{x}dx$</td><td>$\ln|x|+C$</td><td>$\displaystyle\int \cos x\,dx$</td><td>$\sin x+C$</td></tr>
+    <tr><td>$\displaystyle\int e^{x}dx$</td><td>$e^{x}+C$</td><td>$\displaystyle\int \frac{1}{\cos^{2}x}dx$</td><td>$\tan x+C$</td></tr>
+    <tr><td>$\displaystyle\int a^{x}dx$</td><td>$\dfrac{a^{x}}{\ln a}+C$</td><td>$\displaystyle\int \frac{1}{1+x^{2}}dx$</td><td>$\arctan x+C$</td></tr>
+    <tr><td>$\displaystyle\int \frac{f'}{f}dx$</td><td>$\ln|f|+C$</td><td>$\displaystyle\int \frac{1}{\sqrt{1-x^{2}}}dx$</td><td>$\arcsin x+C$</td></tr>
+  </table></div>
+
+  <div class="formula"><span class="fl">Integración por partes</span>
+    $$\int u\,dv = u\,v-\int v\,du$$
+  </div>
+  <div class="box tip"><span class="bl">Cómo elegir u · regla ALPES</span>
+    <p>Elige como $u$ lo primero que aparezca en esta lista: <strong>A</strong>rcos · <strong>L</strong>ogaritmos · <strong>P</strong>otencias · <strong>E</strong>xponenciales · <strong>S</strong>enos y cosenos. El resto es $dv$.</p>
+  </div>
+
+  <div class="box method"><span class="bl">Cambio de variable</span>
+    <ol>
+      <li>Busca una parte $t=g(x)$ cuya derivada aparezca (salvo constantes) multiplicando.</li>
+      <li>Calcula $dt=g'(x)dx$ y sustituye <strong>todo</strong>: no puede quedar ninguna $x$.</li>
+      <li>Integra respecto a $t$.</li>
+      <li><strong>Deshaz el cambio</strong> volviendo a $x$ (en la indefinida). En la definida, puedes cambiar también los límites y ahorrarte ese paso.</li>
+    </ol>
+  </div>
+
+  <div class="box method"><span class="bl">Funciones racionales · fracciones simples</span>
+    <ol>
+      <li>Si $\operatorname{grado}(\text{num}) \ge \operatorname{grado}(\text{den})$, <strong>divide</strong> primero.</li>
+      <li>Factoriza el denominador (Ruffini).</li>
+      <li>Descompón en fracciones simples con coeficientes $A$, $B$, $C$… e identifica.</li>
+      <li>Integra cada trozo: salen <strong>logaritmos</strong> y a veces <strong>arcotangentes</strong>.</li>
+    </ol>
+  </div>
+
+  <h4>Integral definida</h4>
+  <div class="box thm"><span class="bl">Regla de Barrow</span>
+    <p>$\displaystyle\int_{a}^{b}f(x)\,dx=F(b)-F(a)$, con $F$ primitiva de $f$. Aquí <strong>no</strong> se escribe la constante: se cancela.</p>
+  </div>
+  <div class="box thm"><span class="bl">Teorema fundamental del cálculo</span>
+    <p>Si $F(x)=\displaystyle\int_{a}^{x}f(t)\,dt$, entonces $F'(x)=f(x)$. Derivar e integrar son operaciones inversas.</p>
+  </div>
+
+  <div class="formula"><span class="fl">Área entre curvas</span>
+    $$A=\int_{a}^{b}\big|\,f(x)-g(x)\,\big|\,dx$$
+  </div>
+  <div class="box warn"><span class="bl">El error clásico del área</span>
+    <p>Si las curvas <strong>se cruzan</strong> dentro del intervalo, hay que <strong>partir la integral</strong> en los puntos de corte y sumar cada trozo en valor absoluto. Integrar de un tirón puede darte un área artificialmente pequeña o incluso negativa —y un área nunca es negativa.</p>
+  </div>
+
+  <div class="formula"><span class="fl">Volumen de revolución (giro alrededor del eje X)</span>
+    $$V=\pi\int_{a}^{b}\big[f(x)\big]^{2}dx$$
+  </div>
+
+  <div class="ex"><span class="el"><b>Ejemplo resuelto</b> · área entre curvas</span>
+    <p>Área encerrada entre $f(x)=x^{2}$ y $g(x)=x$.</p>
+    <p>Cortes: $x^{2}=x \Rightarrow x(x-1)=0 \Rightarrow x=0,\;x=1$. En $(0,1)$ se cumple $g\ge f$, luego:</p>
+    <p>$A=\displaystyle\int_{0}^{1}(x-x^{2})dx=\left[\frac{x^{2}}{2}-\frac{x^{3}}{3}\right]_{0}^{1}=\frac{1}{2}-\frac{1}{3}=\frac{1}{6}$ unidades cuadradas.</p>
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>Integrar es <strong>contar bloques</strong>. El área bajo una curva son los bloques que necesitas para rellenar bajo un tejado curvo; el área entre dos curvas, los del hueco entre dos tejados superpuestos.</p>
+    <p>El <strong>volumen de revolución</strong> es literalmente lo que haces al construir una torre redonda: coges el perfil de la silueta, lo giras 360° y cuentas los bloques del sólido resultante. Si alguna vez has estimado el material para un alminar cilíndrico antes de empezar a colocarlo, ya estabas integrando.</p>
+    <p>Y la relación derivada–integral: si conoces <strong>la pendiente</strong> del terreno en cada punto, la integral te reconstruye <strong>la forma</strong> completa de la ladera.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p>La tecla <code>∫dx</code> calcula <strong>integrales definidas</strong> numéricamente: metes la función y los límites $a$ y $b$, y te da el valor. Ideal para comprobar un área antes de darla por buena.</p>
+    <p class="muted">Cuidado: da el valor <em>con signo</em>. Si la función cambia de signo en el intervalo, el número no es el área —tienes que partirla tú igualmente.</p>
+  </div>
+
+  <div class="quiz" data-unit="u6"></div>
+</section>
+
+
+<!-- ======================= U7 ======================= -->
+<section class="unit" id="u7">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">7</span><span class="blk">Geometria</span></div>
+    <h2>Vectors en l'espai</h2>
+    <p class="sub">Coordenadas, los tres productos y lo que mide cada uno.</p>
+    <div class="chips"><span>Módulo</span><span>Producto escalar</span><span>Producto vectorial</span><span>Producto mixto</span><span>Dependencia lineal</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u7"> Unidad dominada</label>
+  </div>
+
+  <p>Un vector $\vec{v}=(v_1,v_2,v_3)$ en $\mathbb{R}^{3}$. El vector que va de $A$ a $B$ es $\overrightarrow{AB}=B-A$: siempre <strong>extremo menos origen</strong>.</p>
+
+  <div class="formula"><span class="fl">Módulo</span>
+    $$|\vec{v}|=\sqrt{v_1^{2}+v_2^{2}+v_3^{2}}$$
+  </div>
+
+  <h4>Los tres productos</h4>
+  <div class="formula"><span class="fl">Producto escalar · devuelve un número</span>
+    $$\vec{u}\cdot\vec{v}=u_1v_1+u_2v_2+u_3v_3=|\vec{u}|\,|\vec{v}|\cos\alpha$$
+  </div>
+  <div class="formula"><span class="fl">Ángulo y perpendicularidad</span>
+    $$\cos\alpha=\frac{\vec{u}\cdot\vec{v}}{|\vec{u}|\,|\vec{v}|}
+    \qquad\qquad \vec{u}\perp\vec{v}\iff \vec{u}\cdot\vec{v}=0$$
+  </div>
+
+  <div class="formula"><span class="fl">Producto vectorial · devuelve un vector perpendicular a ambos</span>
+    $$\vec{u}\times\vec{v}=\begin{vmatrix}\vec{i}&\vec{j}&\vec{k}\\ u_1&u_2&u_3\\ v_1&v_2&v_3\end{vmatrix}$$
+  </div>
+  <p>Su módulo $|\vec{u}\times\vec{v}|=|\vec{u}||\vec{v}|\sin\alpha$ es el <strong>área del paralelogramo</strong> que forman.</p>
+
+  <div class="formula"><span class="fl">Producto mixto · devuelve un número</span>
+    $$[\vec{u},\vec{v},\vec{w}]=\vec{u}\cdot(\vec{v}\times\vec{w})=\begin{vmatrix}u_1&u_2&u_3\\ v_1&v_2&v_3\\ w_1&w_2&w_3\end{vmatrix}$$
+  </div>
+
+  <div class="box tip"><span class="bl">Qué producto uso para cada cosa</span>
+    <div class="scroll-x"><table class="tbl" style="margin:.4em 0 0">
+      <tr><th>Necesito…</th><th>Uso</th></tr>
+      <tr><td>Ángulo entre dos elementos</td><td>Producto <strong>escalar</strong></td></tr>
+      <tr><td>Un vector perpendicular a otros dos</td><td>Producto <strong>vectorial</strong></td></tr>
+      <tr><td>Comprobar perpendicularidad</td><td>Escalar $=0$</td></tr>
+      <tr><td>Comprobar si son paralelos</td><td>Vectorial $=\vec{0}$ (o coordenadas proporcionales)</td></tr>
+      <tr><td>Área de un triángulo</td><td>$\frac{1}{2}|\vec{u}\times\vec{v}|$</td></tr>
+      <tr><td>Volumen de un tetraedro</td><td>$\frac{1}{6}\big|[\vec{u},\vec{v},\vec{w}]\big|$</td></tr>
+      <tr><td>Saber si 4 puntos son coplanarios</td><td>Mixto $=0$</td></tr>
+    </table></div>
+  </div>
+
+  <div class="box def"><span class="bl">Dependencia lineal</span>
+    <p>Dos vectores son <strong>dependientes</strong> (paralelos) si son proporcionales. Tres son <strong>independientes</strong> —y forman base de $\mathbb{R}^3$— si el determinante de sus coordenadas es $\neq 0$.</p>
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>El juego es literalmente una rejilla de coordenadas: <strong>X</strong> este–oeste, <strong>Y</strong> altura, <strong>Z</strong> norte–sur. Un vector es el desplazamiento entre dos bloques: "+5 al este, +3 arriba, −2 al norte". $\overrightarrow{AB}$ es exactamente lo que te tendrías que mover para ir de $A$ a $B$, y $|\overrightarrow{AB}|$ es la distancia en línea recta —como vuela un ghast, no como caminas.</p>
+    <p><strong>Escalar:</strong> el ángulo entre dos direcciones; si da 0, se cruzan en ángulo recto (paredes alineadas a la rejilla). <strong>Vectorial:</strong> la dirección que sale perpendicular de una pared, sabiendo sus dos aristas —y su módulo es el área de esa pared en bloques. <strong>Mixto:</strong> el volumen en bloques de una sala; si da 0, tus tres aristas son planas y no hay sala que construir.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p><code>MENU → 5: Vector</code>. Define <code>VctA</code>, <code>VctB</code>, <code>VctC</code> con dimensión 3. Desde <code>OPTN</code> tienes <strong>Dot Product</strong> (escalar), el producto vectorial con el símbolo <code>×</code> entre dos vectores, y <strong>Abs</strong> para el módulo. El mixto sale como <code>VctA · (VctB × VctC)</code>.</p>
+    <p class="muted">Esta es de las funciones más rentables de la calculadora: te resuelve áreas y volúmenes en segundos para comprobar.</p>
+  </div>
+
+  <div class="quiz" data-unit="u7"></div>
+</section>
+
+<!-- ======================= U8 ======================= -->
+<section class="unit" id="u8">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">8</span><span class="blk">Geometria</span></div>
+    <h2>Geometria de l'espai</h2>
+    <p class="sub">Rectas y planos: ecuaciones, posiciones relativas, ángulos y distancias.</p>
+    <div class="chips"><span>Recta</span><span>Plano</span><span>Posiciones relativas</span><span>Ángulos</span><span>Distancias</span><span>Áreas y volúmenes</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u8"> Unidad dominada</label>
+  </div>
+
+  <h4>La recta</h4>
+  <p>Determinada por un <strong>punto</strong> $P(x_0,y_0,z_0)$ y un <strong>vector director</strong> $\vec{v}=(v_1,v_2,v_3)$.</p>
+  <div class="box def"><span class="bl">Ecuaciones de la recta</span>
+    <p><strong>Vectorial:</strong> $(x,y,z)=(x_0,y_0,z_0)+t(v_1,v_2,v_3)$</p>
+    <p><strong>Paramétricas:</strong> $\begin{cases}x=x_0+tv_1\\ y=y_0+tv_2\\ z=z_0+tv_3\end{cases}$</p>
+    <p><strong>Continua:</strong> $\dfrac{x-x_0}{v_1}=\dfrac{y-y_0}{v_2}=\dfrac{z-z_0}{v_3}$</p>
+    <p class="muted">Si te dan dos puntos, $\vec{v}=\overrightarrow{AB}$. Si te la dan como intersección de dos planos, $\vec{v}=\vec{n_1}\times\vec{n_2}$.</p>
+  </div>
+
+  <h4>El plano</h4>
+  <div class="box def"><span class="bl">Ecuaciones del plano</span>
+    <p><strong>General:</strong> $Ax+By+Cz+D=0$, con vector normal $\vec{n}=(A,B,C)$ leído <strong>directamente en los coeficientes</strong>.</p>
+    <p><strong>Punto–normal:</strong> $A(x-x_0)+B(y-y_0)+C(z-z_0)=0$.</p>
+    <p><strong>Paramétrica:</strong> $(x,y,z)=P+s\vec{u}+t\vec{v}$. Si tienes dos directores, $\vec{n}=\vec{u}\times\vec{v}$.</p>
+  </div>
+
+  <h4>Posiciones relativas</h4>
+  <div class="box method"><span class="bl">Dos rectas · el método seguro</span>
+    <ol>
+      <li>¿Son $\vec{u}$ y $\vec{v}$ proporcionales? <strong>Sí</strong> → coincidentes o paralelas (comprueba si un punto de una está en la otra).</li>
+      <li><strong>No</strong> proporcionales → calcula el mixto $[\vec{u},\vec{v},\overrightarrow{PQ}]$.</li>
+      <li>Si el mixto es $0$ → <strong>se cortan</strong> (son coplanarias).</li>
+      <li>Si el mixto es $\neq 0$ → <strong>se cruzan</strong> (no hay plano que las contenga).</li>
+    </ol>
+  </div>
+  <p><strong>Recta y plano:</strong> si $\vec{v}\cdot\vec{n}\neq 0$ se cortan en un punto; si $\vec{v}\cdot\vec{n}=0$ es paralela (o está contenida, si un punto suyo cumple la ecuación del plano).</p>
+  <p><strong>Dos planos:</strong> normales proporcionales → paralelos o coincidentes; si no, se cortan en una recta.</p>
+
+  <h4>Ángulos</h4>
+  <div class="formula"><span class="fl">Entre dos rectas</span>
+    $$\cos\alpha=\frac{|\vec{u}\cdot\vec{v}|}{|\vec{u}|\,|\vec{v}|}$$
+  </div>
+  <div class="formula"><span class="fl">Entre dos planos</span>
+    $$\cos\alpha=\frac{|\vec{n_1}\cdot\vec{n_2}|}{|\vec{n_1}|\,|\vec{n_2}|}$$
+  </div>
+  <div class="formula"><span class="fl">Entre recta y plano · atención, seno</span>
+    $$\sin\alpha=\frac{|\vec{v}\cdot\vec{n}|}{|\vec{v}|\,|\vec{n}|}$$
+  </div>
+  <div class="box warn"><span class="bl">Errores de ángulos</span>
+    <ul>
+      <li>Recta–plano va con <strong>seno</strong>, no coseno: mides respecto a la normal y completas a $90^\circ$.</li>
+      <li>El <strong>valor absoluto</strong> del numerador no es opcional: sin él puedes obtener el ángulo obtuso.</li>
+    </ul>
+  </div>
+
+  <h4>Distancias</h4>
+  <div class="formula"><span class="fl">Punto a plano</span>
+    $$d(P,\pi)=\frac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^{2}+B^{2}+C^{2}}}$$
+  </div>
+  <div class="formula"><span class="fl">Punto a recta</span>
+    $$d(P,r)=\frac{\big|\overrightarrow{AP}\times\vec{v}\big|}{|\vec{v}|}\qquad (A\in r)$$
+  </div>
+  <div class="formula"><span class="fl">Entre dos rectas que se cruzan</span>
+    $$d(r,s)=\frac{\big|[\,\overrightarrow{AB},\vec{u},\vec{v}\,]\big|}{|\vec{u}\times\vec{v}|}$$
+  </div>
+
+  <div class="box tip"><span class="bl">Elementos paralelos · siempre el mismo truco</span>
+    <p>Entre <strong>planos paralelos</strong>, entre <strong>recta y plano paralelos</strong> o entre <strong>rectas paralelas</strong>: coge un punto cualquiera de uno de los dos elementos y aplica la fórmula punto–plano o punto–recta correspondiente. Nunca hace falta una fórmula nueva.</p>
+  </div>
+
+  <div class="formula"><span class="fl">Áreas y volúmenes</span>
+    $$A_{\triangle}=\frac{1}{2}\big|\overrightarrow{AB}\times\overrightarrow{AC}\big|
+    \qquad\qquad V_{\text{tetraedro}}=\frac{1}{6}\big|[\,\overrightarrow{AB},\overrightarrow{AC},\overrightarrow{AD}\,]\big|$$
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>Una <strong>recta</strong> es un trazado recto: un raíl de vagoneta, una fila de vallas o el haz de un faro subiendo. "Punto + director" significa "empieza en este bloque y tira en esta dirección". Un <strong>plano</strong> es una superficie plana: un suelo, una pared, o el nivel del mar (Y ≈ 63 es un plano horizontal gigantesco); su normal indica hacia dónde mira.</p>
+    <p>Las <strong>posiciones relativas</strong> son la pregunta práctica de cualquier build: ¿estos dos raíles se cortan, van paralelos, o uno pasa elevado sobre el otro sin tocarlo nunca? Ese último caso —<em>se cruzan</em>— es el raíl a distinta altura y en otra dirección. Y las <strong>distancias</strong>: a qué altura flota un bloque sobre el suelo (punto–plano), lo más cerca que pasa un bloque de un raíl (punto–recta), o el hueco mínimo entre dos raíles cruzados.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p>Todo este bloque se apoya en el menú <code>Vector</code>: mete los vectores, saca módulos, escalares y vectoriales, y aplica tú la fórmula. Para la distancia punto–plano, el denominador $\sqrt{A^2+B^2+C^2}$ es simplemente <strong>Abs</strong> del vector normal.</p>
+  </div>
+
+  <div class="quiz" data-unit="u8"></div>
+</section>
+
+<!-- ======================= U9 ======================= -->
+<section class="unit" id="u9">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">9</span><span class="blk">Probabilitat</span></div>
+    <h2>Probabilitat</h2>
+    <p class="sub">Sucesos, condicionada, probabilidad total y Bayes.</p>
+    <div class="chips"><span>Laplace</span><span>Unión e intersección</span><span>Condicionada</span><span>Independencia</span><span>Bayes</span><span>Diagramas de árbol</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u9"> Unidad dominada</label>
+  </div>
+
+  <div class="formula"><span class="fl">Regla de Laplace · casos equiprobables</span>
+    $$P(A)=\frac{\text{casos favorables}}{\text{casos posibles}}$$
+  </div>
+
+  <h4>Operaciones con sucesos</h4>
+  <div class="formula"><span class="fl">Unión y complementario</span>
+    $$P(A\cup B)=P(A)+P(B)-P(A\cap B) \qquad\qquad P(\overline{A})=1-P(A)$$
+  </div>
+  <p class="muted">Si $A$ y $B$ son <strong>incompatibles</strong> ($A\cap B=\varnothing$), entonces $P(A\cup B)=P(A)+P(B)$.</p>
+  <p><strong>Leyes de De Morgan:</strong> $\overline{A\cup B}=\overline{A}\cap\overline{B}$ &nbsp;y&nbsp; $\overline{A\cap B}=\overline{A}\cup\overline{B}$. Muy útiles cuando el enunciado dice "ninguno" o "al menos uno".</p>
+
+  <div class="formula"><span class="fl">Probabilidad condicionada</span>
+    $$P(A\mid B)=\frac{P(A\cap B)}{P(B)} \qquad\Longrightarrow\qquad P(A\cap B)=P(B)\cdot P(A\mid B)$$
+  </div>
+
+  <div class="box def"><span class="bl">Independencia</span>
+    <p>$A$ y $B$ son independientes si $P(A\cap B)=P(A)\cdot P(B)$, o equivalentemente $P(A\mid B)=P(A)$: saber que ocurrió $B$ no cambia la probabilidad de $A$.</p>
+  </div>
+
+  <div class="box warn"><span class="bl">Incompatibles ≠ independientes</span>
+    <p>Son conceptos <strong>distintos y casi opuestos</strong>. Incompatibles significa que no pueden pasar a la vez ($A\cap B=\varnothing$). Independientes significa que uno no informa sobre el otro. De hecho, si $P(A)>0$ y $P(B)>0$ y son incompatibles, <strong>nunca</strong> son independientes: saber que ocurrió $B$ te dice con certeza que $A$ no ocurrió.</p>
+  </div>
+
+  <div class="formula"><span class="fl">Probabilidad total</span>
+    $$P(B)=\sum_{i}P(A_i)\cdot P(B\mid A_i)$$
+  </div>
+  <div class="formula"><span class="fl">Teorema de Bayes</span>
+    $$P(A_i\mid B)=\frac{P(A_i)\cdot P(B\mid A_i)}{\displaystyle\sum_{j}P(A_j)\cdot P(B\mid A_j)}$$
+  </div>
+
+  <div class="box method"><span class="bl">Diagrama de árbol · resuelve el 90% de estos problemas</span>
+    <ol>
+      <li>Primer nivel: las <strong>causas</strong> $A_1,A_2,\dots$ (sus probabilidades deben sumar 1).</li>
+      <li>Segundo nivel: el suceso $B$ condicionado a cada causa.</li>
+      <li>Cada rama completa se multiplica: $P(A_i)\cdot P(B\mid A_i)$.</li>
+      <li><strong>Probabilidad total</strong> = suma de todas las ramas que terminan en $B$.</li>
+      <li><strong>Bayes</strong> = una rama concreta dividida entre esa suma total.</li>
+    </ol>
+  </div>
+
+  <div class="ex"><span class="el"><b>Ejemplo resuelto</b> · Bayes</span>
+    <p>Dos máquinas fabrican piezas: $A_1$ produce el $60\%$ (un $3\%$ defectuosas) y $A_2$ el $40\%$ (un $5\%$ defectuosas). Sale una pieza defectuosa: ¿probabilidad de que la haya hecho $A_1$?</p>
+    <p><strong>Total:</strong> $P(D)=0{,}6\cdot 0{,}03+0{,}4\cdot 0{,}05=0{,}018+0{,}020=0{,}038$.</p>
+    <p><strong>Bayes:</strong> $P(A_1\mid D)=\dfrac{0{,}018}{0{,}038}\approx 0{,}474$.</p>
+    <p class="muted">Fíjate en el giro: $A_1$ fabrica más piezas, pero como es más fiable, ante un defecto es <em>menos</em> probable que venga de ella.</p>
+  </div>
+
+  <h4>Combinatoria de apoyo</h4>
+  <div class="scroll-x"><table class="tbl">
+    <tr><th>Concepto</th><th>Fórmula</th><th>¿Importa el orden?</th></tr>
+    <tr><td>Permutaciones</td><td>$P_n=n!$</td><td>Sí, y se usan todos</td></tr>
+    <tr><td>Variaciones</td><td>$V_{n,k}=\dfrac{n!}{(n-k)!}$</td><td>Sí</td></tr>
+    <tr><td>Combinaciones</td><td>$C_{n,k}=\dbinom{n}{k}=\dfrac{n!}{k!\,(n-k)!}$</td><td>No</td></tr>
+  </table></div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>Esto es <strong>todo el RNG del juego</strong>. La regla de Laplace son los slots de loot de un cofre. La <strong>condicionada</strong> es el saqueo con contexto: "sé que este cofre es de mazmorra, ¿ahora qué probabilidad hay de que tenga un disco?". La <strong>independencia</strong> es que matar un creeper no cambia nada sobre el siguiente: el juego no te debe nada por haber fallado antes.</p>
+    <p><strong>Bayes</strong> es la pregunta al revés, y es la más útil: "me ha caído un objeto raro — ¿de qué mob o estructura venía con más probabilidad?". Igual que deducir en qué bioma estás a partir de los mobs que aparecen: observas el efecto y estimas la causa.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p>Para combinatoria: <code>OPTN</code> te da <strong>nCr</strong> y <strong>nPr</strong>, y la tecla <code>x!</code> el factorial. Escribe por ejemplo <code>10 nCr 3</code> y obtienes $\binom{10}{3}=120$ al instante.</p>
+    <p class="muted">En Bayes no hay atajo: el valor está en dibujar bien el árbol. La calculadora solo acelera las cuentas.</p>
+  </div>
+
+  <div class="quiz" data-unit="u9"></div>
+</section>
+
+<!-- ======================= U10 ======================= -->
+<section class="unit" id="u10">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">10</span><span class="blk">Probabilitat</span></div>
+    <h2>Distribucions de probabilitat</h2>
+    <p class="sub">Binomial y normal: las dos distribuciones que hay que dominar.</p>
+    <div class="chips"><span>Variable aleatoria</span><span>Binomial</span><span>Normal</span><span>Tipificación</span><span>Aproximación</span></div>
+    <label class="udone"><input type="checkbox" data-unit="u10"> Unidad dominada</label>
+  </div>
+
+  <h4>Distribución binomial B(n, p)</h4>
+  <div class="box def"><span class="bl">Cuándo se usa</span>
+    <p>Cuando repites $n$ veces un experimento <strong>independiente</strong> con solo dos resultados (éxito / fracaso) y probabilidad de éxito $p$ <strong>constante</strong>. La variable $X$ cuenta el número de éxitos.</p>
+  </div>
+  <div class="formula"><span class="fl">Función de probabilidad</span>
+    $$P(X=k)=\binom{n}{k}\,p^{k}\,q^{\,n-k}\qquad (q=1-p)$$
+  </div>
+  <div class="formula"><span class="fl">Media y desviación típica</span>
+    $$\mu=n\,p\qquad\qquad \sigma=\sqrt{n\,p\,q}$$
+  </div>
+  <div class="box tip"><span class="bl">Atajos que ahorran tiempo</span>
+    <ul>
+      <li><strong>"Al menos uno":</strong> $P(X\ge 1)=1-P(X=0)$.</li>
+      <li><strong>"Como mucho k":</strong> $P(X\le k)=P(0)+P(1)+\dots+P(k)$.</li>
+      <li><strong>"Más de k":</strong> $P(X>k)=1-P(X\le k)$.</li>
+    </ul>
+  </div>
+
+  <div class="ex"><span class="el"><b>Ejemplo resuelto</b> · binomial</span>
+    <p>Se lanza una moneda 5 veces. ¿Probabilidad de obtener exactamente 3 caras?</p>
+    <p>$X\sim B(5;\,0{,}5)$, luego $P(X=3)=\dbinom{5}{3}(0{,}5)^{3}(0{,}5)^{2}=10\cdot 0{,}03125=0{,}3125$.</p>
+  </div>
+
+  <h4>Distribución normal N(μ, σ)</h4>
+  <div class="box def"><span class="bl">Características</span>
+    <p>Variable <strong>continua</strong>, campana de Gauss simétrica respecto a la media $\mu$. Como es continua, $P(X=k)=0$ siempre: solo tienen sentido las probabilidades de intervalos. La $N(0,1)$ es la <strong>normal estándar</strong>, con variable $Z$.</p>
+  </div>
+  <div class="formula"><span class="fl">Tipificación</span>
+    $$Z=\frac{X-\mu}{\sigma}$$
+  </div>
+
+  <div class="box method"><span class="bl">Usar la tabla paso a paso</span>
+    <ol>
+      <li>Tipifica: $z=\dfrac{x-\mu}{\sigma}$.</li>
+      <li>$P(Z\le z)$ se lee directamente en la tabla.</li>
+      <li>$P(Z\ge z)=1-P(Z\le z)$.</li>
+      <li>Para $z$ negativo, por simetría: $P(Z\le -z)=1-P(Z\le z)$.</li>
+      <li>Intervalo: $P(a\le Z\le b)=P(Z\le b)-P(Z\le a)$.</li>
+    </ol>
+  </div>
+
+  <div class="box thm"><span class="bl">Aproximación de la binomial por la normal</span>
+    <p>Si $n$ es grande y se cumple $np>5$ y $nq>5$, entonces $B(n,p)\approx N\big(np,\;\sqrt{npq}\big)$.</p>
+  </div>
+  <div class="box warn"><span class="bl">Corrección de continuidad · no la olvides</span>
+    <p>Al pasar de discreta a continua hay que ajustar medio punto:</p>
+    <ul>
+      <li>$P(X=k)\approx P(k-0{,}5\le X\le k+0{,}5)$</li>
+      <li>$P(X\le k)\approx P(X\le k+0{,}5)$</li>
+      <li>$P(X\ge k)\approx P(X\ge k-0{,}5)$</li>
+    </ul>
+  </div>
+
+  <div class="box tip"><span class="bl">Regla 68 – 95 – 99,7</span>
+    <p>En cualquier normal, el $68\%$ de los datos cae en $\mu\pm\sigma$, el $95\%$ en $\mu\pm 2\sigma$ y el $99{,}7\%$ en $\mu\pm 3\sigma$. Sirve para detectar resultados absurdos de un vistazo: si te sale una probabilidad del $0{,}4$ para algo a tres desviaciones, has fallado algo.</p>
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>En Minecraft</span>
+    <p>La <strong>binomial</strong> es picar: "excavo 20 bloques a nivel de diamante; cada uno tiene probabilidad $p$ de ser mena". La media $\mu=np$ es exactamente cuántos diamantes esperas —y la desviación $\sigma$ te dice cuánto puede desviarse tu suerte real de esa expectativa.</p>
+    <p>La <strong>normal</strong> aparece cuando sumas muchísimo RNG: las alturas del terreno en un chunk grande, el daño total tras cientos de golpes, o el loot acumulado de miles de cofres. Todo se agrupa alrededor de la media formando la campana. Por eso, con $n$ enorme, la binomial se puede aproximar por una normal: es la diferencia entre calcular la probabilidad exacta de 7 diamantes en 20 bloques y estimar cuántos sacarás tras minar toda una sesión.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Con la Casio fx-991</span>
+    <p><code>MENU → 7: Distribution</code> lo hace casi todo:</p>
+    <ul>
+      <li><strong>Binomial PD</strong> → $P(X=k)$ · <strong>Binomial CD</strong> → $P(X\le k)$</li>
+      <li><strong>Normal PD / CD</strong> → densidad y probabilidad acumulada, introduciendo $\mu$ y $\sigma$ directamente (¡sin tipificar a mano!)</li>
+      <li><strong>Inverse Normal</strong> → el camino inverso: dada una probabilidad, te devuelve el valor de $x$</li>
+    </ul>
+    <p class="muted">Es la unidad donde la calculadora más te ahorra. Aun así, en el examen escrito conviene mostrar la tipificación: el 80% valora el proceso.</p>
+  </div>
+
+  <div class="quiz" data-unit="u10"></div>
+</section>
+
+
+
+<!-- ======================= HERRAMIENTAS ======================= -->
+<section class="unit" id="tools">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">⚙</span><span class="blk">Recursos</span></div>
+    <h2>Calculadoras interactivas</h2>
+    <p class="sub">Introduce tus datos y comprueba el resultado al instante. Úsalas para verificar ejercicios, no para sustituir el procedimiento escrito.</p>
+  </div>
+
+  <div class="tool">
+    <h5>Matriz 3×3 — determinante, rango e inversa</h5>
+    <p class="td">Calcula $|A|$, clasifica la matriz y obtiene la inversa si existe.</p>
+    <div class="matlbl">Introduce los 9 coeficientes</div>
+    <div class="grid3" id="m3">
+      <input type="number" step="any" value="1"><input type="number" step="any" value="2"><input type="number" step="any" value="3">
+      <input type="number" step="any" value="0"><input type="number" step="any" value="1"><input type="number" step="any" value="4">
+      <input type="number" step="any" value="5"><input type="number" step="any" value="6"><input type="number" step="any" value="0">
+    </div>
+    <button class="btn" onclick="calcMat()">Calcular</button>
+    <button class="btn gh" onclick="randMat()">Ejemplo aleatorio</button>
+    <div class="out" id="outMat"></div>
+  </div>
+
+  <div class="tool">
+    <h5>Sistema 3×3 — clasificación por Rouché–Frobenius</h5>
+    <p class="td">Introduce los coeficientes y los términos independientes. Te dice si es SCD, SCI o SI, con los rangos, y resuelve por Cramer si procede.</p>
+    <div class="matlbl">Filas: &nbsp; a·x + b·y + c·z = d</div>
+    <div class="grid4" id="sys">
+      <input type="number" step="any" value="1"><input type="number" step="any" value="1"><input type="number" step="any" value="1"><input type="number" step="any" value="6">
+      <input type="number" step="any" value="2"><input type="number" step="any" value="-1"><input type="number" step="any" value="1"><input type="number" step="any" value="3">
+      <input type="number" step="any" value="1"><input type="number" step="any" value="2"><input type="number" step="any" value="-1"><input type="number" step="any" value="2">
+    </div>
+    <button class="btn" onclick="calcSys()">Clasificar y resolver</button>
+    <div class="out" id="outSys"></div>
+  </div>
+
+  <div class="tool">
+    <h5>Vectores en el espacio — todos los productos</h5>
+    <p class="td">Módulos, producto escalar, vectorial y mixto, ángulo, área del triángulo y volumen del tetraedro.</p>
+    <div class="matlbl">Vector u &nbsp;(x, y, z)</div>
+    <div class="grid3" id="vu"><input type="number" step="any" value="1"><input type="number" step="any" value="2"><input type="number" step="any" value="3"></div>
+    <div class="matlbl">Vector v</div>
+    <div class="grid3" id="vv"><input type="number" step="any" value="4"><input type="number" step="any" value="0"><input type="number" step="any" value="-1"></div>
+    <div class="matlbl">Vector w &nbsp;(solo para el producto mixto)</div>
+    <div class="grid3" id="vw"><input type="number" step="any" value="2"><input type="number" step="any" value="1"><input type="number" step="any" value="1"></div>
+    <button class="btn" onclick="calcVec()">Calcular</button>
+    <div class="out" id="outVec"></div>
+  </div>
+
+  <div class="tool">
+    <h5>Distancia punto → plano</h5>
+    <p class="td">Plano $Ax+By+Cz+D=0$ y punto $P(x_0,y_0,z_0)$.</p>
+    <div class="matlbl">Coeficientes del plano &nbsp;(A, B, C, D)</div>
+    <div class="grid4" id="pl"><input type="number" step="any" value="2"><input type="number" step="any" value="-1"><input type="number" step="any" value="2"><input type="number" step="any" value="-3"></div>
+    <div class="matlbl">Punto P &nbsp;(x₀, y₀, z₀)</div>
+    <div class="grid3" id="pt"><input type="number" step="any" value="1"><input type="number" step="any" value="1"><input type="number" step="any" value="1"></div>
+    <button class="btn" onclick="calcDist()">Calcular distancia</button>
+    <div class="out" id="outDist"></div>
+  </div>
+
+  <div class="tool">
+    <h5>Distribución binomial B(n, p)</h5>
+    <p class="td">Probabilidad puntual, acumulada, media y desviación típica.</p>
+    <label>Número de repeticiones n</label>
+    <div style="max-width:150px"><input type="number" id="bn" value="10" min="1" max="300"></div>
+    <label>Probabilidad de éxito p</label>
+    <div style="max-width:150px"><input type="number" id="bp" value="0.3" step="0.01" min="0" max="1"></div>
+    <label>Número de éxitos k</label>
+    <div style="max-width:150px"><input type="number" id="bk" value="3" min="0"></div>
+    <button class="btn" onclick="calcBin()">Calcular</button>
+    <div class="out" id="outBin"></div>
+  </div>
+
+  <div class="tool">
+    <h5>Distribución normal N(μ, σ)</h5>
+    <p class="td">Tipifica y calcula probabilidades acumuladas sin necesidad de la tabla.</p>
+    <label>Media μ</label>
+    <div style="max-width:150px"><input type="number" id="nm" value="0" step="any"></div>
+    <label>Desviación típica σ</label>
+    <div style="max-width:150px"><input type="number" id="ns" value="1" step="any" min="0.0001"></div>
+    <label>Valor x</label>
+    <div style="max-width:150px"><input type="number" id="nx" value="1.5" step="any"></div>
+    <button class="btn" onclick="calcNor()">Calcular</button>
+    <div class="out" id="outNor"></div>
+  </div>
+</section>
+
+<!-- ======================= FLASHCARDS ======================= -->
+<section class="unit" id="flash">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">⚡</span><span class="blk">Recursos</span></div>
+    <h2>Tarjetas de fórmulas</h2>
+    <p class="sub">Toca la tarjeta para girarla. Repasa las fórmulas clave de las 10 unidades antes de un examen.</p>
+  </div>
+  <div class="fcw">
+    <div class="fc" id="fcard" onclick="flipCard()">
+      <span class="side" id="fcside">Pregunta</span>
+      <div class="ct" id="fctext"></div>
+      <span class="hint">toca para girar</span>
+    </div>
+    <div class="fcn">
+      <button onclick="prevCard()">← Anterior</button>
+      <span class="ctr" id="fcctr">1 / 1</span>
+      <button onclick="nextCard()">Siguiente →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CASIO ======================= -->
+<section class="unit" id="casio">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">🖩</span><span class="blk">Recursos</span></div>
+    <h2>Guía de la Casio CLASSWIZ fx-991</h2>
+    <p class="sub">Es obligatoria en clase y en los exámenes, y hay un 10% de la nota que se juega precisamente en la prueba global de herramientas tecnológicas.</p>
+  </div>
+
+  <div class="box cas"><span class="bl"><span class="casio-ico"></span>Los menús que usarás este curso</span>
+    <div class="scroll-x"><table class="tbl" style="margin:.5em 0 0">
+      <tr><th>Menú</th><th>Para qué</th><th>Unidad</th></tr>
+      <tr><td>1 · Equation</td><td>Sistemas de 2–4 incógnitas y raíces de polinomios</td><td>U2</td></tr>
+      <tr><td>3 · Table</td><td>Tablas de valores: intuir límites y perfilar gráficas</td><td>U3, U5</td></tr>
+      <tr><td>4 · Matrix</td><td>Determinante, inversa y producto de matrices</td><td>U1</td></tr>
+      <tr><td>5 · Vector</td><td>Escalar, vectorial, módulo → áreas y volúmenes</td><td>U7, U8</td></tr>
+      <tr><td>6 · Statistics</td><td>Medias, desviaciones y regresión</td><td>U9, U10</td></tr>
+      <tr><td>7 · Distribution</td><td>Binomial y normal (PD, CD e inversa)</td><td>U10</td></tr>
+      <tr><td>Teclas <code>d/dx</code> e <code>∫dx</code></td><td>Derivada en un punto e integral definida</td><td>U4, U6</td></tr>
+    </table></div>
+  </div>
+
+  <details class="acc"><summary>Trucos que ahorran minutos en el examen</summary>
+    <div class="accbody">
+      <ul>
+        <li><strong><code>CALC</code></strong> evalúa una expresión con distintos valores sin reescribirla: perfecto para comprobar que un punto pertenece a una recta o plano.</li>
+        <li><strong><code>SOLVE</code></strong> resuelve numéricamente una ecuación cualquiera. Útil para localizar cortes con los ejes.</li>
+        <li><strong><code>OPTN</code></strong> cambia de contenido según el menú: ahí están nCr, nPr, det, Abs, Dot Product…</li>
+        <li><strong><code>S⇔D</code></strong> alterna entre fracción exacta y decimal. Entrega siempre el resultado exacto cuando lo tengas.</li>
+        <li>Antes de empezar un examen, comprueba el <strong>modo angular</strong> (<code>SHIFT MENU</code>): si trabajas con radianes y está en grados, todos los ángulos saldrán mal.</li>
+      </ul>
+    </div>
+  </details>
+
+  <div class="box warn"><span class="bl">Norma del centro</span>
+    <p>En clase <strong>no se permiten aparatos electrónicos salvo la calculadora</strong>, excepto si el profesor lo autoriza por motivos didácticos. En los exámenes, cada alumno usa su propio material. Copiar en un examen o tarea supone un <strong>cero</strong> en esa actividad y posible sanción —y facilitar la copia a otro compañero se sanciona igual.</p>
+  </div>
+</section>
+
+<!-- ======================= TABLA Z ======================= -->
+<section class="unit" id="tablaz">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">Z</span><span class="blk">Recursos</span></div>
+    <h2>Tabla de la normal N(0,1)</h2>
+    <p class="sub">Valores de $P(Z\le z)$ para $z$ de 0,00 a 3,49. Para valores negativos usa $P(Z\le -z)=1-P(Z\le z)$.</p>
+  </div>
+  <div class="scroll-x" id="ztable"></div>
+</section>
+
+<!-- ======================= EXAMEN ======================= -->
+<section class="unit" id="examen">
+  <div class="uhead">
+    <div class="ubadge"><span class="num">★</span><span class="blk">Recursos</span></div>
+    <h2>Estrategia de examen</h2>
+    <p class="sub">Cómo convertir lo que sabes en la nota que mereces, según los criterios de tu departamento.</p>
+  </div>
+
+  <div class="box method"><span class="bl">Durante la prueba escrita (el 80% de la nota)</span>
+    <ol>
+      <li><strong>Lee todo primero</strong> y empieza por el ejercicio que mejor domines: asegura puntos antes de arriesgar.</li>
+      <li><strong>Escribe el planteamiento</strong> aunque no termines. Un problema bien planteado y sin acabar puntúa; un resultado suelto sin proceso, apenas.</li>
+      <li><strong>Justifica cada paso</strong>. El criterio pide demostrar la validez de la solución con razonamiento y argumentación: nombra el teorema que aplicas (Rouché, Bolzano, Barrow…).</li>
+      <li><strong>Da todas las soluciones</strong>. Si hay varios casos, discútelos todos: el criterio menciona explícitamente "obtener todas las soluciones".</li>
+      <li><strong>Comprueba con la calculadora</strong> lo que puedas: determinantes, integrales definidas, sistemas numéricos.</li>
+      <li><strong>Responde a la pregunta</strong> con una frase final y sus unidades. Cierra el problema, no lo dejes en un número suelto.</li>
+    </ol>
+  </div>
+
+  <div class="box tip"><span class="bl">Los otros 20%, que se pierden por dejadez</span>
+    <p>Un <strong>5%</strong> es organización y rigor en el lenguaje matemático: usar bien los símbolos $\Rightarrow$, $\iff$, $\in$, escribir con orden y no mezclar pasos. Otro <strong>5%</strong> es actitud, entrega de tareas y constancia —es la parte más fácil de asegurar del curso entero, y solo depende de ser regular—. Y el <strong>10%</strong> restante es la prueba global de herramientas tecnológicas: practica con la Casio durante el curso, no la víspera.</p>
+  </div>
+
+  <div class="box def"><span class="bl">Calendario que conviene tener claro</span>
+    <ul>
+      <li>La <strong>prueba final de curso</strong> incluye todos los criterios ya evaluados en pruebas escritas.</li>
+      <li>Si la media de las pruebas anteriores no permite aprobar algún criterio, esa nota <strong>hace de recuperación</strong>.</li>
+      <li>Si ya ibas aprobado, <strong>suma como una nota más</strong> a la media.</li>
+      <li>Quien no apruebe en mayo tiene <strong>examen extraordinario en junio</strong> más un trabajo con todos los contenidos del curso.</li>
+      <li>Si faltas a un examen con el protocolo seguido, se acuerda nueva fecha. Sin justificar, se valora con un <strong>cero</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="box mcb"><span class="bl"><span class="blk"></span>Una última en Minecraft</span>
+    <p>Un curso es una partida en supervivencia: no se gana con una gran gesta al final, sino no muriendo por tonterías. Las tareas y la actitud son la comida en el inventario, la calculadora es tu pico encantado, y la prueba final es el Ender Dragon: llegas con lo que hayas construido durante meses, no con lo que improvises esa noche.</p>
+  </div>
+</section>
+
+
+</main>
+</div>
+
+<script>
+/* ===================== DATOS DE QUIZ ===================== */
+const QUIZ = {};
+
+Object.assign(QUIZ,{
+u1:[
+ {q:"Si $A$ y $B$ son matrices cuadradas, ¿qué es siempre cierto?",
+  o:["$A\\cdot B=B\\cdot A$","$(A\\cdot B)^{t}=B^{t}\\cdot A^{t}$","Si $A\\cdot B=0$ entonces $A=0$ o $B=0$"],c:1,
+  e:"Al trasponer un producto se invierte el orden de los factores. El producto de matrices no es conmutativo, y existen divisores de cero: dos matrices no nulas pueden multiplicarse y dar la matriz nula."},
+ {q:"Una matriz $A$ de orden 3 tiene $|A|=0$. ¿Qué puedes afirmar?",
+  o:["Su rango es 3","No tiene inversa","Todos sus elementos son cero"],c:1,
+  e:"La inversa existe solo si $|A|\\neq 0$. Además el rango será como mucho 2, pero la matriz puede tener perfectamente elementos no nulos."},
+ {q:"Si $A$ es de orden 3 y $|A|=2$, ¿cuánto vale $|3A|$?",
+  o:["$6$","$18$","$54$"],c:2,
+  e:"Multiplicar una fila por $k$ multiplica el determinante por $k$, y aquí se multiplican las tres filas: $|3A|=3^{3}\\cdot|A|=27\\cdot 2=54$."},
+ {q:"Para despejar $X$ en la ecuación $X\\cdot A=B$ (con $A$ regular):",
+  o:["$X=A^{-1}B$","$X=BA^{-1}$","$X=BA$"],c:1,
+  e:"Como $A$ multiplica a $X$ por la derecha, hay que multiplicar por $A^{-1}$ también por la derecha: $XAA^{-1}=BA^{-1}$, luego $X=BA^{-1}$."}
+],
+u2:[
+ {q:"Un sistema de 3 ecuaciones con 3 incógnitas cumple $\\operatorname{rg}(A)=\\operatorname{rg}(A^{*})=2$. Es:",
+  o:["SCD","SCI con 1 parámetro","Incompatible"],c:1,
+  e:"Los rangos coinciden, así que es compatible; como $r=2<n=3$, es indeterminado con $n-r=1$ parámetro libre."},
+ {q:"¿Cuándo un sistema homogéneo tiene soluciones distintas de la trivial?",
+  o:["Cuando $|A|\\neq 0$","Cuando $|A|=0$","Nunca"],c:1,
+  e:"Un homogéneo siempre es compatible. Si $|A|\\neq 0$ solo admite la solución trivial; para tener infinitas soluciones hace falta que el determinante se anule."},
+ {q:"Si $\\operatorname{rg}(A)=2$ y $\\operatorname{rg}(A^{*})=3$, el sistema es:",
+  o:["Compatible determinado","Compatible indeterminado","Incompatible"],c:2,
+  e:"Por Rouché–Frobenius, si los rangos son distintos el sistema no tiene solución. Aparece una fila del tipo $0=k$ con $k\\neq 0$."},
+ {q:"En una discusión con parámetro obtienes $|A|=(\\lambda-2)(\\lambda+1)$. ¿Qué haces?",
+  o:["Concluyes que es SCD siempre","Estudias por separado $\\lambda=2$ y $\\lambda=-1$, y el resto de valores aparte","Solo estudias $\\lambda=2$"],c:1,
+  e:"Cada valor que anula el determinante es un caso propio que hay que analizar con su matriz ampliada. Para los demás valores, $|A|\\neq 0$ y el sistema es SCD."}
+],
+u3:[
+ {q:"$\\displaystyle\\lim_{x\\to\\infty}\\frac{3x^{2}+5}{2x^{2}-x}$ vale:",
+  o:["$0$","$3/2$","$\\infty$"],c:1,
+  e:"Es una indeterminación $\\infty/\\infty$ con numerador y denominador del mismo grado: el límite es el cociente de los coeficientes principales, $3/2$."},
+ {q:"¿Cuál de estas NO es una indeterminación?",
+  o:["$1^{\\infty}$","$0^{\\infty}$","$\\infty-\\infty$"],c:1,
+  e:"$0^{\\infty}$ vale directamente $0$: no hay conflicto entre base y exponente. Las siete indeterminaciones son $0/0$, $\\infty/\\infty$, $\\infty-\\infty$, $0\\cdot\\infty$, $1^{\\infty}$, $0^{0}$ e $\\infty^{0}$."},
+ {q:"Una función tiene $\\lim_{x\\to 2^{-}}f(x)=3$ y $\\lim_{x\\to 2^{+}}f(x)=5$. En $x=2$ hay:",
+  o:["Discontinuidad evitable","Discontinuidad de salto finito","Continuidad"],c:1,
+  e:"Los dos límites laterales existen y son finitos pero distintos: el salto es finito, de valor $5-3=2$."},
+ {q:"Para demostrar que $x^{3}+x-1=0$ tiene una raíz en $(0,1)$ usarías:",
+  o:["El teorema de Bolzano","La regla de L'Hôpital","El teorema de Rolle"],c:0,
+  e:"La función es continua y cambia de signo: $f(0)=-1<0$ y $f(1)=1>0$. Por Bolzano existe un $c\\in(0,1)$ con $f(c)=0$."}
+],
+u4:[
+ {q:"La derivada de $f(x)=\\sin(3x^{2})$ es:",
+  o:["$\\cos(3x^{2})$","$6x\\cos(3x^{2})$","$6x\\sin(3x^{2})$"],c:1,
+  e:"Regla de la cadena: la derivada de $\\sin u$ es $\\cos u\\cdot u'$, y aquí $u=3x^{2}$ con $u'=6x$."},
+ {q:"Si $f'(a)=0$ y $f''(a)<0$, en $x=a$ hay:",
+  o:["Un mínimo relativo","Un máximo relativo","Un punto de inflexión"],c:1,
+  e:"Criterio de la segunda derivada: con $f''(a)<0$ la función es cóncava hacia abajo en ese punto, así que el extremo es un máximo."},
+ {q:"¿Qué implicación es correcta?",
+  o:["Continua $\\Rightarrow$ derivable","Derivable $\\Rightarrow$ continua","Son equivalentes"],c:1,
+  e:"Toda función derivable es continua, pero no al revés: $f(x)=|x|$ es continua en $x=0$ y no derivable ahí, porque las derivadas laterales valen $-1$ y $1$."},
+ {q:"En un problema de optimización obtienes $f'(x)=0$ en $x=4$. ¿Qué falta antes de responder?",
+  o:["Nada, ya está resuelto","Justificar que es máximo o mínimo","Volver a derivar siempre tres veces"],c:1,
+  e:"Un punto con derivada nula es solo un candidato. Hay que comprobar el signo de $f'$ a ambos lados o el valor de $f''(4)$. Es el paso que más se olvida y el que piden explícitamente."}
+],
+u5:[
+ {q:"Una función tiene asíntota horizontal $y=2$ cuando $x\\to+\\infty$. En esa rama:",
+  o:["Puede tener además asíntota oblicua","No puede tener asíntota oblicua","Tiene siempre asíntota vertical"],c:1,
+  e:"Horizontal y oblicua son excluyentes en la misma rama: si la función tiende a un valor finito, no puede crecer como una recta de pendiente no nula."},
+ {q:"Si $f''(x)>0$ en un intervalo, la función es ahí:",
+  o:["Creciente","Cóncava hacia arriba","Decreciente"],c:1,
+  e:"El signo de $f''$ da la curvatura, no el crecimiento. Positiva significa cóncava hacia arriba (forma de $\\smile$); el crecimiento lo marca $f'$."},
+ {q:"En $x=1$ se cumple $f''(1)=0$. ¿Hay punto de inflexión seguro?",
+  o:["Sí, siempre","Solo si $f''$ cambia de signo en $x=1$","Solo si además $f'(1)=0$"],c:1,
+  e:"Que la segunda derivada se anule no basta: debe cambiar de signo. En $f(x)=x^{4}$ se cumple $f''(0)=0$ y no hay inflexión, porque sigue siendo cóncava hacia arriba a ambos lados."}
+],
+u6:[
+ {q:"$\\displaystyle\\int \\frac{2x}{x^{2}+1}\\,dx$ es igual a:",
+  o:["$\\ln|x^{2}+1|+C$","$\\arctan(x^{2})+C$","$\\dfrac{x^{2}}{x^{2}+1}+C$"],c:0,
+  e:"Tiene la forma $\\int f'/f$, cuya primitiva es $\\ln|f|+C$: el numerador $2x$ es exactamente la derivada del denominador."},
+ {q:"Para $\\displaystyle\\int x\\,e^{x}dx$ por partes, ¿qué eliges como $u$?",
+  o:["$u=e^{x}$","$u=x$","Da igual"],c:1,
+  e:"Por la regla ALPES, las potencias van antes que las exponenciales. Tomando $u=x$, al derivar desaparece la $x$ y la integral se simplifica; al revés se complicaría."},
+ {q:"Calculas $\\int_{a}^{b}f(x)dx$ y te sale $-4$. El área encerrada es:",
+  o:["$-4$","$4$","No se puede saber sin estudiar el signo de $f$"],c:2,
+  e:"La integral definida da un valor con signo. Si $f$ es negativa en todo el intervalo, el área es $4$; pero si cambia de signo dentro, hay que partir la integral en los cortes y sumar los valores absolutos."},
+ {q:"La constante de integración $+C$:",
+  o:["Se escribe siempre, también en la definida","Solo en la integral indefinida","Solo cuando hay logaritmos"],c:1,
+  e:"En la definida se cancela al restar $F(b)-F(a)$. En la indefinida es imprescindible: representa la familia completa de primitivas."}
+],
+u7:[
+ {q:"Si $\\vec{u}\\cdot\\vec{v}=0$ con ambos vectores no nulos, entonces:",
+  o:["Son paralelos","Son perpendiculares","Son iguales"],c:1,
+  e:"El producto escalar es $|\\vec{u}||\\vec{v}|\\cos\\alpha$. Si se anula con módulos no nulos, es $\\cos\\alpha=0$, luego el ángulo es de $90^\\circ$."},
+ {q:"Para hallar un vector perpendicular a $\\vec{u}$ y a $\\vec{v}$ a la vez usas:",
+  o:["El producto escalar","El producto vectorial","El producto mixto"],c:1,
+  e:"El producto vectorial $\\vec{u}\\times\\vec{v}$ devuelve precisamente un vector perpendicular a los dos. Es la forma habitual de obtener el vector normal de un plano."},
+ {q:"Cuatro puntos $A$, $B$, $C$, $D$ son coplanarios si:",
+  o:["$[\\overrightarrow{AB},\\overrightarrow{AC},\\overrightarrow{AD}]=0$","$\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=0$","$|\\overrightarrow{AB}|=|\\overrightarrow{CD}|$"],c:0,
+  e:"El producto mixto mide el volumen del paralelepípedo. Si vale cero no hay volumen, así que los tres vectores están en un mismo plano y los cuatro puntos también."},
+ {q:"El área de un triángulo de vértices $A$, $B$, $C$ es:",
+  o:["$|\\overrightarrow{AB}\\times\\overrightarrow{AC}|$","$\\frac{1}{2}|\\overrightarrow{AB}\\times\\overrightarrow{AC}|$","$\\frac{1}{6}|\\overrightarrow{AB}\\times\\overrightarrow{AC}|$"],c:1,
+  e:"El módulo del producto vectorial da el área del paralelogramo; el triángulo es justo la mitad. El factor $1/6$ corresponde al volumen del tetraedro con el producto mixto."}
+],
+u8:[
+ {q:"El vector normal del plano $3x-y+2z-7=0$ es:",
+  o:["$(3,-1,2)$","$(3,-1,2,-7)$","$(-7,3,-1)$"],c:0,
+  e:"En la ecuación general $Ax+By+Cz+D=0$, el vector normal se lee directamente en los coeficientes de $x$, $y$ y $z$. El término independiente no forma parte de él."},
+ {q:"Dos rectas con directores no proporcionales y producto mixto $[\\vec{u},\\vec{v},\\overrightarrow{PQ}]\\neq 0$:",
+  o:["Se cortan","Se cruzan","Son paralelas"],c:1,
+  e:"Al no ser proporcionales los directores, no son paralelas. Como el mixto no se anula, no son coplanarias: no existe plano que las contenga, así que se cruzan."},
+ {q:"El ángulo entre una recta y un plano se calcula con:",
+  o:["$\\cos\\alpha=\\frac{|\\vec{v}\\cdot\\vec{n}|}{|\\vec{v}||\\vec{n}|}$","$\\sin\\alpha=\\frac{|\\vec{v}\\cdot\\vec{n}|}{|\\vec{v}||\\vec{n}|}$","$\\tan\\alpha=\\vec{v}\\cdot\\vec{n}$"],c:1,
+  e:"Se usa el seno, porque la fórmula compara el director con la normal del plano y el ángulo buscado es el complementario de ese."},
+ {q:"Para hallar la distancia entre dos planos paralelos:",
+  o:["Se usa el producto mixto","Se toma un punto de uno y se aplica la fórmula punto–plano al otro","No se puede calcular"],c:1,
+  e:"Como la distancia es la misma desde cualquier punto, basta elegir uno cómodo de un plano y aplicar la fórmula punto–plano con el otro. El mismo truco vale para recta y plano paralelos."}
+],
+u9:[
+ {q:"Si $A$ y $B$ son incompatibles con $P(A)>0$ y $P(B)>0$, entonces:",
+  o:["Son independientes","No son independientes","Siempre $P(A)=P(B)$"],c:1,
+  e:"Si son incompatibles, $P(A\\cap B)=0$, pero $P(A)\\cdot P(B)>0$: no coinciden, luego no son independientes. De hecho saber que ocurrió $B$ garantiza que $A$ no ocurrió."},
+ {q:"$P(A\\mid B)$ se define como:",
+  o:["$\\dfrac{P(A\\cap B)}{P(B)}$","$\\dfrac{P(A\\cap B)}{P(A)}$","$P(A)\\cdot P(B)$"],c:0,
+  e:"Se divide entre la probabilidad de la condición, que es el nuevo espacio de referencia. Dividir entre $P(A)$ daría $P(B\\mid A)$, que en general es distinto."},
+ {q:"En un árbol, la probabilidad total de un suceso $B$ se obtiene:",
+  o:["Multiplicando todas las ramas","Sumando las ramas completas que terminan en $B$","Restando 1 a la rama mayor"],c:1,
+  e:"Cada rama completa aporta $P(A_i)\\cdot P(B\\mid A_i)$, y la probabilidad total es la suma de todas ellas. Bayes es después una de esas ramas dividida entre esa suma."},
+ {q:"¿Cuántos grupos de 3 personas se pueden formar entre 10, sin importar el orden?",
+  o:["$720$","$120$","$30$"],c:1,
+  e:"Al no importar el orden son combinaciones: $\\binom{10}{3}=\\frac{10!}{3!\\,7!}=120$. El valor $720$ correspondería a variaciones, donde sí importaría el orden."}
+],
+u10:[
+ {q:"En una $B(n,p)$, la media y la desviación típica son:",
+  o:["$\\mu=np$ y $\\sigma=npq$","$\\mu=np$ y $\\sigma=\\sqrt{npq}$","$\\mu=p$ y $\\sigma=\\sqrt{pq}$"],c:1,
+  e:"La media es $np$ y la desviación típica lleva raíz cuadrada: $\\sigma=\\sqrt{npq}$. Sin la raíz tendrías la varianza."},
+ {q:"En una distribución normal, ¿cuánto vale $P(X=5)$?",
+  o:["Depende de $\\mu$ y $\\sigma$","Siempre $0$","Siempre $0,5$"],c:1,
+  e:"La normal es continua, y en una variable continua la probabilidad de un valor puntual es cero. Solo tienen sentido las probabilidades de intervalos."},
+ {q:"¿Cuándo puedes aproximar una binomial por una normal?",
+  o:["Siempre","Cuando $np>5$ y $nq>5$","Solo si $p=0,5$"],c:1,
+  e:"Se necesita que ambos productos superen 5, lo que garantiza que la binomial es suficientemente simétrica. Entonces $B(n,p)\\approx N(np,\\sqrt{npq})$."},
+ {q:"Al aproximar y calcular $P(X\\le 8)$ con la normal, debes usar:",
+  o:["$P(X\\le 8)$","$P(X\\le 8{,}5)$","$P(X\\le 7{,}5)$"],c:1,
+  e:"Es la corrección de continuidad: al pasar de discreta a continua se amplía medio punto para incluir todo el valor 8, que ocupa el intervalo de 7,5 a 8,5."},
+ {q:"Si $Z\\sim N(0,1)$ y la tabla da $P(Z\\le 1{,}2)=0{,}8849$, entonces $P(Z\\le -1{,}2)$ vale:",
+  o:["$0{,}8849$","$0{,}1151$","$-0{,}8849$"],c:1,
+  e:"Por simetría de la campana, $P(Z\\le -z)=1-P(Z\\le z)=1-0{,}8849=0{,}1151$. Una probabilidad nunca puede ser negativa."}
+]
+});
+
+
+/* ===================== FLASHCARDS ===================== */
+const CARDS = [];
+
+CARDS.push(
+ {u:"U1", f:"Determinante de orden 2", b:"$$\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix}=ad-bc$$"},
+ {u:"U1", f:"Matriz inversa por adjuntos", b:"$$A^{-1}=\\frac{1}{|A|}\\big(\\operatorname{Adj}(A)\\big)^{t}$$"},
+ {u:"U1", f:"¿Cuándo existe $A^{-1}$?", b:"Solo si $|A|\\neq 0$ (matriz regular)."},
+ {u:"U1", f:"$|kA|$ para una matriz de orden $n$", b:"$$|kA|=k^{n}\\,|A|$$"},
+ {u:"U2", f:"Rouché–Frobenius: ¿cuándo SCD?", b:"$$\\operatorname{rg}(A)=\\operatorname{rg}(A^{*})=n$$"},
+ {u:"U2", f:"Rouché–Frobenius: ¿cuándo SCI?", b:"$\\operatorname{rg}(A)=\\operatorname{rg}(A^{*})=r<n$, con $n-r$ parámetros."},
+ {u:"U2", f:"Regla de Cramer", b:"$$x_i=\\frac{|A_i|}{|A|}$$"},
+ {u:"U3", f:"Las 7 indeterminaciones", b:"$$\\frac{0}{0}\\;\\; \\frac{\\infty}{\\infty}\\;\\; \\infty-\\infty\\;\\; 0\\cdot\\infty\\;\\; 1^{\\infty}\\;\\; 0^{0}\\;\\; \\infty^{0}$$"},
+ {u:"U3", f:"Indeterminación $1^{\\infty}$", b:"$$\\lim f^{g}=e^{\\,\\lim\\, g\\,(f-1)}$$"},
+ {u:"U3", f:"Asíntota oblicua $y=mx+n$", b:"$$m=\\lim_{x\\to\\infty}\\frac{f(x)}{x}\\qquad n=\\lim_{x\\to\\infty}\\big(f(x)-mx\\big)$$"},
+ {u:"U3", f:"Teorema de Bolzano", b:"Si $f$ es continua en $[a,b]$ y $f(a)f(b)<0$, existe $c\\in(a,b)$ con $f(c)=0$."},
+ {u:"U4", f:"Definición de derivada", b:"$$f'(a)=\\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h}$$"},
+ {u:"U4", f:"Derivada de un cociente", b:"$$\\left(\\frac{u}{v}\\right)'=\\frac{u'v-uv'}{v^{2}}$$"},
+ {u:"U4", f:"Regla de la cadena", b:"$$\\big(f(g(x))\\big)'=f'\\big(g(x)\\big)\\cdot g'(x)$$"},
+ {u:"U4", f:"Recta tangente en $x=a$", b:"$$y-f(a)=f'(a)\\,(x-a)$$"},
+ {u:"U4", f:"Teorema del valor medio (Lagrange)", b:"$$f'(c)=\\frac{f(b)-f(a)}{b-a}$$"},
+ {u:"U5", f:"Signo de $f''$ y curvatura", b:"$f''>0$: cóncava hacia arriba $(\\smile)$ · $f''<0$: cóncava hacia abajo $(\\frown)$"},
+ {u:"U6", f:"Integración por partes", b:"$$\\int u\\,dv=uv-\\int v\\,du$$"},
+ {u:"U6", f:"Integral de $f'/f$", b:"$$\\int\\frac{f'}{f}\\,dx=\\ln|f|+C$$"},
+ {u:"U6", f:"Regla de Barrow", b:"$$\\int_a^b f(x)\\,dx=F(b)-F(a)$$"},
+ {u:"U6", f:"Área entre dos curvas", b:"$$A=\\int_a^b \\big|f(x)-g(x)\\big|\\,dx$$"},
+ {u:"U6", f:"Volumen de revolución (eje X)", b:"$$V=\\pi\\int_a^b \\big[f(x)\\big]^2 dx$$"},
+ {u:"U7", f:"Módulo de un vector", b:"$$|\\vec{v}|=\\sqrt{v_1^{2}+v_2^{2}+v_3^{2}}$$"},
+ {u:"U7", f:"Ángulo entre dos vectores", b:"$$\\cos\\alpha=\\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}|\\,|\\vec{v}|}$$"},
+ {u:"U7", f:"Área del triángulo $ABC$", b:"$$A=\\frac{1}{2}\\big|\\overrightarrow{AB}\\times\\overrightarrow{AC}\\big|$$"},
+ {u:"U7", f:"Volumen del tetraedro", b:"$$V=\\frac{1}{6}\\big|[\\,\\overrightarrow{AB},\\overrightarrow{AC},\\overrightarrow{AD}\\,]\\big|$$"},
+ {u:"U8", f:"Distancia de un punto a un plano", b:"$$d=\\frac{|Ax_0+By_0+Cz_0+D|}{\\sqrt{A^{2}+B^{2}+C^{2}}}$$"},
+ {u:"U8", f:"Distancia de un punto a una recta", b:"$$d=\\frac{\\big|\\overrightarrow{AP}\\times\\vec{v}\\big|}{|\\vec{v}|}$$"},
+ {u:"U8", f:"Ángulo entre recta y plano", b:"$$\\sin\\alpha=\\frac{|\\vec{v}\\cdot\\vec{n}|}{|\\vec{v}|\\,|\\vec{n}|}$$"},
+ {u:"U8", f:"Distancia entre rectas que se cruzan", b:"$$d=\\frac{\\big|[\\,\\overrightarrow{AB},\\vec{u},\\vec{v}\\,]\\big|}{|\\vec{u}\\times\\vec{v}|}$$"},
+ {u:"U9", f:"Probabilidad de la unión", b:"$$P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$$"},
+ {u:"U9", f:"Probabilidad condicionada", b:"$$P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}$$"},
+ {u:"U9", f:"Teorema de Bayes", b:"$$P(A_i\\mid B)=\\frac{P(A_i)P(B\\mid A_i)}{\\sum_j P(A_j)P(B\\mid A_j)}$$"},
+ {u:"U9", f:"Combinaciones de $n$ elementos tomados de $k$", b:"$$\\binom{n}{k}=\\frac{n!}{k!\\,(n-k)!}$$"},
+ {u:"U10", f:"Función de probabilidad binomial", b:"$$P(X=k)=\\binom{n}{k}p^{k}q^{\\,n-k}$$"},
+ {u:"U10", f:"Media y desviación de una binomial", b:"$$\\mu=np\\qquad \\sigma=\\sqrt{npq}$$"},
+ {u:"U10", f:"Tipificación de la normal", b:"$$Z=\\frac{X-\\mu}{\\sigma}$$"},
+ {u:"U10", f:"Simetría de la normal estándar", b:"$$P(Z\\le -z)=1-P(Z\\le z)$$"},
+ {u:"U10", f:"Condición para aproximar binomial por normal", b:"$np>5$ y $nq>5$, entonces $B(n,p)\\approx N\\big(np,\\sqrt{npq}\\big)$"}
+);
+
+
+/* ===================== UTILIDADES ===================== */
+function gv(id){return [].slice.call(document.querySelectorAll("#"+id+" input")).map(function(i){return parseFloat(i.value)||0;});}
+function fm(x){ if(!isFinite(x)) return "—";
+  var r=Math.round(x*10000)/10000;
+  if(Math.abs(r-Math.round(r))<1e-9) return String(Math.round(r));
+  return String(r).replace(".",",");}
+function row(a,b){return '<div class="r"><span>'+a+'</span><b>'+b+'</b></div>';}
+function show(id,h){var o=document.getElementById(id);o.innerHTML=h;o.classList.add("show");tex(o);}
+function det3(m){return m[0]*(m[4]*m[8]-m[5]*m[7])-m[1]*(m[3]*m[8]-m[5]*m[6])+m[2]*(m[3]*m[7]-m[4]*m[6]);}
+function det2(a,b,c,d){return a*d-b*c;}
+
+/* ===================== MATRIZ 3×3 ===================== */
+function randMat(){
+  document.querySelectorAll("#m3 input").forEach(function(i){i.value=Math.floor(Math.random()*9)-3;});
+}
+function calcMat(){
+  var m=gv("m3"), d=det3(m), h="";
+  h+='<div class="verdict">'+(Math.abs(d)<1e-10?"Matriz singular — no tiene inversa":"Matriz regular — tiene inversa")+'</div>';
+  h+=row("Determinante $|A|$","$"+fm(d)+"$");
+  var rank=0;
+  if(Math.abs(d)>1e-10) rank=3;
+  else{
+    var sub=[[0,1,3,4],[0,2,3,5],[1,2,4,5],[0,1,6,7],[0,2,6,8],[1,2,7,8],[3,4,6,7],[3,5,6,8],[4,5,7,8]];
+    for(var i=0;i<sub.length;i++){var s=sub[i];
+      if(Math.abs(det2(m[s[0]],m[s[1]],m[s[2]],m[s[3]]))>1e-10){rank=2;break;}}
+    if(rank===0) rank = m.some(function(x){return Math.abs(x)>1e-10;})?1:0;
+  }
+  h+=row("Rango de $A$","$"+rank+"$");
+  if(Math.abs(d)>1e-10){
+    var c=[
+      det2(m[4],m[5],m[7],m[8]), -det2(m[3],m[5],m[6],m[8]), det2(m[3],m[4],m[6],m[7]),
+      -det2(m[1],m[2],m[7],m[8]), det2(m[0],m[2],m[6],m[8]), -det2(m[0],m[1],m[6],m[7]),
+      det2(m[1],m[2],m[4],m[5]), -det2(m[0],m[2],m[3],m[5]), det2(m[0],m[1],m[3],m[4])];
+    var inv=[c[0],c[3],c[6],c[1],c[4],c[7],c[2],c[5],c[8]].map(function(x){return x/d;});
+    h+='<div style="margin-top:9px">Inversa $A^{-1}$:</div>';
+    h+='$$\\begin{pmatrix}'+fm(inv[0])+'&'+fm(inv[1])+'&'+fm(inv[2])+'\\\\'
+      +fm(inv[3])+'&'+fm(inv[4])+'&'+fm(inv[5])+'\\\\'
+      +fm(inv[6])+'&'+fm(inv[7])+'&'+fm(inv[8])+'\\end{pmatrix}$$';
+  } else {
+    h+='<div style="margin-top:9px" class="muted">Como $|A|=0$, la matriz no es invertible. Sus filas son linealmente dependientes.</div>';
+  }
+  show("outMat",h);
+}
+
+/* ===================== SISTEMA 3×3 ===================== */
+function calcSys(){
+  var v=gv("sys");
+  var A=[v[0],v[1],v[2], v[4],v[5],v[6], v[8],v[9],v[10]];
+  var B=[v[3],v[7],v[11]];
+  var d=det3(A), h="";
+  function rank3(M){
+    if(Math.abs(det3(M))>1e-10) return 3;
+    var sub=[[0,1,3,4],[0,2,3,5],[1,2,4,5],[0,1,6,7],[0,2,6,8],[1,2,7,8],[3,4,6,7],[3,5,6,8],[4,5,7,8]];
+    for(var i=0;i<sub.length;i++){var s=sub[i];
+      if(Math.abs(det2(M[s[0]],M[s[1]],M[s[2]],M[s[3]]))>1e-10) return 2;}
+    return M.some(function(x){return Math.abs(x)>1e-10;})?1:0;
+  }
+  var rA=rank3(A);
+  /* rango de la ampliada: max de los rangos de las submatrices 3x3 posibles */
+  var rAst=rA;
+  var cols=[[0,1,3],[0,2,3],[1,2,3]];
+  for(var k=0;k<cols.length;k++){
+    var c=cols[k];
+    var M=[v[c[0]],v[c[1]],v[c[2]], v[4+c[0]],v[4+c[1]],v[4+c[2]], v[8+c[0]],v[8+c[1]],v[8+c[2]]];
+    if(Math.abs(det3(M))>1e-10){rAst=3;break;}
+  }
+  if(rAst<3 && rA<2){
+    var Mfull=[v[0],v[1],v[2],v[3], v[4],v[5],v[6],v[7], v[8],v[9],v[10],v[11]];
+    var any=false;
+    for(var i=0;i<3;i++) for(var j=0;j<4;j++) for(var i2=i+1;i2<3;i2++) for(var j2=j+1;j2<4;j2++){
+      if(Math.abs(det2(Mfull[i*4+j],Mfull[i*4+j2],Mfull[i2*4+j],Mfull[i2*4+j2]))>1e-10) any=true;}
+    if(any) rAst=Math.max(rAst,2);
+  }
+  var n=3, verdict, expl;
+  if(rA!==rAst){verdict="Sistema INCOMPATIBLE (SI)";expl="Los rangos no coinciden, así que no existe ninguna solución.";}
+  else if(rA===n){verdict="Sistema COMPATIBLE DETERMINADO (SCD)";expl="Los rangos coinciden con el número de incógnitas: hay una única solución.";}
+  else{verdict="Sistema COMPATIBLE INDETERMINADO (SCI)";expl="Hay infinitas soluciones, con "+(n-rA)+" parámetro(s) libre(s).";}
+  h+='<div class="verdict">'+verdict+'</div>';
+  h+='<div class="muted" style="margin-bottom:7px">'+expl+'</div>';
+  h+=row("$\\operatorname{rg}(A)$","$"+rA+"$");
+  h+=row("$\\operatorname{rg}(A^{*})$","$"+rAst+"$");
+  h+=row("$|A|$","$"+fm(d)+"$");
+  if(Math.abs(d)>1e-10){
+    function sw(M,col,Bv){var c=M.slice();c[col]=Bv[0];c[col+3]=Bv[1];c[col+6]=Bv[2];return c;}
+    h+='<div style="margin-top:8px">Solución por Cramer:</div>';
+    h+=row("$x$","$"+fm(det3(sw(A,0,B))/d)+"$");
+    h+=row("$y$","$"+fm(det3(sw(A,1,B))/d)+"$");
+    h+=row("$z$","$"+fm(det3(sw(A,2,B))/d)+"$");
+  }
+  show("outSys",h);
+}
+
+/* ===================== VECTORES ===================== */
+function calcVec(){
+  var u=gv("vu"), v=gv("vv"), w=gv("vw"), h="";
+  var dot=u[0]*v[0]+u[1]*v[1]+u[2]*v[2];
+  var cr=[u[1]*v[2]-u[2]*v[1], u[2]*v[0]-u[0]*v[2], u[0]*v[1]-u[1]*v[0]];
+  var mu=Math.hypot(u[0],u[1],u[2]), mv=Math.hypot(v[0],v[1],v[2]);
+  var mc=Math.hypot(cr[0],cr[1],cr[2]);
+  var mix=det3([u[0],u[1],u[2],v[0],v[1],v[2],w[0],w[1],w[2]]);
+  var ang=(mu&&mv)?Math.acos(Math.max(-1,Math.min(1,dot/(mu*mv))))*180/Math.PI:NaN;
+  h+=row("$|\\vec{u}|$","$"+fm(mu)+"$");
+  h+=row("$|\\vec{v}|$","$"+fm(mv)+"$");
+  h+=row("Producto escalar $\\vec{u}\\cdot\\vec{v}$","$"+fm(dot)+"$");
+  h+=row("Ángulo entre $\\vec{u}$ y $\\vec{v}$","$"+fm(ang)+"^\\circ$");
+  h+=row("Producto vectorial $\\vec{u}\\times\\vec{v}$","$("+fm(cr[0])+",\\,"+fm(cr[1])+",\\,"+fm(cr[2])+")$");
+  h+=row("$|\\vec{u}\\times\\vec{v}|$ — área del paralelogramo","$"+fm(mc)+"$");
+  h+=row("Área del triángulo","$"+fm(mc/2)+"$");
+  h+=row("Producto mixto $[\\vec{u},\\vec{v},\\vec{w}]$","$"+fm(mix)+"$");
+  h+=row("Volumen del tetraedro","$"+fm(Math.abs(mix)/6)+"$");
+  var notes=[];
+  if(Math.abs(dot)<1e-10) notes.push("$\\vec{u}$ y $\\vec{v}$ son <strong>perpendiculares</strong> (escalar nulo).");
+  if(mc<1e-10) notes.push("$\\vec{u}$ y $\\vec{v}$ son <strong>paralelos</strong> (vectorial nulo).");
+  if(Math.abs(mix)<1e-10) notes.push("Los tres vectores son <strong>coplanarios</strong> (mixto nulo): no encierran volumen.");
+  if(notes.length) h+='<div style="margin-top:9px" class="muted">'+notes.join("<br>")+'</div>';
+  show("outVec",h);
+}
+
+/* ===================== DISTANCIA PUNTO-PLANO ===================== */
+function calcDist(){
+  var pl=gv("pl"), pt=gv("pt");
+  var num=pl[0]*pt[0]+pl[1]*pt[1]+pl[2]*pt[2]+pl[3];
+  var den=Math.hypot(pl[0],pl[1],pl[2]);
+  var h="";
+  if(den<1e-10){show("outDist",'<div class="verdict">Datos no válidos</div><div class="muted">El vector normal $(A,B,C)$ no puede ser nulo: eso no define un plano.</div>');return;}
+  h+='<div class="verdict">$d(P,\\pi)='+fm(Math.abs(num)/den)+'$</div>';
+  h+=row("Vector normal $\\vec{n}$","$("+fm(pl[0])+",\\,"+fm(pl[1])+",\\,"+fm(pl[2])+")$");
+  h+=row("Numerador $|Ax_0+By_0+Cz_0+D|$","$"+fm(Math.abs(num))+"$");
+  h+=row("Denominador $|\\vec{n}|$","$"+fm(den)+"$");
+  if(Math.abs(num)<1e-10) h+='<div style="margin-top:9px" class="muted">La distancia es cero: el punto <strong>pertenece al plano</strong>.</div>';
+  show("outDist",h);
+}
+
+/* ===================== BINOMIAL ===================== */
+function comb(n,k){if(k<0||k>n)return 0;var r=1;for(var i=1;i<=k;i++)r=r*(n-k+i)/i;return r;}
+function calcBin(){
+  var n=Math.max(1,Math.round(+document.getElementById("bn").value||1));
+  var pp=+document.getElementById("bp").value; var k=Math.round(+document.getElementById("bk").value||0);
+  if(pp<0||pp>1){show("outBin",'<div class="verdict">Valor no válido</div><div class="muted">La probabilidad $p$ debe estar entre 0 y 1.</div>');return;}
+  var q=1-pp;
+  function P(kk){return comb(n,kk)*Math.pow(pp,kk)*Math.pow(q,n-kk);}
+  var acc=0; for(var i=0;i<=Math.min(k,n);i++) acc+=P(i);
+  var h='<div class="verdict">$P(X='+k+')='+fm(P(k))+'$</div>';
+  h+=row("$P(X\\le "+k+")$","$"+fm(acc)+"$");
+  h+=row("$P(X\\ge "+k+")$","$"+fm(1-acc+P(k))+"$");
+  h+=row("$P(X\\ge 1)=1-P(X=0)$","$"+fm(1-P(0))+"$");
+  h+=row("Media $\\mu=np$","$"+fm(n*pp)+"$");
+  h+=row("Desviación $\\sigma=\\sqrt{npq}$","$"+fm(Math.sqrt(n*pp*q))+"$");
+  if(n*pp>5 && n*q>5) h+='<div style="margin-top:9px" class="muted">Se cumple $np>5$ y $nq>5$: <strong>puedes aproximar</strong> por $N('+fm(n*pp)+',\\;'+fm(Math.sqrt(n*pp*q))+')$ (recuerda la corrección de continuidad).</div>';
+  else h+='<div style="margin-top:9px" class="muted">No se cumple $np>5$ y $nq>5$: <strong>no</strong> conviene aproximar por la normal.</div>';
+  show("outBin",h);
+}
+
+/* ===================== NORMAL ===================== */
+function erf(x){var s=x<0?-1:1;x=Math.abs(x);
+  var a1=.254829592,a2=-.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,pp=.3275911;
+  var t=1/(1+pp*x); var y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return s*y;}
+function phi(z){return .5*(1+erf(z/Math.SQRT2));}
+function calcNor(){
+  var m=+document.getElementById("nm").value, s=+document.getElementById("ns").value, x=+document.getElementById("nx").value;
+  if(!(s>0)){show("outNor",'<div class="verdict">Valor no válido</div><div class="muted">La desviación típica $\\sigma$ debe ser mayor que cero.</div>');return;}
+  var z=(x-m)/s, p=phi(z);
+  var h='<div class="verdict">$P(X\\le '+fm(x)+')='+fm(p)+'$</div>';
+  h+=row("Valor tipificado $z=\\dfrac{x-\\mu}{\\sigma}$","$"+fm(z)+"$");
+  h+=row("$P(Z\\le z)$","$"+fm(p)+"$");
+  h+=row("$P(Z\\ge z)$","$"+fm(1-p)+"$");
+  h+=row("$P(-z\\le Z\\le z)$","$"+fm(Math.abs(2*phi(Math.abs(z))-1))+"$");
+  show("outNor",h);
+}
+
+/* ===================== TABLA Z ===================== */
+function buildZ(){
+  var el=document.getElementById("ztable"); if(!el) return;
+  var h='<table class="tbl"><tr><th>z</th>';
+  for(var c=0;c<10;c++) h+='<th>0,0'+c+'</th>';
+  h+='</tr>';
+  for(var r=0;r<35;r++){
+    var base=r/10;
+    h+='<tr><td><b>'+base.toFixed(1).replace(".",",")+'</b></td>';
+    for(var c2=0;c2<10;c2++){
+      var z=base+c2/100;
+      h+='<td>'+phi(z).toFixed(4).replace(".",",")+'</td>';
+    }
+    h+='</tr>';
+  }
+  el.innerHTML=h+'</table>';
+}
+
+/* ===================== FLASHCARDS ===================== */
+var ci=0, flipped=false;
+function drawCard(){
+  var c=CARDS[ci];
+  document.getElementById("fcside").textContent=flipped?(c.u+" · Respuesta"):(c.u+" · Fórmula");
+  var t=document.getElementById("fctext");
+  t.innerHTML=flipped?c.b:c.f;
+  tex(t);
+  document.getElementById("fcctr").textContent=(ci+1)+" / "+CARDS.length;
+}
+function flipCard(){flipped=!flipped;drawCard();}
+function nextCard(){ci=(ci+1)%CARDS.length;flipped=false;drawCard();}
+function prevCard(){ci=(ci-1+CARDS.length)%CARDS.length;flipped=false;drawCard();}
+window.initCards=function(){ if(CARDS.length) drawCard(); };
+window.initTools=function(){ buildZ(); };
+
+
+/* ===================== RENDER MATEMÁTICAS ===================== */
+function tex(el){
+  if(window.renderMathInElement){
+    renderMathInElement(el,{delimiters:[
+      {left:"$$",right:"$$",display:true},
+      {left:"$",right:"$",display:false}
+    ],throwOnError:false});
+  }
+}
+
+/* ===================== QUIZ ENGINE ===================== */
+function buildQuiz(box){
+  const unit = box.dataset.unit, qs = QUIZ[unit] || [];
+  if(!qs.length) return;
+  let h = '<div class="qh"><span>Comprueba que lo has entendido</span><span class="sc" data-sc="'+unit+'">0 / '+qs.length+'</span></div>';
+  qs.forEach(function(q,i){
+    h += '<div class="q"><div class="qt"><span class="qn">'+(i+1)+'.</span>'+q.q+'</div>';
+    q.o.forEach(function(o,j){
+      h += '<button class="opt" data-u="'+unit+'" data-q="'+i+'" data-o="'+j+'">'+o+'</button>';
+    });
+    h += '<div class="fb"></div></div>';
+  });
+  box.innerHTML = h;
+  tex(box);
+}
+const score = {};
+document.addEventListener("click",function(e){
+  const b = e.target.closest(".opt");
+  if(!b || b.disabled) return;
+  const u=b.dataset.u, qi=+b.dataset.q, oi=+b.dataset.o, q=QUIZ[u][qi];
+  const wrapQ=b.closest(".q"), fb=wrapQ.querySelector(".fb");
+  wrapQ.querySelectorAll(".opt").forEach(function(o,j){
+    o.disabled=true;
+    if(j===q.c) o.classList.add("ok");
+    else if(j===oi) o.classList.add("no");
+  });
+  const good = oi===q.c;
+  fb.className="fb show "+(good?"ok":"no");
+  fb.innerHTML="<b>"+(good?"Correcto":"No es esa")+"</b>"+q.e;
+  tex(fb);
+  if(good){ score[u]=(score[u]||0)+1; }
+  const sc=document.querySelector('[data-sc="'+u+'"]');
+  if(sc) sc.textContent=(score[u]||0)+" / "+QUIZ[u].length;
+});
+
+/* ===================== PROGRESO ===================== */
+const doneSet = new Set();
+function refreshProgress(){
+  const n=doneSet.size, t=10;
+  document.getElementById("progbar").style.width=(n/t*100)+"%";
+  document.getElementById("progtxt").textContent=n+" / "+t+" unitats";
+  document.querySelectorAll('#nb-units a').forEach(function(a){
+    a.classList.toggle("done", doneSet.has(a.getAttribute("href").slice(1)));
+  });
+}
+document.addEventListener("change",function(e){
+  if(!e.target.matches(".udone input")) return;
+  const id=e.target.dataset.unit, lab=e.target.closest(".udone");
+  if(e.target.checked){doneSet.add(id);lab.classList.add("on");}
+  else{doneSet.delete(id);lab.classList.remove("on");}
+  refreshProgress();
+});
+
+/* ===================== BUSCADOR NAV ===================== */
+const si=document.getElementById("navsearch");
+si.addEventListener("input",function(){
+  const v=si.value.trim().toLowerCase();
+  let shown=0;
+  document.querySelectorAll(".sidebar a").forEach(function(a){
+    const hit = !v || a.textContent.toLowerCase().includes(v);
+    a.classList.toggle("hide",!hit);
+    if(hit) shown++;
+  });
+  document.getElementById("nores").style.display = shown? "none":"block";
+});
+
+/* ===================== SCROLLSPY ===================== */
+function initSpy(){
+  const links=[].slice.call(document.querySelectorAll(".sidebar a"));
+  const map={}; links.forEach(function(a){map[a.getAttribute("href").slice(1)]=a;});
+  const obs=new IntersectionObserver(function(en){
+    en.forEach(function(x){
+      if(x.isIntersecting){
+        links.forEach(function(l){l.classList.remove("active");});
+        if(map[x.target.id]) map[x.target.id].classList.add("active");
+      }
+    });
+  },{rootMargin:"-12% 0px -78% 0px"});
+  document.querySelectorAll("[id]").forEach(function(s){ if(map[s.id]) obs.observe(s); });
+  links.forEach(function(a){a.addEventListener("click",function(){document.body.classList.remove("nav-open");});});
+}
+
+/* ===================== INIT ===================== */
+document.addEventListener("DOMContentLoaded",function(){
+  tex(document.body);
+  document.querySelectorAll(".quiz").forEach(buildQuiz);
+  if(window.initTools) window.initTools();
+  if(window.initCards) window.initCards();
+  initSpy(); refreshProgress();
+});
+</script>
+</body>
+</html>

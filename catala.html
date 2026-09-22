@@ -1,0 +1,2659 @@
+<!doctype html>
+<html lang="ca" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Català 10 · Llengua Catalana i Literatura II</title>
+<meta name="description" content="Plataforma d'estudi per a la prova de Llengua Catalana i Literatura II de les PBAU: reflexió lingüística, llengua i societat, literatura i simulador de correcció.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --paper:#F7F8FA; --surface:#FFFFFF; --surface-2:#EFF2F7;
+    --ink:#0F1419; --ink-soft:#444C57; --muted:#79818D;
+    --line:#E2E7EF; --line-soft:#EDF0F6;
+    --blue:#1B5E9E; --blue-ink:#144E86; --wine:#7B2233;
+    --ok:#1E7A57; --warn:#95610F; --bad:#A72F3B;
+    --tint-blue:rgba(27,94,158,.08); --tint-wine:rgba(123,34,51,.08);
+    --tint-ok:rgba(30,122,87,.10); --tint-warn:rgba(149,97,15,.10); --tint-bad:rgba(167,47,59,.10);
+    --shadow:0 1px 2px rgba(15,20,25,.05), 0 12px 32px -20px rgba(15,20,25,.45);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1116; --surface:#151A21; --surface-2:#1D232C;
+      --ink:#E9EEF5; --ink-soft:#BAC3CF; --muted:#838C99;
+      --line:#28303A; --line-soft:#212832;
+      --blue:#79B2E8; --blue-ink:#9CC8F2; --wine:#E4909D;
+      --ok:#6FC9A2; --warn:#DBA945; --bad:#E8858F;
+      --tint-blue:rgba(121,178,232,.13); --tint-wine:rgba(228,144,157,.13);
+      --tint-ok:rgba(111,201,162,.13); --tint-warn:rgba(219,169,69,.13); --tint-bad:rgba(232,133,143,.13);
+      --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 38px -22px rgba(0,0,0,.9);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1116; --surface:#151A21; --surface-2:#1D232C;
+    --ink:#E9EEF5; --ink-soft:#BAC3CF; --muted:#838C99;
+    --line:#28303A; --line-soft:#212832;
+    --blue:#79B2E8; --blue-ink:#9CC8F2; --wine:#E4909D;
+    --ok:#6FC9A2; --warn:#DBA945; --bad:#E8858F;
+    --tint-blue:rgba(121,178,232,.13); --tint-wine:rgba(228,144,157,.13);
+    --tint-ok:rgba(111,201,162,.13); --tint-warn:rgba(219,169,69,.13); --tint-bad:rgba(232,133,143,.13);
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 38px -22px rgba(0,0,0,.9);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:15px; line-height:1.62; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:Merriweather,Georgia,serif; font-weight:700; margin:0; line-height:1.24; letter-spacing:-.012em; text-wrap:balance}
+  p{margin:0}
+  button{font:inherit; color:inherit}
+  a{color:var(--blue-ink)}
+  :focus-visible{outline:2px solid var(--blue); outline-offset:2px; border-radius:6px}
+  ::selection{background:var(--tint-blue)}
+
+  /* ---------- estructura ---------- */
+  .shell{display:flex; min-height:100%}
+  .sidebar{
+    width:270px; flex:0 0 270px; background:var(--surface); border-right:1px solid var(--line);
+    position:sticky; top:0; height:100dvh; overflow-y:auto; padding:20px 14px 28px;
+  }
+  .main{flex:1 1 auto; min-width:0; padding-block:0 96px}
+  .wrap{max-width:960px; margin:0 auto; padding-inline:clamp(16px,4vw,44px)}
+  @media (max-width:1023px){
+    .sidebar{
+      position:fixed; z-index:60; left:0; top:0; height:100dvh; transform:translateX(-100%);
+      transition:transform .24s ease; box-shadow:var(--shadow);
+      padding-top:calc(16px + env(safe-area-inset-top,0px));
+    }
+    body.nav-open .sidebar{transform:translateX(0)}
+    .scrim{position:fixed; inset:0; background:rgba(8,11,15,.45); z-index:55; opacity:0; pointer-events:none; transition:opacity .2s}
+    body.nav-open .scrim{opacity:1; pointer-events:auto}
+  }
+  @media (min-width:1024px){ .scrim{display:none} .only-mobile{display:none!important} }
+
+  .topbar{
+    position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--paper) 86%, transparent);
+    backdrop-filter:blur(12px); border-bottom:1px solid var(--line-soft);
+    display:flex; align-items:center; gap:10px; padding:9px clamp(12px,3vw,26px);
+  }
+  .brand{font-family:Merriweather,Georgia,serif; font-size:17px; display:flex; align-items:center; gap:9px; font-weight:700; letter-spacing:-.02em}
+  .seal{
+    width:27px; height:27px; border-radius:8px; display:grid; place-items:center; flex:0 0 27px;
+    background:var(--blue); color:#fff; font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:500;
+  }
+  :root[data-theme="dark"] .seal{color:#0E1116}
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .seal{color:#0E1116} }
+
+  /* ---------- navegació ---------- */
+  .navgroup{margin-bottom:16px}
+  .navlabel{font-size:10.5px; text-transform:uppercase; letter-spacing:.13em; color:var(--muted); padding:0 10px 6px; font-weight:600}
+  .navitem{
+    display:flex; align-items:center; gap:10px; width:100%; text-align:left; cursor:pointer;
+    padding:8px 10px; border-radius:9px; border:0; background:transparent; color:var(--ink-soft);
+    font-size:14px; line-height:1.3; transition:background .14s, color .14s;
+  }
+  .navitem:hover{background:var(--surface-2); color:var(--ink)}
+  .navitem[aria-current="true"]{background:var(--tint-blue); color:var(--blue-ink); font-weight:600}
+  .navitem .ico{width:18px; text-align:center; font-size:14px; opacity:.85}
+  .navitem .tag{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--muted); border:1px solid var(--line); border-radius:5px; padding:0 5px}
+  .navitem[aria-current="true"] .tag{border-color:color-mix(in srgb,var(--blue) 40%,transparent); color:var(--blue-ink)}
+
+  /* ---------- peces ---------- */
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px}
+  .card-flat{background:var(--surface-2); border-radius:14px; padding:18px}
+  .card-blue{background:var(--tint-blue); border:1px solid color-mix(in srgb,var(--blue) 26%,transparent); border-radius:14px; padding:18px}
+  .card-wine{background:var(--tint-wine); border:1px solid color-mix(in srgb,var(--wine) 26%,transparent); border-radius:14px; padding:18px}
+  .eyebrow{font-size:10.5px; text-transform:uppercase; letter-spacing:.14em; color:var(--muted); font-weight:700}
+  .lead{color:var(--ink-soft)}
+  .rule{height:1px; background:var(--line); border:0; margin:0}
+  .chip{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:3px 10px; font-size:12px; color:var(--ink-soft); background:var(--surface); white-space:nowrap}
+  .chip-blue{border-color:color-mix(in srgb,var(--blue) 34%,transparent); background:var(--tint-blue); color:var(--blue-ink)}
+  .chip-wine{border-color:color-mix(in srgb,var(--wine) 34%,transparent); background:var(--tint-wine); color:var(--wine)}
+  .chip-ok{border-color:color-mix(in srgb,var(--ok) 34%,transparent); background:var(--tint-ok); color:var(--ok)}
+  .chip-bad{border-color:color-mix(in srgb,var(--bad) 34%,transparent); background:var(--tint-bad); color:var(--bad)}
+  .chip-warn{border-color:color-mix(in srgb,var(--warn) 34%,transparent); background:var(--tint-warn); color:var(--warn)}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:7px; cursor:pointer;
+    border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:10px;
+    padding:8px 14px; font-size:14px; font-weight:500; transition:background .14s,border-color .14s,transform .08s;
+  }
+  .btn:hover{background:var(--surface-2)}
+  .btn:active{transform:translateY(1px)}
+  .btn[disabled]{opacity:.45; cursor:default}
+  .btn-primary{background:var(--blue); border-color:var(--blue); color:#FBFDFF}
+  :root[data-theme="dark"] .btn-primary{color:#0E1116}
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .btn-primary{color:#0E1116} }
+  .btn-primary:hover{background:color-mix(in srgb,var(--blue) 86%, var(--ink))}
+  .btn-ghost{border-color:transparent; background:transparent; color:var(--ink-soft)}
+  .btn-ghost:hover{background:var(--surface-2); color:var(--ink)}
+  .btn-sm{padding:5px 10px; font-size:13px; border-radius:8px}
+  .num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+  .field{width:100%; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:9px 11px; font:inherit; color:var(--ink)}
+  .field:focus{border-color:var(--blue)}
+  textarea.field{min-height:150px; resize:vertical; line-height:1.7}
+  select.field{cursor:pointer}
+  .sec{display:block; padding-top:26px}
+  .sec[hidden]{display:none!important}
+  .meter{height:7px; border-radius:99px; background:var(--surface-2); overflow:hidden}
+  .meter > i{display:block; height:100%; background:var(--blue); border-radius:99px; transition:width .45s ease}
+  .meter > i.is-ok{background:var(--ok)} .meter > i.is-warn{background:var(--warn)} .meter > i.is-bad{background:var(--bad)}
+  .ok{color:var(--ok)} .warn{color:var(--warn)} .bad{color:var(--bad)} .blue{color:var(--blue-ink)}
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--surface)}
+  table{border-collapse:collapse; width:100%; min-width:520px; font-size:14px}
+  th,td{padding:10px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line-soft)}
+  thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); background:var(--surface-2); font-weight:700}
+  tbody tr:last-child td{border-bottom:0}
+  blockquote.doc{
+    font-family:Merriweather,Georgia,serif; font-size:15px; line-height:1.8; color:var(--ink-soft);
+    border-left:3px solid var(--wine); padding:2px 0 2px 16px; margin:0;
+  }
+  .kbd{font-family:"IBM Plex Mono",monospace; font-size:11px; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 5px; color:var(--muted)}
+  details.acc{border:1px solid var(--line); border-radius:14px; background:var(--surface); overflow:hidden}
+  details.acc + details.acc{margin-top:10px}
+  details.acc > summary{cursor:pointer; padding:14px 18px; list-style:none; display:flex; align-items:center; gap:12px}
+  details.acc > summary::-webkit-details-marker{display:none}
+  details.acc > summary::after{content:"+"; margin-left:auto; color:var(--muted); font-family:"IBM Plex Mono",monospace}
+  details.acc[open] > summary::after{content:"–"}
+  details.acc[open] > summary{border-bottom:1px solid var(--line-soft); background:var(--surface-2)}
+  .acc-body{padding:18px}
+  .flip{perspective:1200px}
+  .flip-inner{position:relative; transition:transform .5s cubic-bezier(.2,.7,.2,1); transform-style:preserve-3d; min-height:250px}
+  .flip.is-flipped .flip-inner{transform:rotateY(180deg)}
+  .flip-face{position:absolute; inset:0; backface-visibility:hidden; display:flex; flex-direction:column; justify-content:center; padding:26px; border-radius:16px; border:1px solid var(--line); background:var(--surface); overflow:auto}
+  .flip-back{transform:rotateY(180deg); background:var(--surface-2)}
+  .tabs{display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:0}
+  .tab{border:0; background:transparent; cursor:pointer; padding:8px 12px; border-radius:9px 9px 0 0; color:var(--ink-soft); font-size:14px; border-bottom:2px solid transparent; margin-bottom:-1px}
+  .tab:hover{background:var(--surface-2); color:var(--ink)}
+  .tab[aria-selected="true"]{color:var(--blue-ink); border-bottom-color:var(--blue); font-weight:600}
+  .opt{
+    display:block; width:100%; text-align:left; cursor:pointer; border:1px solid var(--line); background:var(--surface);
+    border-radius:11px; padding:11px 14px; font-size:14.5px; transition:border-color .14s, background .14s;
+  }
+  .opt:hover:not([disabled]){border-color:var(--blue); background:var(--tint-blue)}
+  .opt[disabled]{cursor:default}
+  .opt.is-right{border-color:var(--ok); background:var(--tint-ok); color:var(--ok); font-weight:600}
+  .opt.is-wrong{border-color:var(--bad); background:var(--tint-bad); color:var(--bad)}
+  .seg{
+    display:inline-block; border:1px dashed var(--line); border-radius:8px; padding:3px 8px; margin:3px 2px;
+    cursor:pointer; transition:background .14s, border-color .14s; font-size:15.5px;
+  }
+  .seg:hover{border-color:var(--blue); background:var(--tint-blue)}
+  .seg.is-picked{border-style:solid; border-color:var(--blue); background:var(--tint-blue)}
+  .seg.is-right{border-style:solid; border-color:var(--ok); background:var(--tint-ok)}
+  .seg.is-wrong{border-style:solid; border-color:var(--bad); background:var(--tint-bad)}
+  .seg .fn{font-family:"IBM Plex Mono",monospace; font-size:10px; display:block; color:var(--muted); letter-spacing:.06em}
+  mark.err{background:var(--tint-bad); color:var(--bad); border-radius:4px; padding:0 3px; border-bottom:2px solid var(--bad); font-weight:500}
+  mark.conn{background:var(--tint-ok); color:var(--ok); border-radius:4px; padding:0 3px}
+  .scorebar{display:grid; grid-template-columns:150px 1fr 56px; gap:12px; align-items:center; font-size:13.5px}
+  @media (max-width:560px){ .scorebar{grid-template-columns:110px 1fr 48px; gap:8px; font-size:12.5px} }
+  .badge{font-family:"IBM Plex Mono",monospace; font-size:11px; border-radius:6px; padding:1px 6px; background:var(--surface-2); color:var(--muted)}
+  .skeleton-box{background:var(--surface-2); border-radius:12px; padding:16px; font-size:14px; line-height:1.7; white-space:pre-wrap}
+  .toast{
+    position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(12px); z-index:90;
+    background:var(--ink); color:var(--paper); padding:9px 16px; border-radius:999px; font-size:13.5px;
+    opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+  }
+  .toast.is-on{opacity:1; transform:translateX(-50%) translateY(0)}
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important; transition:none!important} }
+
+  /* ---------- defenses davant el preflight de Tailwind ---------- */
+  body h1{font-size:clamp(28px,4.4vw,36px)} body h2{font-size:23px} body h3{font-size:17px} body h4{font-size:15px}
+  body h1, body h2, body h3, body h4{font-family:Merriweather,Georgia,serif; font-weight:700}
+  body ul.bul{list-style:disc; padding-left:20px; margin:0}
+  body ol.bul{list-style:decimal; padding-left:20px; margin:0}
+  body ul.bul li, body ol.bul li{margin-top:5px}
+  body blockquote.doc{margin:0}
+  body label{cursor:pointer}
+  body input[type="checkbox"]{accent-color:var(--blue); width:14px; height:14px; vertical-align:-2px; margin-right:5px}
+  body input[type="range"]{-webkit-appearance:auto; appearance:auto; accent-color:var(--blue)}
+
+  /* ---------- utilitats (equivalents a Tailwind, per si el CDN no carrega) ---------- */
+  .flex{display:flex} .grid{display:grid} .hidden{display:none}
+  .items-center{align-items:center} .items-start{align-items:flex-start} .items-baseline{align-items:baseline} .items-end{align-items:flex-end}
+  .justify-between{justify-content:space-between} .justify-center{justify-content:center}
+  .flex-wrap{flex-wrap:wrap} .flex-col{flex-direction:column} .flex-1{flex:1 1 0%}
+  .ml-auto{margin-left:auto} .mx-auto{margin-left:auto;margin-right:auto}
+  .w-full{width:100%} .w-auto{width:auto} .min-w-0{min-width:0} .text-center{text-align:center} .text-right{text-align:right}
+  .gap-1{gap:4px} .gap-2{gap:8px} .gap-3{gap:12px} .gap-4{gap:16px} .gap-5{gap:20px} .gap-6{gap:24px}
+  .mt-1{margin-top:4px} .mt-2{margin-top:8px} .mt-3{margin-top:12px} .mt-4{margin-top:16px}
+  .mt-5{margin-top:20px} .mt-6{margin-top:24px} .mt-8{margin-top:32px} .mt-10{margin-top:40px}
+  .mb-1{margin-bottom:4px} .mb-2{margin-bottom:8px} .mb-3{margin-bottom:12px} .mb-4{margin-bottom:16px} .mb-6{margin-bottom:24px}
+  .pt-2{padding-top:8px} .pt-4{padding-top:16px}
+  .t-xs{font-size:12px} .t-sm{font-size:13.5px} .t-base{font-size:15px} .t-lg{font-size:17px} .t-xl{font-size:21px} .t-2xl{font-size:28px} .t-3xl{font-size:38px}
+  .fw-500{font-weight:500} .fw-600{font-weight:600} .fw-700{font-weight:700}
+  .lh-tight{line-height:1.3} .max-62{max-width:62ch} .max-420{max-width:420px}
+  .g-auto{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .g-2{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .stack{display:flex; flex-direction:column}
+</style>
+</head>
+<body>
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+
+<div class="shell">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar" aria-label="Navegació principal">
+    <div class="flex items-center gap-2 mb-6" style="padding:0 8px">
+      <span class="seal">Ç</span>
+      <div class="min-w-0">
+        <div class="brand" style="font-size:16px">Català 10</div>
+        <div class="t-xs" style="color:var(--muted)">Llengua i Literatura II</div>
+      </div>
+    </div>
+
+    <nav class="navgroup">
+      <div class="navlabel">Inici</div>
+      <button class="navitem" data-view="panell"><span class="ico">◧</span>Panell de control<span class="tag">1</span></button>
+      <button class="navitem" data-view="prova"><span class="ico">◈</span>Com és la prova<span class="tag">2</span></button>
+    </nav>
+
+    <nav class="navgroup">
+      <div class="navlabel">Rutes d'estudi</div>
+      <button class="navitem" data-view="sintaxi"><span class="ico">⌁</span>Reflexió lingüística<span class="tag">3</span></button>
+      <button class="navitem" data-view="societat"><span class="ico">◍</span>Llengua i societat<span class="tag">4</span></button>
+      <button class="navitem" data-view="literatura"><span class="ico">✦</span>Literatura<span class="tag">5</span></button>
+    </nav>
+
+    <nav class="navgroup">
+      <div class="navlabel">Caixa d'eines</div>
+      <button class="navitem" data-view="escriure"><span class="ico">✎</span>Generador d'estructures<span class="tag">6</span></button>
+      <button class="navitem" data-view="faltes"><span class="ico">⚠</span>Alarma de faltes greus<span class="tag">7</span></button>
+    </nav>
+
+    <nav class="navgroup">
+      <div class="navlabel">Posa't a prova</div>
+      <button class="navitem" data-view="arena"><span class="ico">◉</span>Arena d'Avaluació<span class="tag">8</span></button>
+    </nav>
+
+    <div class="rule mt-4 mb-4"></div>
+
+    <div class="card-flat" style="padding:14px">
+      <div class="eyebrow">Cronòmetre d'examen</div>
+      <div class="num t-2xl mt-1" id="timerBig">90:00</div>
+      <div class="flex gap-2 mt-3 flex-wrap">
+        <button class="btn btn-sm btn-primary" id="timerToggle">Iniciar</button>
+        <button class="btn btn-sm btn-ghost" id="timerReset">Reiniciar</button>
+      </div>
+      <p class="t-xs mt-2" style="color:var(--muted)">La prova dura 90 minuts.</p>
+    </div>
+
+    <p class="t-xs mt-4" style="color:var(--muted); padding:0 8px; line-height:1.5">
+      Continguts ajustats a la matriu d'especificacions (Decret 43/2025) i a les
+      puntualitzacions de la UIB per al curs 2025-2026.
+    </p>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main min-w-0">
+    <header class="topbar">
+      <button class="btn btn-sm btn-ghost only-mobile" id="burger" aria-label="Obrir el menú">☰</button>
+      <div class="brand t-base"><span id="crumb">Panell de control</span></div>
+      <div class="flex items-center gap-2 ml-auto">
+        <span class="chip num" id="timerChip" hidden>90:00</span>
+        <button class="btn btn-sm btn-ghost" id="themeBtn" aria-label="Canviar el tema">◑</button>
+      </div>
+    </header>
+
+    <div class="wrap">
+
+      <!-- ============ PANELL ============ -->
+      <section class="sec" id="sec-panell">
+        <div class="eyebrow">Panell de control</div>
+        <h1 class="mt-2">Tot el que necessites per treure un 10 a Llengua Catalana</h1>
+        <p class="lead mt-3 max-62">
+          Aquesta plataforma segueix l'estructura real de la prova de <b>Llengua Catalana i Literatura II</b>:
+          comentari de text i redacció, llengua i societat, i educació literària. Tria una ruta a l'esquerra
+          o comença per on tens la nota més baixa.
+        </p>
+
+        <div class="g-auto mt-6">
+          <div class="card">
+            <div class="eyebrow">Compte enrere</div>
+            <div class="num t-3xl mt-1" id="countdown">—</div>
+            <p class="t-sm" style="color:var(--muted)" id="countdownSub">dies fins a la prova</p>
+            <label class="eyebrow mt-3" for="examDate" style="display:block">Data de la prova</label>
+            <input class="field mt-1" type="date" id="examDate" value="2026-06-09">
+          </div>
+          <div class="card">
+            <div class="eyebrow">Estructura de la prova</div>
+            <div class="stack gap-3 mt-3" id="structureList"></div>
+          </div>
+          <div class="card">
+            <div class="eyebrow">El teu progrés</div>
+            <div class="stack gap-4 mt-3" id="progressList"></div>
+            <button class="btn btn-sm btn-ghost mt-4" id="resetProgress">Esborrar el progrés</button>
+          </div>
+        </div>
+
+        <h2 class="mt-10">Calculadora de nota</h2>
+        <p class="lead t-sm mt-1">Posa la nota que creus que trauràs a cada pregunta i mira on perds el 10.</p>
+        <div class="card mt-4">
+          <div class="g-auto" id="calcInputs"></div>
+          <div class="rule mt-5 mb-4"></div>
+          <div class="flex items-end justify-between flex-wrap gap-4">
+            <div>
+              <div class="eyebrow">Nota estimada</div>
+              <div class="num t-3xl" id="calcTotal">0,00</div>
+            </div>
+            <div class="stack gap-1 t-sm" style="color:var(--ink-soft)" id="calcBreakdown"></div>
+          </div>
+        </div>
+
+        <h2 class="mt-10">Pla de xoc de 7 dies</h2>
+        <div class="g-2 mt-4" id="planList"></div>
+      </section>
+
+      <!-- ============ COM ÉS LA PROVA ============ -->
+      <section class="sec" id="sec-prova" hidden>
+        <div class="eyebrow">Mapa de l'examen</div>
+        <h1 class="mt-2">Com és la prova, pregunta per pregunta</h1>
+        <p class="lead mt-3 max-62">
+          Model oficial vigent: un <b>text periodístic</b> (una notícia) al bloc 1, i tria d'opcions
+          als blocs 2 i 3. Saber exactament què et demanen és mig punt regalat.
+        </p>
+        <div class="mt-6" id="provaBlocs"></div>
+
+        <div class="card-wine mt-6">
+          <div class="eyebrow">Avisos que costen punts</div>
+          <ul class="bul mt-2 t-sm" style="color:var(--ink-soft)">
+            <li><b>No es poden emprar esquemes ni guions</b> en cap resposta: es redueix un 50 % la nota de la pregunta.</li>
+            <li>Al text argumentatiu <b>no pots inventar dades ni donar informació falsa</b>: es penalitza.</li>
+            <li>El text argumentatiu ha de tenir <b>175-200 paraules</b> i estructura d'introducció, argumentació i conclusió.</li>
+            <li>La <b>contraargumentació no és obligatòria</b>, però es valora positivament: inclou-la sempre.</li>
+            <li>Al bloc 3 has de <b>citar i referenciar el text</b> dins la resposta.</li>
+          </ul>
+        </div>
+
+        <h2 class="mt-10">Rúbrica mental del corrector</h2>
+        <div class="tablewrap mt-4">
+          <table>
+            <thead><tr><th>Criteri</th><th>Què mira</th><th>Com el guanyes</th></tr></thead>
+            <tbody id="rubricaBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ REFLEXIÓ LINGÜÍSTICA ============ -->
+      <section class="sec" id="sec-sintaxi" hidden>
+        <div class="eyebrow">Ruta d'estudi 01</div>
+        <h1 class="mt-2">Reflexió lingüística</h1>
+        <p class="lead mt-3 max-62">
+          Funcions sintàctiques, oració composta i els temuts pronoms febles. Tot amb el truc de la
+          <b>pronominalització</b>, que és el que et salva quan dubtes.
+        </p>
+
+        <div class="tabs mt-6" id="sintaxiTabs">
+          <button class="tab" data-tab="funcions" aria-selected="true">Funcions sintàctiques</button>
+          <button class="tab" data-tab="composta" aria-selected="false">Oració composta</button>
+          <button class="tab" data-tab="pronoms" aria-selected="false">Pronoms febles</button>
+          <button class="tab" data-tab="reflexio" aria-selected="false">Morfologia i lèxic</button>
+        </div>
+
+        <!-- Funcions -->
+        <div class="mt-6" id="tab-funcions">
+          <div class="card-blue">
+            <div class="eyebrow">El truc infal·lible</div>
+            <p class="t-sm mt-2" style="color:var(--ink-soft)">
+              Substitueix el sintagma per un pronom feble: el pronom et diu la funció.
+            </p>
+            <div class="tablewrap mt-3" style="background:transparent">
+              <table>
+                <thead><tr><th>Funció</th><th>Pronom</th><th>Exemple</th></tr></thead>
+                <tbody id="trucsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card mt-6">
+            <div class="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <div class="eyebrow">Analitzador interactiu</div>
+                <h3 class="mt-1">Clica un sintagma i digues quina funció fa</h3>
+              </div>
+              <span class="chip num" id="synCounter">1 / 1</span>
+            </div>
+            <div class="mt-4" style="font-family:Merriweather,Georgia,serif; font-size:18px; line-height:2.2" id="synSentence"></div>
+            <div class="flex gap-2 flex-wrap mt-4" id="synOptions"></div>
+            <div class="mt-4" id="synFeedback"></div>
+            <div class="flex gap-2 flex-wrap mt-4">
+              <button class="btn btn-primary" id="synSolve">Veure la solució</button>
+              <button class="btn" id="synNext">Una altra oració →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Composta -->
+        <div class="mt-6" id="tab-composta" hidden>
+          <div id="compostaTheory"></div>
+          <div class="card mt-6">
+            <div class="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <div class="eyebrow">Classifica l'oració</div>
+                <h3 class="mt-1">Quin tipus d'oració composta és?</h3>
+              </div>
+              <span class="chip num" id="compCounter">0 encerts</span>
+            </div>
+            <blockquote class="doc mt-4" id="compSentence"></blockquote>
+            <div class="stack gap-2 mt-4" id="compOptions"></div>
+            <div class="mt-4" id="compFeedback"></div>
+            <button class="btn mt-4" id="compNext">Següent oració →</button>
+          </div>
+        </div>
+
+        <!-- Pronoms -->
+        <div class="mt-6" id="tab-pronoms" hidden>
+          <div class="g-2">
+            <div class="card">
+              <div class="eyebrow">Minijoc</div>
+              <h3 class="mt-1">Pronoms febles contrarellotge</h3>
+              <p class="t-sm lead mt-2">Tria la substitució correcta. 4 opcions, explicació a cada resposta.</p>
+              <div class="flex gap-4 mt-4 flex-wrap t-sm">
+                <span>Encerts: <b class="num" id="pfHits">0</b></span>
+                <span>Errors: <b class="num" id="pfMiss">0</b></span>
+                <span>Ratxa: <b class="num" id="pfStreak">0</b></span>
+                <span>Temps: <b class="num" id="pfTime">0s</b></span>
+              </div>
+              <div class="meter mt-3"><i id="pfMeter" style="width:0%"></i></div>
+            </div>
+            <div class="card-flat">
+              <div class="eyebrow">Recordatori balear</div>
+              <p class="t-sm mt-2" style="color:var(--ink-soft)">
+                En balear les formes plenes són vives: <b>me, te, se, mos, vos</b> («me'l dóna», «vos ho dic»),
+                i l'ordre pot ser CD + CI («la me dóna»). A l'examen escriu en <b>estàndard</b>,
+                però reconèixer la forma dialectal et pot servir al bloc 2.
+              </p>
+            </div>
+          </div>
+
+          <div class="card mt-6">
+            <div class="eyebrow" id="pfTag">Substitució</div>
+            <blockquote class="doc mt-3" id="pfSentence"></blockquote>
+            <div class="stack gap-2 mt-4" id="pfOptions"></div>
+            <div class="mt-4" id="pfFeedback"></div>
+            <div class="flex gap-2 mt-4 flex-wrap">
+              <button class="btn btn-primary" id="pfNext">Següent →</button>
+              <button class="btn btn-ghost" id="pfRestart">Reiniciar el joc</button>
+            </div>
+          </div>
+
+          <h3 class="mt-8">Taula de combinacions binàries</h3>
+          <p class="t-sm lead mt-1">Les que cauen sempre. Fixa't que amb <b>li</b> el CD va davant i <b>li</b> es converteix en <b>hi</b>.</p>
+          <div class="tablewrap mt-3">
+            <table>
+              <thead><tr><th>CI</th><th>+ el</th><th>+ la</th><th>+ els</th><th>+ les</th><th>+ en</th><th>+ ho</th></tr></thead>
+              <tbody id="pfTableBody"></tbody>
+            </table>
+          </div>
+          <div class="card-flat mt-4">
+            <div class="eyebrow">Les quatre formes d'un mateix pronom</div>
+            <div class="tablewrap mt-3" style="background:transparent">
+              <table>
+                <thead><tr><th>Pronom</th><th>Reforçada<br>(davant consonant)</th><th>Elidida<br>(davant vocal)</th><th>Plena<br>(darrere consonant)</th><th>Reduïda<br>(darrere vocal)</th></tr></thead>
+                <tbody id="pfFormsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reflexió sobre la llengua -->
+        <div class="mt-6" id="tab-reflexio" hidden>
+          <div id="reflexioCards"></div>
+        </div>
+      </section>
+
+      <!-- ============ LLENGUA I SOCIETAT ============ -->
+      <section class="sec" id="sec-societat" hidden>
+        <div class="eyebrow">Ruta d'estudi 02</div>
+        <h1 class="mt-2">Llengua i societat</h1>
+        <p class="lead mt-3 max-62">
+          El bloc 2 val <b>3 punts</b> i només has de respondre <b>una</b> de les quatre opcions.
+          Aquí tens els conceptes amb definició d'examen, el temari oficial i la dialectologia.
+        </p>
+
+        <div class="tabs mt-6" id="societatTabs">
+          <button class="tab" data-tab="flash" aria-selected="true">Fitxes ràpides</button>
+          <button class="tab" data-tab="temari" aria-selected="false">Temari oficial</button>
+          <button class="tab" data-tab="dialectes" aria-selected="false">Dialectologia</button>
+          <button class="tab" data-tab="detector" aria-selected="false">Detector de geolecte</button>
+        </div>
+
+        <div class="mt-6" id="tab-flash">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
+              <select class="field w-auto" id="fcFilter"></select>
+              <label class="t-sm" style="color:var(--ink-soft)"><input type="checkbox" id="fcOnlyHard"> només les marcades</label>
+            </div>
+            <span class="chip num" id="fcCounter"></span>
+          </div>
+          <div class="flip mt-4" id="fcCard">
+            <div class="flip-inner">
+              <div class="flip-face">
+                <div class="eyebrow" id="fcCat"></div>
+                <h2 class="mt-2" id="fcTerm">—</h2>
+                <p class="t-sm mt-3" style="color:var(--muted)">Clica la fitxa o prem <span class="kbd">Espai</span> per girar-la.</p>
+              </div>
+              <div class="flip-face flip-back">
+                <div class="eyebrow" id="fcCatBack"></div>
+                <p class="mt-2" style="line-height:1.7" id="fcDef"></p>
+                <p class="t-sm mt-3 blue" id="fcEx"></p>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-2 flex-wrap mt-4">
+            <button class="btn btn-primary" id="fcFlip">Girar</button>
+            <button class="btn" id="fcKnow">La sé</button>
+            <button class="btn" id="fcHard">Repassar-la</button>
+            <button class="btn btn-ghost" id="fcNext">Següent →</button>
+            <button class="btn btn-ghost" id="fcShuffle">Barrejar</button>
+          </div>
+          <div class="meter mt-4"><i id="fcMeter" style="width:0%"></i></div>
+          <p class="t-xs mt-1" style="color:var(--muted)" id="fcProgressTxt"></p>
+        </div>
+
+        <div class="mt-6" id="tab-temari" hidden>
+          <p class="t-sm lead mb-4">Els vuit temes del bloc 2, amb exemples reals de preguntes competencials.</p>
+          <div id="temariList"></div>
+        </div>
+
+        <div class="mt-6" id="tab-dialectes" hidden>
+          <div id="dialectesContent"></div>
+        </div>
+
+        <div class="mt-6" id="tab-detector" hidden>
+          <div class="card">
+            <div class="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <div class="eyebrow">Entrenament</div>
+                <h3 class="mt-1">De quin geolecte és aquest fragment?</h3>
+              </div>
+              <span class="chip num" id="geoScore">0 / 0</span>
+            </div>
+            <blockquote class="doc mt-4" id="geoText"></blockquote>
+            <div class="stack gap-2 mt-4" id="geoOptions"></div>
+            <div class="mt-4" id="geoFeedback"></div>
+            <button class="btn mt-4" id="geoNext">Següent fragment →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LITERATURA ============ -->
+      <section class="sec" id="sec-literatura" hidden>
+        <div class="eyebrow">Ruta d'estudi 03</div>
+        <h1 class="mt-2">Literatura</h1>
+        <p class="lead mt-3 max-62">
+          Lectures obligatòries del curs. Cada fitxa porta context, corrent, personatges, temes,
+          simbologia, fragments clau i les preguntes que poden caure.
+        </p>
+        <div class="flex gap-2 flex-wrap mt-6" id="litFilter"></div>
+        <div class="mt-5" id="litList"></div>
+      </section>
+
+      <!-- ============ GENERADOR D'ESTRUCTURES ============ -->
+      <section class="sec" id="sec-escriure" hidden>
+        <div class="eyebrow">Caixa d'eines</div>
+        <h1 class="mt-2">Generador d'estructures</h1>
+        <p class="lead mt-3 max-62">
+          Tria el tipus de text i et munta l'esquelet: paràgraf a paràgraf, amb el nombre de paraules
+          recomanat i els connectors exactes que hi has de posar.
+        </p>
+
+        <div class="card mt-6">
+          <div class="g-auto">
+            <div>
+              <label class="eyebrow mb-1" for="genType" style="display:block">Tipus de text</label>
+              <select class="field" id="genType"></select>
+            </div>
+            <div>
+              <label class="eyebrow mb-1" for="genTopic" style="display:block">Tema (opcional)</label>
+              <input class="field" id="genTopic" placeholder="p. ex. els mòbils a les aules">
+            </div>
+            <div>
+              <label class="eyebrow mb-1" for="genWords" style="display:block">Extensió objectiu</label>
+              <select class="field" id="genWords">
+                <option value="175-200">175-200 paraules (bloc 1)</option>
+                <option value="200-250">200-250 paraules</option>
+                <option value="250-300">250-300 paraules</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4 flex-wrap">
+            <button class="btn btn-primary" id="genBtn">Generar l'esquelet</button>
+            <button class="btn" id="genCopy">Copiar</button>
+          </div>
+        </div>
+
+        <div class="mt-6" id="genOut"></div>
+
+        <h2 class="mt-10">Banc de connectors d'alt nivell</h2>
+        <p class="t-sm lead mt-1">Clica'n un per copiar-lo. Evita repetir sempre «a més» i «però».</p>
+        <div class="mt-4" id="connBank"></div>
+      </section>
+
+      <!-- ============ FALTES GREUS ============ -->
+      <section class="sec" id="sec-faltes" hidden>
+        <div class="eyebrow">Caixa d'eines</div>
+        <h1 class="mt-2">Alarma de faltes greus</h1>
+        <p class="lead mt-3 max-62">
+          Els errors que et lleven punts sense que te n'adonis. Cerca'n un, o fes el test ràpid de detecció.
+        </p>
+
+        <div class="flex items-center gap-3 flex-wrap mt-6">
+          <input class="field max-420" id="faltesSearch" placeholder="Cercar «tinc que», «lo», «degut a»…">
+          <span class="chip num" id="faltesCount"></span>
+        </div>
+        <div class="flex gap-2 flex-wrap mt-3" id="faltesCats"></div>
+        <div class="tablewrap mt-4">
+          <table>
+            <thead><tr><th style="width:26%">Ho dius així ✗</th><th style="width:26%">Escriu-ho així ✓</th><th>Per què</th></tr></thead>
+            <tbody id="faltesBody"></tbody>
+          </table>
+        </div>
+
+        <h2 class="mt-10">Els 15 accents diacrítics que queden</h2>
+        <p class="t-sm lead mt-1">
+          Des de la reforma de l'IEC (2017) només hi ha <b>15 mots</b> amb accent diacrític (més els seus
+          compostos i derivats: adéu, marededéu, rodamón, subsòl, entresòl, contrapèl…). La resta, fora accent:
+          <b>soc, dona, os, net, ves, sou, mon, son, be, te, ma, mes, se, si, sol, us, vens</b>.
+        </p>
+        <div class="g-auto mt-4" id="diacriticsGrid"></div>
+
+        <h2 class="mt-10">Test ràpid de detecció</h2>
+        <div class="card mt-4">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="eyebrow">Troba l'error</div>
+            <span class="chip num" id="faltesQuizScore">0 / 0</span>
+          </div>
+          <blockquote class="doc mt-4" id="faltesQuizQ"></blockquote>
+          <div class="stack gap-2 mt-4" id="faltesQuizOpts"></div>
+          <div class="mt-4" id="faltesQuizFb"></div>
+          <button class="btn mt-4" id="faltesQuizNext">Següent frase →</button>
+        </div>
+      </section>
+
+      <!-- ============ ARENA ============ -->
+      <section class="sec" id="sec-arena" hidden>
+        <div class="eyebrow">Simulador</div>
+        <h1 class="mt-2">Arena d'Avaluació</h1>
+        <p class="lead mt-3 max-62">
+          Escriu com a l'examen i rep una correcció automàtica: coherència, cohesió, riquesa lèxica,
+          correcció lingüística i el <b>simulador de penalitzacions</b>, que et descompta per cada falta.
+        </p>
+
+        <div class="card mt-6">
+          <div class="g-auto">
+            <div>
+              <label class="eyebrow mb-1" for="arenaBloc" style="display:block">Prova</label>
+              <select class="field" id="arenaBloc">
+                <option value="b1">Bloc 1 · P3 — Text argumentatiu (2 punts)</option>
+                <option value="b2">Bloc 2 · Llengua i societat (3 punts)</option>
+                <option value="b3">Bloc 3 · Literatura (3 punts)</option>
+              </select>
+            </div>
+            <div>
+              <label class="eyebrow mb-1" for="arenaPenal" style="display:block">Descompte per falta</label>
+              <select class="field" id="arenaPenal">
+                <option value="0.1">−0,10 per falta (habitual)</option>
+                <option value="0.05">−0,05 per falta</option>
+                <option value="0.15">−0,15 per falta</option>
+              </select>
+            </div>
+            <div>
+              <label class="eyebrow mb-1" for="arenaCap" style="display:block">Penalització màxima</label>
+              <select class="field" id="arenaCap">
+                <option value="0.5">Fins a −0,5 punts</option>
+                <option value="1">Fins a −1 punt</option>
+                <option value="2">Fins a −2 punts</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card-blue mt-5">
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <div class="eyebrow">Enunciat</div>
+              <button class="btn btn-sm" id="arenaShuffle">Un altre tema ⟳</button>
+            </div>
+            <p class="mt-2" style="font-family:Merriweather,Georgia,serif; line-height:1.7" id="arenaPrompt"></p>
+            <p class="t-sm mt-3" style="color:var(--ink-soft)" id="arenaHint"></p>
+          </div>
+
+          <div class="flex items-center justify-between flex-wrap gap-3 mt-5">
+            <label class="eyebrow" for="arenaText">La teva resposta</label>
+            <div class="flex items-center gap-3 flex-wrap t-sm">
+              <span class="chip num" id="arenaWords">0 paraules</span>
+              <span class="chip num" id="arenaClock">00:00</span>
+              <button class="btn btn-sm btn-ghost" id="arenaClockBtn">Iniciar el rellotge</button>
+            </div>
+          </div>
+          <textarea class="field mt-2" id="arenaText" style="min-height:280px" placeholder="Escriu aquí la teva resposta. Separa els paràgrafs amb una línia en blanc…"></textarea>
+          <div class="meter mt-2"><i id="arenaWordMeter" style="width:0%"></i></div>
+          <p class="t-xs mt-1" style="color:var(--muted)" id="arenaWordHint"></p>
+
+          <div class="flex gap-2 mt-4 flex-wrap">
+            <button class="btn btn-primary" id="arenaCorrect">Corregir</button>
+            <button class="btn" id="arenaSave">Desar l'intent</button>
+            <button class="btn btn-ghost" id="arenaClear">Esborrar</button>
+          </div>
+        </div>
+
+        <div class="mt-6" id="arenaResult"></div>
+
+        <h2 class="mt-10">Historial d'intents</h2>
+        <div class="mt-4" id="arenaHistory"></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================================
+   CATALÀ 10 — Plataforma d'estudi per a Llengua Catalana i Literatura II
+   Continguts basats en la matriu d'especificacions (Decret 43/2025) i en les
+   puntualitzacions oficials de la prova del curs 2025-2026.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- DADES --- */
+const D = {};
+
+D.estructura = [
+  { id:"b1", nom:"Bloc 1 · Comentari de text i redacció", punts:4, color:"blue",
+    desc:"Text periodístic: una notícia.",
+    preguntes:[
+      { n:"P1", t:"Posa un titular que reflecteixi el sentit del text (màxim 3 línies)", p:1 },
+      { n:"P2", t:"Determina i justifica l'estructura del text", p:1 },
+      { n:"P3", t:"Text argumentatiu sobre el tema del text (175-200 paraules)", p:2 }
+    ]},
+  { id:"b2", nom:"Bloc 2 · Llengua i societat", punts:3, color:"wine",
+    desc:"Quatre opcions: n'has de respondre només una.",
+    preguntes:[ { n:"Opció", t:"Pregunta competencial sobre variació, contacte de llengües, normalització, drets lingüístics o prejudicis", p:3 } ]},
+  { id:"b3", nom:"Bloc 3 · Educació literària", punts:3, color:"blue",
+    desc:"Quatre opcions equilibrades entre gèneres i èpoques: n'has de respondre només una.",
+    preguntes:[ { n:"Opció", t:"Anàlisi d'una lectura obligatòria en relació amb l'autor i el corrent literari, amb citació del text", p:3 } ]}
+];
+
+D.rubrica = [
+  ["Adequació","Que responguis el que et demanen, amb el registre formal i l'extensió exigida.","Torna a llegir l'enunciat quan acabis: hi has respost tot? Has fet 175-200 paraules?"],
+  ["Coherència","Que la informació estigui ordenada, sense contradiccions ni repeticions.","Un paràgraf = una idea. Introducció, argumentació (2 idees) i conclusió."],
+  ["Cohesió","Connectors, pronoms, puntuació i referències que lliguen el text.","Obre cada paràgraf amb un connector diferent i evita repetir el mateix mot."],
+  ["Riquesa lèxica","Vocabulari precís, variat i propi del registre formal.","Fora «cosa», «fer», «molt». Fes servir sinònims i lèxic del camp semàntic del tema."],
+  ["Correcció lingüística","Ortografia, morfosintaxi, accentuació i barbarismes.","Reserva 5 minuts per repassar accents, apòstrofs i concordances. Cada falta descompta."],
+  ["Presentació","Lletra llegible, marges, paràgrafs marcats.","Res d'esquemes ni guions: es redueix la nota de la pregunta un 50 %."]
+];
+
+D.pla = [
+  { d:"Dia 1", t:"Bloc 1 a fons", tasks:["Llegeix 3 notícies i posa'ls un titular","Practica l'estructura externa (avanttítol, titular, subtítol, entradeta, cos, peu de foto)","Escriu 1 text argumentatiu de 175-200 paraules"] },
+  { d:"Dia 2", t:"Sociolingüística", tasks:["Fitxes de bilingüisme, diglòssia i conflicte lingüístic","Normalització vs. normativització vs. substitució","4 prejudicis lingüístics amb refutació"] },
+  { d:"Dia 3", t:"Dialectologia", tasks:["Bloc oriental vs. occidental","Trets del balear amb exemples","Detector de geolecte: 10 fragments"] },
+  { d:"Dia 4", t:"Literatura I", tasks:["Rusiñol i el teatre modernista","Rosselló-Pòrcel i les avantguardes","Memoritza 2 citacions per autor"] },
+  { d:"Dia 5", t:"Literatura II", tasks:["La plaça del Diamant: personatges i simbologia","Maria-Mercè Marçal: Bruixa de dol","Practica un comentari de fragment amb citació"] },
+  { d:"Dia 6", t:"Correcció llampec", tasks:["Repassa la taula de faltes greus","Els 15 diacrítics","Minijoc de pronoms febles: 20 encerts seguits"] },
+  { d:"Dia 7", t:"Simulacre complet", tasks:["90 minuts de rellotge, examen sencer","Corregeix-te a l'Arena d'Avaluació","Apunta els 5 errors que repeteixes més"] }
+];
+
+/* ------------------------------------------------------- SINTAXI --------- */
+D.trucs = [
+  ["CD (complement directe)","el / la / els / les · en (indeterminat) · ho (neutre)","Vaig llegir <i>el llibre</i> → <b>El</b> vaig llegir."],
+  ["CI (complement indirecte)","li · els","Ho vaig dir <i>a la Marta</i> → <b>Li</b> ho vaig dir."],
+  ["CRV (complement de règim verbal)","en (prep. <i>de</i>) · hi (altres preposicions)","Parlem <i>de política</i> → <b>En</b> parlem. Confio <i>en tu</i> → <b>Hi</b> confio."],
+  ["Atribut","ho (indeterminat)","És <i>professora</i> → <b>Ho</b> és."],
+  ["C. predicatiu","hi","Van arribar <i>cansats</i> → <b>Hi</b> van arribar."],
+  ["CC (complement circumstancial)","hi (lloc, manera, instrument) · en (de/procedència)","Viu <i>a Palma</i> → <b>Hi</b> viu. Ve <i>de Sóller</i> → <b>En</b> ve."],
+  ["C. agent","no es pronominalitza","La novel·la va ser escrita <i>per Rodoreda</i>."]
+];
+
+D.sintaxiFuncions = ["Subjecte","Verb","CD","CI","CRV","Atribut","C. predicatiu","CC","C. agent","CN"];
+
+D.sintaxiFrases = [
+  { segs:[
+      {t:"La meva germana", f:"Subjecte", why:"Concorda amb el verb: si el canviem a plural, «van llegir»."},
+      {t:"va llegir", f:"Verb", why:"Perífrasi de passat perifràstic: nucli del predicat."},
+      {t:"tot el llibre", f:"CD", why:"El substituïm per «el»: El va llegir en una tarda."},
+      {t:"en una tarda", f:"CC", why:"Circumstancial de temps: respon a «quan?»."}
+    ]},
+  { segs:[
+      {t:"El director", f:"Subjecte", why:"Fa l'acció i concorda amb «va lliurar»."},
+      {t:"va lliurar", f:"Verb", why:"Nucli verbal."},
+      {t:"els premis", f:"CD", why:"«Els va lliurar»: pronom el/la/els/les → CD."},
+      {t:"als guanyadors", f:"CI", why:"«Els va lliurar els premis» → pronom li/els → CI."},
+      {t:"ahir", f:"CC", why:"Circumstancial de temps."}
+    ]},
+  { segs:[
+      {t:"Aquesta pel·lícula", f:"Subjecte", why:"Concorda amb el verb copulatiu «és»."},
+      {t:"és", f:"Verb", why:"Verb copulatiu (ser, estar, semblar)."},
+      {t:"molt interessant", f:"Atribut", why:"«Ho és»: amb verb copulatiu, el pronom «ho» marca l'atribut."}
+    ]},
+  { segs:[
+      {t:"Els alumnes", f:"Subjecte", why:"Concorda amb «van arribar»."},
+      {t:"van arribar", f:"Verb", why:"Nucli verbal, verb predicatiu."},
+      {t:"cansats", f:"C. predicatiu", why:"Concorda amb el subjecte però el verb no és copulatiu: «Hi van arribar»."},
+      {t:"a l'institut", f:"CC", why:"Circumstancial de lloc: «Hi van arribar»."}
+    ]},
+  { segs:[
+      {t:"Tothom", f:"Subjecte", why:"Pronom indefinit que fa de subjecte."},
+      {t:"parla", f:"Verb", why:"Nucli verbal."},
+      {t:"d'aquesta novel·la", f:"CRV", why:"«Parlar de» exigeix la preposició: «En parla» → complement de règim verbal."}
+    ]},
+  { segs:[
+      {t:"La plaça del Diamant", f:"Subjecte", why:"Subjecte pacient d'una oració passiva."},
+      {t:"va ser escrita", f:"Verb", why:"Perífrasi de passiva (ser + participi)."},
+      {t:"per Mercè Rodoreda", f:"C. agent", why:"Qui fa realment l'acció en una passiva. No es pronominalitza."}
+    ]},
+  { segs:[
+      {t:"La casa", f:"Subjecte", why:"Nucli del sintagma nominal subjecte."},
+      {t:"del meu padrí", f:"CN", why:"Complement del nom: determina «la casa», no depèn del verb."},
+      {t:"és", f:"Verb", why:"Verb copulatiu."},
+      {t:"molt antiga", f:"Atribut", why:"«Ho és»."}
+    ]},
+  { segs:[
+      {t:"Ens", f:"CI", why:"«Dir alguna cosa A ALGÚ»: el pronom «ens» hi fa de complement indirecte."},
+      {t:"van dir", f:"Verb", why:"Nucli verbal."},
+      {t:"la veritat", f:"CD", why:"«La van dir» → CD."}
+    ]},
+  { segs:[
+      {t:"El jurat", f:"Subjecte", why:"Concorda amb «va nomenar»."},
+      {t:"el", f:"CD", why:"Pronom feble de CD."},
+      {t:"va nomenar", f:"Verb", why:"Nucli verbal."},
+      {t:"president", f:"C. predicatiu", why:"Atribueix una qualitat al CD amb un verb no copulatiu."}
+    ]},
+  { segs:[
+      {t:"Els nins", f:"Subjecte", why:"Concorda amb «juguen»."},
+      {t:"juguen", f:"Verb", why:"Nucli verbal."},
+      {t:"al pati", f:"CC", why:"Circumstancial de lloc: «Hi juguen»."},
+      {t:"cada horabaixa", f:"CC", why:"Circumstancial de temps (horabaixa: forma balear de «tarda»)."}
+    ]}
+];
+
+D.compostaTeoria = [
+  { t:"Coordinades", c:"Dues oracions del mateix nivell, unides per un nexe (o juxtaposades amb coma).",
+    items:[
+      ["Copulativa","i, ni","Estudia <b>i</b> treballa."],
+      ["Adversativa","però, sinó, tanmateix, ara bé","Volia venir, <b>però</b> no va poder."],
+      ["Disjuntiva","o, o bé","Vine ara <b>o bé</b> truca'm demà."],
+      ["Distributiva","ara… ara, l'un… l'altre","<b>Ara</b> riu, <b>ara</b> plora."],
+      ["Il·lativa","doncs, per tant, així doncs","Plou, <b>per tant</b> no sortirem."],
+      ["Explicativa","és a dir, o sigui","És filòloga, <b>és a dir</b>, estudia les llengües."]
+    ]},
+  { t:"Subordinades substantives", c:"Fan de subjecte, de CD, d'atribut o de CRV. Es poden substituir per «això» o «ho».",
+    items:[
+      ["Subjecte","que + oració","<b>Que arribis tard</b> em molesta. → <i>Això</i> em molesta."],
+      ["CD","que, si, interrogatives indirectes","Em va dir <b>que vindria</b>. → <i>Ho</i> va dir."],
+      ["CRV","de + que, en + que","Es queixa <b>que no l'escolten</b>. → <i>Se'n</i> queixa."],
+      ["D'infinitiu","infinitiu","Vull <b>aprovar</b>. → <i>Ho</i> vull."]
+    ]},
+  { t:"Subordinades adjectives (de relatiu)", c:"Complementen un nom (antecedent). Nexes: que, qui, què, el qual, on, on.",
+    items:[
+      ["Especificativa","sense comes; restringeix","Els alumnes <b>que van estudiar</b> van aprovar."],
+      ["Explicativa","entre comes; només afegeix informació","Els alumnes, <b>que van estudiar</b>, van aprovar."]
+    ]},
+  { t:"Subordinades adverbials", c:"Fan de complement circumstancial o expressen una relació lògica.",
+    items:[
+      ["Temps","quan, mentre, abans que, així que","<b>Quan arribis</b>, avisa'm."],
+      ["Lloc","on","Ho deixarem <b>on tu vulguis</b>."],
+      ["Manera","com, tal com, sense que","Ho va fer <b>com li van dir</b>."],
+      ["Causal","perquè, ja que, atès que, com que","No vaig venir <b>perquè estava malalt</b>."],
+      ["Final","perquè (+ subj.), a fi que, per tal que","T'ho dic <b>perquè ho sàpigues</b>."],
+      ["Condicional","si, sempre que, en cas que","<b>Si estudies</b>, aprovaràs."],
+      ["Concessiva","encara que, tot i que, per bé que, malgrat que","<b>Encara que plogui</b>, hi anirem."],
+      ["Consecutiva","tan… que, tant… que, de manera que","Era <b>tan tard que</b> vam tornar."],
+      ["Comparativa","més… que, menys… que, tan… com","Sap <b>més que</b> tu."]
+    ]}
+];
+
+D.compostaQuiz = [
+  { f:"Encara que plogui, anirem a la platja.", a:"Subordinada adverbial concessiva",
+    o:["Subordinada adverbial condicional","Subordinada adverbial concessiva","Coordinada adversativa","Subordinada adverbial causal"],
+    w:"«Encara que» presenta un obstacle que no impedeix l'acció: és concessiva. Si fos condicional diria «Si plou, no hi anirem»." },
+  { f:"Em va confessar que no havia estudiat res.", a:"Subordinada substantiva de CD",
+    o:["Subordinada substantiva de subjecte","Subordinada substantiva de CD","Subordinada de relatiu","Subordinada adverbial causal"],
+    w:"Substitueix-la per «ho»: «M'ho va confessar». Si es pot commutar per «ho», és CD." },
+  { f:"El llibre que em vas deixar és boníssim.", a:"Subordinada adjectiva especificativa",
+    o:["Subordinada adjectiva explicativa","Subordinada adjectiva especificativa","Subordinada substantiva de subjecte","Coordinada copulativa"],
+    w:"Complementa el nom «llibre», no va entre comes i en restringeix el significat: especificativa." },
+  { f:"Volia aprovar, però no va estudiar prou.", a:"Coordinada adversativa",
+    o:["Coordinada copulativa","Coordinada il·lativa","Coordinada adversativa","Subordinada adverbial concessiva"],
+    w:"«Però» contraposa dues oracions del mateix nivell: coordinació adversativa." },
+  { f:"Com que feia mal temps, van suspendre la festa.", a:"Subordinada adverbial causal",
+    o:["Subordinada adverbial causal","Subordinada adverbial consecutiva","Subordinada adverbial condicional","Coordinada il·lativa"],
+    w:"«Com que» sempre encapçala una causal al començament de l'oració." },
+  { f:"Que arribis tard cada dia comença a ser un problema.", a:"Subordinada substantiva de subjecte",
+    o:["Subordinada substantiva de CD","Subordinada substantiva de subjecte","Subordinada de relatiu","Subordinada adverbial de temps"],
+    w:"Commuta-la per «Això»: «Això comença a ser un problema». Fa de subjecte." },
+  { f:"Era tan tard que vam decidir tornar a casa.", a:"Subordinada adverbial consecutiva",
+    o:["Subordinada adverbial comparativa","Subordinada adverbial consecutiva","Subordinada adverbial causal","Coordinada il·lativa"],
+    w:"L'estructura «tan… que» indica la conseqüència d'una intensitat: consecutiva." },
+  { f:"T'ho explic perquè ho sàpigues tot.", a:"Subordinada adverbial final",
+    o:["Subordinada adverbial causal","Subordinada adverbial final","Subordinada substantiva de CRV","Subordinada adverbial consecutiva"],
+    w:"«Perquè» + subjuntiu = finalitat. «Perquè» + indicatiu = causa." },
+  { f:"Na Maria, que viu a Sóller, hi ve cada dissabte.", a:"Subordinada adjectiva explicativa",
+    o:["Subordinada adjectiva especificativa","Subordinada adjectiva explicativa","Subordinada substantiva de CD","Coordinada explicativa"],
+    w:"Va entre comes i no restringeix res: només afegeix informació sobre l'antecedent." },
+  { f:"Es queixava que ningú no l'escoltava.", a:"Subordinada substantiva de CRV",
+    o:["Subordinada substantiva de CD","Subordinada substantiva de CRV","Subordinada adverbial causal","Subordinada de relatiu"],
+    w:"«Queixar-se DE» regeix preposició: «Se'n queixava» → complement de règim verbal." }
+];
+
+/* ------------------------------------------------------- PRONOMS --------- */
+D.pronoms = [
+  { q:"Vaig comprar <b>el diari</b> al quiosc.", tag:"CD determinat", a:"El vaig comprar al quiosc.",
+    o:["El vaig comprar al quiosc.","En vaig comprar al quiosc.","Hi vaig comprar al quiosc.","Ho vaig comprar al quiosc."],
+    w:"CD amb article determinat → el / la / els / les." },
+  { q:"Vaig comprar <b>dos diaris</b>.", tag:"CD quantificat", a:"En vaig comprar dos.",
+    o:["Els vaig comprar dos.","En vaig comprar dos.","Ho vaig comprar dos.","Hi vaig comprar dos."],
+    w:"Quan el CD porta un quantificador, el pronom és «en» i el quantificador es manté." },
+  { q:"Parlàvem <b>de les vacances</b>.", tag:"CRV amb «de»", a:"En parlàvem.",
+    o:["Hi parlàvem.","Ho parlàvem.","En parlàvem.","Les parlàvem."],
+    w:"«Parlar de» → el complement de règim introduït per «de» es pronominalitza amb «en»." },
+  { q:"Pensem <b>en el futur</b>.", tag:"CRV amb altra preposició", a:"Hi pensem.",
+    o:["En pensem.","Hi pensem.","Ho pensem.","El pensem."],
+    w:"Complement de règim amb preposició diferent de «de» → «hi»." },
+  { q:"Vaig anar <b>a Menorca</b> l'estiu passat.", tag:"CC de lloc", a:"Hi vaig anar l'estiu passat.",
+    o:["Hi vaig anar l'estiu passat.","En vaig anar l'estiu passat.","La vaig anar l'estiu passat.","Ho vaig anar l'estiu passat."],
+    w:"CC de lloc de destinació o situació → «hi». Només «de + lloc» (procedència) fa «en»." },
+  { q:"Na Maria és <b>metgessa</b>.", tag:"Atribut", a:"Na Maria ho és.",
+    o:["Na Maria l'és.","Na Maria ho és.","Na Maria hi és.","Na Maria n'és."],
+    w:"L'atribut indeterminat d'un verb copulatiu es pronominalitza amb «ho»." },
+  { q:"Els alumnes van tornar <b>contents</b>.", tag:"C. predicatiu", a:"Els alumnes hi van tornar.",
+    o:["Els alumnes ho van tornar.","Els alumnes els van tornar.","Els alumnes hi van tornar.","Els alumnes en van tornar."],
+    w:"El predicatiu (verb no copulatiu) es pronominalitza amb «hi»." },
+  { q:"Dona <b>el llibre</b> <b>a en Pere</b>.", tag:"CI + CD (imperatiu)", a:"Dona-l'hi.",
+    o:["Dona-li'l.","Dona-l'hi.","Dona'l-li.","Dona-li-ho."],
+    w:"«li» davant el/la/els/les/en/ho es transforma en «hi» i el CD passa al davant: li + el = l'hi." },
+  { q:"He deixat <b>les claus</b> <b>a la veïna</b>.", tag:"CI + CD", a:"Les hi he deixades.",
+    o:["Li les he deixades.","Les hi he deixades.","Els les he deixades.","L'hi he deixades."],
+    w:"li + les = «les hi». La concordança del participi («deixades») és opcional però ben vista." },
+  { q:"No parlis <b>d'això</b> <b>a ton pare</b>.", tag:"CI + CRV", a:"No n'hi parlis.",
+    o:["No li'n parlis.","No n'hi parlis.","No en li parlis.","No hi en parlis."],
+    w:"li + en = «n'hi». Recorda: amb «li», l'altre pronom sempre va davant." },
+  { q:"Van regalar <b>un ram de flors</b> <b>als padrins</b>.", tag:"CI plural + CD", a:"Els en van regalar un.",
+    o:["Els en van regalar un.","Els hi van regalar un.","Els el van regalar un.","N'els van regalar un."],
+    w:"CI plural «els» + CD quantificat «en»: l'ordre és CI + CD, «els en»." },
+  { q:"Em van donar <b>la notícia</b>.", tag:"CI + CD", a:"Me la van donar.",
+    o:["M'la van donar.","Me la van donar.","La'm van donar.","Me l'han donada."],
+    w:"«em» davant d'un altre pronom pren la forma reforçada plena «me»: me la." },
+  { q:"Porta <b>el cafè</b> <b>a nosaltres</b>.", tag:"CI + CD (imperatiu)", a:"Porta'ns-el.",
+    o:["Porta-nos-el.","Porta'ns-el.","Porta'l-nos.","Porta-ens-el."],
+    w:"Darrere vocal, «ens» fa «'ns» i el CD s'hi enganxa amb guionet: porta'ns-el." },
+  { q:"Han posat <b>els llibres</b> <b>a la prestatgeria</b>.", tag:"CD + CC de lloc", a:"Els hi han posat.",
+    o:["Els hi han posat.","Los hi han posat.","Els els han posat.","Hi els han posat."],
+    w:"CD «els» + CC de lloc «hi» = «els hi»." },
+  { q:"Hi ha <b>molta gent</b> a la plaça.", tag:"CD quantificat + hi", a:"N'hi ha molta.",
+    o:["Hi n'ha molta.","N'hi ha molta.","Li n'ha molta.","N'hi ha molt."],
+    w:"«en» + «hi» = «n'hi». El quantificador concorda: molta gent → molta." },
+  { q:"Vaig prometre <b>a la Joana</b> <b>que hi aniria</b>.", tag:"CI + oració CD", a:"Li ho vaig prometre.",
+    o:["Li ho vaig prometre.","L'hi vaig prometre.","Li la vaig prometre.","Hi ho vaig prometre."],
+    w:"Una oració subordinada que fa de CD es pronominalitza amb «ho»: li + ho = «li ho» (és l'excepció, «li» es manté)." },
+  { q:"Compra <b>el pa</b> <b>per a mi</b>.", tag:"CI + CD (imperatiu)", a:"Compra-me'l.",
+    o:["Compra'm-el.","Compra-me'l.","Compram-lo.","Compra-lo'm."],
+    w:"Darrere consonant, «em» fa «-me» i «el» fa «'l»: compra-me'l." },
+  { q:"Ve <b>de Sóller</b> cada dia.", tag:"CC de procedència", a:"En ve cada dia.",
+    o:["Hi ve cada dia.","En ve cada dia.","Ho ve cada dia.","Ne ve cada dia."],
+    w:"Amb «de + lloc» (procedència) el pronom és «en», no «hi»." },
+  { q:"Nosaltres <b>ens</b> <b>en</b> anem ara. Forma correcta de l'imperatiu:", tag:"Ordre i formes", a:"Anem-nos-en.",
+    o:["Anem-nos-en.","Anem'ns-en.","Anem-ens-ne.","Anem-se'n."],
+    w:"Darrere consonant «ens» fa «-nos» i «en» fa «-ne»: anem-nos-en." },
+  { q:"Vull que <b>tu</b> <b>ho</b> diguis. Imperatiu negatiu:", tag:"Formes reforçades", a:"No ho diguis.",
+    o:["No't ho diguis.","No ho diguis.","No hi diguis.","No el diguis."],
+    w:"Davant el verb i davant consonant, el pronom neutre és sempre «ho», invariable." }
+];
+
+D.pfTaula = [
+  ["em","me'l","me la","me'ls","me les","me'n","m'ho"],
+  ["et","te'l","te la","te'ls","te les","te'n","t'ho"],
+  ["li","l'hi","la hi","els hi","les hi","n'hi","l'hi"],
+  ["ens","ens el","ens la","ens els","ens les","ens en","ens ho"],
+  ["us","us el","us la","us els","us les","us en","us ho"],
+  ["els","els el","els la","els els","els les","els en","els ho"]
+];
+
+D.pfFormes = [
+  ["em (1a sing.)","em parla","m'escolta","parla'm? → darrere consonant: -me","escolta'm"],
+  ["et (2a sing.)","et veig","t'estimo","veure't? → -te","escolta't"],
+  ["es (reflexiu)","es renta","s'aixeca","rentar-se","renta's"],
+  ["el (CD masc.)","el veig","l'agafo","agafar-lo","agafa'l"],
+  ["la (CD fem.)","la veig","l'agafo","agafar-la","agafa-la"],
+  ["ens","ens veu","ens escolta","veure'ns → -nos","dona'ns"],
+  ["us","us veu","us escolta","veure-us","doneu-vos"],
+  ["els (CI/CD pl.)","els veig","els escolto","veure'ls → -los","agafa'ls"],
+  ["en","en parlo","n'agafo","parlar-ne","parla'n"],
+  ["hi","hi vaig","hi entro","anar-hi","vés-hi"],
+  ["ho","ho dic","ho entenc","dir-ho","digues-ho"]
+];
+
+D.reflexio = [
+  { t:"Formació de paraules", items:[
+      ["Derivació","Afegir prefixos o sufixos al lexema: <b>des</b>fer, tranquil·l<b>itat</b>, llibr<b>eter</b>."],
+      ["Composició","Unir dos lexemes: para-sol, escura-dents, capgirar."],
+      ["Parasíntesi","Prefix + lexema + sufix alhora: <b>en</b>fosqu<b>ir</b>, <b>a</b>terr<b>ar</b>, <b>es</b>blanque<b>ït</b>."],
+      ["Sigles i acrònims","IEC, UIB (sigles); Renfe, làser (acrònims lexicalitzats)."],
+      ["Habilitació","Canviar de categoria sense afixos: el <i>dinar</i>, el <i>saber</i>."]
+    ]},
+  { t:"Relacions semàntiques", items:[
+      ["Sinonímia","Mots de significat pròxim: <i>car</i> / <i>costós</i>. Absoluta gairebé no n'hi ha."],
+      ["Antonímia","Oposició: gradual (fred/calent), complementària (viu/mort), inversa (comprar/vendre)."],
+      ["Polisèmia","Un sol mot amb sentits relacionats: <i>cap</i> (part del cos, líder, extrem)."],
+      ["Homonímia","Mots d'origen diferent amb la mateixa forma: <i>gat</i> (animal) / <i>gat</i> (eina per aixecar el cotxe); <i>son</i> (ganes de dormir) / <i>son</i> (possessiu)."],
+      ["Paronímia","Formes semblants que es confonen: <i>afecte</i> / <i>efecte</i>, <i>actitud</i> / <i>aptitud</i>, <i>infringir</i> / <i>infligir</i>."],
+      ["Hiperonímia / hiponímia","<i>Flor</i> és hiperònim de <i>rosa</i>; <i>rosa</i> n'és hipònim."],
+      ["Denotació / connotació","Significat objectiu de diccionari vs. valors afegits, subjectius o culturals."]
+    ]},
+  { t:"Mecanismes de cohesió", items:[
+      ["Referència (díctics i anàfores)","Pronoms i determinants que remeten a alguna cosa ja dita o a la situació: <i>aquell, ell, aquí, ara</i>."],
+      ["Substitució lèxica","Repetir la idea amb un sinònim, un hiperònim o una proforma (<i>fer</i>, <i>cosa</i> — amb mesura)."],
+      ["El·lipsi","Suprimir el que ja se sap: «Jo vaig arribar tard i ell [va arribar] d'hora»."],
+      ["Connectors","Marcadors que expliciten la relació lògica entre idees (vegeu el banc de connectors)."],
+      ["Puntuació","La coma, el punt i coma i els dos punts també cohesionen: separen i jerarquitzen."]
+    ]},
+  { t:"Registres i modalitats", items:[
+      ["Registres","Segons el grau de formalitat i el camp: col·loquial, estàndard, formal/científic, literari."],
+      ["Factors","Tema, canal, intenció i relació entre els interlocutors."],
+      ["Modalitats textuals","Narració, descripció, exposició, argumentació, diàleg, instrucció."],
+      ["L'estàndard","Varietat supradialectal, codificada i neutra, pròpia dels mitjans i de l'ensenyament. A l'examen, escriu en estàndard."]
+    ]}
+];
+
+/* ------------------------------------------------- LLENGUA I SOCIETAT ---- */
+D.flash = [
+  { c:"Contacte", t:"Bilingüisme individual", d:"Capacitat d'una persona d'emprar dues llengües. És un fet individual i, en si mateix, no problemàtic.", e:"Exemple: una mallorquina que parla català i castellà amb la mateixa facilitat." },
+  { c:"Contacte", t:"Bilingüisme territorial", d:"Un estat té dos territoris clarament delimitats, cadascun amb una llengua pròpia. Les persones poden ser monolingües.", e:"Exemple: Bèlgica (Flandes neerlandòfon i Valònia francòfona) o Suïssa." },
+  { c:"Contacte", t:"Bilingüisme social", d:"Un mateix grup empra dues llengües segons els àmbits d'ús. Sol amagar una situació de desigualtat i de conflicte lingüístic.", e:"És la situació de les Illes Balears, Catalunya o el País Valencià." },
+  { c:"Contacte", t:"Mitificació del bilingüisme", d:"Presentar el bilingüisme social com una riquesa neutra i estable, negant que hi hagi un conflicte i una llengua subordinada.", e:"«Aquí som bilingües i no passa res»: el mite tapa la substitució en marxa." },
+  { c:"Contacte", t:"Bilingüe vs. bilingüista", d:"<b>Bilingüe</b> és el parlant que domina dues llengües. <b>Bilingüista</b> és qui defensa ideològicament que el bilingüisme social és la situació ideal i definitiva.", e:"Ser bilingüe és una habilitat; ser bilingüista és una posició política." },
+  { c:"Contacte", t:"Diglòssia", d:"Repartiment desigual de funcions entre dues varietats o llengües: la varietat A (alta) ocupa els usos formals i de prestigi i la B (baixa), els familiars i informals.", e:"Català a casa i al carrer; castellà a la justícia, a l'empresa o als mitjans estatals." },
+  { c:"Contacte", t:"Conflicte lingüístic", d:"Situació en què dues llengües competeixen pels mateixos àmbits d'ús. No és estable: es resol amb la substitució de la llengua subordinada o amb la seva normalització.", e:"És el concepte que descriu millor la realitat actual del català." },
+  { c:"Contacte", t:"Interferència lingüística", d:"Influència d'una llengua sobre una altra per contacte: manlleus innecessaris, calcs sintàctics i barbarismes.", e:"«Tinc que anar-hi» (calc de <i>tengo que</i>) en lloc de «He d'anar-hi»." },
+  { c:"Contacte", t:"Interposició", d:"Concepte de Lluís V. Aracil: la llengua dominant s'interposa entre la llengua subordinada i la resta del món, i n'impedeix el contacte directe.", e:"Llegir un autor japonès traduït al castellà perquè no arriba la traducció catalana." },
+  { c:"Normalització", t:"Substitució lingüística", d:"Procés pel qual els parlants abandonen progressivament la llengua pròpia i n'adopten una altra. Passa per una fase de bilingüització i acaba en el monolingüisme en la llengua dominant.", e:"Fases: bilingüització → monolingüisme en la llengua dominant → mort de la llengua." },
+  { c:"Normalització", t:"Normalització lingüística", d:"Procés social i polític planificat per retornar una llengua minoritzada a tots els àmbits d'ús i donar-li l'estatus de llengua normal del territori.", e:"Actua sobre l'<b>estatus</b> (usos) de la llengua." },
+  { c:"Normalització", t:"Normativització", d:"Fixació d'una norma unitària: ortografia, gramàtica i diccionari. Actua sobre el <b>corpus</b> de la llengua.", e:"Pompeu Fabra: Normes ortogràfiques (1913), Gramàtica (1918) i Diccionari general (1932); avui, l'IEC." },
+  { c:"Normalització", t:"Llengua minoritària vs. minoritzada", d:"<b>Minoritària</b>: té pocs parlants. <b>Minoritzada</b>: pateix restriccions d'ús per raons polítiques i socials, encara que tingui molts parlants.", e:"El català, amb uns 10 milions de parlants, no és minoritari, però sí minoritzat." },
+  { c:"Normalització", t:"Llengua pròpia", d:"La que és històricament i territorialment vinculada a una comunitat. L'Estatut de les Illes Balears reconeix el català com a llengua pròpia.", e:"El reconeixement de llengua pròpia justifica les mesures de normalització." },
+  { c:"Normalització", t:"Àmbits d'ús", d:"Espais socials on es fa servir una llengua: família, escola, administració, justícia, mitjans, empresa, oci i tecnologia.", e:"Una llengua normalitzada és present en tots els àmbits, també en els privats." },
+  { c:"Normalització", t:"Planificació lingüística", d:"Conjunt de mesures conscients per intervenir en la situació d'una llengua: planificació del corpus (normativització) i de l'estatus (usos i drets).", e:"Lleis, plans d'ensenyament, mitjans públics, etiquetatge i toponímia." },
+  { c:"Normalització", t:"Model del Quebec", d:"Política lingüística intervencionista: la Carta de la llengua francesa (Llei 101, 1977) fa del francès la llengua oficial i preferent de l'administració, l'escola, l'etiquetatge i el món laboral.", e:"Model de planificació que prioritza la llengua del territori per revertir la substitució." },
+  { c:"Normalització", t:"Model suís", d:"Principi de territorialitat: cada cantó estableix la seva llengua oficial (alemany, francès, italià o romanx) i la garanteix dins el seu territori.", e:"Contrast amb el model de personalitat, on el ciutadà tria la llengua arreu de l'estat." },
+  { c:"Prejudicis", t:"Prejudici lingüístic", d:"Judici de valor no fonamentat sobre una llengua o una varietat, basat en creences socials i no en criteris lingüístics.", e:"«El català no serveix per a la ciència», «el mallorquí no és català», «el castellà és més fàcil»." },
+  { c:"Prejudicis", t:"Autoodi", d:"Actitud del parlant d'una llengua minoritzada que menysprea la seva pròpia llengua i n'assumeix els prejudicis.", e:"Dir que la pròpia manera de parlar és «un mal català» o «un dialecte»." },
+  { c:"Prejudicis", t:"Norma de convergència lingüística", d:"Costum de canviar de llengua quan l'interlocutor sembla no catalanoparlant (per aspecte físic o accent). Reforça la subordinació i és un prejudici.", e:"Dirigir-se en castellà a algú només per la seva aparença: és una pregunta típica del bloc 2." },
+  { c:"Prejudicis", t:"Lleialtat lingüística", d:"Actitud de mantenir la llengua pròpia en la conversa, amb naturalitat i sense imposició, encara que l'interlocutor en faci servir una altra.", e:"És la conducta que més afavoreix la normalització en el dia a dia." },
+  { c:"Variació", t:"Variació diatòpica (geolecte)", d:"Variació segons el lloc: els dialectes geogràfics. Dos grans blocs: oriental i occidental.", e:"Balear, central, rossellonès i alguerès (oriental); nord-occidental i valencià (occidental)." },
+  { c:"Variació", t:"Variació diastràtica (sociolecte)", d:"Variació segons el grup social: nivell d'instrucció, professió o grup (argots).", e:"L'argot juvenil o el llenguatge tècnic d'un ofici." },
+  { c:"Variació", t:"Variació diacrònica (cronolecte)", d:"Variació segons l'edat del parlant i l'època històrica de la llengua.", e:"El català medieval, o el parlar dels adolescents d'avui." },
+  { c:"Variació", t:"Registres", d:"Variació funcional segons la situació comunicativa: tema, canal, intenció i relació entre interlocutors.", e:"Col·loquial, estàndard, formal o científic i literari." },
+  { c:"Variació", t:"Varietat estàndard", d:"Model de llengua comú, codificat i supradialectal, propi de l'ensenyament, l'administració i els mitjans. No elimina els dialectes: els complementa.", e:"L'estàndard admet formes pròpies de cada territori (modalitats insulars)." },
+  { c:"Marc legal", t:"Constitució espanyola, article 3", d:"El castellà és la llengua oficial de l'Estat i tots els espanyols tenen el deure de conèixer-la; les altres llengües són també oficials segons els seus estatuts.", e:"Hi ha un deure de conèixer el castellà, però no el català: una asimetria jurídica clau." },
+  { c:"Marc legal", t:"Estatut d'Autonomia de les Illes Balears (art. 4)", d:"El català és la llengua pròpia de les Illes Balears i, juntament amb el castellà, hi té caràcter oficial. Ningú no pot ser discriminat per raó de la llengua.", e:"Les modalitats insulars són objecte d'estudi i protecció, sense perjudici de la unitat de la llengua." },
+  { c:"Marc legal", t:"Llei 3/1986 de Normalització Lingüística", d:"Llei de les Illes Balears que regula l'ús oficial del català, el dret d'usar-lo davant l'administració, la seva presència a l'ensenyament, als mitjans i a la toponímia.", e:"Dret d'adreçar-se en català a l'Administració i de rebre'n resposta." },
+  { c:"Marc legal", t:"Carta Europea de les Llengües Regionals o Minoritàries", d:"Tractat del Consell d'Europa (1992) que compromet els estats a protegir i promoure les llengües regionals o minoritàries. Espanya la va ratificar el 2001.", e:"Serveix per argumentar els drets lingüístics en clau europea." },
+  { c:"Marc legal", t:"Oficialitat", d:"Que una llengua sigui oficial vol dir que té plena validesa jurídica: es pot emprar davant qualsevol institució i les administracions han de garantir-ne l'ús.", e:"Oficialitat ≠ normalitat: es pot ser oficial i continuar sent minoritzada." }
+];
+
+D.temari = [
+  { n:1, t:"La variació lingüística: geolectes, cronolectes, sociolectes i registres",
+    c:"Variació estilística, situació comunicativa i registres lingüístics.",
+    q:["Llegeix tres fragments i indica quin registre (col·loquial, estàndard o formal) empra cadascun. Justifica-ho.",
+       "Transforma un text (p. ex. una sol·licitud) en registre formal i en registre col·loquial i explica què hi has canviat i per què.",
+       "Identifica en un fragment tres trets dialectals que permetin saber de quina varietat geogràfica prové."] },
+  { n:2, t:"Llengües en contacte: bilingüisme, diglòssia, interferència i interposició",
+    c:"Definició i tipus de bilingüisme (individual, territorial i social). Bilingüe i bilingüista. La mitificació del bilingüisme. El conflicte lingüístic.",
+    q:["Explica la diferència entre bilingüisme individual i bilingüisme social.",
+       "Què entenem per conflicte lingüístic? Posa un exemple de la situació actual.",
+       "Identifica en un text els conceptes sociolingüístics que hi apareixen (bilingüisme, diglòssia, interferència…)."] },
+  { n:3, t:"Llengües subordinades i llengües dominants",
+    c:"Processos de substitució lingüística. Llengües minoritàries i minoritzades. Situació lingüística a Europa i règim lingüístic europeu. Les llengües de la península Ibèrica.",
+    q:["Com es pot revertir un procés de substitució lingüística? Posa exemples reals.",
+       "Explica com es reconeix que una llengua és subordinada.",
+       "Quines són les llengües de la península Ibèrica i quin reconeixement legal tenen?",
+       "Què significa que una llengua sigui minoritària però no minoritzada? Posa'n un exemple."] },
+  { n:4, t:"Normalització i substitució",
+    c:"La normalització lingüística i la seva relació amb la normativització i amb la substitució.",
+    q:["Quines mesures de normalització poden combatre els prejudicis lingüístics?",
+       "Identifica, en una situació real o inventada, un cas de minorització o de substitució lingüística."] },
+  { n:5, t:"Models de política lingüística en territoris plurilingües",
+    c:"Models de planificació lingüística i la seva relació amb els processos de normalització. El marc legal que afecta la llengua catalana (lleis estatals i autonòmiques).",
+    q:["Comenta dos models de política lingüística actuals (per exemple, el del Quebec i el de Suïssa).",
+       "Explica quin marc legal regula el català i què garanteix."] },
+  { n:6, t:"Drets lingüístics a les Illes Balears",
+    c:"Què significa i què implica que una llengua sigui oficial. L'ús del català en els àmbits socials.",
+    q:["Quins drets lingüístics tenen els ciutadans segons la normativa vigent?",
+       "Davant una vulneració de drets lingüístics, quina resposta institucional es pot demanar?"] },
+  { n:7, t:"Prejudicis i estereotips lingüístics",
+    c:"Els prejudicis lingüístics i el seu efecte sobre els usos.",
+    q:["Descriu quatre prejudicis que afectin el català i comenta per què són falsos o exagerats."] },
+  { n:8, t:"Norma culta / estàndard",
+    c:"Els conceptes de norma culta i estàndard, la seva utilitat i la seva diversitat dins la llengua catalana.",
+    q:["Escriu un text breu en varietat estàndard i un altre en la teva varietat dialectal, i compara'ls."] }
+];
+
+D.dialectes = {
+  blocs:[
+    { t:"Bloc oriental", d:"Redueix les vocals àtones: la <i>a</i> i la <i>e</i> es neutralitzen en [ə].",
+      dial:["Central","Balear","Rossellonès","Alguerès"] },
+    { t:"Bloc occidental", d:"Manté la distinció entre <i>a</i> i <i>e</i> àtones i la <i>o</i> àtona sona [o].",
+      dial:["Nord-occidental","Valencià"] }
+  ],
+  fitxes:[
+    { n:"Balear", z:"Mallorca, Menorca i Eivissa", b:"oriental", trets:[
+        "<b>Article salat</b>: es, sa, es/ets, ses (<i>sa mar</i>, <i>es nins</i>). L'article literari <i>el/la</i> es reserva per a alguns usos (<i>el Rei</i>, <i>la mar</i>).",
+        "<b>Article personal</b> en/na, n' (<i>en Pere</i>, <i>na Maria</i>).",
+        "<b>1a persona del present sense desinència</b>: jo <i>cant</i>, <i>tem</i>, <i>dorm</i>.",
+        "<b>Desinències -am / -au</b> a la 1a i 2a del plural: <i>cantam</i>, <i>cantau</i>.",
+        "<b>Vocal neutra tònica</b> [ə] en mallorquí (<i>pera</i> vs. <i>pèra</i>).",
+        "<b>Ordre i formes pronominals antigues</b>: <i>me'l dóna</i>, <i>la me dóna</i>, <i>mos</i>, <i>vos</i>.",
+        "Increment incoatiu en <b>-esc</b>: <i>partesc</i>, <i>serveix</i> → <i>servesc</i>.",
+        "<b>Lèxic</b>: al·lot, nin, moix, ca, cercar, horabaixa, capell, torcaboques, idò, tassó, missatge."
+      ]},
+    { n:"Central", z:"Barcelona, Girona, Tarragona", b:"oriental", trets:[
+        "És la base de l'estàndard oriental i del model dels mitjans.",
+        "Neutralització de <i>a</i> i <i>e</i> àtones en [ə] i de <i>o</i> àtona en [u].",
+        "Desinència de 1a persona en <b>-o</b>: <i>canto</i>.",
+        "Pèrdua de la <i>-r</i> final (<i>cantar</i> → [kənˈta]).",
+        "Lèxic: noi, mirall, nen, marxar, xai."
+      ]},
+    { n:"Nord-occidental", z:"Lleida, Franja, Andorra, Ribagorça", b:"occidental", trets:[
+        "Manté les vocals àtones <i>a/e</i> i <i>o</i> sense neutralitzar.",
+        "Desinència de 1a persona en <b>-o</b> o <b>-e</b> segons la zona: <i>canto</i> / <i>cante</i>.",
+        "Article <i>lo, los</i> en el parlar col·loquial.",
+        "Demostratius <i>este, eixe</i> en algunes zones; diftong <i>ei</i> per <i>e</i> (<i>rei</i>).",
+        "Lèxic: xic, espill, melic, romer, bres."
+      ]},
+    { n:"Valencià", z:"País Valencià", b:"occidental", trets:[
+        "Pronuncia la <b>-r final</b> (<i>cantar</i>, <i>carrer</i>) i manté la distinció b/v en bona part del territori.",
+        "Desinència de 1a persona en <b>-e</b>: <i>cante</i>. Subjuntiu en <i>-a</i>: <i>cante, cantes</i>.",
+        "<b>Passat simple</b> viu: <i>aní, cantí</i> (al costat de <i>vaig anar</i>).",
+        "Demostratius <i>este, eixe, aquell</i>; incoatius en <i>-ix</i>: <i>patix</i>.",
+        "Lèxic: xiquet, espill, roig, granera, hui, vesprada, bou."
+      ]},
+    { n:"Rossellonès", z:"Catalunya del Nord (estat francès)", b:"oriental", trets:[
+        "Forta <b>interferència del francès</b> en el lèxic i en la sintaxi.",
+        "Desinència de 1a persona en <b>-i</b>: <i>canti</i>.",
+        "Ús de <b>pas</b> com a única marca de negació: <i>no vull pas</i> / <i>vull pas</i>.",
+        "<i>Mes</i> per <i>però</i>; preferència per <i>ésser</i> en temps compostos.",
+        "Lèxic d'origen francès: <i>vitura</i>, <i>votura</i>, <i>gendarme</i>, <i>usina</i>."
+      ]},
+    { n:"Alguerès", z:"l'Alguer (Sardenya)", b:"oriental", trets:[
+        "Influència del <b>sard, l'italià i el castellà</b> històric.",
+        "Articles <b>lo, la, los, les</b>.",
+        "Rotacisme: <i>l</i> intervocàlica → <i>r</i> (<i>Barcelona</i> → <i>Barcerona</i>, <i>scola</i> → <i>iscora</i>).",
+        "Possessius <i>lo meu, la mia</i>.",
+        "Lèxic italià i sard: <i>lo carrer</i>, <i>la tanca</i>, <i>minyó</i>."
+      ]}
+  ],
+  lexic:[
+    ["Balear","al·lot / nin","moix","ca","cercar","horabaixa","capell"],
+    ["Central","noi / nen","gat","gos","buscar","tarda","barret"],
+    ["Nord-occ.","xic","gat","gos","buscar","tarda","barret"],
+    ["Valencià","xiquet","gat","gos","buscar","vesprada","barret"]
+  ]
+};
+
+D.geoQuiz = [
+  { f:"Ahir horabaixa vaig anar a cercar es nin a s'escola i llavors mos ne vàrem anar a ca sa padrina.",
+    a:"Balear (mallorquí)", o:["Balear (mallorquí)","Valencià","Nord-occidental","Rossellonès"],
+    w:"Article salat (<i>es, sa, s'</i>), lèxic propi (<i>horabaixa, cercar, nin, padrina</i>) i pronom <i>mos</i>." },
+  { f:"Este matí el xiquet s'ha alçat de matí i ha agarrat l'espill del bany. Cante mentre es dutxa.",
+    a:"Valencià", o:["Balear (menorquí)","Valencià","Central","Alguerès"],
+    w:"Demostratiu <i>este</i>, lèxic <i>xiquet, espill, agarrar</i> i desinència de 1a persona en <i>-e</i> (<i>cante</i>)." },
+  { f:"Lo xic va marxar cap al tros amb lo tractor i no va tornar hasta la nit.",
+    a:"Nord-occidental", o:["Nord-occidental","Valencià","Balear (eivissenc)","Central"],
+    w:"Articles <i>lo/los</i> col·loquials i lèxic de l'interior (<i>xic, tros</i>), propis del nord-occidental." },
+  { f:"Jo canti cada vespre a la vetllada, mes no vull pas sortir amb aquest temps.",
+    a:"Rossellonès", o:["Alguerès","Rossellonès","Central","Balear (menorquí)"],
+    w:"Desinència <i>-i</i> de 1a persona (<i>canti</i>), <i>mes</i> per <i>però</i> i la negació amb <i>pas</i>." },
+  { f:"Lo pare de la mia mare és anat a la plaça a comprar lo peix fresc.",
+    a:"Alguerès", o:["Valencià","Alguerès","Nord-occidental","Rossellonès"],
+    w:"Articles <i>lo/la</i>, possessiu <i>la mia</i> i estructura calcada de l'italià." },
+  { f:"Ses al·lotes d'Eivissa fan festa a sa plaça; noltros hi anam cada diumenge.",
+    a:"Balear (eivissenc)", o:["Balear (eivissenc)","Central","Valencià","Nord-occidental"],
+    w:"Article salat, <i>al·lotes</i>, <i>noltros</i> i desinència <i>-am</i> (<i>anam</i>): trets balears." },
+  { f:"Aquest matí he agafat el tren a l'estació i després he anat a buscar el nen a l'escola.",
+    a:"Central", o:["Central","Valencià","Balear (mallorquí)","Nord-occidental"],
+    w:"Lèxic i morfologia de l'estàndard oriental central: <i>nen, buscar, agafar</i>, sense article salat." }
+];
+
+/* ---------------------------------------------------------- LITERATURA -- */
+D.literatura = [
+  {
+    id:"rusinol", oficial:true, etiqueta:"Teatre modernista",
+    titol:"L'alegria que passa", autor:"Santiago Rusiñol", anys:"1898 · un acte, amb música d'Enric Morera",
+    context:"Modernisme (final del s. XIX i principi del XX). Rusiñol (Barcelona, 1861-Aranjuez, 1931) és pintor, dramaturg i ànima de les Festes Modernistes de Sitges. El Modernisme vol modernitzar i europeïtzar la cultura catalana i trenca amb la Renaixença; hi conviuen dos corrents: el <b>regeneracionista-vitalista</b> (l'artista que vol redimir el poble) i l'<b>esteticista-decadentista</b> (l'art per l'art, l'artista aïllat).",
+    argument:"En un poble gris, avorrit i endormiscat hi arriba una companyia de circ ambulant. El jove Joanet, aprenent de ferrer, s'enlluerna amb la Zaira i amb la vida lliure dels artistes i vol fugir-hi. El poble, mesquí, no els dona ni menjar ni diners i els fa fora. El circ se'n va, la Zaira també, i Joanet es queda al poble, condemnat a la rutina.",
+    personatges:[
+      ["Joanet","Jove somiador, el veritable protagonista. Encarna l'ànsia d'art i de llibertat ofegada per l'entorn."],
+      ["Zaira","L'amazona del circ: bellesa, alegria i art efímer. És allò que passa i no torna."],
+      ["El Clown i l'Arlequí","Artistes pobres i nòmades; el seu art no té preu al poble, només fam."],
+      ["El poble (carreters, ferrers, l'autoritat)","Personatge col·lectiu: la mediocritat, la falta de sensibilitat i l'interès material."]
+    ],
+    temes:["El conflicte entre l'artista i la societat burgesa i materialista","L'art com a alegria fugissera que passa i no es pot retenir","La rutina i l'avorriment del món rural tancat","La frustració vital del jove que no pot fugir"],
+    simbols:[
+      ["El circ","L'art, la fantasia, la llibertat: l'alegria que <i>passa</i> sense aturar-se."],
+      ["El poble","La prosa de la vida, la mediocritat que anul·la l'individu."],
+      ["La carretera","La possibilitat de fugida, sempre oberta i sempre negada."],
+      ["La ferreria i les campanes","La rutina, el treball mecànic, el temps que es repeteix igual."]
+    ],
+    fragments:[
+      ["Escena última","JOANET: «Dormim al llit de la prosa, ja que em fuig la poesia.»"]
+    ],
+    preguntes:["Explica les característiques del Modernisme i del teatre de Rusiñol a partir d'aquest fragment.","Comenta el simbolisme del circ i del poble a L'alegria que passa.","Quin paper hi fa el personatge de Joanet i què representa?"]
+  },
+  {
+    id:"rossello", oficial:true, etiqueta:"Literatura dels anys 20 i 30",
+    titol:"Tempestat de flama (antologia poètica)", autor:"Bartomeu Rosselló-Pòrcel", anys:"Palma, 1913 – el Brull, 1938",
+    context:"Poeta mallorquí de vida brevíssima (mor als 24 anys de tuberculosi). Estudia a Barcelona, on tracta Carles Riba i fa amistat amb Salvador Espriu. La seva obra sintetitza el <b>postsimbolisme</b> de Riba, la tradició barroca (Góngora), la poesia popular mallorquina i les <b>avantguardes</b>. Publica <i>Nou poemes</i> (1933) i <i>Quadern de sonets</i> (1934); <i>Imitació del foc</i> apareix pòstumament el 1938.",
+    argument:"No és una obra narrativa: és una antologia de poemes. La lectura s'ha de fer per nuclis temàtics i formals — el foc que destrueix i purifica, la nit, la mort imminent, el paisatge mallorquí i la guerra.",
+    personatges:[
+      ["La veu poètica","Un jo líric consumit pel foc: intensitat, febre i consciència de mort pròxima."],
+      ["Mallorca","No és un decorat: el paisatge insular esdevé memòria i pèrdua, sobretot durant la guerra."]
+    ],
+    temes:["El foc com a destrucció i purificació","La mort i la fugacitat de la vida","El paisatge de Mallorca i l'enyor durant la guerra","L'amor i el desig","La tensió entre tradició clàssica i avantguarda"],
+    simbols:[
+      ["El foc i la flama","Passió, febre, destrucció i coneixement: dona títol a l'antologia i a <i>Imitació del foc</i>."],
+      ["La nit","Espai del misteri, del somni i de la mort."],
+      ["El vent i la tempesta","Violència i moviment interior, en la línia avantguardista."]
+    ],
+    fragments:[
+      ["A Mallorca, durant la guerra civil","«Verdegen encara aquells camps / i duren aquelles arbredes…»"]
+    ],
+    preguntes:["Comenta la presència del foc com a element simbòlic en la poesia de Rosselló-Pòrcel.","Relaciona un poema amb el context de la guerra civil i amb la tradició i l'avantguarda.","Quins recursos formals clàssics manté el poeta i quins trets avantguardistes hi introdueix?"]
+  },
+  {
+    id:"salvat", oficial:true, etiqueta:"Avantguardes",
+    titol:"Poesia i cal·ligrames", autor:"Joan Salvat-Papasseit", anys:"Barcelona, 1894-1924",
+    context:"Obrer autodidacte, agitador cultural i poeta avantguardista. Introdueix a Catalunya l'esperit del <b>futurisme</b> i del cubisme literari: llibertat tipogràfica, cal·ligrames, exaltació de la màquina, del port i de la ciutat moderna. Després evoluciona cap a una poesia amorosa i quotidiana, lluminosa i planera. Obres: <i>Poemes en ondes hertzianes</i> (1919), <i>L'irradiador del port i les gavines</i> (1921), <i>La gesta dels estels</i> (1922), <i>El poema de la rosa als llavis</i> (1923) i <i>Óssa menor</i> (1925, pòstum).",
+    argument:"Dues etapes: la <b>avantguardista</b>, amb cal·ligrames i imatges maquinistes, i la <b>vitalista-amorosa</b>, amb poemes d'amor, de festa popular i de celebració de les coses senzilles.",
+    personatges:[
+      ["El jo poètic obrer","Veu popular, vitalista i rebel, orgullosa del seu origen."],
+      ["La ciutat i el port","Escenari modern: grues, fàbriques, gavines, llum elèctrica."]
+    ],
+    temes:["L'exaltació de la modernitat i de la màquina","L'amor sensual i celebratiu","La vida quotidiana i les festes populars","La consciència social i obrera","La malaltia i la mort viscudes amb vitalisme"],
+    simbols:[
+      ["El cal·ligrama","La pàgina com a quadre: el poema dibuixa allò que diu i trenca la linealitat."],
+      ["El port i l'irradiador","La modernitat, el moviment, l'obertura al món."],
+      ["La rosa als llavis","L'amor i el desig com a plenitud vital."]
+    ],
+    fragments:[
+      ["Res no és mesquí","«Res no és mesquí / ni cap hora és isarda…»"]
+    ],
+    preguntes:["Explica quina influència van tenir el cal·ligrama i les noves tendències pictòriques en la literatura de Salvat-Papasseit.","Comenta l'evolució de la seva poesia, de l'avantguarda al vitalisme amorós.","Analitza els elements futuristes d'un poema seu."]
+  },
+  {
+    id:"rodoreda", oficial:true, etiqueta:"Literatura de postguerra",
+    titol:"La plaça del Diamant", autor:"Mercè Rodoreda", anys:"1962 · novel·la",
+    context:"Rodoreda (Barcelona, 1908 – Girona, 1983) s'exilia el 1939 i escriu la novel·la a Ginebra. L'obra recorre la Barcelona de Gràcia des dels anys de la República fins a la postguerra, passant per la Guerra Civil i la fam. És la gran novel·la de la <b>literatura de postguerra</b> i un monòleg interior en primera persona.",
+    argument:"Natàlia, una jove dependenta, coneix en Quimet en un ball de la plaça del Diamant. Ell la rebateja <b>Colometa</b> i li omple la casa de coloms. Arriben els fills, la misèria i la guerra; en Quimet mor al front. Natàlia, desesperada, està a punt de matar els fills i ella mateixa, però el botiguer Antoni la salva i s'hi casa. Anys després, torna de nit a la plaça del Diamant i hi deixa anar un crit que la allibera.",
+    personatges:[
+      ["Natàlia / Colometa","Narradora. Passiva i anul·lada primer, supervivent després. El canvi de nom marca la pèrdua d'identitat."],
+      ["Quimet","Primer marit: dominant, fantasiós, obsessionat pels coloms. Mor al front."],
+      ["Antoni","Segon marit, botiguer mutilat per la guerra. Li dona seguretat i tendresa, no passió."],
+      ["La senyora Enriqueta","Figura protectora, gairebé maternal, que l'acompanya sempre."],
+      ["Julieta, Cintet i Mateu","Amics del barri; Mateu, afusellat, representa la generació sacrificada."],
+      ["Rita i Antoni (els fills)","El futur que obliga Natàlia a resistir."]
+    ],
+    temes:["L'anul·lació i la recuperació de la identitat de la dona","La guerra i la postguerra vistes des de dins de casa","La fam, la misèria i la supervivència","La incomunicació dins la parella","El pas del temps i la memòria"],
+    simbols:[
+      ["Els coloms","La invasió, l'ofec i el domini d'en Quimet dins la casa; també la mateixa Natàlia (Colometa) tancada al colomar."],
+      ["La plaça del Diamant","Cercle vital: on comença tot (el ball) i on Natàlia es reconcilia amb ella mateixa (el crit final)."],
+      ["L'embut","L'angoixa: la sensació d'estar aixafada, de no poder respirar."],
+      ["El ganivet","L'objecte amb què grava el seu nom a la porta: el gest de recuperar el nom i l'existència."],
+      ["La balança i la botiga","L'estabilitat material que li dona Antoni després de la guerra."]
+    ],
+    fragments:[
+      ["Capítol XXXII (mort d'en Quimet)","«Tenia les plomes del coll mullades per la suor de la mort, els ullets enlleganyats. Ossos i ploma.»"]
+    ],
+    preguntes:["Comenta aquest fragment de La plaça del Diamant i relaciona'l amb el context històric.","Analitza la simbologia dels coloms al llarg de la novel·la.","Explica l'evolució de la protagonista i el sentit del crit final.","Quins trets d'estil (monòleg interior, llengua col·loquial) caracteritzen la narració?"]
+  },
+  {
+    id:"marcal", oficial:true, etiqueta:"Literatura actual",
+    titol:"Bruixa de dol", autor:"Maria-Mercè Marçal", anys:"1979 · poemari",
+    context:"Marçal (Barcelona, 1952 – 1998), poeta, filòloga i activista. La seva obra uneix <b>feminisme</b>, consciència de classe i llengua: recupera formes de la cançó popular (corrandes, cançons de bressol, sextines, sonets) per omplir-les d'un contingut nou i transgressor. A <i>Bruixa de dol</i> hi trobem seccions com <i>Foc de pales</i>, <i>Foravilers</i>, <i>Zodíac</i> i el conegut poema <i>Vuit de març</i>.",
+    argument:"Poemari articulat per cicles: el dol amorós, la identitat de la dona, el cos, la maternitat i la sororitat. La <b>bruixa</b> és la dona que la societat margina perquè no obeeix: Marçal la reivindica com a figura d'alliberament.",
+    personatges:[
+      ["El jo líric femení","Veu de dona que es construeix contra els rols heretats."],
+      ["La bruixa","Símbol de la dona perseguida i rebel: el dol és per l'amor perdut i pel món que li han imposat."]
+    ],
+    temes:["La identitat de la dona i el cos","L'amor, el desamor i el dol","La sororitat i la lluita col·lectiva (Vuit de març)","La maternitat viscuda lliurement","La recuperació de la veu popular"],
+    simbols:[
+      ["La bruixa","La dona lliure i marginada; el dol, la pèrdua que la transforma."],
+      ["La lluna","Cicles femenins, canvi i companyia."],
+      ["El foc","Passió i alhora record de les que van ser cremades."],
+      ["El mirall","La cerca de la pròpia imatge sense la mirada masculina."]
+    ],
+    fragments:[
+      ["Vuit de març","«Amb totes dues mans / alçades a la lluna, / obrim una finestra / en aquest cel tancat.»"],
+      ["Divisa (de Cau de llunes, 1977)","«A l'atzar agraeixo tres dons: haver nascut dona, de classe baixa i nació oprimida.»"]
+    ],
+    preguntes:["Quins elements de la tradició popular recupera Marçal i amb quina intenció?","Comenta el símbol de la bruixa a Bruixa de dol.","Analitza el poema Vuit de març en relació amb el feminisme de l'autora."]
+  },
+  {
+    id:"puig", oficial:false, etiqueta:"Complement · altres currículums",
+    titol:"Aigües encantades", autor:"Joan Puig i Ferreter", anys:"1908 · drama en tres actes",
+    context:"Drama modernista de tendència <b>regeneracionista</b>. No forma part de les lectures obligatòries de les Illes Balears, però és una lectura habitual en altres territoris i serveix per comparar-lo amb el teatre de Rusiñol.",
+    argument:"En un poble sec i supersticiós es creu que desencantar les aigües portaria la desgràcia. Un Foraster proposa canalitzar-les per regar els camps; el poble s'hi oposa i el rebutja. Cecília, filla del cacic, se sent atreta per les seves idees i acaba trencant amb el seu món.",
+    personatges:[
+      ["El Foraster","L'home nou, portador del progrés i de la raó."],
+      ["Cecília","La jove que desperta i s'allibera de l'ambient tancat del poble."],
+      ["El poble i el cacic","La força de la tradició, la por i l'interès."]
+    ],
+    temes:["L'individu superior contra la massa","Raó i progrés contra superstició","La rebel·lió de la dona jove"],
+    simbols:[["Les aigües encantades","La riquesa i la vida que la por manté bloquejades."],["La sequera","L'immobilisme del poble."]],
+    fragments:[["Nucli del conflicte","El debat sobre desencantar les aigües resumeix el xoc entre progrés i superstició."]],
+    preguntes:["Compara el conflicte individu-societat a Aigües encantades i a L'alegria que passa.","Explica el component regeneracionista del teatre modernista."]
+  }
+];
+
+/* ------------------------------------------------- EXPRESSIÓ ESCRITA ----- */
+D.connectors = [
+  ["Per començar","Per començar · D'entrada · En primer lloc · Pel que fa a · Quant a · Avui dia · És un fet que"],
+  ["Afegir","A més · A més a més · Així mateix · D'una banda… de l'altra · Encara més · Tot seguit · Igualment"],
+  ["Contrastar","Tanmateix · Això no obstant · No obstant això · En canvi · Ara bé · Per contra · Tot i això · Si més no"],
+  ["Causa","perquè · ja que · atès que · vist que · com que · a causa de · per raó de · gràcies a"],
+  ["Conseqüència","Per tant · Així doncs · En conseqüència · Per consegüent · De manera que · Això fa que"],
+  ["Exemplificar","Per exemple · Com ara · En concret · Posem per cas · Sense anar més lluny · És el cas de"],
+  ["Concedir","Encara que · Tot i que · Si bé · Per bé que · Malgrat que · És cert que… però"],
+  ["Condicionar","Si · Sempre que · A condició que · En cas que · Llevat que · Tret que"],
+  ["Reformular","És a dir · Dit d'una altra manera · En altres paraules · O sigui · Més ben dit"],
+  ["Opinar","Al meu parer · Des del meu punt de vista · Considero que · Cal destacar que · Val a dir que · Convé recordar que"],
+  ["Concloure","En conclusió · En definitiva · Per acabar · En resum · Comptat i debatut · Al capdavall · Tot plegat"]
+];
+
+D.plantilles = {
+  argumentatiu:{
+    nom:"Text argumentatiu (bloc 1, P3)",
+    nota:"175-200 paraules. Introducció + argumentació + conclusió. La contraargumentació no és obligatòria, però es valora positivament. Prohibit fer esquemes o guions i inventar dades.",
+    parts:[
+      { t:"Introducció", w:"30-40 paraules", g:"Presenta el tema i pren posició clarament. No repeteixis l'enunciat: reformula'l.",
+        m:"Avui dia, [TEMA] ha esdevingut un tema de debat constant. Hi ha qui defensa […], mentre que altres veus adverteixen […]. Al meu parer, […]." },
+      { t:"Argument 1", w:"45-55 paraules", g:"Idea forta + explicació + exemple concret i real (res d'inventar dades).",
+        m:"D'una banda, […]. Això es pot comprovar en el fet que […]. Per exemple, […]. Per tant, […]." },
+      { t:"Argument 2", w:"45-55 paraules", g:"Segona idea, diferent de la primera. Canvia de connector.",
+        m:"D'altra banda, […]. Cal destacar que […], la qual cosa demostra que […]." },
+      { t:"Contraargument (opcional, puja nota)", w:"25-35 paraules", g:"Reconeix l'objecció i refuta-la. És el que distingeix un 8 d'un 10.",
+        m:"És cert que […]. Tanmateix, aquest argument no té prou pes, perquè […]." },
+      { t:"Conclusió", w:"25-35 paraules", g:"Recupera la tesi amb altres paraules i tanca amb una idea de futur o una crida.",
+        m:"En definitiva, […]. Per això convindria […]. Al capdavall, […]." }
+    ]},
+  opinio:{
+    nom:"Article d'opinió",
+    nota:"Text periodístic d'autor: to personal, títol suggeridor i llibertat estilística, però estructura argumentativa.",
+    parts:[
+      { t:"Títol", w:"1 línia", g:"Suggeridor, no descriptiu. Pot ser una pregunta o un joc de paraules.", m:"[TÍTOL]" },
+      { t:"Entrada (lead)", w:"35-45 paraules", g:"Comença amb una anècdota, una dada real o una pregunta retòrica que enganxi.",
+        m:"L'altre dia […]. Aquesta escena resumeix bé què passa amb [TEMA]." },
+      { t:"Desenvolupament", w:"90-120 paraules", g:"Dos o tres arguments amb to personal. Pots usar la primera persona i la ironia.",
+        m:"D'entrada, […]. A més, […]. Ara bé, convé no oblidar que […]." },
+      { t:"Tancament", w:"30-40 paraules", g:"Torna a la imatge de l'inici i tanca amb una frase contundent.",
+        m:"Tot plegat, […]. Potser va essent hora de […]." }
+    ]},
+  carta:{
+    nom:"Carta formal / instància",
+    nota:"Registre molt formal, tractament de vostè, fórmules fixes i estructura rígida.",
+    parts:[
+      { t:"Encapçalament", w:"—", g:"Dades de qui escriu i de qui rep, lloc i data.",
+        m:"[Nom i llinatges], amb DNI […] i domicili a […]\nA l'atenció de [càrrec o institució]\n[Població], [dia] de [mes] de [any]" },
+      { t:"Salutació", w:"1 línia", g:"Fórmula fixa, seguida de coma.", m:"Benvolgut senyor / Benvolguda senyora," },
+      { t:"Exposició", w:"60-80 paraules", g:"Explica els fets amb objectivitat. En una instància, comença amb EXPÒS.",
+        m:"Em dirigeixo a vostè per exposar-li que […]. Atès que […] i vist que […]," },
+      { t:"Petició", w:"30-40 paraules", g:"Demanda clara i concreta. En una instància, DEMAN.",
+        m:"Per tot això, us deman que […] i que […]." },
+      { t:"Comiat", w:"1-2 línies", g:"Fórmula de cortesia i signatura.",
+        m:"Us agraeixo per endavant la vostra atenció.\nAtentament,\n[Signatura]" }
+    ]},
+  noticia:{
+    nom:"Notícia (estructura del bloc 1)",
+    nota:"La notícia respon a les sis preguntes bàsiques: què, qui, quan, on, com i per què. Va de més a menys important (piràmide invertida) i s'organitza en paràgrafs breus.",
+    parts:[
+      { t:"Titular", w:"màxim 3 línies", g:"Frase breu que reflecteix el sentit global del text. És la pregunta 1 de l'examen (1 punt).",
+        m:"[Subjecte] + [verb en present] + [complement essencial]" },
+      { t:"Avanttítol i subtítol", w:"1 línia cada un", g:"L'avanttítol precedeix el titular i el complementa; el subtítol el continua i hi afegeix dades.",
+        m:"Avanttítol: [context previ]\nSubtítol: [dada que amplia el titular]" },
+      { t:"Entradeta (lead)", w:"30-40 paraules", g:"Primer paràgraf: hi han de sortir les sis preguntes bàsiques.",
+        m:"[Què] ha passat [on] [quan], segons [font], la qual cosa [per què/conseqüència]." },
+      { t:"Cos", w:"paràgrafs breus", g:"Informació de més a menys rellevant, amb declaracions i dades.",
+        m:"Segons […], «[declaració]». A més, […]." },
+      { t:"Peu de foto", w:"1 línia", g:"Explica la imatge que acompanya la notícia.", m:"[Descripció de la imatge] · Foto: [autor]" }
+    ]},
+  comentari:{
+    nom:"Comentari literari (bloc 3)",
+    nota:"Cal citar i referenciar el text dins la resposta. Res d'esquemes ni guions.",
+    parts:[
+      { t:"Situació", w:"30-40 paraules", g:"Autor, obra, any, gènere i corrent literari; situa el fragment dins l'obra.",
+        m:"Aquest fragment pertany a [OBRA] ([any]), de [AUTOR], obra representativa del [corrent]. Se situa al moment en què […]." },
+      { t:"Tema i contingut", w:"40-50 paraules", g:"Digues el tema en una frase i resumeix el contingut.",
+        m:"El tema del fragment és […]. S'hi narra com […]." },
+      { t:"Anàlisi formal", w:"60-80 paraules", g:"Estructura, veu narrativa o jo líric, recursos i llengua, sempre amb citacions curtes.",
+        m:"Destaca l'ús de […], com es veu a «[citació]», que reforça […]." },
+      { t:"Relació amb l'autor i el corrent", w:"40-50 paraules", g:"Connecta-ho amb el context històric i amb els trets del moviment.",
+        m:"Aquests trets són propis de [corrent], ja que […]. En el context de […], l'obra […]." },
+      { t:"Valoració", w:"25-30 paraules", g:"Tanca amb una valoració argumentada, no amb un «m'ha agradat».",
+        m:"En conclusió, el fragment condensa […], la qual cosa explica […]." }
+    ]}
+};
+
+/* ------------------------------------------------------ FALTES GREUS ---- */
+D.faltes = [
+  ["Calc","tinc que estudiar","he d'estudiar / haig d'estudiar","«Tenir que» és un calc del castellà <i>tener que</i>. L'obligació es fa amb <b>haver de</b> o <b>caldre</b>."],
+  ["Calc","hi han molts alumnes","hi ha molts alumnes","El verb <b>haver-hi</b> és impersonal: sempre en singular, «hi ha»."],
+  ["Calc","degut a la pluja","a causa de la pluja / per la pluja","«Degut a» només és correcte si <i>degut</i> concorda amb un nom («un retard degut a…»). Com a connector causal és incorrecte."],
+  ["Calc","lo millor és estudiar","el millor és estudiar","No existeix l'article neutre <b>lo</b>. Fes servir <b>el</b>, <b>allò</b> o reformula la frase."],
+  ["Calc","lo que em preocupa","el que em preocupa / allò que em preocupa","Mateix cas: «lo que» és un castellanisme molt penalitzat."],
+  ["Calc","en quant a la llengua","quant a la llengua / pel que fa a la llengua","«En quant a» és incorrecte; les formes normatives són <b>quant a</b> i <b>pel que fa a</b>."],
+  ["Calc","no obstant, cal dir…","no obstant això, cal dir… / això no obstant","«No obstant» tot sol és incorrecte en català: necessita <b>això</b>."],
+  ["Calc","desde que va arribar","des que va arribar","S'escriu <b>des de</b> (separat) i, davant d'una oració, <b>des que</b> sense la preposició."],
+  ["Calc","ho faig per a que ho vegis","ho faig perquè ho vegis","La finalitat s'expressa amb <b>perquè</b> + subjuntiu. «Per a que» no existeix."],
+  ["Calc","penso de que és així","penso que és així","Dequisme: després de <i>pensar, dir, creure</i> no hi va <b>de</b>."],
+  ["Calc","estic segur de què vindrà","estic segur que vindrà","Amb adjectius com <i>segur</i> tampoc no hi cal la preposició davant de <b>que</b>."],
+  ["Calc","a nivell d'ensenyament","en l'àmbit de l'ensenyament / pel que fa a l'ensenyament","«A nivell de» només és correcte si hi ha nivells reals (a nivell del mar)."],
+  ["Calc","el mateix serà revisat","aquest document serà revisat","«El mateix» com a pronom anafòric és un calc administratiu. Repeteix el nom o fes servir un pronom."],
+  ["Calc","donar-se compte","adonar-se","«Donar-se compte» és un calc de <i>darse cuenta</i>."],
+  ["Calc","tenir ganes de que vingui","tenir ganes que vingui","Davant de <b>que</b> cauen les preposicions <i>de, a, en, amb</i>."],
+  ["Calc","en front de","davant de / enfront de","«En front de» s'escriu junt: <b>enfront de</b>, o millor <b>davant de</b>."],
+  ["Barbarisme","bueno","bé / d'acord / bo","Castellanisme col·loquial. A l'examen no hi pot sortir mai."],
+  ["Barbarisme","vale","d'acord / entesos / va bé","Castellanisme."],
+  ["Barbarisme","pues","doncs","Castellanisme."],
+  ["Barbarisme","entonces","aleshores / llavors","Castellanisme."],
+  ["Barbarisme","ademés","a més / a més a més","Castellanisme."],
+  ["Barbarisme","antes","abans","Castellanisme."],
+  ["Barbarisme","inclús","fins i tot","«Inclús» com a adverbi és incorrecte."],
+  ["Barbarisme","alomillor","potser / tal vegada","Castellanisme de <i>a lo mejor</i>."],
+  ["Barbarisme","disfrutar","gaudir / fruir / passar-ho bé","Castellanisme."],
+  ["Barbarisme","enterar-se","assabentar-se / adonar-se / saber","Castellanisme."],
+  ["Barbarisme","despedir-se","acomiadar-se","Castellanisme."],
+  ["Barbarisme","apretar","prémer / estrènyer / pitjar","Castellanisme."],
+  ["Barbarisme","recolzar una idea","donar suport a una idea / secundar-la","«Recolzar» vol dir <i>reposar sobre alguna cosa</i>, no donar suport."],
+  ["Barbarisme","vivenda","habitatge","Castellanisme."],
+  ["Barbarisme","tamany","mida / grandària / dimensió","Castellanisme."],
+  ["Barbarisme","barco","vaixell / barca","Castellanisme."],
+  ["Barbarisme","tonto","ximple / beneit / bàmbol","Castellanisme."],
+  ["Barbarisme","rato","estona","Castellanisme."],
+  ["Barbarisme","sello","segell","Castellanisme."],
+  ["Barbarisme","enxufe","endoll / (fig.) padrí","Castellanisme."],
+  ["Barbarisme","acera","voravia / vorera","Castellanisme."],
+  ["Barbarisme","basura","fems / escombraries","Castellanisme."],
+  ["Barbarisme","cariño","estimació / afecte","Castellanisme."],
+  ["Barbarisme","novio / novia","xicot / al·lot / promès · xicota / al·lota / promesa","Castellanisme."],
+  ["Barbarisme","hasta","fins / fins i tot","Castellanisme."],
+  ["Verbs","ha sigut un error","ha estat un error","El participi de <i>ser</i> és <b>estat</b> (ser/ésser)."],
+  ["Verbs","ha hagut molts problemes","hi ha hagut molts problemes","Amb <b>haver-hi</b> no es pot perdre el pronom <b>hi</b>."],
+  ["Verbs","si vindria, t'ho diria","si vingués, t'ho diria","En l'oració condicional no s'hi pot posar el condicional: hi va l'imperfet de subjuntiu."],
+  ["Verbs","tinguent en compte","tenint en compte","El gerundi de <i>tenir</i> és <b>tenint</b>."],
+  ["Verbs","dient-li això, va marxar","li va dir això i va marxar","El gerundi no pot expressar una acció posterior a la del verb principal."],
+  ["Pronoms","els hi vaig dir la veritat","els vaig dir la veritat","«Els hi» només és correcte quan hi ha un CD/CC amb <b>hi</b>. Per a un CI plural n'hi ha prou amb <b>els</b>."],
+  ["Pronoms","dona-li el llibre a ell → dona-li'l","dona-l'hi","Amb <b>li</b>, l'altre pronom va davant i <i>li</i> es transforma en <b>hi</b>."],
+  ["Pronoms","me se'n va caure","se me'n va caure","L'ordre normatiu dels pronoms és: 3a reflexiva (se) · 2a · 1a · CI · CD · en · hi."],
+  ["Pronoms","vaig comprar-li a ell","li vaig comprar","Evita duplicar el pronom amb un sintagma tònic redundant si no hi ha èmfasi."],
+  ["Accentuació","es un tema important","és un tema important","<b>és</b> (verb) porta accent; <b>es</b> (pronom) no."],
+  ["Accentuació","perque no ho sabia","perquè no ho sabia","<b>Perquè</b> s'escriu amb accent obert sobre la <i>e</i>."],
+  ["Accentuació","aixo es aixi","això és així","Compte amb <b>això</b> i <b>així</b>: totes dues porten accent."],
+  ["Accentuació","tambe cal dir-ho","també cal dir-ho","Mot agut acabat en vocal: porta accent."],
+  ["Accentuació","la situacio actual","la situació actual","Els mots aguts acabats en -ió porten accent; en plural, no (<i>situacions</i>)."],
+  ["Accentuació","la ciencia i la conseqüencia","la ciència i la conseqüència","Mots plans acabats en -encia: accent obert sobre la <i>e</i>."],
+  ["Ortografia","el problema es que es dificil","el problema és que és difícil","Repassa els accents un per un al final: és on més punts es perden."],
+  ["Ortografia","el amic i el home","l'amic i l'home","Davant vocal o h muda, l'article masculí s'apostrofa."],
+  ["Ortografia","l'universitat / l'idea","la universitat / la idea","No s'apostrofa l'article femení davant <b>i</b> o <b>u</b> àtones: <i>la idea, la universitat, la humitat</i>."],
+  ["Ortografia","de el centre / a el matí","del centre / al matí","Contraccions obligatòries: <b>del, al, pel, cal</b>."],
+  ["Ortografia","aquest asignatura","aquesta assignatura","Concordança i doble essa: <i>assignatura, assemblea, pressió</i>."],
+  ["Ortografia","per que ho dius?","per què ho dius?","<b>Per què</b> (interrogatiu) separat i amb accent; <b>perquè</b> (causal/final) junt."],
+  ["Ortografia","sino ho fas","si no ho fas","<b>Si no</b> (condicional) separat; <b>sinó</b> (adversatiu) junt: «No és blanc, sinó negre»."]
+];
+
+D.diacritics = [
+  ["bé","adverbi / béns","be (xai; lletra b)"],
+  ["déu","divinitat (adéu, marededéu)","deu (número 10; verb deure; font)"],
+  ["és","verb ser","es (pronom; article salat)"],
+  ["mà","part del cos","ma (possessiu: ma mare)"],
+  ["més","quantitat","mes (mes de l'any; però)"],
+  ["món","el planeta (rodamón)","mon (possessiu: mon pare)"],
+  ["pèl","cabell (contrapèl)","pel (per + el)"],
+  ["què","interrogatiu / relatiu tònic","que (conjunció i relatiu àton)"],
+  ["sé","verb saber","se (pronom)"],
+  ["sí","afirmació","si (condicional; nota musical)"],
+  ["sòl","terra (subsòl, entresòl)","sol (astre; adjectiu; verb soler)"],
+  ["són","verb ser (3a pl.)","son (ganes de dormir; possessiu)"],
+  ["té","verb tenir","te (infusió; pronom; lletra t)"],
+  ["ús","acció d'usar","us (pronom)"],
+  ["vós","tractament","vos (pronom: renta-vos)"]
+];
+
+D.faltesQuiz = [
+  { f:"Crec que tinc que repassar els accents abans de l'examen.", a:"tinc que", o:["Crec que","tinc que","repassar","abans de"], w:"«Tenir que» és un calc: ha de ser <b>he de repassar</b>." },
+  { f:"A la classe hi han vint alumnes i tots parlen català.", a:"hi han", o:["A la classe","hi han","vint alumnes","parlen català"], w:"<b>Haver-hi</b> és impersonal: «hi ha vint alumnes»." },
+  { f:"Degut a la vaga, molts estudiants no van poder arribar.", a:"Degut a", o:["Degut a","la vaga","molts estudiants","van poder arribar"], w:"Com a connector causal cal dir <b>a causa de</b> o <b>per</b>." },
+  { f:"Lo important és entendre el text abans de respondre.", a:"Lo important", o:["Lo important","entendre","el text","abans de respondre"], w:"No hi ha article neutre: <b>El més important</b> o <b>Allò important</b>." },
+  { f:"Es evident que la llengua es troba en una situació delicada.", a:"Es evident", o:["Es evident","que la llengua","es troba","situació delicada"], w:"Aquí «es» és el verb <i>ser</i>: <b>És evident</b>, amb accent." },
+  { f:"En quant a la normalització, encara queda molta feina.", a:"En quant a", o:["En quant a","la normalització","encara","molta feina"], w:"Les formes correctes són <b>quant a</b> o <b>pel que fa a</b>." },
+  { f:"Vaig donar-li el llibre i després vaig donar-li'l a la Marta.", a:"donar-li'l", o:["Vaig donar-li","el llibre","i després","donar-li'l"], w:"li + el = <b>l'hi</b>: «donar-l'hi»." },
+  { f:"No obstant, cal reconèixer que el debat és complex.", a:"No obstant,", o:["No obstant,","cal reconèixer","que el debat","és complex"], w:"Cal dir <b>No obstant això</b> o <b>Això no obstant</b>." },
+  { f:"Ho explico per a que tothom ho pugui entendre.", a:"per a que", o:["Ho explico","per a que","tothom","ho pugui entendre"], w:"La finalitat s'expressa amb <b>perquè</b> + subjuntiu." },
+  { f:"El amic de la Maria ha arribat des de Menorca.", a:"El amic", o:["El amic","de la Maria","ha arribat","des de Menorca"], w:"Davant vocal, l'article s'apostrofa: <b>L'amic</b>." },
+  { f:"Els hi vaig explicar el problema als meus pares.", a:"Els hi", o:["Els hi","vaig explicar","el problema","als meus pares"], w:"Per a un CI plural n'hi ha prou amb <b>els</b>: «Els vaig explicar el problema»." },
+  { f:"Ha sigut una decisió molt discutida per tothom.", a:"Ha sigut", o:["Ha sigut","una decisió","molt discutida","per tothom"], w:"El participi de <i>ser</i> és <b>estat</b>: «Ha estat»." }
+];
+
+/* -------------------------------------------------------- ARENA --------- */
+D.arenaTemes = {
+  b1:[
+    { p:"Creus que prohibir l'ús dels telèfons mòbils dins els centres educatius és una mesura adequada? Argumenta la teva resposta.", h:"Tema real del model d'examen. 175-200 paraules, amb introducció, argumentació i conclusió.", claus:["mòbil","centre","alumn","concentració","norma","educa"] },
+    { p:"Escriu un text argumentatiu sobre l'ús de la intel·ligència artificial a les aules: ajuda o obstacle per a l'aprenentatge?", h:"Defineix la teva tesi a la primera línia i sosté-la amb dos arguments i un contraargument.", claus:["intel·ligència artificial","aprenentatge","alumn","professor","eina","pensament"] },
+    { p:"La massificació turística a les Illes Balears: cal limitar el nombre de visitants?", h:"Pots parlar d'habitatge, de sostenibilitat i de llengua, però no inventis dades ni percentatges.", claus:["turis","illes","habitatge","sostenib","econom","massificació"] },
+    { p:"Les xarxes socials i la salut mental dels adolescents: hi hauria d'haver una edat mínima d'accés?", h:"Compte amb el registre: res de col·loquialismes ni d'emoticones.", claus:["xarxes","adolescent","salut","edat","control","xarxa"] },
+    { p:"L'ús del català entre els joves: és una llengua en perill o simplement en transformació?", h:"Aprofita el lèxic sociolingüístic del bloc 2: substitució, normalització, prejudicis.", claus:["català","jove","llengua","ús","normalitza","parlant"] },
+    { p:"Els deures escolars a casa: són necessaris per aprendre o una càrrega excessiva?", h:"Estructura clàssica: tesi, dos arguments, contraargument refutat i conclusió.", claus:["deures","casa","aprenentatge","temps","alumn","escola"] },
+    { p:"Hauria de ser obligatori l'ensenyament de l'educació emocional als instituts?", h:"Recorda: la contraargumentació no és obligatòria, però suma.", claus:["emocional","institut","educa","benestar","obligat","alumn"] }
+  ],
+  b2:[
+    { p:"Vols iniciar-te en el món de les xarxes socials i has de crear un canal amb contingut propi. Ets catalanoparlant, però dubtes si fer-ho en la teva llengua o en altres llengües amb més públic. Justifica per què el faries en la teva llengua.", h:"Opció real del model d'examen. Fes servir conceptes: normalització, àmbits d'ús, prejudicis, lleialtat lingüística.", claus:["normalitza","àmbit","prejudici","lleialtat","públic","llengua pròpia"] },
+    { p:"El fet que un catalanoparlant es dirigeixi en castellà a una persona amb una aparença física o un accent percebuts com a no catalanoparlants, comporta un prejudici lingüístic? Argumenta la teva resposta.", h:"Termes clau: prejudici, norma de convergència, autoodi, subordinació.", claus:["prejudici","convergència","autoodi","subordina","estereotip","català"] },
+    { p:"Escriu un diàleg entre dos personatges de zones geogràfiques diferents, especifica quin geolecte empra cadascun i marca'n els trets característics.", h:"Tria dos geolectes ben diferenciats (p. ex. mallorquí i valencià) i comenta els trets després del diàleg.", claus:["geolecte","article salat","lèxic","desinència","valencià","balear"] },
+    { p:"Reflexiona sobre la situació actual de la llengua pròpia a les Illes Balears.", h:"Estructura-ho: marc legal, àmbits d'ús, factors de minorització i propostes.", claus:["illes balears","llengua pròpia","oficial","normalitza","substitució","estatut"] },
+    { p:"Què entenem per conflicte lingüístic? Posa un exemple de la situació actual i explica com es pot resoldre.", h:"Conflicte → substitució o normalització. Defineix, exemplifica i conclou.", claus:["conflicte","substitució","normalitza","bilingüisme","diglòssia","àmbit"] },
+    { p:"Descriu quatre prejudicis que afectin la llengua catalana i explica per què són falsos o exagerats.", h:"Un paràgraf per prejudici, amb la refutació dins el mateix paràgraf.", claus:["prejudici","fals","dialecte","útil","difícil","unitat"] },
+    { p:"Comenta dos models de política lingüística actuals (per exemple, el del Quebec i el de Suïssa) i compara'ls amb el cas català.", h:"Territorialitat vs. personalitat; intervenció vs. laissez-faire.", claus:["quebec","suïssa","territorialitat","política","planificació","oficial"] }
+  ],
+  b3:[
+    { p:"Explica quines són les principals característiques del Modernisme i del teatre de Santiago Rusiñol a partir de l'escena última de L'alegria que passa.", h:"Cita el text entre cometes i relaciona-ho amb el corrent literari.", claus:["modernisme","rusiñol","artista","circ","poble","simbol"] },
+    { p:"Comenta un fragment de La plaça del Diamant i relaciona'l amb l'autora i el context històric.", h:"Monòleg interior, llengua col·loquial, simbologia dels coloms, guerra i postguerra.", claus:["rodoreda","colom","guerra","natàlia","postguerra","monòleg"] },
+    { p:"Quina influència van tenir el cal·ligrama i les noves tendències pictòriques en la literatura de Joan Salvat-Papasseit?", h:"Futurisme, cubisme, tipografia, port i màquina; després, vitalisme amorós.", claus:["cal·ligrama","futurisme","avantguarda","salvat","tipograf","modernitat"] },
+    { p:"Comenta la presència del foc i de la mort en la poesia de Bartomeu Rosselló-Pòrcel i relaciona-la amb el seu context.", h:"Postsimbolisme, barroc, avantguarda, Mallorca i guerra civil.", claus:["foc","mort","mallorca","avantguarda","sonet","guerra"] },
+    { p:"Quins elements de la tradició popular recupera Maria-Mercè Marçal a Bruixa de dol i amb quina intenció?", h:"Corrandes, cançó, sextina; bruixa, feminisme, sororitat, Vuit de març.", claus:["marçal","bruixa","popular","feminisme","dona","dol"] }
+  ]
+};
+
+/* ============================================================================
+   APLICACIÓ
+   ========================================================================== */
+const $  = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rnd = (n) => Math.floor(Math.random()*n);
+const shuffle = (a) => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=rnd(i+1); [b[i],b[j]]=[b[j],b[i]];} return b; };
+const nf = (n, d=2) => n.toLocaleString("ca-ES",{minimumFractionDigits:d, maximumFractionDigits:d});
+
+const store = {
+  k:"cat10:",
+  get(key, def){ try{ const v = localStorage.getItem(this.k+key); return v===null ? def : JSON.parse(v); }catch(e){ return def; } },
+  set(key, val){ try{ localStorage.setItem(this.k+key, JSON.stringify(val)); }catch(e){} },
+  del(key){ try{ localStorage.removeItem(this.k+key); }catch(e){} }
+};
+
+let toastT = null;
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("is-on");
+  clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove("is-on"), 1900);
+}
+
+/* ------------------------------------------------------------- PROGRÉS -- */
+const PROG_DEF = { sintaxi:0, pronoms:0, flash:0, geo:0, faltes:0, arena:0 };
+const PROG_META = [
+  ["sintaxi","Anàlisi sintàctica", 20],
+  ["pronoms","Pronoms febles", 30],
+  ["flash","Fitxes de sociolingüística", D.flash.length],
+  ["geo","Detector de geolecte", 14],
+  ["faltes","Test de faltes greus", 20],
+  ["arena","Redaccions corregides", 8]
+];
+let PROG = Object.assign({}, PROG_DEF, store.get("prog", {}));
+function bumpProg(k, n=1){ PROG[k] = (PROG[k]||0) + n; store.set("prog", PROG); renderProgress(); }
+function renderProgress(){
+  const box = $("#progressList"); if(!box) return;
+  box.innerHTML = PROG_META.map(([k, nom, tot])=>{
+    const v = Math.min(PROG[k]||0, tot), pct = Math.round(v/tot*100);
+    const cls = pct>=100 ? "is-ok" : pct>=50 ? "" : "is-warn";
+    return `<div>
+      <div class="flex justify-between items-baseline t-sm"><span>${nom}</span><span class="num t-xs" style="color:var(--muted)">${v}/${tot}</span></div>
+      <div class="meter mt-1"><i class="${cls}" style="width:${pct}%"></i></div>
+    </div>`;
+  }).join("");
+}
+
+/* -------------------------------------------------------------- ROUTER -- */
+const VIEWS = {
+  panell:"Panell de control", prova:"Com és la prova", sintaxi:"Reflexió lingüística",
+  societat:"Llengua i societat", literatura:"Literatura", escriure:"Generador d'estructures",
+  faltes:"Alarma de faltes greus", arena:"Arena d'Avaluació"
+};
+function go(view){
+  if(!VIEWS[view]) view = "panell";
+  $$(".sec").forEach(s => s.hidden = (s.id !== "sec-"+view));
+  $$(".navitem").forEach(b => b.setAttribute("aria-current", String(b.dataset.view === view)));
+  $("#crumb").textContent = VIEWS[view];
+  document.body.classList.remove("nav-open");
+  if(location.hash.slice(1) !== view) history.replaceState(null, "", "#"+view);
+  window.scrollTo({top:0, behavior:"instant" in window ? "instant" : "auto"});
+}
+$$(".navitem").forEach(b => b.addEventListener("click", ()=>go(b.dataset.view)));
+$("#burger").addEventListener("click", ()=>document.body.classList.toggle("nav-open"));
+$("#scrim").addEventListener("click", ()=>document.body.classList.remove("nav-open"));
+window.addEventListener("hashchange", ()=>go(location.hash.slice(1)));
+
+/* --------------------------------------------------------------- TEMA --- */
+(function themeInit(){
+  const saved = store.get("theme", "");
+  if(saved) document.documentElement.dataset.theme = saved;
+  $("#themeBtn").addEventListener("click", ()=>{
+    const cur = document.documentElement.dataset.theme;
+    const next = cur === "dark" ? "light" : cur === "light" ? "" : "dark";
+    document.documentElement.dataset.theme = next;
+    store.set("theme", next);
+    toast(next === "dark" ? "Tema fosc" : next === "light" ? "Tema clar" : "Tema del sistema");
+  });
+})();
+
+/* ----------------------------------------------------------- CRONÒMETRE - */
+(function timerInit(){
+  let left = 90*60, on = false, id = null;
+  const fmt = s => String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+  function paint(){ const t = fmt(left); $("#timerBig").textContent = t; $("#timerChip").textContent = t; }
+  function tick(){
+    left = Math.max(0, left-1); paint();
+    if(left === 0){ stop(); toast("S'ha acabat el temps!"); }
+  }
+  function start(){ on = true; id = setInterval(tick, 1000); $("#timerToggle").textContent = "Pausar"; $("#timerChip").hidden = false; }
+  function stop(){ on = false; clearInterval(id); $("#timerToggle").textContent = "Continuar"; }
+  $("#timerToggle").addEventListener("click", ()=> on ? stop() : start());
+  $("#timerReset").addEventListener("click", ()=>{ stop(); left = 90*60; paint(); $("#timerToggle").textContent = "Iniciar"; $("#timerChip").hidden = true; });
+  paint();
+})();
+
+/* --------------------------------------------------------------- PANELL - */
+(function panellInit(){
+  const dateInput = $("#examDate");
+  function provaPerDefecte(){
+    const avui = new Date(), any = avui.getFullYear();
+    const juny = new Date(any, 5, 8);
+    return (avui > juny ? (any+1) : any) + "-06-08";
+  }
+  dateInput.value = store.get("examDate", provaPerDefecte());
+  function paintCountdown(){
+    const d = new Date(dateInput.value + "T09:00:00");
+    if(isNaN(d)){ $("#countdown").textContent = "—"; return; }
+    const diff = Math.ceil((d - new Date())/86400000);
+    $("#countdown").textContent = diff > 0 ? diff : diff === 0 ? "Avui" : "—";
+    $("#countdownSub").textContent = diff > 1 ? "dies fins a la prova" : diff === 1 ? "dia: demà és el dia" : diff === 0 ? "Sort!" : "la data ja ha passat";
+  }
+  dateInput.addEventListener("change", ()=>{ store.set("examDate", dateInput.value); paintCountdown(); });
+  paintCountdown();
+
+  $("#structureList").innerHTML = D.estructura.map(b => {
+    const [cap, cua] = b.nom.split(" · ");
+    return `<div>
+      <div class="flex justify-between items-baseline gap-2">
+        <span class="t-sm fw-500">${cap} <span class="t-xs" style="color:var(--muted)">${cua}</span></span>
+        <span class="chip chip-${b.color==="wine"?"wine":"blue"} num">${b.punts} p</span>
+      </div>
+      <div class="meter mt-1"><i style="width:${b.punts*10}%"></i></div>
+    </div>`;
+  }).join("");
+
+  // Calculadora de nota
+  const camps = [];
+  D.estructura.forEach(b => b.preguntes.forEach((p,i) => camps.push({ id:b.id+"-"+i, nom:`${b.nom.split(" · ")[0]} · ${p.n}`, max:p.p, t:p.t })));
+  $("#calcInputs").innerHTML = camps.map(c => `
+    <div>
+      <label class="eyebrow" for="calc-${c.id}" style="display:block">${c.nom} <span style="color:var(--muted)">(${nf(c.max,0)} p)</span></label>
+      <p class="t-xs mt-1" style="color:var(--muted); line-height:1.4">${c.t}</p>
+      <input class="field mt-2 calc-in num" type="number" id="calc-${c.id}" min="0" max="${c.max}" step="0.05" value="0" data-max="${c.max}">
+    </div>`).join("");
+  function calc(){
+    let total = 0;
+    const rows = $$(".calc-in").map(inp => {
+      const max = parseFloat(inp.dataset.max);
+      let v = parseFloat(inp.value); if(isNaN(v)) v = 0;
+      v = Math.max(0, Math.min(max, v)); total += v;
+      return `<span>${inp.previousElementSibling.previousElementSibling.textContent.split(" (")[0]}: <b class="num">${nf(v)}</b> / ${nf(max,0)}</span>`;
+    });
+    $("#calcTotal").textContent = nf(total);
+    $("#calcTotal").className = "num t-3xl " + (total>=9 ? "ok" : total>=5 ? "" : "bad");
+    $("#calcBreakdown").innerHTML = rows.join("");
+  }
+  $("#calcInputs").addEventListener("input", calc); calc();
+
+  $("#planList").innerHTML = D.pla.map(p => `
+    <div class="card">
+      <div class="flex items-baseline gap-2"><span class="chip chip-blue num">${p.d}</span><h3>${p.t}</h3></div>
+      <ul class="bul mt-3 t-sm" style="color:var(--ink-soft)">${p.tasks.map(t=>`<li>${t}</li>`).join("")}</ul>
+    </div>`).join("");
+
+  $("#resetProgress").addEventListener("click", ()=>{
+    PROG = Object.assign({}, PROG_DEF); store.set("prog", PROG); renderProgress(); toast("Progrés esborrat");
+  });
+  renderProgress();
+})();
+
+/* ------------------------------------------------------------ LA PROVA -- */
+(function provaInit(){
+  $("#provaBlocs").innerHTML = D.estructura.map(b => `
+    <details class="acc" open>
+      <summary>
+        <span class="chip chip-${b.color==="wine"?"wine":"blue"} num">${b.punts} punts</span>
+        <span class="fw-600">${b.nom}</span>
+      </summary>
+      <div class="acc-body">
+        <p class="lead t-sm">${b.desc}</p>
+        <div class="stack gap-3 mt-4">
+          ${b.preguntes.map(p=>`
+            <div class="card-flat">
+              <div class="flex justify-between items-baseline gap-3">
+                <span class="eyebrow">${p.n}</span><span class="badge">${nf(p.p,0)} p</span>
+              </div>
+              <p class="mt-1">${p.t}</p>
+            </div>`).join("")}
+        </div>
+      </div>
+    </details>`).join("");
+  $("#rubricaBody").innerHTML = D.rubrica.map(r => `<tr><td class="fw-600">${r[0]}</td><td>${r[1]}</td><td style="color:var(--ink-soft)">${r[2]}</td></tr>`).join("");
+})();
+
+/* ---------------------------------------------------------------- TABS -- */
+function initTabs(wrapSel){
+  const wrap = $(wrapSel); if(!wrap) return;
+  wrap.addEventListener("click", e => {
+    const b = e.target.closest(".tab"); if(!b) return;
+    $$(".tab", wrap).forEach(t => t.setAttribute("aria-selected", String(t === b)));
+    $$(".tab", wrap).forEach(t => { const pane = $("#tab-"+t.dataset.tab); if(pane) pane.hidden = (t !== b); });
+  });
+}
+initTabs("#sintaxiTabs"); initTabs("#societatTabs");
+
+/* ------------------------------------------------ REFLEXIÓ LINGÜÍSTICA -- */
+(function sintaxiInit(){
+  $("#trucsBody").innerHTML = D.trucs.map(t => `<tr><td class="fw-600">${t[0]}</td><td class="num" style="color:var(--blue-ink)">${t[1]}</td><td style="color:var(--ink-soft)">${t[2]}</td></tr>`).join("");
+
+  /* --- analitzador sintàctic --- */
+  let order = shuffle(D.sintaxiFrases.map((_,i)=>i)), pos = 0, picked = -1, done = [];
+  function frase(){ return D.sintaxiFrases[order[pos]]; }
+  function paintSentence(){
+    const f = frase();
+    $("#synSentence").innerHTML = f.segs.map((s,i)=>{
+      const st = done[i];
+      const cls = st === true ? "is-right" : st === false ? "is-wrong" : (i === picked ? "is-picked" : "");
+      return `<span class="seg ${cls}" data-i="${i}">${s.t}${st === true ? `<span class="fn">${s.f}</span>` : ""}</span>`;
+    }).join(" ");
+    $("#synCounter").textContent = `${pos+1} / ${order.length}`;
+    $("#synOptions").innerHTML = D.sintaxiFuncions.map(f => `<button class="btn btn-sm" data-f="${f}" ${picked<0?"disabled":""}>${f}</button>`).join("");
+  }
+  function nova(){
+    pos = (pos+1) % order.length; picked = -1; done = [];
+    $("#synFeedback").innerHTML = ""; paintSentence();
+  }
+  $("#synSentence").addEventListener("click", e => {
+    const s = e.target.closest(".seg"); if(!s) return;
+    const i = +s.dataset.i;
+    if(done[i] === true) return;
+    picked = i; $("#synFeedback").innerHTML = `<p class="t-sm" style="color:var(--muted)">Has triat «${frase().segs[i].t}». Ara digues quina funció hi fa.</p>`;
+    paintSentence();
+  });
+  $("#synOptions").addEventListener("click", e => {
+    const b = e.target.closest("button[data-f]"); if(!b || picked < 0) return;
+    const seg = frase().segs[picked], right = (b.dataset.f === seg.f);
+    done[picked] = right;
+    $("#synFeedback").innerHTML = right
+      ? `<div class="card-flat"><b class="ok">Correcte: ${seg.f}.</b> <span class="t-sm" style="color:var(--ink-soft)">${seg.why}</span></div>`
+      : `<div class="card-flat"><b class="bad">No hi és.</b> <span class="t-sm" style="color:var(--ink-soft)">«${seg.t}» no fa de ${b.dataset.f}. Pista: ${seg.why}</span></div>`;
+    if(right){ bumpProg("sintaxi"); picked = -1; }
+    paintSentence();
+    if(frase().segs.every((_,i)=>done[i] === true)){
+      $("#synFeedback").innerHTML += `<p class="mt-3 ok fw-600">Oració resolta sencera. Passa a la següent.</p>`;
+    }
+  });
+  $("#synSolve").addEventListener("click", ()=>{
+    const f = frase(); done = f.segs.map(()=>true); picked = -1; paintSentence();
+    $("#synFeedback").innerHTML = `<div class="card-flat"><div class="eyebrow">Solució comentada</div><ul class="bul mt-2 t-sm" style="color:var(--ink-soft)">${f.segs.map(s=>`<li><b>${s.t}</b> — ${s.f}: ${s.why}</li>`).join("")}</ul></div>`;
+  });
+  $("#synNext").addEventListener("click", nova);
+  paintSentence();
+
+  /* --- oració composta --- */
+  $("#compostaTheory").innerHTML = D.compostaTeoria.map(b => `
+    <details class="acc">
+      <summary><span class="fw-600">${b.t}</span></summary>
+      <div class="acc-body">
+        <p class="lead t-sm">${b.c}</p>
+        <div class="tablewrap mt-3">
+          <table><thead><tr><th>Tipus</th><th>Nexes</th><th>Exemple</th></tr></thead>
+          <tbody>${b.items.map(i=>`<tr><td class="fw-600">${i[0]}</td><td class="num" style="color:var(--blue-ink)">${i[1]}</td><td style="color:var(--ink-soft)">${i[2]}</td></tr>`).join("")}</tbody></table>
+        </div>
+      </div>
+    </details>`).join("");
+
+  let cOrder = shuffle(D.compostaQuiz.map((_,i)=>i)), cPos = 0, cHits = 0, cLocked = false;
+  function paintComp(){
+    const q = D.compostaQuiz[cOrder[cPos]];
+    $("#compSentence").textContent = q.f;
+    $("#compOptions").innerHTML = shuffle(q.o).map(o => `<button class="opt" data-o="${esc(o)}">${o}</button>`).join("");
+    $("#compFeedback").innerHTML = ""; cLocked = false;
+    $("#compCounter").textContent = `${cHits} encerts`;
+  }
+  $("#compOptions").addEventListener("click", e => {
+    const b = e.target.closest(".opt"); if(!b || cLocked) return;
+    cLocked = true;
+    const q = D.compostaQuiz[cOrder[cPos]], right = b.dataset.o === q.a;
+    $$(".opt", $("#compOptions")).forEach(o => {
+      o.disabled = true;
+      if(o.dataset.o === q.a) o.classList.add("is-right");
+      else if(o === b) o.classList.add("is-wrong");
+    });
+    if(right){ cHits++; bumpProg("sintaxi"); }
+    $("#compCounter").textContent = `${cHits} encerts`;
+    $("#compFeedback").innerHTML = `<div class="card-flat"><b class="${right?"ok":"bad"}">${right?"Correcte":"És "+q.a}.</b> <span class="t-sm" style="color:var(--ink-soft)">${q.w}</span></div>`;
+  });
+  $("#compNext").addEventListener("click", ()=>{ cPos = (cPos+1) % cOrder.length; if(cPos === 0) cOrder = shuffle(cOrder); paintComp(); });
+  paintComp();
+
+  /* --- pronoms febles --- */
+  $("#pfTableBody").innerHTML = D.pfTaula.map(r => `<tr><td class="fw-600 num">${r[0]}</td>${r.slice(1).map(c=>`<td class="num" style="color:var(--blue-ink)">${c}</td>`).join("")}</tr>`).join("");
+  $("#pfFormsBody").innerHTML = D.pfFormes.map(r => `<tr><td class="fw-600">${r[0]}</td>${r.slice(1).map(c=>`<td class="num">${c}</td>`).join("")}</tr>`).join("");
+
+  let pOrder = shuffle(D.pronoms.map((_,i)=>i)), pPos = 0, pHits = 0, pMiss = 0, pStreak = 0, pStart = null, pLocked = false, pTick = null;
+  function paintPf(){
+    const q = D.pronoms[pOrder[pPos]];
+    $("#pfTag").textContent = q.tag;
+    $("#pfSentence").innerHTML = q.q;
+    $("#pfOptions").innerHTML = shuffle(q.o).map(o => `<button class="opt" data-o="${esc(o)}">${o}</button>`).join("");
+    $("#pfFeedback").innerHTML = ""; pLocked = false;
+    const tot = pHits + pMiss;
+    $("#pfMeter").style.width = Math.min(100, Math.round(pHits/D.pronoms.length*100)) + "%";
+    $("#pfMeter").className = pHits >= D.pronoms.length*0.8 ? "is-ok" : "";
+    if(!pStart){ pStart = Date.now(); pTick = setInterval(()=>{ $("#pfTime").textContent = Math.round((Date.now()-pStart)/1000)+"s"; }, 1000); }
+    void tot;
+  }
+  $("#pfOptions").addEventListener("click", e => {
+    const b = e.target.closest(".opt"); if(!b || pLocked) return;
+    pLocked = true;
+    const q = D.pronoms[pOrder[pPos]], right = b.dataset.o === q.a;
+    $$(".opt", $("#pfOptions")).forEach(o => {
+      o.disabled = true;
+      if(o.dataset.o === q.a) o.classList.add("is-right");
+      else if(o === b) o.classList.add("is-wrong");
+    });
+    if(right){ pHits++; pStreak++; bumpProg("pronoms"); } else { pMiss++; pStreak = 0; }
+    $("#pfHits").textContent = pHits; $("#pfMiss").textContent = pMiss; $("#pfStreak").textContent = pStreak;
+    $("#pfFeedback").innerHTML = `<div class="card-flat"><b class="${right?"ok":"bad"}">${right?"Molt bé.":"La correcta és «"+q.a+"»."}</b> <span class="t-sm" style="color:var(--ink-soft)">${q.w}</span></div>`;
+    $("#pfMeter").style.width = Math.min(100, Math.round(pHits/D.pronoms.length*100)) + "%";
+  });
+  $("#pfNext").addEventListener("click", ()=>{ pPos = (pPos+1) % pOrder.length; if(pPos === 0) pOrder = shuffle(pOrder); paintPf(); });
+  $("#pfRestart").addEventListener("click", ()=>{
+    pOrder = shuffle(pOrder); pPos = 0; pHits = 0; pMiss = 0; pStreak = 0;
+    clearInterval(pTick); pStart = null; $("#pfTime").textContent = "0s";
+    $("#pfHits").textContent = 0; $("#pfMiss").textContent = 0; $("#pfStreak").textContent = 0;
+    paintPf(); toast("Joc reiniciat");
+  });
+  paintPf();
+
+  /* --- morfologia i lèxic --- */
+  $("#reflexioCards").innerHTML = D.reflexio.map(b => `
+    <details class="acc" open>
+      <summary><span class="fw-600">${b.t}</span></summary>
+      <div class="acc-body">
+        <div class="stack gap-3">
+          ${b.items.map(i=>`<div class="card-flat"><div class="fw-600">${i[0]}</div><p class="t-sm mt-1" style="color:var(--ink-soft)">${i[1]}</p></div>`).join("")}
+        </div>
+      </div>
+    </details>`).join("");
+})();
+
+/* --------------------------------------------------- LLENGUA I SOCIETAT - */
+(function societatInit(){
+  /* --- fitxes --- */
+  const cats = Array.from(new Set(D.flash.map(f=>f.c)));
+  $("#fcFilter").innerHTML = `<option value="">Totes les categories</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join("");
+  let hard = store.get("fcHard", []), seen = store.get("fcSeen", []), deck = [], idx = 0;
+  function build(){
+    const cat = $("#fcFilter").value, only = $("#fcOnlyHard").checked;
+    deck = D.flash.map((f,i)=>({f,i})).filter(o => (!cat || o.f.c === cat) && (!only || hard.includes(o.i)));
+    if(!deck.length) deck = D.flash.map((f,i)=>({f,i}));
+    deck = shuffle(deck); idx = 0; paintFc();
+  }
+  function paintFc(){
+    const o = deck[idx]; if(!o) return;
+    $("#fcCard").classList.remove("is-flipped");
+    $("#fcCat").textContent = o.f.c; $("#fcCatBack").textContent = o.f.t;
+    $("#fcTerm").textContent = o.f.t; $("#fcDef").innerHTML = o.f.d; $("#fcEx").innerHTML = o.f.e;
+    $("#fcCounter").textContent = `${idx+1} / ${deck.length}`;
+    const pct = Math.round(seen.length/D.flash.length*100);
+    $("#fcMeter").style.width = pct + "%";
+    $("#fcProgressTxt").textContent = `${seen.length} de ${D.flash.length} fitxes dominades · ${hard.length} marcades per repassar`;
+  }
+  function next(){ idx = (idx+1) % deck.length; paintFc(); }
+  $("#fcCard").addEventListener("click", ()=>$("#fcCard").classList.toggle("is-flipped"));
+  $("#fcFlip").addEventListener("click", ()=>$("#fcCard").classList.toggle("is-flipped"));
+  $("#fcNext").addEventListener("click", next);
+  $("#fcShuffle").addEventListener("click", ()=>{ deck = shuffle(deck); idx = 0; paintFc(); toast("Fitxes barrejades"); });
+  $("#fcKnow").addEventListener("click", ()=>{
+    const o = deck[idx]; if(!o) return;
+    if(!seen.includes(o.i)){ seen.push(o.i); store.set("fcSeen", seen); bumpProg("flash"); }
+    hard = hard.filter(h => h !== o.i); store.set("fcHard", hard); next();
+  });
+  $("#fcHard").addEventListener("click", ()=>{
+    const o = deck[idx]; if(!o) return;
+    if(!hard.includes(o.i)){ hard.push(o.i); store.set("fcHard", hard); }
+    next();
+  });
+  $("#fcFilter").addEventListener("change", build);
+  $("#fcOnlyHard").addEventListener("change", build);
+  document.addEventListener("keydown", e => {
+    if($("#sec-societat").hidden || $("#tab-flash").hidden) return;
+    if(e.target.matches("input,textarea,select")) return;
+    if(e.code === "Space"){ e.preventDefault(); $("#fcCard").classList.toggle("is-flipped"); }
+    if(e.key === "ArrowRight") next();
+  });
+  build();
+
+  /* --- temari --- */
+  $("#temariList").innerHTML = D.temari.map(t => `
+    <details class="acc">
+      <summary><span class="chip chip-blue num">Tema ${t.n}</span><span class="fw-600">${t.t}</span></summary>
+      <div class="acc-body">
+        <p class="lead t-sm">${t.c}</p>
+        <div class="eyebrow mt-4">Preguntes competencials possibles</div>
+        <ol class="bul mt-2 t-sm" style="color:var(--ink-soft)">${t.q.map(q=>`<li>${q}</li>`).join("")}</ol>
+      </div>
+    </details>`).join("");
+
+  /* --- dialectologia --- */
+  $("#dialectesContent").innerHTML = `
+    <div class="g-2">
+      ${D.dialectes.blocs.map(b=>`
+        <div class="card-blue">
+          <h3>${b.t}</h3>
+          <p class="t-sm mt-2" style="color:var(--ink-soft)">${b.d}</p>
+          <div class="flex gap-2 flex-wrap mt-3">${b.dial.map(d=>`<span class="chip">${d}</span>`).join("")}</div>
+        </div>`).join("")}
+    </div>
+    <div class="mt-6">
+      ${D.dialectes.fitxes.map(f=>`
+        <details class="acc">
+          <summary><span class="fw-600">${f.n}</span><span class="badge">${f.z}</span><span class="chip ${f.b==="oriental"?"chip-blue":"chip-wine"}">${f.b}</span></summary>
+          <div class="acc-body"><ul class="bul t-sm" style="color:var(--ink-soft)">${f.trets.map(t=>`<li>${t}</li>`).join("")}</ul></div>
+        </details>`).join("")}
+    </div>
+    <h3 class="mt-8">Lèxic comparat</h3>
+    <div class="tablewrap mt-3">
+      <table>
+        <thead><tr><th>Varietat</th><th>noi</th><th>gat</th><th>gos</th><th>buscar</th><th>tarda</th><th>barret</th></tr></thead>
+        <tbody>${D.dialectes.lexic.map(r=>`<tr><td class="fw-600">${r[0]}</td>${r.slice(1).map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
+      </table>
+    </div>`;
+
+  /* --- detector de geolecte --- */
+  let gOrder = shuffle(D.geoQuiz.map((_,i)=>i)), gPos = 0, gHits = 0, gTot = 0, gLocked = false;
+  function paintGeo(){
+    const q = D.geoQuiz[gOrder[gPos]];
+    $("#geoText").textContent = q.f;
+    $("#geoOptions").innerHTML = shuffle(q.o).map(o=>`<button class="opt" data-o="${esc(o)}">${o}</button>`).join("");
+    $("#geoFeedback").innerHTML = ""; gLocked = false;
+    $("#geoScore").textContent = `${gHits} / ${gTot}`;
+  }
+  $("#geoOptions").addEventListener("click", e => {
+    const b = e.target.closest(".opt"); if(!b || gLocked) return;
+    gLocked = true; gTot++;
+    const q = D.geoQuiz[gOrder[gPos]], right = b.dataset.o === q.a;
+    $$(".opt", $("#geoOptions")).forEach(o => {
+      o.disabled = true;
+      if(o.dataset.o === q.a) o.classList.add("is-right");
+      else if(o === b) o.classList.add("is-wrong");
+    });
+    if(right){ gHits++; bumpProg("geo"); }
+    $("#geoScore").textContent = `${gHits} / ${gTot}`;
+    $("#geoFeedback").innerHTML = `<div class="card-flat"><b class="${right?"ok":"bad"}">${right?"Encertat: "+q.a:"És "+q.a}.</b> <span class="t-sm" style="color:var(--ink-soft)">${q.w}</span></div>`;
+  });
+  $("#geoNext").addEventListener("click", ()=>{ gPos = (gPos+1) % gOrder.length; if(gPos === 0) gOrder = shuffle(gOrder); paintGeo(); });
+  paintGeo();
+})();
+
+/* ----------------------------------------------------------- LITERATURA - */
+(function litInit(){
+  let filtre = "tots";
+  function paint(){
+    const llista = D.literatura.filter(o => filtre === "tots" || (filtre === "oficials" ? o.oficial : o.id === filtre));
+    $("#litFilter").innerHTML =
+      [["tots","Totes les obres"],["oficials","Només lectures obligatòries"]].concat(D.literatura.map(o=>[o.id, o.autor.split(" ").slice(-1)[0]]))
+      .map(([v,t])=>`<button class="btn btn-sm ${filtre===v?"btn-primary":""}" data-f="${v}">${t}</button>`).join("");
+    $("#litList").innerHTML = llista.map(o => `
+      <details class="acc" ${llista.length===1?"open":""}>
+        <summary>
+          <span class="chip ${o.oficial?"chip-blue":"chip-wine"}">${o.etiqueta}</span>
+          <span class="fw-600" style="font-family:Merriweather,Georgia,serif">${o.titol}</span>
+          <span class="badge">${o.autor}</span>
+        </summary>
+        <div class="acc-body">
+          <div class="eyebrow">${o.anys}</div>
+
+          <h4 class="mt-4">Context i corrent literari</h4>
+          <p class="lead t-sm mt-1">${o.context}</p>
+
+          <h4 class="mt-5">Argument i estructura</h4>
+          <p class="lead t-sm mt-1">${o.argument}</p>
+
+          <h4 class="mt-5">Personatges i veus</h4>
+          <div class="stack gap-2 mt-2">
+            ${o.personatges.map(p=>`<div class="card-flat" style="padding:12px 14px"><b>${p[0]}</b><p class="t-sm mt-1" style="color:var(--ink-soft)">${p[1]}</p></div>`).join("")}
+          </div>
+
+          <h4 class="mt-5">Temes</h4>
+          <div class="flex gap-2 flex-wrap mt-2">${o.temes.map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+
+          <h4 class="mt-5">Simbologia</h4>
+          <div class="tablewrap mt-2">
+            <table><thead><tr><th style="width:28%">Símbol</th><th>Què significa</th></tr></thead>
+            <tbody>${o.simbols.map(s=>`<tr><td class="fw-600">${s[0]}</td><td style="color:var(--ink-soft)">${s[1]}</td></tr>`).join("")}</tbody></table>
+          </div>
+
+          <h4 class="mt-5">Citacions per memoritzar</h4>
+          ${o.fragments.map(f=>`<div class="mt-2"><div class="eyebrow">${f[0]}</div><blockquote class="doc mt-1">${f[1]}</blockquote></div>`).join("")}
+
+          <div class="card-blue mt-5">
+            <div class="eyebrow">Preguntes que poden caure</div>
+            <ol class="bul mt-2 t-sm" style="color:var(--ink-soft)">${o.preguntes.map(p=>`<li>${p}</li>`).join("")}</ol>
+          </div>
+        </div>
+      </details>`).join("");
+  }
+  $("#litFilter").addEventListener("click", e => {
+    const b = e.target.closest("button[data-f]"); if(!b) return;
+    filtre = b.dataset.f; paint();
+  });
+  paint();
+})();
+
+/* ------------------------------------------------- GENERADOR D'ESTRUCTURES */
+(function escriureInit(){
+  const keys = Object.keys(D.plantilles);
+  $("#genType").innerHTML = keys.map(k=>`<option value="${k}">${D.plantilles[k].nom}</option>`).join("");
+  let ultimText = "";
+
+  function generar(){
+    const k = $("#genType").value, pl = D.plantilles[k];
+    const tema = $("#genTopic").value.trim() || "[EL TEMA DE L'EXAMEN]";
+    const [minW, maxW] = $("#genWords").value.split("-").map(Number);
+    const factor = (minW + maxW) / 2 / 187.5;
+
+    const parts = pl.parts.map(p => {
+      const m = p.m.replace(/\[TEMA\]/g, tema.toUpperCase());
+      let w = p.w;
+      const range = p.w.match(/^(\d+)-(\d+)/);
+      if(range && k === "argumentatiu") w = `${Math.round(+range[1]*factor)}-${Math.round(+range[2]*factor)} paraules`;
+      return { ...p, m, w };
+    });
+
+    ultimText = `${pl.nom.toUpperCase()} — ${tema}\n\n` + parts.map(p => `【${p.t} · ${p.w}】\n${p.m}`).join("\n\n");
+
+    $("#genOut").innerHTML = `
+      <div class="card-wine">
+        <div class="eyebrow">Recorda</div>
+        <p class="t-sm mt-1" style="color:var(--ink-soft)">${pl.nota}</p>
+      </div>
+      <div class="stack gap-3 mt-4">
+        ${parts.map((p,i)=>`
+          <div class="card">
+            <div class="flex justify-between items-baseline gap-3 flex-wrap">
+              <div class="flex items-baseline gap-2"><span class="chip chip-blue num">${i+1}</span><h3>${p.t}</h3></div>
+              <span class="badge">${p.w}</span>
+            </div>
+            <p class="t-sm mt-2" style="color:var(--ink-soft)">${p.g}</p>
+            <div class="skeleton-box mt-3">${esc(p.m)}</div>
+          </div>`).join("")}
+      </div>
+      <div class="card-flat mt-4">
+        <div class="eyebrow">Check-list abans de lliurar</div>
+        <ul class="bul mt-2 t-sm" style="color:var(--ink-soft)">
+          <li>Compta les paraules: ${minW}-${maxW}.</li>
+          <li>Cada paràgraf comença amb un connector diferent.</li>
+          <li>Cap esquema, cap guió, cap llista amb guionets.</li>
+          <li>Repassa accents, apòstrofs i concordances els darrers 5 minuts.</li>
+        </ul>
+      </div>`;
+  }
+  $("#genBtn").addEventListener("click", generar);
+  $("#genType").addEventListener("change", generar);
+  $("#genCopy").addEventListener("click", async ()=>{
+    if(!ultimText){ generar(); }
+    try{ await navigator.clipboard.writeText(ultimText); toast("Esquelet copiat"); }
+    catch(e){ toast("El navegador no permet copiar-ho"); }
+  });
+  generar();
+
+  $("#connBank").innerHTML = D.connectors.map(c => `
+    <div class="card mt-3">
+      <div class="eyebrow">${c[0]}</div>
+      <div class="flex gap-2 flex-wrap mt-2">${c[1].split(" · ").map(x=>`<button class="chip conn-chip" data-c="${esc(x)}">${x}</button>`).join("")}</div>
+    </div>`).join("");
+  $("#connBank").addEventListener("click", async e => {
+    const b = e.target.closest(".conn-chip"); if(!b) return;
+    try{ await navigator.clipboard.writeText(b.dataset.c); toast(`«${b.dataset.c}» copiat`); }
+    catch(err){ toast(b.dataset.c); }
+  });
+})();
+
+/* ------------------------------------------------------- FALTES GREUS --- */
+(function faltesInit(){
+  const cats = Array.from(new Set(D.faltes.map(f=>f[0])));
+  let cat = "", q = "";
+  $("#faltesCats").innerHTML = [["","Totes"]].concat(cats.map(c=>[c,c]))
+    .map(([v,t])=>`<button class="btn btn-sm ${v===cat?"btn-primary":""}" data-c="${v}">${t}</button>`).join("");
+  function paint(){
+    $$("#faltesCats button").forEach(b => b.classList.toggle("btn-primary", b.dataset.c === cat));
+    const list = D.faltes.filter(f =>
+      (!cat || f[0] === cat) &&
+      (!q || (f[1]+" "+f[2]+" "+f[3]).toLowerCase().includes(q)));
+    $("#faltesCount").textContent = `${list.length} errors`;
+    $("#faltesBody").innerHTML = list.length ? list.map(f => `
+      <tr>
+        <td class="bad fw-600">${f[1]}</td>
+        <td class="ok fw-600">${f[2]}</td>
+        <td style="color:var(--ink-soft)"><span class="badge">${f[0]}</span> ${f[3]}</td>
+      </tr>`).join("") : `<tr><td colspan="3" style="color:var(--muted)">Cap resultat.</td></tr>`;
+  }
+  $("#faltesCats").addEventListener("click", e => {
+    const b = e.target.closest("button[data-c]"); if(!b) return;
+    cat = b.dataset.c; paint();
+  });
+  $("#faltesSearch").addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); paint(); });
+  paint();
+
+  $("#diacriticsGrid").innerHTML = D.diacritics.map(d => `
+    <div class="card-flat">
+      <div class="flex items-baseline gap-2"><b class="t-lg" style="font-family:Merriweather,Georgia,serif">${d[0]}</b><span class="t-sm" style="color:var(--ink-soft)">${d[1]}</span></div>
+      <div class="rule mt-2 mb-2"></div>
+      <div class="t-sm" style="color:var(--muted)"><b>${d[2].split(" (")[0]}</b> ${d[2].includes("(") ? "("+d[2].split(" (").slice(1).join(" (") : ""}</div>
+    </div>`).join("");
+
+  let fOrder = shuffle(D.faltesQuiz.map((_,i)=>i)), fPos = 0, fHits = 0, fTot = 0, fLocked = false;
+  function paintQuiz(){
+    const it = D.faltesQuiz[fOrder[fPos]];
+    $("#faltesQuizQ").textContent = it.f;
+    $("#faltesQuizOpts").innerHTML = it.o.map(o=>`<button class="opt" data-o="${esc(o)}">${o}</button>`).join("");
+    $("#faltesQuizFb").innerHTML = ""; fLocked = false;
+    $("#faltesQuizScore").textContent = `${fHits} / ${fTot}`;
+  }
+  $("#faltesQuizOpts").addEventListener("click", e => {
+    const b = e.target.closest(".opt"); if(!b || fLocked) return;
+    fLocked = true; fTot++;
+    const it = D.faltesQuiz[fOrder[fPos]], right = b.dataset.o === it.a;
+    $$(".opt", $("#faltesQuizOpts")).forEach(o => {
+      o.disabled = true;
+      if(o.dataset.o === it.a) o.classList.add("is-right");
+      else if(o === b) o.classList.add("is-wrong");
+    });
+    if(right){ fHits++; bumpProg("faltes"); }
+    $("#faltesQuizScore").textContent = `${fHits} / ${fTot}`;
+    $("#faltesQuizFb").innerHTML = `<div class="card-flat"><b class="${right?"ok":"bad"}">${right?"Exacte.":"L'error és «"+it.a+"»."}</b> <span class="t-sm" style="color:var(--ink-soft)">${it.w}</span></div>`;
+  });
+  $("#faltesQuizNext").addEventListener("click", ()=>{ fPos = (fPos+1) % fOrder.length; if(fPos === 0) fOrder = shuffle(fOrder); paintQuiz(); });
+  paintQuiz();
+})();
+
+/* ============================================================================
+   MOTOR DE CORRECCIÓ
+   ========================================================================== */
+const CORR = (function(){
+  const FI = "(?![\\p{L}\\p{M}·'’\\-])";
+  const INI = "(?:^|[^\\p{L}\\p{M}·'’\\-])";
+  function rx(p){ return new RegExp(INI + "(" + p + ")" + FI, "giu"); }
+
+  const REGLES = [
+    // --- calcs i sintaxi ---
+    { p:"tinc que|tens que|té que|tenim que|teniu que|tenen que|tenia que|tenir que|tindré que", t:"sintaxi", s:"haver de / caldre", w:"«Tenir que» és un calc de <i>tener que</i>: has d'escriure «he de», «has de», «cal»." },
+    { p:"hi han|hi havien|hi hauran|hi han hagut", t:"sintaxi", s:"hi ha / hi havia / hi haurà", w:"El verb <b>haver-hi</b> és impersonal i va sempre en singular." },
+    { p:"degut a", t:"sintaxi", s:"a causa de / per", w:"Com a connector causal, «degut a» és incorrecte." },
+    { p:"en quant a", t:"sintaxi", s:"quant a / pel que fa a", w:"La forma normativa és «quant a» o «pel que fa a»." },
+    { p:"per a que", t:"sintaxi", s:"perquè", w:"La finalitat s'expressa amb «perquè» + subjuntiu." },
+    { p:"no obstant(?!\\s+això)", t:"sintaxi", s:"no obstant això / això no obstant", w:"«No obstant» tot sol no és correcte en català." },
+    { p:"lo\\s+(?:que|millor|pitjor|important|bo|dolent|més|mateix|meu|nostre|seu)", t:"sintaxi", s:"el/allò + …", w:"No existeix l'article neutre «lo»." },
+    { p:"a nivell d[e']", t:"sintaxi", s:"en l'àmbit de / pel que fa a", w:"«A nivell de» només val si hi ha nivells reals." },
+    { p:"donar-se compte|em vaig donar compte|es va donar compte|ens vam donar compte", t:"sintaxi", s:"adonar-se", w:"Calc de <i>darse cuenta</i>." },
+    { p:"penso de que|crec de que|dic de que|opino de que|segur de que|convençut de que", t:"sintaxi", s:"(sense «de»)", w:"Dequisme: davant de «que» cauen les preposicions." },
+    { p:"desde", t:"ortografia", s:"des de / des que", w:"S'escriu «des de» separat; davant d'una oració, «des que»." },
+    { p:"els hi (?:vaig|vam|van|he|hem|han|deia|dic|direm|donaré|donarem)", t:"sintaxi", s:"els + verb", w:"Revisa-ho: per a un CI plural n'hi ha prou amb «els»; «els hi» només val si hi ha un complement amb «hi»." },
+    { p:"ha sigut|han sigut|hem sigut|has sigut|he sigut|havia sigut", t:"sintaxi", s:"ha estat / han estat…", w:"El participi de <i>ser</i> és «estat»." },
+    { p:"tinguent|sapiguent|poguent", t:"sintaxi", s:"tenint / sabent / podent", w:"Gerundis mal formats." },
+    { p:"hi ha que", t:"sintaxi", s:"cal / s'ha de", w:"«Hi ha que» és un calc de <i>hay que</i>." },
+    { p:"en front de", t:"sintaxi", s:"davant de / enfront de", w:"«Enfront» s'escriu junt." },
+    { p:"a on", t:"sintaxi", s:"on", w:"«A on» és incorrecte en la llengua formal." },
+    { p:"sino(?!\\p{L})", t:"ortografia", s:"si no / sinó", w:"«Si no» (condicional) va separat; «sinó» (adversatiu), junt i amb accent." },
+    { p:"per que", t:"ortografia", s:"per què / perquè", w:"«Per què» (interrogatiu) separat i amb accent; «perquè» (causal o final), junt." },
+    { p:"de el|a el|per el|de els|a els|per els", t:"ortografia", s:"del / al / pel / dels / als / pels", w:"Les contraccions són obligatòries." },
+    // --- barbarismes ---
+    { p:"bueno", t:"lèxic", s:"bé / bo / d'acord", w:"Castellanisme impropi de la llengua escrita." },
+    { p:"vale", t:"lèxic", s:"d'acord / entesos", w:"Castellanisme." },
+    { p:"pues", t:"lèxic", s:"doncs", w:"Castellanisme." },
+    { p:"entonces", t:"lèxic", s:"aleshores / llavors", w:"Castellanisme." },
+    { p:"ademés|ademes", t:"lèxic", s:"a més / a més a més", w:"Castellanisme." },
+    { p:"antes", t:"lèxic", s:"abans", w:"Castellanisme." },
+    { p:"inclús", t:"lèxic", s:"fins i tot", w:"«Inclús» com a adverbi és incorrecte." },
+    { p:"a lo millor|alomillor", t:"lèxic", s:"potser / tal vegada", w:"Castellanisme." },
+    { p:"disfrut(?:ar|o|a|em|en|ava)", t:"lèxic", s:"gaudir / fruir", w:"Castellanisme." },
+    { p:"enterar-se|em vaig enterar|es va enterar|enterat", t:"lèxic", s:"assabentar-se / saber", w:"Castellanisme." },
+    { p:"despedir|despedir-se|despedida", t:"lèxic", s:"acomiadar / acomiadar-se / comiat", w:"Castellanisme." },
+    { p:"apretar|apreta", t:"lèxic", s:"prémer / estrènyer / pitjar", w:"Castellanisme." },
+    { p:"recolz(?:ar|o|a|en|ament)", t:"lèxic", s:"donar suport / suport", w:"«Recolzar» vol dir reposar sobre alguna cosa." },
+    { p:"vivenda", t:"lèxic", s:"habitatge", w:"Castellanisme." },
+    { p:"tamany", t:"lèxic", s:"mida / grandària", w:"Castellanisme." },
+    { p:"barco", t:"lèxic", s:"vaixell", w:"Castellanisme." },
+    { p:"tonto|tonta", t:"lèxic", s:"ximple / beneit", w:"Castellanisme." },
+    { p:"rato", t:"lèxic", s:"estona", w:"Castellanisme." },
+    { p:"sello", t:"lèxic", s:"segell", w:"Castellanisme." },
+    { p:"enxufe", t:"lèxic", s:"endoll", w:"Castellanisme." },
+    { p:"acera", t:"lèxic", s:"voravia / vorera", w:"Castellanisme." },
+    { p:"basura", t:"lèxic", s:"fems / escombraries", w:"Castellanisme." },
+    { p:"cariño|carinyo", t:"lèxic", s:"estimació / afecte", w:"Castellanisme." },
+    { p:"novio|novia|nòvio", t:"lèxic", s:"xicot / al·lot / parella", w:"Castellanisme." },
+    { p:"hasta", t:"lèxic", s:"fins", w:"Castellanisme." },
+    { p:"bocadillo|entrepa(?!n)", t:"lèxic", s:"entrepà", w:"Castellanisme." },
+    { p:"guai|flipar|flipa|mola|molaria|rotllo|tio|xungo|cutre", t:"lèxic", s:"(registre massa col·loquial)", w:"A l'examen cal un registre formal: evita el vocabulari col·loquial." },
+    { p:"jaja|jeje|xd|lol|ok", t:"lèxic", s:"(elimina-ho)", w:"Marques de llenguatge de xat: impròpies d'un text formal." },
+    // --- accents i apòstrofs de risc alt ---
+    { p:"es (?=(?:un|una|el|la|els|les|molt|molta|molts|moltes|important|evident|necessari|necessària|cert|clar|fonamental|possible|difícil|millor|pitjor|així|allò)\\b)", t:"ortografia", s:"és", w:"Aquí «es» és el verb <i>ser</i>: ha de portar accent." },
+    { p:"es que", t:"ortografia", s:"és que", w:"«És que» amb el verb <i>ser</i> porta accent." },
+    { p:"el amic|el home|el any|el altre|el estudi|el examen|el alumne|el institut|el interès|el ensenyament|el idioma|el ordinador|el objectiu|el exemple|el efecte|el article|el ambient|el impacte|el accés|el aire|el hivern|el estat|el origen|el ús|el important", t:"ortografia", s:"l'…", w:"Davant vocal o h muda, l'article masculí s'apostrofa." },
+    { p:"la escola|la associació|la energia|la educació|la opinió|la època|la hora|la empresa|la ajuda|la illa|la administració|la actualitat|la opció|la escala|la edat", t:"ortografia", s:"l'…", w:"L'article femení s'apostrofa davant vocal (excepte i/u àtones)." }
+  ].map(r => ({ ...r, re: rx(r.p) }));
+
+  const ACCENTS = {
+    "aixi":"així","aixo":"això","tambe":"també","pero":"però","perque":"perquè / per què","nomes":"només",
+    "algu":"algú","ningu":"ningú","mati":"matí","dificil":"difícil","facil":"fàcil","util":"útil","inutil":"inútil",
+    "ultim":"últim","ultima":"última","unic":"únic","unica":"única","public":"públic","publica":"pública",
+    "politic":"polític","politica":"política","politics":"polítics","politiques":"polítiques",
+    "economic":"econòmic","economica":"econòmica","cientific":"científic","cientifica":"científica",
+    "historia":"història","families":"famílies","familia":"família","memoria":"memòria","industria":"indústria",
+    "catala":"català","catalans":"catalans (correcte)","llengues":"llengües","questio":"qüestió","questions":"qüestions",
+    "sera":"serà","estara":"estarà","haura":"haurà","podra":"podrà","fara":"farà","tindra":"tindrà","vindra":"vindrà",
+    "alla":"allà","aqui":"aquí","adeu":"adéu","mes":"mes / més","persones":"persones (correcte)",
+    "intel·ligencia":"intel·ligència","interes":"interès","interessos":"interessos (correcte)",
+    "societats":"societats (correcte)","dies":"dies (correcte)","aixecar":"aixecar (correcte)"
+  };
+  const ACC_OK = new Set(["catalans","persones","societats","dies","interessos","aixecar","mes"]);
+
+  function suggeriment(w){
+    if(ACCENTS[w] && !ACC_OK.has(w)) return ACCENTS[w];
+    if(/^[\p{L}·]{4,}cio$/u.test(w) && !/ó/.test(w)) return w.slice(0,-3) + "ció";
+    if(/^[\p{L}·]{4,}sio$/u.test(w) && !/ó/.test(w)) return w.slice(0,-3) + "sió";
+    if(/ncia$/u.test(w) && !/[àèéíòóú]/u.test(w)){
+      if(/encia$/u.test(w)) return w.slice(0,-5) + "ència";
+      if(/ancia$/u.test(w)) return w.slice(0,-5) + "ància";
+    }
+    if(/ncies$/u.test(w) && !/[àèéíòóú]/u.test(w)){
+      if(/encies$/u.test(w)) return w.slice(0,-6) + "ències";
+      if(/ancies$/u.test(w)) return w.slice(0,-6) + "àncies";
+    }
+    return null;
+  }
+
+  const CONN = D.connectors.map(c => ({ fn:c[0], llista:c[1].split(" · ").map(s => s.trim()) }));
+  const CROSSA = ["cosa","coses","molt","molta","molts","moltes","gent","tema","temes","fer","fa","fan","bo","bona","bé"];
+  const STOP = new Set(["that","això","aquest","aquesta","aquests","aquestes","perquè","també","quan","però","amb","dels","les","els","una","uns","unes","com","per","què","que","del","més","son","són","han","hem","han","seva","seus","seves","aquell","aquella","molt","tots","totes","cada","seu","nostre","sobre","entre","fins","després","abans","encara","només","tot","tota"]);
+
+  function troba(text){
+    const errors = [];
+    const vistos = new Set();
+    REGLES.forEach(r => {
+      r.re.lastIndex = 0;
+      let m;
+      while((m = r.re.exec(text)) !== null){
+        const frag = m[1];
+        const i = m.index + (m[0].length - frag.length);
+        const key = i + ":" + frag;
+        if(!vistos.has(key)){
+          vistos.add(key);
+          errors.push({ i, len:frag.length, txt:frag, t:r.t, s:r.s, w:r.w });
+        }
+        if(m.index === r.re.lastIndex) r.re.lastIndex++;
+      }
+    });
+    // accents i ortografia mot a mot
+    const tok = /[\p{L}\p{M}·'’\-]+/gu;
+    let t;
+    while((t = tok.exec(text)) !== null){
+      const raw = t[0], w = raw.toLowerCase();
+      const sug = suggeriment(w);
+      if(sug && !/\(correcte\)/.test(sug)){
+        const key = t.index + ":" + raw;
+        if(!vistos.has(key)){
+          vistos.add(key);
+          errors.push({ i:t.index, len:raw.length, txt:raw, t:"ortografia", s:sug, w:"Accentuació: revisa aquest mot." });
+        }
+      }
+    }
+    return errors.sort((a,b)=>a.i-b.i);
+  }
+
+  function connectors(text){
+    const low = " " + text.toLowerCase().replace(/\s+/g," ") + " ";
+    const trobats = [], ranges = [];
+    CONN.forEach(c => {
+      const hits = c.llista.filter(x => {
+        const needle = x.toLowerCase();
+        const re = new RegExp("(?:^|[^\\p{L}])" + needle.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + "(?![\\p{L}])", "u");
+        return re.test(low);
+      });
+      if(hits.length) trobats.push({ fn:c.fn, hits });
+      hits.forEach(h => {
+        const re = new RegExp("(?:^|[^\\p{L}])(" + h.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")(?![\\p{L}])", "giu");
+        let m; re.lastIndex = 0;
+        while((m = re.exec(text.toLowerCase())) !== null){
+          const i = m.index + (m[0].length - m[1].length);
+          ranges.push({ i, len:m[1].length });
+          if(m.index === re.lastIndex) re.lastIndex++;
+        }
+      });
+    });
+    return { trobats, ranges };
+  }
+
+  function estadistiques(text){
+    const paraules = (text.trim().match(/[\p{L}\p{M}·'’\-]+/gu) || []);
+    const parags = text.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+    const frases = text.split(/[.!?…]+(?=\s|$)/).map(f=>f.trim()).filter(f=>f.length>1);
+    const low = paraules.map(p=>p.toLowerCase());
+    const uniq = new Set(low);
+    const freq = {};
+    low.forEach(w => { if(w.length > 5 && !STOP.has(w)) freq[w] = (freq[w]||0)+1; });
+    const repetits = Object.entries(freq).filter(([,n]) => n >= 4).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const crosses = CROSSA.map(c => [c, low.filter(w=>w===c).length]).filter(([,n]) => n >= 3);
+    const llargues = frases.map(f => (f.match(/[\p{L}\p{M}·'’\-]+/gu)||[]).length);
+    return {
+      paraules: paraules.length,
+      parags: parags.length,
+      frases: frases.length,
+      mitjana: frases.length ? Math.round(paraules.length/frases.length) : 0,
+      maxFrase: llargues.length ? Math.max(...llargues) : 0,
+      ttr: paraules.length ? uniq.size/paraules.length : 0,
+      repetits, crosses,
+      esquema: /^[\s]*[-–—*•·]\s+\S/m.test(text) || /^[\s]*\d+[.)]\s+\S/m.test(text),
+      dades: /\d+\s?%|\bel\s+\d+\s+per\s+cent\b|segons un estudi|segons una enquesta/i.test(text),
+      citacio: /«[^»]{3,}»|"[^"]{6,}"|“[^”]{3,}”/.test(text)
+    };
+  }
+  return { troba, connectors, estadistiques, CONN };
+})();
+
+/* --------------------------------------------------------------- ARENA -- */
+(function arenaInit(){
+  const MAXP = { b1:2, b2:3, b3:3 };
+  const RANG = { b1:[175,200], b2:[180,300], b3:[180,300] };
+  let tema = null, clockId = null, clockS = 0;
+
+  function novTema(){
+    const llista = D.arenaTemes[$("#arenaBloc").value];
+    let nou = llista[rnd(llista.length)];
+    if(llista.length > 1 && tema && nou.p === tema.p) nou = llista[(llista.indexOf(nou)+1) % llista.length];
+    tema = nou;
+    $("#arenaPrompt").textContent = tema.p;
+    const [a,b] = RANG[$("#arenaBloc").value];
+    $("#arenaHint").innerHTML = `<b>Pista:</b> ${tema.h} <span style="color:var(--muted)">· Extensió: ${a}-${b} paraules · Val ${nf(MAXP[$("#arenaBloc").value],0)} punts.</span>`;
+    comptar();
+  }
+  function comptar(){
+    const txt = $("#arenaText").value;
+    const n = (txt.trim().match(/[\p{L}\p{M}·'’\-]+/gu) || []).length;
+    const [a,b] = RANG[$("#arenaBloc").value];
+    $("#arenaWords").textContent = n + (n === 1 ? " paraula" : " paraules");
+    const pct = Math.min(100, Math.round(n / b * 100));
+    const bar = $("#arenaWordMeter");
+    bar.style.width = pct + "%";
+    bar.className = n >= a && n <= b ? "is-ok" : n > b ? "is-bad" : "is-warn";
+    $("#arenaWordHint").textContent = n < a ? `Et falten ${a-n} paraules per arribar al mínim (${a}).`
+      : n > b ? `Te'n sobren ${n-b}: el màxim és ${b} i passar-se també penalitza.`
+      : `Dins del rang exigit (${a}-${b}). Perfecte.`;
+  }
+  function clockPaint(){ $("#arenaClock").textContent = String(Math.floor(clockS/60)).padStart(2,"0")+":"+String(clockS%60).padStart(2,"0"); }
+
+  $("#arenaBloc").addEventListener("change", novTema);
+  $("#arenaShuffle").addEventListener("click", novTema);
+  $("#arenaText").addEventListener("input", comptar);
+  $("#arenaClear").addEventListener("click", ()=>{ $("#arenaText").value = ""; comptar(); $("#arenaResult").innerHTML = ""; });
+  $("#arenaClockBtn").addEventListener("click", ()=>{
+    if(clockId){ clearInterval(clockId); clockId = null; $("#arenaClockBtn").textContent = "Continuar"; }
+    else { clockId = setInterval(()=>{ clockS++; clockPaint(); }, 1000); $("#arenaClockBtn").textContent = "Aturar"; }
+  });
+
+  /* ---------- marcatge del text ---------- */
+  function marcar(text, errors, connRanges){
+    const marks = errors.map(e => ({ i:e.i, len:e.len, cls:"err", title:`${e.t}: ${e.txt} → ${e.s}` }))
+      .concat(connRanges.map(r => ({ i:r.i, len:r.len, cls:"conn", title:"connector" })))
+      .sort((a,b) => a.i - b.i);
+    let out = "", cur = 0;
+    marks.forEach(m => {
+      if(m.i < cur) return;
+      out += esc(text.slice(cur, m.i));
+      out += `<mark class="${m.cls}" title="${esc(m.title)}">${esc(text.slice(m.i, m.i+m.len))}</mark>`;
+      cur = m.i + m.len;
+    });
+    out += esc(text.slice(cur));
+    return out.replace(/\n{2,}/g, "</p><p class='mt-3'>").replace(/\n/g, "<br>");
+  }
+
+  function bar(nom, val, coment){
+    const pct = Math.round(val*10);
+    const cls = val >= 8 ? "is-ok" : val >= 6 ? "" : val >= 4 ? "is-warn" : "is-bad";
+    return `<div class="mt-4">
+      <div class="scorebar">
+        <span class="fw-600">${nom}</span>
+        <span class="meter"><i class="${cls}" style="width:${pct}%"></i></span>
+        <span class="num text-right">${nf(val,1)}</span>
+      </div>
+      <p class="t-sm mt-1" style="color:var(--ink-soft)">${coment}</p>
+    </div>`;
+  }
+
+  function corregir(){
+    const text = $("#arenaText").value;
+    const bloc = $("#arenaBloc").value;
+    const maxP = MAXP[bloc], [minW, maxW] = RANG[bloc];
+    if(text.trim().length < 40){ toast("Escriu una mica més abans de corregir"); return; }
+
+    const st = CORR.estadistiques(text);
+    const errors = CORR.troba(text);
+    const conn = CORR.connectors(text);
+    const fnCobertes = conn.trobats.length;
+    const clausTrobades = (tema.claus || []).filter(c => text.toLowerCase().includes(c.toLowerCase()));
+
+    /* --- adequació --- */
+    let adeq = 10; const cAdeq = [];
+    if(st.paraules < minW){ adeq -= Math.min(5, 1 + (minW - st.paraules)/minW*20); cAdeq.push(`<b class='warn'>Et falten ${minW-st.paraules} paraules</b>: n'has escrit ${st.paraules} i el rang exigit és de ${minW} a ${maxW}. No arribar a l'extensió és de les coses que més nota costen.`); }
+    else if(st.paraules > maxW){ adeq -= Math.min(4, 1 + (st.paraules - maxW)/maxW*20); cAdeq.push(`<b class='warn'>Te'n sobren ${st.paraules-maxW}</b>: n'has escrit ${st.paraules} i el màxim és ${maxW}.`); }
+    else cAdeq.push(`Extensió correcta (${st.paraules} paraules).`);
+    if(st.esquema){ adeq -= 4; cAdeq.push("<b class='bad'>Hi ha guions o numeracions: això és un esquema i pot reduir la nota de la pregunta un 50 %.</b>"); }
+    const colloquial = errors.filter(e => /registre massa col·loquial|llenguatge de xat/.test(e.w)).length;
+    if(colloquial){ adeq -= 2; cAdeq.push("Hi ha marques de registre col·loquial: el text ha de ser formal."); }
+    if(bloc === "b3" && !st.citacio){ adeq -= 2; cAdeq.push("Al bloc 3 has de <b>citar el text</b> entre cometes i referenciar-lo."); }
+    if(tema.claus && tema.claus.length){
+      const cob = clausTrobades.length / tema.claus.length;
+      if(cob < 0.34){ adeq -= 2; cAdeq.push("Gairebé no has fet servir el vocabulari específic que demana l'enunciat."); }
+      else cAdeq.push(`Conceptes clau detectats: ${clausTrobades.length} de ${tema.claus.length}.`);
+    }
+    adeq = Math.max(0, Math.min(10, adeq));
+
+    /* --- coherència --- */
+    let coh = st.parags >= 3 ? 9 : st.parags === 2 ? 6.5 : 4.5;
+    const cCoh = [];
+    cCoh.push(st.parags >= 3
+      ? `${st.parags} paràgrafs: l'estructura d'introducció, argumentació i conclusió es veu a simple vista.`
+      : `Només ${st.parags} paràgraf${st.parags===1?"":"s"}. Separa introducció, argumentació i conclusió amb una línia en blanc.`);
+    const teObertura = /^(avui|actualment|en els darrers|és un fet|des de fa|sovint|d'entrada|en primer lloc|darrerament|el debat)/i.test(text.trim());
+    const teTancament = /(en conclusió|en definitiva|per acabar|en resum|comptat i debatut|al capdavall|tot plegat)/i.test(text);
+    if(teObertura) coh += 0.5; else cCoh.push("La introducció no situa el tema: comença contextualitzant-lo.");
+    if(teTancament) coh += 0.5; else cCoh.push("No hi ha cap marca de conclusió («En definitiva…», «Al capdavall…»).");
+    if(st.frases < 5){ coh -= 1; cCoh.push("Poques frases: desenvolupa més cada idea."); }
+    coh = Math.max(0, Math.min(10, coh));
+
+    /* --- cohesió --- */
+    let cox = [3, 5, 6.5, 8, 9, 9.5][Math.min(5, fnCobertes)];
+    const cCox = [];
+    cCox.push(fnCobertes
+      ? `Has fet servir connectors de ${fnCobertes} funcions diferents: ${conn.trobats.map(t=>t.fn.toLowerCase()).join(", ")}.`
+      : "No s'ha detectat cap connector: el text sembla una llista de frases soltes.");
+    const falten = CORR.CONN.map(c=>c.fn).filter(f => !conn.trobats.some(t=>t.fn===f));
+    if(falten.length) cCox.push(`Hi trobo a faltar connectors de: <b>${falten.slice(0,4).join(", ").toLowerCase()}</b>.`);
+    if(st.mitjana > 30){ cox -= 1.5; cCox.push(`Frases massa llargues (mitjana de ${st.mitjana} paraules). Puntua més.`); }
+    else if(st.mitjana && st.mitjana < 9){ cox -= 1; cCox.push("Frases molt curtes i tallades: lliga-les amb connectors i subordinades."); }
+    else if(st.mitjana) cCox.push(`Mitjana de ${st.mitjana} paraules per frase: un ritme adequat.`);
+    if(st.maxFrase > 45) cCox.push(`Hi ha una frase de ${st.maxFrase} paraules: divideix-la.`);
+    cox = Math.max(0, Math.min(10, cox));
+
+    /* --- riquesa lèxica --- */
+    let riq = st.ttr >= 0.62 ? 9.5 : st.ttr >= 0.55 ? 8.5 : st.ttr >= 0.48 ? 7 : st.ttr >= 0.42 ? 5.5 : 4;
+    const cRiq = [`Índex de varietat lèxica: ${nf(st.ttr*100,0)} % de mots diferents.`];
+    if(st.crosses.length){
+      riq -= Math.min(2, st.crosses.length*0.6);
+      cRiq.push(`Paraules crossa repetides: ${st.crosses.map(c=>`«${c[0]}» (${c[1]})`).join(", ")}. Substitueix-les per lèxic precís.`);
+    }
+    if(st.repetits.length){
+      riq -= Math.min(1.5, st.repetits.length*0.4);
+      cRiq.push(`Mots molt repetits: ${st.repetits.map(r=>`«${r[0]}» (${r[1]})`).join(", ")}. Fes servir sinònims o pronoms.`);
+    }
+    if(!st.crosses.length && !st.repetits.length) cRiq.push("No hi ha repeticions cridaneres: bon domini del vocabulari.");
+    riq = Math.max(0, Math.min(10, riq));
+
+    /* --- correcció --- */
+    const per100 = st.paraules ? errors.length / st.paraules * 100 : 0;
+    let cor = Math.max(0, 10 - per100*1.8);
+    const perTipus = { ortografia:0, "lèxic":0, sintaxi:0 };
+    errors.forEach(e => perTipus[e.t] = (perTipus[e.t]||0) + 1);
+    const cCor = [errors.length
+      ? `S'han detectat <b>${errors.length}</b> errors (${perTipus.ortografia} d'ortografia, ${perTipus["lèxic"]} de lèxic i ${perTipus.sintaxi} de sintaxi): ${nf(per100,1)} per cada 100 paraules.`
+      : "No s'ha detectat cap error dels que busca el corrector. Repassa igualment els accents a mà."];
+    cor = Math.max(0, Math.min(10, cor));
+
+    /* --- nota --- */
+    const global = adeq*0.20 + coh*0.20 + cox*0.20 + riq*0.15 + cor*0.25;
+    const perErr = parseFloat($("#arenaPenal").value);
+    const cap = parseFloat($("#arenaCap").value);
+    const penal = Math.min(cap, errors.length * perErr);
+    const brut = global/10*maxP;
+    const nota = Math.max(0, brut - penal);
+
+    const checklist = [
+      [st.paraules >= minW && st.paraules <= maxW, `Extensió de ${minW} a ${maxW} paraules`, `${st.paraules} paraules`],
+      [st.parags >= 3, "Tres parts ben separades (introducció, argumentació, conclusió)", `${st.parags} paràgrafs`],
+      [fnCobertes >= 3, "Varietat de connectors", `${fnCobertes} funcions`],
+      [!st.esquema, "Cap esquema ni guió (reducció del 50 %)", st.esquema ? "n'hi ha" : "correcte"],
+      [!st.dades, "Cap dada susceptible de ser inventada", st.dades ? "revisa-ho" : "correcte"],
+      [errors.length === 0, "Sense faltes detectades", `${errors.length} detectades`]
+    ];
+    if(bloc === "b3") checklist.push([st.citacio, "Citació literal del text", st.citacio ? "hi és" : "falta"]);
+    if(/contra|tanmateix|és cert que|ara bé|si bé|no obstant això/i.test(text) && bloc === "b1")
+      checklist.push([true, "Contraargumentació (opcional, puja nota)", "detectada"]);
+
+    $("#arenaResult").innerHTML = `
+      <div class="card">
+        <div class="flex items-end justify-between flex-wrap gap-4">
+          <div>
+            <div class="eyebrow">Nota estimada</div>
+            <div class="num t-3xl ${nota >= maxP*0.9 ? "ok" : nota >= maxP*0.5 ? "" : "bad"}">${nf(nota)} <span class="t-lg" style="color:var(--muted)">/ ${nf(maxP,0)}</span></div>
+            <p class="t-sm" style="color:var(--muted)">Equival a un ${nf(nota/maxP*10,1)} sobre 10.</p>
+          </div>
+          <div class="stack gap-1 t-sm text-right">
+            <span>Valoració dels criteris: <b class="num">${nf(brut)}</b></span>
+            <span class="bad">Penalització per faltes: <b class="num">−${nf(penal)}</b></span>
+            <span style="color:var(--muted)" class="t-xs">${errors.length} × ${nf(perErr,2)} (màxim −${nf(cap,2)})</span>
+          </div>
+        </div>
+
+        <div class="card-wine mt-5">
+          <div class="eyebrow">Simulador de penalitzacions</div>
+          <p class="t-sm mt-1" style="color:var(--ink-soft)">
+            Cada error d'ortografia, de lèxic o de sintaxi descompta <b>${nf(perErr,2)}</b> punts fins a un màxim de <b>${nf(cap,2)}</b>.
+            ${errors.length ? `Amb ${errors.length} errors detectats has perdut <b>${nf(penal)}</b> punts: són ${nf(penal/maxP*10,1)} dècimes sobre 10 regalades per no repassar.` : "Avui no has perdut res per faltes. Mantingues aquest nivell de repàs."}
+            <br><span class="t-xs" style="color:var(--muted)">Simulació orientativa: el barem exacte de descompte el fixa cada convocatòria. Consulta els criteris oficials de correcció.</span>
+          </p>
+        </div>
+
+        <h3 class="mt-6">Criteris de correcció</h3>
+        ${bar("Adequació", adeq, cAdeq.join(" "))}
+        ${bar("Coherència", coh, cCoh.join(" "))}
+        ${bar("Cohesió", cox, cCox.join(" "))}
+        ${bar("Riquesa lèxica", riq, cRiq.join(" "))}
+        ${bar("Correcció lingüística", cor, cCor.join(" "))}
+
+        <h3 class="mt-8">Llista de comprovació</h3>
+        <div class="stack gap-2 mt-3">
+          ${checklist.map(c=>`
+            <div class="flex items-center gap-3 t-sm">
+              <span class="chip ${c[0]?"chip-ok":"chip-bad"}">${c[0]?"✓":"✗"}</span>
+              <span class="flex-1">${c[1]}</span>
+              <span class="badge">${c[2]}</span>
+            </div>`).join("")}
+        </div>
+
+        ${errors.length ? `
+        <h3 class="mt-8">Errors detectats</h3>
+        <div class="tablewrap mt-3">
+          <table>
+            <thead><tr><th>Fragment</th><th>Tipus</th><th>Proposta</th><th>Per què</th></tr></thead>
+            <tbody>${errors.map(e=>`
+              <tr>
+                <td class="bad fw-600">${esc(e.txt)}</td>
+                <td><span class="badge">${e.t}</span></td>
+                <td class="ok">${e.s}</td>
+                <td style="color:var(--ink-soft)">${e.w}</td>
+              </tr>`).join("")}</tbody>
+          </table>
+        </div>` : ""}
+
+        <h3 class="mt-8">El teu text revisat</h3>
+        <p class="t-xs mt-1" style="color:var(--muted)">
+          <mark class="err">així</mark> = possible error · <mark class="conn">així</mark> = connector detectat
+        </p>
+        <div class="card-flat mt-3" style="line-height:1.8"><p>${marcar(text, errors, conn.ranges)}</p></div>
+
+        ${st.dades ? `<div class="card-wine mt-5"><div class="eyebrow">Atenció a les dades</div><p class="t-sm mt-1" style="color:var(--ink-soft)">Has fet servir xifres o percentatges. A la prova <b>no es poden inventar dades</b> i, si te'n inventes, et penalitzen. Si no n'estàs segur, argumenta sense xifres concretes.</p></div>` : ""}
+      </div>`;
+
+    bumpProg("arena");
+    window.__arenaLast = { bloc, prompt:tema.p, paraules:st.paraules, nota, errors:errors.length, data:new Date().toISOString() };
+    $("#arenaResult").scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  $("#arenaCorrect").addEventListener("click", corregir);
+  $("#arenaSave").addEventListener("click", ()=>{
+    if(!window.__arenaLast){ toast("Corregeix el text abans de desar-lo"); return; }
+    const h = store.get("arenaHist", []);
+    h.unshift(Object.assign({}, window.__arenaLast, { text:$("#arenaText").value.slice(0, 4000) }));
+    store.set("arenaHist", h.slice(0, 20)); paintHist(); toast("Intent desat");
+  });
+
+  function paintHist(){
+    const h = store.get("arenaHist", []);
+    $("#arenaHistory").innerHTML = h.length ? `
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Data</th><th>Prova</th><th>Paraules</th><th>Faltes</th><th>Nota</th></tr></thead>
+          <tbody>${h.map(x=>`
+            <tr>
+              <td class="num t-sm">${new Date(x.data).toLocaleDateString("ca-ES",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}</td>
+              <td class="t-sm">${x.bloc === "b1" ? "Bloc 1 · argumentatiu" : x.bloc === "b2" ? "Bloc 2 · llengua i societat" : "Bloc 3 · literatura"}<br><span class="t-xs" style="color:var(--muted)">${esc(x.prompt.slice(0,70))}…</span></td>
+              <td class="num">${x.paraules}</td>
+              <td class="num ${x.errors ? "bad" : "ok"}">${x.errors}</td>
+              <td class="num fw-600">${nf(x.nota)}</td>
+            </tr>`).join("")}</tbody>
+        </table>
+      </div>
+      <button class="btn btn-sm btn-ghost mt-3" id="histClear">Esborrar l'historial</button>`
+      : `<p class="lead t-sm">Encara no hi ha cap intent desat. Escriu una resposta, corregeix-la i desa-la per veure com evoluciones.</p>`;
+    const b = $("#histClear");
+    if(b) b.addEventListener("click", ()=>{ store.del("arenaHist"); paintHist(); toast("Historial esborrat"); });
+  }
+
+  novTema(); paintHist(); clockPaint();
+})();
+
+/* ------------------------------------------------------------- ARRENCADA */
+go(location.hash.slice(1) || "panell");
+document.addEventListener("keydown", e => {
+  if(e.target.matches("input,textarea,select")) return;
+  const n = parseInt(e.key, 10);
+  if(n >= 1 && n <= 8) go(Object.keys(VIEWS)[n-1]);
+});
+</script>
+</body>
+</html>

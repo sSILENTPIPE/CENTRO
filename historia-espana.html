@@ -1,0 +1,1967 @@
+<title>Història 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --paper:#F5F4F1; --surface:#FFFFFF; --surface-2:#EFEDE7;
+    --ink:#17150F; --ink-soft:#4B463C; --muted:#7B7568;
+    --line:#E2DED4; --line-soft:#EDEAE2;
+    --wine:#7B1E2B; --wine-ink:#7B1E2B; --gold:#8A6D23;
+    --ok:#2F6B4F; --warn:#95610F; --bad:#9B2C2C;
+    --tint-wine:rgba(123,30,43,.07); --tint-gold:rgba(138,109,35,.10);
+    --shadow:0 1px 2px rgba(23,21,15,.05), 0 10px 30px -18px rgba(23,21,15,.35);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#121110; --surface:#1A1917; --surface-2:#232120;
+      --ink:#F0ECE3; --ink-soft:#C6C0B4; --muted:#8F8778;
+      --line:#302C27; --line-soft:#262320;
+      --wine:#D4767F; --wine-ink:#E3A2A8; --gold:#D4AE64;
+      --ok:#74BE9A; --warn:#D9A441; --bad:#E0736F;
+      --tint-wine:rgba(212,118,127,.12); --tint-gold:rgba(212,174,100,.12);
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 34px -20px rgba(0,0,0,.8);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#121110; --surface:#1A1917; --surface-2:#232120;
+    --ink:#F0ECE3; --ink-soft:#C6C0B4; --muted:#8F8778;
+    --line:#302C27; --line-soft:#262320;
+    --wine:#D4767F; --wine-ink:#E3A2A8; --gold:#D4AE64;
+    --ok:#74BE9A; --warn:#D9A441; --bad:#E0736F;
+    --tint-wine:rgba(212,118,127,.12); --tint-gold:rgba(212,174,100,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 34px -20px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:Newsreader,Georgia,serif; font-weight:500; text-wrap:balance; margin:0; letter-spacing:-.01em; line-height:1.18}
+  p{margin:0}
+  button{font:inherit; color:inherit}
+  :focus-visible{outline:2px solid var(--wine); outline-offset:2px; border-radius:6px}
+  ::selection{background:var(--tint-gold)}
+
+  /* ---------- shell ---------- */
+  .shell{display:flex; min-height:100%}
+  .sidebar{
+    width:264px; flex:0 0 264px; background:var(--surface);
+    border-right:1px solid var(--line); position:sticky;
+    top:env(safe-area-inset-top,0px); height:100dvh; overflow-y:auto; padding:22px 16px 28px;
+  }
+  .main{flex:1 1 auto; min-width:0; padding-block:26px 90px; padding-left:clamp(16px,4vw,52px); padding-right:clamp(16px,4vw,52px)}
+  .wrap{max-width:940px; margin:0 auto}
+  @media (max-width:1023px){
+    .sidebar{
+      position:fixed; z-index:60; left:0; top:0; height:100dvh; transform:translateX(-100%);
+      transition:transform .24s ease; box-shadow:var(--shadow); padding-top:calc(18px + env(safe-area-inset-top,0px));
+    }
+    body.nav-open .sidebar{transform:translateX(0)}
+    .scrim{position:fixed; inset:0; background:rgba(10,9,7,.42); z-index:55; opacity:0; pointer-events:none; transition:opacity .2s}
+    body.nav-open .scrim{opacity:1; pointer-events:auto}
+  }
+  @media (min-width:1024px){ .scrim{display:none} .topbar-burger{display:none} }
+
+  .topbar{
+    position:sticky; top:env(safe-area-inset-top,0px); z-index:40;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--line-soft);
+    display:flex; align-items:center; gap:12px; padding:9px clamp(12px,3vw,24px);
+  }
+  .brand{font-family:Newsreader,Georgia,serif; font-size:18px; letter-spacing:-.015em; display:flex; align-items:center; gap:9px}
+  .brand .seal{
+    width:26px;height:26px;border-radius:50%; display:grid; place-items:center;
+    border:1px solid var(--wine); color:var(--wine); font-size:11px; font-family:"IBM Plex Mono",monospace; letter-spacing:.02em;
+  }
+
+  /* ---------- nav ---------- */
+  .navgroup{margin-bottom:18px}
+  .navlabel{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:.13em; color:var(--muted);
+    padding:0 10px 7px; font-weight:600;
+  }
+  .navitem{
+    display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+    padding:8px 10px; border-radius:8px; border:0; background:transparent; cursor:pointer;
+    color:var(--ink-soft); font-size:14px; line-height:1.3; transition:background .14s, color .14s;
+  }
+  .navitem:hover{background:var(--surface-2); color:var(--ink)}
+  .navitem[aria-current="true"]{background:var(--tint-wine); color:var(--wine-ink); font-weight:500}
+  .navitem .tag{
+    margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--muted);
+    border:1px solid var(--line); border-radius:4px; padding:1px 5px;
+  }
+  .navitem[aria-current="true"] .tag{border-color:color-mix(in srgb,var(--wine) 40%,transparent); color:var(--wine-ink)}
+
+  /* ---------- pieces ---------- */
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:20px}
+  .card-flat{background:var(--surface-2); border-radius:12px; padding:18px}
+  .eyebrow{font-size:10.5px; text-transform:uppercase; letter-spacing:.14em; color:var(--muted); font-weight:600}
+  .lead{color:var(--ink-soft); font-size:15px}
+  .rule{height:1px; background:var(--line); border:0; margin:0}
+  .chip{
+    display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line);
+    border-radius:999px; padding:3px 10px; font-size:12px; color:var(--ink-soft); background:var(--surface);
+  }
+  .chip-wine{border-color:color-mix(in srgb,var(--wine) 35%,transparent); background:var(--tint-wine); color:var(--wine-ink)}
+  .chip-gold{border-color:color-mix(in srgb,var(--gold) 38%,transparent); background:var(--tint-gold); color:var(--gold)}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:7px; cursor:pointer;
+    border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    border-radius:9px; padding:8px 14px; font-size:14px; font-weight:500; transition:background .14s,border-color .14s,transform .08s;
+  }
+  .btn:hover{background:var(--surface-2)}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--wine); border-color:var(--wine); color:#FDF8F6}
+  :root[data-theme="dark"] .btn-primary, :root:not([data-theme="light"]) .btn-primary{color:#1A1917}
+  @media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .btn-primary{color:#FDF8F6} }
+  .btn-primary:hover{background:color-mix(in srgb,var(--wine) 86%, var(--ink))}
+  .btn-ghost{border-color:transparent; background:transparent; color:var(--ink-soft)}
+  .btn-ghost:hover{background:var(--surface-2); color:var(--ink)}
+  .btn-sm{padding:5px 10px; font-size:13px; border-radius:7px}
+  .num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+  .field{
+    width:100%; background:var(--surface); border:1px solid var(--line); border-radius:9px;
+    padding:9px 11px; font:inherit; color:var(--ink);
+  }
+  textarea.field{min-height:150px; resize:vertical; line-height:1.65}
+  select.field{cursor:pointer}
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--surface)}
+  table{border-collapse:collapse; width:100%; min-width:520px; font-size:14px}
+  th,td{padding:11px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line-soft)}
+  thead th{font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); background:var(--surface-2)}
+  tbody tr:last-child td{border-bottom:0}
+  .rowlabel{font-weight:500; color:var(--ink); white-space:nowrap}
+  blockquote.doc{
+    font-family:Newsreader,Georgia,serif; font-size:15.5px; line-height:1.72; color:var(--ink-soft);
+    border-left:2px solid var(--gold); padding:2px 0 2px 16px; margin:0;
+  }
+  .kbd{font-family:"IBM Plex Mono",monospace; font-size:11px; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 5px; color:var(--muted)}
+  .sec{display:block}
+  .sec[hidden]{display:none!important}
+  .grid-auto{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .stack{display:flex; flex-direction:column}
+  .meter{height:6px; border-radius:99px; background:var(--surface-2); overflow:hidden}
+  .meter > i{display:block; height:100%; background:var(--wine); border-radius:99px; transition:width .4s ease}
+  .ok{color:var(--ok)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+  .flip{perspective:1200px}
+  .flip-inner{position:relative; transition:transform .5s cubic-bezier(.2,.7,.2,1); transform-style:preserve-3d; min-height:228px}
+  .flip.is-flipped .flip-inner{transform:rotateY(180deg)}
+  .flip-face{position:absolute; inset:0; backface-visibility:hidden; display:flex; flex-direction:column; justify-content:center; padding:26px; border-radius:14px; border:1px solid var(--line); background:var(--surface)}
+  .flip-back{transform:rotateY(180deg); background:var(--surface-2)}
+  .sortitem{
+    display:flex; align-items:center; gap:11px; width:100%; text-align:left; cursor:pointer;
+    border:1px solid var(--line); background:var(--surface); border-radius:10px; padding:11px 13px; font-size:14px;
+    transition:border-color .14s, background .14s, opacity .2s;
+  }
+  .sortitem:hover{border-color:var(--gold)}
+  .sortitem[disabled]{opacity:.35; cursor:default}
+  .sortitem .idx{
+    width:22px;height:22px;flex:0 0 22px;border-radius:50%; display:grid; place-items:center;
+    font-family:"IBM Plex Mono",monospace; font-size:11px; background:var(--tint-wine); color:var(--wine-ink);
+  }
+  details.acc{border:1px solid var(--line); border-radius:12px; background:var(--surface); overflow:hidden}
+  details.acc + details.acc{margin-top:10px}
+  details.acc > summary{cursor:pointer; padding:14px 18px; list-style:none; display:flex; align-items:center; gap:12px}
+  details.acc > summary::-webkit-details-marker{display:none}
+  details.acc[open] > summary{border-bottom:1px solid var(--line-soft); background:var(--surface-2)}
+  .acc-body{padding:18px}
+  .timeline{position:relative; padding-left:22px}
+  .timeline::before{content:""; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background:var(--line)}
+  .tl-item{position:relative; padding-bottom:14px}
+  .tl-item::before{content:""; position:absolute; left:-20px; top:8px; width:7px; height:7px; border-radius:50%; background:var(--gold)}
+  .tl-year{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--wine-ink); letter-spacing:.02em}
+  .pill-score{font-family:"IBM Plex Mono",monospace; font-size:13px; padding:3px 9px; border-radius:7px; background:var(--tint-gold); color:var(--gold)}
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important; transition:none!important} }
+  /* Defenses davant el preflight de Tailwind (s'injecta després d'aquest full) */
+  body h1{font-size:34px} body h2{font-size:23px} body h3{font-size:17px} body h4{font-size:15px}
+  body h1, body h2, body h3, body h4{font-family:Newsreader,Georgia,serif; font-weight:500}
+  body ul.lead, body ul[style*="padding-left"]{list-style:disc}
+  body ol.lead, body ol[style*="padding-left"]{list-style:decimal}
+  body blockquote.doc{margin:0}
+  body input[type="range"]{-webkit-appearance:auto; appearance:auto}
+  body label{cursor:pointer}
+  body input[type="checkbox"]{accent-color:var(--wine); width:14px; height:14px; vertical-align:-2px; margin-right:4px}
+  /* Utilitats equivalents a les classes de Tailwind emprades, perquè la pàgina
+     es mantengui intacta encara que el CDN de Tailwind no carregui */
+  .flex-wrap{flex-wrap:wrap}
+  .flex{display:flex}
+  .gap-\[10px\]{gap:10px}
+  .gap-\[12px\]{gap:12px}
+  .gap-\[14px\]{gap:14px}
+  .gap-\[16px\]{gap:16px}
+  .gap-\[18px\]{gap:18px}
+  .gap-\[20px\]{gap:20px}
+  .gap-\[4px\]{gap:4px}
+  .gap-\[6px\]{gap:6px}
+  .gap-\[8px\]{gap:8px}
+  .grid{display:grid}
+  .items-baseline{align-items:baseline}
+  .items-center{align-items:center}
+  .items-end{align-items:flex-end}
+  .justify-between{justify-content:space-between}
+  .max-w-\[340px\]{max-width:340px}
+  .max-w-\[62ch\]{max-width:62ch}
+  .mb-\[14px\]{margin-bottom:14px}
+  .mb-\[6px\]{margin-bottom:6px}
+  .mb-\[8px\]{margin-bottom:8px}
+  .min-w-0{min-width:0}
+  .ml-auto{margin-left:auto}
+  .mt-\[10px\]{margin-top:10px}
+  .mt-\[12px\]{margin-top:12px}
+  .mt-\[14px\]{margin-top:14px}
+  .mt-\[16px\]{margin-top:16px}
+  .mt-\[18px\]{margin-top:18px}
+  .mt-\[20px\]{margin-top:20px}
+  .mt-\[22px\]{margin-top:22px}
+  .mt-\[24px\]{margin-top:24px}
+  .mt-\[26px\]{margin-top:26px}
+  .mt-\[30px\]{margin-top:30px}
+  .mt-\[32px\]{margin-top:32px}
+  .mt-\[34px\]{margin-top:34px}
+  .mt-\[4px\]{margin-top:4px}
+  .mt-\[6px\]{margin-top:6px}
+  .mt-\[8px\]{margin-top:8px}
+  .text-\[12\.5px\]{font-size:12.5px}
+  .text-\[12px\]{font-size:12px}
+  .text-\[13\.5px\]{font-size:13.5px}
+  .text-\[13px\]{font-size:13px}
+  .text-\[14px\]{font-size:14px}
+  .text-\[15px\]{font-size:15px}
+  .text-\[16px\]{font-size:16px}
+  .text-\[22px\]{font-size:22px}
+  .text-\[23px\]{font-size:23px}
+  .text-\[26px\]{font-size:26px}
+  .text-\[30px\]{font-size:30px}
+  .text-\[34px\]{font-size:34px}
+  .text-\[40px\]{font-size:40px}
+  .text-\[color\:var\(--gold\)\]{color:var(--gold)}
+  .text-\[color\:var\(--ink-soft\)\]{color:var(--ink-soft)}
+  .text-\[color\:var\(--muted\)\]{color:var(--muted)}
+  .w-auto{width:auto}
+</style>
+
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Navegació principal">
+    <div class="brand" style="padding:0 10px 18px">
+      <span class="seal">X</span>
+      <span>Història <strong style="font-weight:600">10</strong></span>
+    </div>
+
+    <div class="navgroup">
+      <div class="navlabel">Inici</div>
+      <button class="navitem" data-go="panel"><span>Panell de control</span></button>
+    </div>
+
+    <div class="navgroup">
+      <div class="navlabel">Rutes d'estudi</div>
+      <button class="navitem" data-go="breus"><span>Qüestions breus</span><span class="tag">A</span></button>
+      <button class="navitem" data-go="comentari"><span>Comentari de font</span><span class="tag">B</span></button>
+      <button class="navitem" data-go="tema"><span>Tema llarg</span><span class="tag">C</span></button>
+    </div>
+
+    <div class="navgroup">
+      <div class="navlabel">Caixa d'eines</div>
+      <button class="navitem" data-go="comparador"><span>Comparador constitucional</span></button>
+      <button class="navitem" data-go="balear"><span>Bonus balear</span><span class="tag">+1,5</span></button>
+      <button class="navitem" data-go="criteris"><span>Criteris i penalitzacions</span></button>
+    </div>
+
+    <div class="navgroup">
+      <div class="navlabel">Prova</div>
+      <button class="navitem" data-go="arena"><span>Arena d'avaluació</span><span class="tag">IA</span></button>
+    </div>
+
+    <div class="card-flat mt-[6px]">
+      <div class="eyebrow mb-[8px]">Rellotge de prova</div>
+      <div class="num text-[26px]" id="timerBig" style="letter-spacing:-.02em">90:00</div>
+      <div class="flex gap-[6px] mt-[10px]">
+        <button class="btn btn-sm" id="timerToggle">Iniciar</button>
+        <button class="btn btn-sm btn-ghost" id="timerReset">Reiniciar</button>
+      </div>
+      <p class="lead text-[12px] mt-[10px] text-[color:var(--muted)]">Repartiment suggerit: A 25' · B 28' · C 30' · revisió 7'</p>
+    </div>
+  </aside>
+
+  <div class="min-w-0" style="flex:1 1 auto">
+    <header class="topbar">
+      <button class="btn btn-sm btn-ghost topbar-burger" id="burger" aria-label="Obrir el menú">☰</button>
+      <div class="brand text-[15px]"><span id="crumb">Panell de control</span></div>
+      <div class="ml-auto flex items-center gap-[8px]">
+        <span class="chip num" id="timerChip" hidden>90:00</span>
+        <button class="btn btn-sm btn-ghost" id="themeBtn" aria-label="Canviar el tema">Tema</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="wrap">
+
+        <!-- ============ PANELL ============ -->
+        <section class="sec" id="sec-panel">
+          <div class="eyebrow">Illes Balears · Proves d'accés a la universitat</div>
+          <h1 class="mt-[8px]" style="font-size:clamp(30px,5vw,42px)">Història d'Espanya, sense marge d'error.</h1>
+          <p class="lead max-w-[62ch] mt-[12px]">
+            Una prova de 90 minuts i 10 punts: quatre qüestions breus, un comentari de font i un tema.
+            Aquí tens les tres rutes, les eines de la casa i una arena per assajar-ho amb els criteris oficials a la mà.
+          </p>
+
+          <div class="grid-auto mt-[26px]">
+            <div class="card">
+              <div class="eyebrow">Compte enrere</div>
+              <div class="num text-[34px] mt-[6px]" id="countdown" style="letter-spacing:-.03em">—</div>
+              <p class="lead text-[13px] mt-[4px]" id="countdownSub">dies fins a la prova</p>
+              <label class="eyebrow mt-[14px]" for="examDate" style="display:block">Data de l'examen</label>
+              <input class="field mt-[6px]" type="date" id="examDate" value="2026-06-09">
+            </div>
+
+            <div class="card">
+              <div class="eyebrow">Estructura de la prova</div>
+              <div class="stack gap-[10px] mt-[12px]" id="structureList"></div>
+            </div>
+
+            <div class="card">
+              <div class="eyebrow">El teu progrés</div>
+              <div class="stack gap-[14px] mt-[12px]" id="progressList"></div>
+              <button class="btn btn-sm btn-ghost mt-[14px]" id="resetProgress">Esborrar el progrés</button>
+            </div>
+          </div>
+
+          <h2 class="text-[23px] mt-[34px]">Calculadora de nota</h2>
+          <p class="lead mt-[6px]">Posa't la nota que creus que trauries i mira on es decideix el 10.</p>
+          <div class="card mt-[14px]">
+            <div class="grid-auto" id="calcInputs"></div>
+            <hr class="rule" style="margin:18px 0">
+            <div class="flex flex-wrap gap-[18px] items-end">
+              <div>
+                <div class="eyebrow">Nota final</div>
+                <div class="num text-[40px]" id="calcTotal" style="letter-spacing:-.03em; line-height:1.1">0,00</div>
+              </div>
+              <div class="stack gap-[4px] text-[13px] text-[color:var(--ink-soft)]" id="calcBreakdown"></div>
+            </div>
+          </div>
+
+          <h2 class="text-[23px] mt-[34px]">Les tres regles que decideixen l'examen</h2>
+          <div class="grid-auto mt-[14px]">
+            <div class="card">
+              <span class="chip chip-wine">A.4 · tot o res</span>
+              <p class="lead mt-[10px]">Ordenar quatre fets: si l'ordre és perfecte, 1 punt; amb una sola errada, <strong>0 punts</strong>. No hi ha nota parcial.</p>
+            </div>
+            <div class="card">
+              <span class="chip chip-gold">Bonus balear</span>
+              <p class="lead mt-[10px]">+0,25 a A.1 i A.3, +0,5 al comentari i +0,5 al tema. Fins a <strong>1,5 punts</strong> regalats si t'entrenes a col·locar-los.</p>
+            </div>
+            <div class="card">
+              <span class="chip">Ortografia</span>
+              <p class="lead mt-[10px]">Les dues primeres faltes no compten. A partir de la tercera, −0,10 cadascuna fins a <strong>−1 punt</strong>; redacció i cohesió, fins a −0,5.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ QÜESTIONS BREUS ============ -->
+        <section class="sec" id="sec-breus" hidden>
+          <div class="eyebrow">Part A · 4 punts (1 punt cada qüestió)</div>
+          <h1 class="mt-[8px]" style="font-size:clamp(26px,4vw,34px)">Qüestions breus</h1>
+          <p class="lead max-w-[62ch] mt-[10px]">
+            Quatre preguntes, quatre mecanismes diferents. Entrena'ls per separat: la A.2 es guanya amb precisió, la A.4 amb memòria de dates.
+          </p>
+
+          <div class="flex gap-[8px] flex-wrap mt-[20px]" id="breusTabs">
+            <button class="btn btn-sm" data-tab="a2">A.2 · Definicions</button>
+            <button class="btn btn-sm" data-tab="a4">A.4 · Ordenar fets</button>
+            <button class="btn btn-sm" data-tab="a1">A.1 · Resposta breu</button>
+          </div>
+
+          <!-- A.2 -->
+          <div class="mt-[22px]" id="tab-a2">
+            <div class="flex flex-wrap gap-[10px] items-center justify-between">
+              <div class="flex gap-[8px] flex-wrap items-center">
+                <label class="eyebrow" for="fcBloc">Bloc</label>
+                <select class="field w-auto" id="fcBloc"></select>
+                <label class="flex items-center gap-[6px] text-[13px] text-[color:var(--ink-soft)]">
+                  <input type="checkbox" id="fcOnlyHard"> només les marcades per repassar
+                </label>
+              </div>
+              <div class="num text-[13px] text-[color:var(--muted)]" id="fcCounter"></div>
+            </div>
+
+            <div class="flip mt-[14px]" id="fcCard">
+              <div class="flip-inner">
+                <div class="flip-face">
+                  <div class="eyebrow" id="fcTermBloc"></div>
+                  <h2 class="mt-[8px]" style="font-size:clamp(24px,4vw,32px)" id="fcTerm">—</h2>
+                  <p class="lead mt-[12px] text-[13px] text-[color:var(--muted)]">Digues-ho en veu alta en una a tres línies. Després gira la fitxa.</p>
+                </div>
+                <div class="flip-face flip-back">
+                  <div class="eyebrow" id="fcTermBack"></div>
+                  <p class="mt-[10px] text-[16px]" style="line-height:1.65" id="fcDef"></p>
+                  <p class="lead mt-[12px] text-[13.5px] text-[color:var(--gold)]" id="fcBal"></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-[8px] flex-wrap mt-[14px]">
+              <button class="btn btn-primary" id="fcFlip">Girar la fitxa</button>
+              <button class="btn" id="fcKnow">La sé</button>
+              <button class="btn" id="fcHard">Repassar-la</button>
+              <button class="btn btn-ghost" id="fcNext">Següent →</button>
+              <button class="btn btn-ghost" id="fcShuffle">Barrejar</button>
+            </div>
+            <div class="meter mt-[16px]"><i id="fcMeter" style="width:0%"></i></div>
+            <p class="lead text-[12.5px] text-[color:var(--muted)] mt-[6px]" id="fcProgressTxt"></p>
+          </div>
+
+          <!-- A.4 -->
+          <div class="mt-[22px]" id="tab-a4" hidden>
+            <div class="card">
+              <div class="flex flex-wrap gap-[10px] items-baseline justify-between">
+                <div>
+                  <div class="eyebrow">A.4 · Bloc A: dels pobles preromans a l'Espanya del segle XVIII</div>
+                  <h2 class="text-[22px] mt-[6px]">Ordena de més antic a més recent</h2>
+                </div>
+                <span class="chip chip-wine">1 errada = 0 punts</span>
+              </div>
+              <p class="lead mt-[10px] text-[14px]">Prem els quatre elements en l'ordre correcte. Quan tinguis els quatre col·locats, comprova.</p>
+
+              <div class="stack gap-[8px] mt-[16px]" id="cronoPool"></div>
+
+              <div class="mt-[18px]">
+                <div class="eyebrow">La teva resposta</div>
+                <div class="stack gap-[8px] mt-[8px]" id="cronoAnswer"></div>
+              </div>
+
+              <div class="flex gap-[8px] flex-wrap mt-[16px]">
+                <button class="btn btn-primary" id="cronoCheck">Comprovar</button>
+                <button class="btn" id="cronoUndo">Desfer</button>
+                <button class="btn btn-ghost" id="cronoNew">Una altra sèrie →</button>
+              </div>
+              <div class="mt-[16px]" id="cronoFeedback"></div>
+              <div class="num flex gap-[16px] mt-[16px] text-[13px] text-[color:var(--muted)]">
+                <span>Encerts: <b id="cronoWins">0</b></span><span>Intents: <b id="cronoTries">0</b></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- A.1 -->
+          <div class="mt-[22px]" id="tab-a1" hidden>
+            <p class="lead mb-[14px]">
+              Entre 6 i 10 línies, amb ordre i claredat. Cada pregunta du el guió d'ítems que el corrector cerca: si hi són tots, tens el punt.
+            </p>
+            <div id="a1List"></div>
+          </div>
+        </section>
+
+        <!-- ============ COMENTARI ============ -->
+        <section class="sec" id="sec-comentari" hidden>
+          <div class="eyebrow">Part B · 3 punts (1,5 + 1,5) · +0,5 per referències balears</div>
+          <h1 class="mt-[8px]" style="font-size:clamp(26px,4vw,34px)">Comentari de font</h1>
+          <p class="lead max-w-[62ch] mt-[10px]">
+            El comentari sempre té dues meitats. Primer identifiques la font (1,5). Després respons la pregunta connectada, citant el document (1,5).
+            Tria una font real i recorre els quatre passos.
+          </p>
+
+          <div class="flex flex-wrap gap-[10px] items-center mt-[20px]">
+            <label class="eyebrow" for="srcSelect">Font</label>
+            <select class="field w-auto" id="srcSelect" style="max-width:100%"></select>
+          </div>
+
+          <div class="mt-[18px]" id="srcDoc"></div>
+
+          <h2 class="text-[22px] mt-[30px]">Els quatre passos</h2>
+          <p class="lead mt-[6px]">Escriu la teva versió a cada pas i compara-la amb el model. El model surt dels criteris oficials de correcció.</p>
+          <div class="mt-[16px]" id="srcSteps"></div>
+
+          <div class="card mt-[22px]" style="border-color:color-mix(in srgb,var(--gold) 40%,transparent)">
+            <div class="eyebrow text-[color:var(--gold)]">Errors que costen punts</div>
+            <ul class="lead grid gap-[6px]" style="margin:10px 0 0; padding-left:18px">
+              <li>Parafrasejar el text sense identificar-lo: el primer 1,5 es perd sencer.</li>
+              <li>Respondre la pregunta sense tornar mai al document. Cita entre cometes i explica la cita.</li>
+              <li>Explicar-ho tot d'una imatge sense descriure-la: si la font és gràfica, la descripció <em>és</em> la citació.</li>
+              <li>Oblidar la frase balear: són 0,5 punts que no tornen.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- ============ TEMA ============ -->
+        <section class="sec" id="sec-tema" hidden>
+          <div class="eyebrow">Part C · 3 punts · entre cara i cara i mitja de full · +0,5 per referències balears</div>
+          <h1 class="mt-[8px]" style="font-size:clamp(26px,4vw,34px)">Tema llarg</h1>
+          <p class="lead max-w-[62ch] mt-[10px]">
+            Ordre cronològic, dates precises, noms propis i una definició d'obertura. Cada esquema està escrit per ser recitat en 30 minuts.
+          </p>
+          <div class="flex flex-wrap gap-[10px] mt-[18px] items-center">
+            <input class="field max-w-[340px]" id="temaSearch" placeholder="Cercar un tema, un any o un personatge…">
+            <span class="chip num" id="temaCount"></span>
+          </div>
+          <div class="mt-[18px]" id="temaList"></div>
+        </section>
+
+        <!-- ============ COMPARADOR ============ -->
+        <section class="sec" id="sec-comparador" hidden>
+          <div class="eyebrow">Eina · pensada per a la A.3</div>
+          <h1 class="mt-[8px]" style="font-size:clamp(26px,4vw,34px)">Comparador constitucional</h1>
+          <p class="lead max-w-[62ch] mt-[10px]">
+            La A.3 no s'aprova definint els dos textos per separat: s'ha de <strong>relacionar</strong>. Tria'n dos i l'eina et dona la taula,
+            dos punts en comú i dues diferències, amb el context de cadascun.
+          </p>
+
+          <div class="flex flex-wrap gap-[12px] items-end mt-[20px]">
+            <div><label class="eyebrow mb-[6px]" for="cmpA" style="display:block">Text A</label><select class="field w-auto" id="cmpA"></select></div>
+            <div><label class="eyebrow mb-[6px]" for="cmpB" style="display:block">Text B</label><select class="field w-auto" id="cmpB"></select></div>
+            <button class="btn btn-ghost" id="cmpSwap">Intercanviar</button>
+          </div>
+
+          <div class="mt-[22px]" id="cmpOut"></div>
+        </section>
+
+        <!-- ============ BONUS BALEAR ============ -->
+        <section class="sec" id="sec-balear" hidden>
+          <div class="eyebrow">Eina · punts extra</div>
+          <h1 class="mt-[8px]" style="font-size:clamp(26px,4vw,34px)">Bonus balear</h1>
+          <p class="lead max-w-[62ch] mt-[10px]">
+            Els criteris ho diuen literalment: al marge de les preguntes específiques sobre les Balears, es valora de manera especialment positiva
+            incorporar-hi referències. Traduït a punts:
+          </p>
+
+          <div class="grid-auto mt-[20px]">
+            <div class="card"><div class="eyebrow">A.1 i A.3</div><div class="num text-[30px] text-[color:var(--gold)]">+0,25</div><p class="lead text-[13px]">a cadascuna</p></div>
+            <div class="card"><div class="eyebrow">B · Comentari</div><div class="num text-[30px] text-[color:var(--gold)]">+0,5</div><p class="lead text-[13px]">amb una sola frase ben col·locada</p></div>
+            <div class="card"><div class="eyebrow">C · Tema</div><div class="num text-[30px] text-[color:var(--gold)]">+0,5</div><p class="lead text-[13px]">encara que el tema sigui estatal</p></div>
+            <div class="card" style="background:var(--tint-gold); border-color:color-mix(in srgb,var(--gold) 40%,transparent)">
+              <div class="eyebrow text-[color:var(--gold)]">Total a l'abast</div><div class="num text-[30px] text-[color:var(--gold)]">+1,5</div>
+              <p class="lead text-[13px]">per unes quatre frases memoritzades</p>
+            </div>
+          </div>
+
+          <h2 class="text-[22px] mt-[32px]">Frases pont, per període</h2>
+          <p class="lead mt-[6px]">Memoritza'n una per bloc. Les del teu guió es guarden en aquest dispositiu.</p>
+          <div class="flex gap-[8px] flex-wrap mt-[14px]" id="balFilters"></div>
+          <div class="grid-auto mt-[16px]" id="balList"></div>
+
+          <div class="card mt-[24px]">
+            <div class="eyebrow">El meu guió balear</div>
+            <div class="mt-[10px]" id="balPlan"></div>
+          </div>
+
+          <h2 class="text-[22px] mt-[32px]">On encaixa cada frase</h2>
+          <p class="lead mt-[6px]">Tria la referència balear correcta per a cada enunciat. Tres encerts seguits i la tens automatitzada.</p>
+          <div class="card mt-[14px]" id="balQuiz"></div>
+        </section>
+
+        <!-- ============ CRITERIS ============ -->
+        <section class="sec" id="sec-criteris" hidden>
+          <div class="eyebrow">Document de referència</div>
+          <h1 class="mt-[8px]" style="font-size:clamp(26px,4vw,34px)">Criteris i penalitzacions</h1>
+          <p class="lead max-w-[62ch] mt-[10px]">
+            Els criteris generals d'avaluació de la convocatòria, en el mateix ordre en què els llegeix qui et corregeix.
+          </p>
+          <div class="grid-auto mt-[20px]" id="critList"></div>
+
+          <h2 class="text-[22px] mt-[32px]">Correcció gramatical, lèxica i ortogràfica</h2>
+          <div class="card mt-[14px]">
+            <div class="stack gap-[12px]">
+              <div class="flex gap-[12px] items-baseline"><span class="pill-score num">0,00</span><p class="lead">Les <strong>dues primeres</strong> incorreccions ortogràfiques no descompten. Una mateixa falta repetida compta una sola vegada.</p></div>
+              <div class="flex gap-[12px] items-baseline"><span class="pill-score num">−0,10</span><p class="lead">Per cada falta <strong>a partir de la tercera</strong>.</p></div>
+              <div class="flex gap-[12px] items-baseline"><span class="pill-score num">−1,00</span><p class="lead">Deducció màxima global de l'exercici, encara que la suma sigui superior.</p></div>
+              <div class="flex gap-[12px] items-baseline"><span class="pill-score num">−0,50</span><p class="lead">Màxim per errors de redacció, presentació, manca de coherència o de cohesió i incorreccions lèxiques o gramaticals.</p></div>
+            </div>
+            <hr class="rule" style="margin:16px 0">
+            <p class="lead text-[13px] text-[color:var(--muted)]">
+              Base normativa: Reial decret 534/2024, d'11 de juny, art. 13.10, i acord de la Comissió Organitzadora de les PAU. La valoració d'aquests aspectes no pot ser inferior al 10 % de la puntuació.
+            </p>
+          </div>
+        </section>
+
+        <!-- ============ ARENA ============ -->
+        <section class="sec" id="sec-arena" hidden>
+          <div class="eyebrow">Simulador · correcció automàtica</div>
+          <h1 class="mt-[8px]" style="font-size:clamp(26px,4vw,34px)">Arena d'avaluació · EvAU 2026</h1>
+          <p class="lead max-w-[62ch] mt-[10px]">
+            Exercicis reals de la convocatòria de 2026. Escriu la resposta, prem Corregir i rep un informe construït sobre els criteris específics
+            d'aquest model d'examen: coneixement global, capacitat analítica, claredat expositiva i vocabulari específic.
+          </p>
+
+          <div class="flex flex-wrap gap-[12px] items-end mt-[20px]">
+            <div class="min-w-0" style="flex:1 1 320px">
+              <label class="eyebrow mb-[6px]" for="arenaSelect" style="display:block">Exercici</label>
+              <select class="field" id="arenaSelect"></select>
+            </div>
+            <button class="btn btn-ghost" id="arenaRandom">Sortida aleatòria</button>
+          </div>
+
+          <div class="mt-[18px]" id="arenaPrompt"></div>
+
+          <div class="mt-[18px]">
+            <div class="flex justify-between items-baseline flex-wrap gap-[8px]">
+              <label class="eyebrow" for="arenaText">La teva resposta</label>
+              <span class="num text-[12px] text-[color:var(--muted)]" id="arenaMeta">0 paraules · ~0 línies</span>
+            </div>
+            <textarea class="field mt-[8px]" id="arenaText" placeholder="Escriu aquí, com a l'examen. Comença amb una definició i ordena-ho cronològicament…"></textarea>
+          </div>
+
+          <div class="card mt-[14px]">
+            <div class="eyebrow">Simulador de penalitzacions</div>
+            <p class="lead text-[13px] mt-[6px] text-[color:var(--muted)]">Advertència fictícia: aquí decideixes tu quantes faltes hauria marcat el corrector, per veure com et menja la nota.</p>
+            <div class="flex flex-wrap gap-[20px] mt-[12px] items-center">
+              <div style="flex:1 1 260px">
+                <label class="text-[13px] text-[color:var(--ink-soft)]" for="arenaFaltes">Faltes d'ortografia marcades: <b class="num" id="arenaFaltesN">0</b></label>
+                <input class="mt-[6px]" type="range" id="arenaFaltes" min="0" max="15" value="0" step="1" style="width:100%; accent-color:var(--wine)">
+              </div>
+              <div style="flex:1 1 220px">
+                <label class="eyebrow mb-[6px]" for="arenaRedaccio" style="display:block">Redacció i cohesió</label>
+                <select class="field" id="arenaRedaccio">
+                  <option value="0">Correcta (0)</option>
+                  <option value="0.2">Alguna incorrecció lèxica (−0,2)</option>
+                  <option value="0.35">Frases mal travades (−0,35)</option>
+                  <option value="0.5">Text desordenat i sense cohesió (−0,5)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-[8px] flex-wrap mt-[16px]">
+            <button class="btn btn-primary" id="arenaCorrect">Corregir</button>
+            <button class="btn" id="arenaModel">Veure resposta model</button>
+            <button class="btn btn-ghost" id="arenaClear">Buidar</button>
+          </div>
+
+          <div class="mt-[22px]" id="arenaOut"></div>
+          <div class="mt-[18px]" id="arenaModelOut"></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   DADES · totes extretes dels materials oficials de la PBAU/EvAU
+   (criteris, enunciat del model 2 de juny de 2026, banc d'exemples i matriu)
+   ========================================================================= */
+
+const FLASHCARDS = [
+  {t:"Abdicacions de Baiona", b:"s. XIX", d:"Maig de 1808: Ferran VII retorna la corona a Carles IV i aquest la cedeix a Napoleó, que la dona al seu germà Josep I. Origen immediat de la Guerra del Francès."},
+  {t:"Motí d'Aranjuez", b:"s. XIX", d:"Revolta de març de 1808 contra Godoy que forçà l'abdicació de Carles IV en el seu fill Ferran VII, setmanes abans de Baiona."},
+  {t:"Guerra del Francès (1808-1814)", b:"s. XIX", d:"Conflicte contra la França napoleònica que combinà guerra convencional, guerrilla i una revolució política simultània: les Corts de Cadis.", bal:"A les Balears: Junta Suprema de Mallorca (1808) i arribada massiva de refugiats peninsulars; Menorca havia tornat a Espanya amb la Pau d'Amiens (1802)."},
+  {t:"Constitució de 1812", b:"s. XIX", d:"«La Pepa», promulgada a Cadis el 19 de març de 1812: sobirania nacional, divisió de poders, sufragi universal masculí indirecte i confessionalitat catòlica."},
+  {t:"Manifest dels Perses (1814)", b:"s. XIX", d:"Escrit de 69 diputats absolutistes que demanà a Ferran VII la derogació de l'obra de Cadis; precedí el decret de 4 de maig de 1814."},
+  {t:"Trienni Liberal (1820-1823)", b:"s. XIX", d:"Etapa liberal del regnat de Ferran VII oberta pel pronunciament de Riego; acabà amb la intervenció dels Cent Mil Fills de Sant Lluís."},
+  {t:"Dècada Ominosa (1823-1833)", b:"s. XIX", d:"Darrera etapa absolutista de Ferran VII: repressió del liberalisme i conflicte successori que desembocà en les guerres carlines."},
+  {t:"Carlisme", b:"s. XIX", d:"Moviment contrarevolucionari partidari de Carles Maria Isidre, amb el lema «Déu, Pàtria, Furs i Rei» i suports rurals al País Basc, Navarra i el Maestrat."},
+  {t:"Desamortització de Mendizábal", b:"s. XIX", d:"Procés iniciat el 1836 d'expropiació i venda en subhasta pública dels béns del clergat regular, per finançar la guerra carlina i crear una base social liberal."},
+  {t:"Desamortització de Madoz (1855)", b:"s. XIX", d:"Desamortització general del Bienni Progressista: afectà béns de l'Estat, del clergat i sobretot els propis i comuns dels municipis; finançà el ferrocarril.", bal:"A Mallorca reforçà la gran propietat i la burgesia urbana, sense repartiment entre la pagesia."},
+  {t:"Llei general de ferrocarrils (1855)", b:"s. XIX", d:"Norma que declarà d'interès general les línies, en fixà el traçat radial des de Madrid i atragué capital estranger amb exempcions aranzelàries."},
+  {t:"Llei Moyano (1857)", b:"s. XIX", d:"Llei d'instrucció pública que dividí l'ensenyament en tres graus i declarà la primària obligatòria i gratuïta per als qui no la poguessin pagar."},
+  {t:"Manifest de Manzanares (1854)", b:"s. XIX", d:"Text redactat per Cánovas que donà programa a la Vicalvarada i obrí el Bienni Progressista: rebaixa d'imposts, reforma electoral i Milícia Nacional."},
+  {t:"Sexenni Democràtic (1868-1874)", b:"s. XIX", d:"Període obert per la revolució de La Gloriosa: govern provisional, Constitució de 1869, monarquia d'Amadeu de Savoia i Primera República."},
+  {t:"Constitució de 1869", b:"s. XIX", d:"Primera constitució democràtica espanyola: sufragi universal masculí, àmplia declaració de drets, llibertat de cultes i monarquia democràtica."},
+  {t:"Primera República Espanyola", b:"s. XIX", d:"Règim democràtic i republicà vigent entre febrer de 1873 i desembre de 1874, que reemplaçà la monarquia d'Amadeu de Savoia; quatre presidents i final amb el cop de Pavía."},
+  {t:"Cantonalisme", b:"s. XIX", d:"Moviment de 1873 que proclamà cantons independents (Cartagena el més conegut) exigint la federació des de baix; desbordà la Primera República."},
+  {t:"Restauració Borbònica", b:"Restauració", d:"Sistema polític dissenyat per Cánovas des de 1875: monarquia d'Alfons XII, Constitució de 1876, sobirania compartida Rei-Corts i torn pacífic de partits."},
+  {t:"Torn de partits", b:"Restauració", d:"Alternança pactada entre el Partit Conservador (Cánovas) i el Liberal (Sagasta), sostinguda per eleccions falsejades des del Ministeri de la Governació."},
+  {t:"Caciquisme", b:"Restauració", d:"Control clientelar del vot pels cacics locals; amb el pucherazo i l'encasellat, garantia el resultat electoral pactat abans de votar."},
+  {t:"Crisi de 1898", b:"Restauració", d:"Derrota davant els Estats Units i pèrdua de Cuba, Puerto Rico i Filipines pel Tractat de París; obrí el regeneracionisme i erosionà el sistema canovista."},
+  {t:"Regeneracionisme", b:"Restauració", d:"Corrent crític posterior a 1898, amb Joaquín Costa al capdavant («escola i rebost»), que denunciava el caciquisme i reclamava modernitzar el país."},
+  {t:"Antoni Maura", b:"Restauració", d:"Polític mallorquí, líder conservador i cap de govern; la seva «revolució des de dalt» s'estroncà amb la Setmana Tràgica de 1909.", bal:"Nascut a Palma: una referència balear que serveix per a qualsevol pregunta sobre la Restauració."},
+  {t:"José Canalejas", b:"Restauració", d:"Líder liberal i cap de govern (1910-1912): «llei del cadenat» sobre els ordes religiosos i substitució de les quintes; fou assassinat el 1912."},
+  {t:"Assemblea de Parlamentaris (1917)", b:"Restauració", d:"Reunió a Barcelona de diputats i senadors, sobretot catalanistes, que exigí Corts Constituents; una de les tres cares de la crisi de 1917."},
+  {t:"Dictadura de Primo de Rivera", b:"Restauració", d:"Règim autoritari nascut del cop del 13 de setembre de 1923: Directori militar (1923-1925), Directori civil (1925-1930), partit únic i fi de la guerra del Marroc."},
+  {t:"Segona República (1931-1936)", b:"República i Guerra", d:"Règim democràtic proclamat el 14 d'abril de 1931 després de les eleccions municipals; Constitució de 1931 i grans reformes estructurals.", bal:"Projecte d'Estatut d'autonomia de Mallorca i Eivissa (1931), que no arribà a prosperar."},
+  {t:"Constitució de 1931", b:"República i Guerra", d:"Text democràtic i laic: sobirania popular, república de treballadors de tota classe, sufragi universal (també femení), Estat integral i unicameralisme."},
+  {t:"Bienni Reformista (1931-1933)", b:"República i Guerra", d:"Primera etapa republicana, amb Azaña al capdavant: reforma agrària, militar, religiosa, educativa, sociolaboral i Estatut de Catalunya."},
+  {t:"Estat integral", b:"República i Guerra", d:"Fórmula de l'article 1 de la Constitució de 1931: ni federal ni centralista, permetia autonomia a les regions que aprovassin un estatut."},
+  {t:"Clara Campoamor", b:"República i Guerra", d:"Diputada del Partit Radical que defensà i aconseguí el sufragi femení a les Corts Constituents de 1931."},
+  {t:"Bienni Conservador o radicalcedista", b:"República i Guerra", d:"Etapa 1933-1936 de govern del Partit Radical amb suport de la CEDA: aturada de les reformes, revolució d'octubre de 1934 i amnistia als colpistes de 1932."},
+  {t:"Front Popular", b:"República i Guerra", d:"Coalició de republicans d'esquerra, socialistes i comunistes que guanyà les eleccions de febrer de 1936 amb un programa d'amnistia i represa de les reformes."},
+  {t:"Guerra Civil (1936-1939)", b:"República i Guerra", d:"Conflicte obert pel cop d'estat del 17-18 de juliol de 1936 entre la República i el bàndol revoltat; acabà l 1 d'abril de 1939 amb la victòria franquista.", bal:"El cop triomfà a Mallorca, Eivissa i Formentera; Menorca es mantingué republicana fins al febrer de 1939."},
+  {t:"Desembarcament de Bayo (1936)", b:"República i Guerra", d:"Expedició republicana del capità Alberto Bayo a Mallorca (agost-setembre de 1936) per recuperar l'illa; fracassà i es retirà de Porto Cristo.", bal:"Referència balear de primer nivell per a qualsevol pregunta sobre la Guerra Civil."},
+  {t:"Conde Rossi", b:"República i Guerra", d:"Sobrenom d'Arconovaldo Bonaccorsi, feixista italià arribat a Mallorca el 1936, impulsor de la repressió a l'illa.", bal:"Georges Bernanos en deixà testimoni a «Els grans cementiris sota la lluna»."},
+  {t:"Decret d'Unificació (1937)", b:"República i Guerra", d:"Decret de Franco que fusionà Falange i la Comunió Tradicionalista en FET y de las JONS, partit únic del bàndol revoltat."},
+  {t:"Franquisme", b:"Franquisme", d:"Dictadura personal de Franco (1939-1975): partit únic, nacionalcatolicisme, repressió i absència de llibertats, amb etapes econòmiques molt diferents."},
+  {t:"Autarquia", b:"Franquisme", d:"Política econòmica d'autosuficiència i intervencionisme (1939-1959): racionament, INI, estraperlo i estancament; acabà amb el Pla d'Estabilització."},
+  {t:"Fuero de los Españoles (1945)", b:"Franquisme", d:"Llei fonamental que simulava una declaració de drets limitada pels principis del règim; part del rentat de cara exterior després de 1945."},
+  {t:"Pla d'Estabilització (1959)", b:"Franquisme", d:"Conjunt de mesures liberalitzadores que posaren fi a l'autarquia, devaluaren la pesseta i obriren l'economia a l'exterior; inici del desenvolupisme.", bal:"A les Balears obrí el boom turístic, com recull l'informe de la Cambra de Comerç de 1961."},
+  {t:"Desenvolupisme (1959-1973)", b:"Franquisme", d:"Etapa de fort creixement econòmic amb plans de desenvolupament, turisme, emigració i remeses, acompanyada d'immobilisme polític.", bal:"Palma esdevé un dels motors turístics de l'Estat i rep immigració peninsular."},
+  {t:"Tardofranquisme (1973-1975)", b:"Franquisme", d:"Crisi final del règim: assassinat de Carrero Blanco, crisi del petroli, augment de la conflictivitat i repressió (procés 1001, execucions de 1975)."},
+  {t:"Junta Democràtica (1974)", b:"Transició", d:"Plataforma opositora impulsada pel PCE que reclamava govern provisional, amnistia, llibertat sindical i consulta sobre la forma d'Estat."},
+  {t:"Llei per a la Reforma Política (1976)", b:"Transició", d:"Llei impulsada per Suárez i aprovada en referèndum que desmuntà legalment el franquisme i obrí el camí a les eleccions lliures de juny de 1977."},
+  {t:"Adolfo Suárez", b:"Transició", d:"President del Govern (1976-1981) i líder de la UCD; artífex de la Reforma Política, de la legalització dels partits i de la Constitució de 1978."},
+  {t:"Pactes de la Moncloa (1977)", b:"Transició", d:"Acords entre govern, partits i sindicats per contenir la inflació i la crisi i estabilitzar el procés democràtic."},
+  {t:"Constitució de 1978", b:"Transició", d:"Aprovada en referèndum el 6 de desembre de 1978: monarquia parlamentària, sobirania popular, Estat social i democràtic de dret i Estat de les autonomies."},
+  {t:"Cop d'estat del 23-F", b:"Transició", d:"Intent de cop del 23 de febrer de 1981, amb l'assalt de Tejero al Congrés durant la Transició; fracassà i acabà consolidant la democràcia."},
+  {t:"Estatut d'autonomia de les Illes Balears (1983)", b:"Democràcia", d:"Norma institucional bàsica aprovada el 1983 per la via de l'article 143: Govern, Parlament i consells insulars com a institucions pròpies.", bal:"Via lenta d'accés a l'autonomia, a diferència de Catalunya, el País Basc, Galícia i Andalusia."},
+  {t:"Mariano Rajoy", b:"Democràcia", d:"President del Govern espanyol entre 2011 i 2018 pel Partit Popular, dins l'etapa democràtica actual; sortí del càrrec per una moció de censura."},
+  {t:"Entrada a la CEE (1986)", b:"Democràcia", d:"Adhesió d'Espanya a la Comunitat Econòmica Europea l 1 de gener de 1986: obertura de mercats, fons estructurals i reconversió industrial."},
+  {t:"Crisi financera de 2007", b:"Democràcia", d:"Crisi iniciada amb l'esclat de la bombolla immobiliària i financera: atur massiu, rescat bancari i retallades.", bal:"A les Balears s'hi sumà la dependència del monocultiu turístic i de la construcció."},
+  {t:"Llei de fosses de les Illes Balears (2016)", b:"Democràcia", d:"Llei 10/2016 que atribueix al Govern balear la localització i identificació de desapareguts de la Guerra Civil i el franquisme.", bal:"Es calcula que hi ha unes 56 fosses a Mallorca, Eivissa i Formentera."}
+];
+
+const CRONO_SETS = [
+  {id:"oficial", label:"Sèrie oficial · juny de 2026", items:[
+    {n:"Poblament fenici d'Eivissa", y:-654, d:"c. 654 aC", note:"Fundació d'Ebusus pels fenicis de Cartago."},
+    {n:"Regne visigòtic de Toledo", y:573, d:"s. VI", note:"Toledo, capital del regne visigot; III Concili el 589."},
+    {n:"Construcció de la mesquita de Còrdova", y:785, d:"785", note:"Iniciada per Abd al-Rahman I a l'emirat independent."},
+    {n:"Incorporació de Menorca a Gran Bretanya", y:1713, d:"1713", note:"Tractat d'Utrecht, dins la Guerra de Successió."}
+  ]},
+  {id:"banc", label:"Sèrie del banc d'exemples", items:[
+    {n:"Inici de la presència fenícia a la Península Ibèrica", y:-1100, d:"c. 1100 aC", note:"Fundació de Gadir (Cadis)."},
+    {n:"Conquesta romana de les Illes Balears", y:-123, d:"123 aC", note:"Quint Cecili Metel; fundació de Palma i Pollentia."},
+    {n:"Al-Àndalus", y:711, d:"711", note:"Inici del domini musulmà a la Península."},
+    {n:"Decret de lliure comerç de Carles III", y:1778, d:"1778", note:"Reformisme borbònic i obertura del comerç americà."}
+  ]},
+  {id:"balear", label:"Sèrie balear", items:[
+    {n:"Cultura talaiòtica", y:-1000, d:"c. 1000 aC", note:"Talaiots i navetes a Mallorca i Menorca."},
+    {n:"Conquesta de Mallorca per Jaume I", y:1229, d:"1229", note:"Incorporació a la Corona d'Aragó."},
+    {n:"Conquesta de Menorca per Alfons III", y:1287, d:"1287", note:"Fi del domini musulmà a les illes."},
+    {n:"Incorporació de Menorca a Gran Bretanya", y:1713, d:"1713", note:"Tractat d'Utrecht."}
+  ]},
+  {id:"medieval", label:"Sèrie medieval", items:[
+    {n:"Batalla de Guadalete", y:711, d:"711", note:"Derrota del rei visigot Roderic."},
+    {n:"Proclamació del Califat de Còrdova", y:929, d:"929", note:"Abd al-Rahman III es proclama califa."},
+    {n:"Batalla de Las Navas de Tolosa", y:1212, d:"1212", note:"Victòria cristiana decisiva a Sierra Morena."},
+    {n:"Compromís de Casp", y:1412, d:"1412", note:"Els Trastàmara accedeixen a la Corona d'Aragó."}
+  ]},
+  {id:"antiga", label:"Sèrie antiga", items:[
+    {n:"Poblament fenici d'Eivissa", y:-654, d:"c. 654 aC", note:"Ebusus, colònia fenício-púnica."},
+    {n:"Fundació de Cartago Nova", y:-227, d:"227 aC", note:"Base cartaginesa a la Península (Cartagena)."},
+    {n:"Caiguda de Numància", y:-133, d:"133 aC", note:"Fi de la resistència celtibèrica davant Roma."},
+    {n:"III Concili de Toledo", y:589, d:"589", note:"Conversió de Recared al catolicisme."}
+  ]},
+  {id:"moderna", label:"Sèrie moderna", items:[
+    {n:"Presa de Granada pels Reis Catòlics", y:1492, d:"1492", note:"Fi del regne nassarita; mateix any del viatge de Colom."},
+    {n:"Expulsió dels moriscos", y:1609, d:"1609", note:"Decretada per Felip III."},
+    {n:"Decrets de Nova Planta", y:1716, d:"1707-1716", note:"Supressió dels furs de la Corona d'Aragó."},
+    {n:"Expulsió dels jesuïtes", y:1767, d:"1767", note:"Carles III, després del motí d'Esquilache (1766)."}
+  ]},
+  {id:"borbons", label:"Sèrie borbònica", items:[
+    {n:"Mort de Carles II sense descendència", y:1700, d:"1700", note:"Obre la Guerra de Successió."},
+    {n:"Tractat d'Utrecht", y:1713, d:"1713", note:"Menorca i Gibraltar passen a Gran Bretanya."},
+    {n:"Motí d'Esquilache", y:1766, d:"1766", note:"Revolta a Madrid contra el ministre italià."},
+    {n:"Pau de Basilea", y:1795, d:"1795", note:"Fi de la guerra contra la França revolucionària."}
+  ]},
+  {id:"mixta", label:"Sèrie mixta", items:[
+    {n:"Conquesta romana de les Illes Balears", y:-123, d:"123 aC", note:"Metel el Baleàric."},
+    {n:"Emirat independent d'Abd al-Rahman I", y:756, d:"756", note:"Ruptura política amb Damasc."},
+    {n:"Unió dinàstica dels Reis Catòlics", y:1479, d:"1479", note:"Isabel de Castella i Ferran d'Aragó."},
+    {n:"Felip II fixa la cort a Madrid", y:1561, d:"1561", note:"Capitalitat permanent de la monarquia hispànica."}
+  ]}
+];
+
+const A1_BANK = [
+  {q:"Quan va tenir lloc l'emancipació de les colònies espanyoles d'Amèrica? Quines foren les causes i conseqüències?",
+   items:["Situar-la cronològicament (1810-1824, 1808-1826, regnat de Ferran VII, entre la Guerra del Francès i la mort de Ferran VII: totes són vàlides)","Causes: crisi de la monarquia el 1808, influència de la Il·lustració i de les revolucions americana i francesa, descontentament criolls, suport britànic","Fets i noms: juntes criolles, Bolívar, San Martín, batalles d'Ayacucho (1824)","Conseqüències econòmiques: pèrdua de mercats i de metalls, crisi de la hisenda, ensulsiada del comerç de Cadis","Conseqüències polítiques: prestigi perdut de Ferran VII, militars retornats i pronunciaments"],
+   bal:"El comerç balear amb Amèrica i l'emigració posterior cap a Amèrica i el nord d'Àfrica."},
+  {q:"Quins foren els principals moviments migratoris a l'Espanya del decenni dels seixanta del segle XX? Explica el cas de les Illes Balears.",
+   items:["Migracions interiors: èxode rural cap a Madrid, Catalunya, el País Basc i la costa mediterrània","Emigració exterior cap a l'Europa desenvolupada (Alemanya, França, Suïssa) i paper de les remeses","Causes: mecanització del camp, Pla d'Estabilització de 1959 i demanda de mà d'obra europea","Conseqüències: despoblament rural, creixement urbà i perifèries, canvi social"],
+   bal:"Les Balears passen de zona d'emigració a zona receptora: immigració peninsular (Andalusia, Múrcia, Extremadura) vinculada a l'expansió turística."},
+  {q:"Què va ser la Guerra del Francès? Explica n'algun aspecte relacionat amb les Illes Balears.",
+   items:["Definició i cronologia: 1808-1814, contra la França napoleònica, arran de les abdicacions de Baiona","Doble dimensió: guerra d'alliberament i revolució política (juntes, Corts de Cadis)","Etapes militars: aixecament i Bailèn (1808), domini francès (1809-1811), contraofensiva i Vitòria (1813)","Conseqüències: destrucció econòmica, Constitució de 1812, inici de l'emancipació americana"],
+   bal:"Mallorca no fou ocupada: Junta Suprema de Mallorca, refugi de milers de peninsulars i presoners francesos a Cabrera."},
+  {q:"Què va ser la Restauració Borbònica? Explica els elements essencials del sistema de Cánovas.",
+   items:["Definició: sistema polític iniciat el 1875 amb Alfons XII després del cop de Martínez Campos","Constitució de 1876: sobirania compartida Rei-Corts, bicameralisme, confessionalitat matisada","Torn pacífic entre conservadors i liberals","Falsejament electoral: cacics, encasellat i pucherazo","Exclusió de carlins, republicans, obreristes i nacionalismes perifèrics"],
+   bal:"Antoni Maura, mallorquí, fou líder conservador i cap de govern; el caciquisme funcionà també a les illes."},
+  {q:"Explica el concepte de Dictadura de Primo de Rivera i descriu-ne les dues grans etapes.",
+   items:["Definició: règim autoritari del cop del 13 de setembre de 1923, amb suport del rei Alfons XIII","Directori militar (1923-1925): suspensió constitucional, repressió del catalanisme i de la CNT, desembarcament d'Alhucemas (1925)","Directori civil (1925-1930): Unió Patriòtica, Assemblea Nacional Consultiva, obres públiques i monopolis (CAMPSA)","Final: oposició d'intel·lectuals i militars, crisi econòmica, dimissió el gener de 1930 i dictablanda de Berenguer"],
+   bal:"Modernització i primeres infraestructures turístiques: el Foment del Turisme de Mallorca (1905) i l'arribada dels primers creuers."},
+  {q:"Quines característiques va tenir la violència política a Espanya durant la Guerra Civil?",
+   items:["Violència a les dues zones, amb magnituds i lògiques diferents","Zona republicana: incontrolada els primers mesos (Paracuellos), després control governamental","Zona revoltada: repressió sistemàtica i planificada, avalada per les autoritats militars i per part de l'Església","Perfils de víctimes: càrrecs republicans, sindicalistes, mestres i dones represaliades","Continuïtat de la repressió després de 1939"],
+   bal:"Mallorca, Eivissa i Formentera sota els revoltats des del juliol de 1936; el Conde Rossi i la repressió contra les dones; Menorca, republicana fins al 1939."},
+  {q:"En què consistí el Pla d'Estabilització de 1959 i quines en foren les conseqüències?",
+   items:["Context: fracàs de l'autarquia, inflació i esgotament de les reserves","Mesures: devaluació de la pesseta, contenció de la despesa, liberalització del comerç exterior i entrada d'inversió estrangera","Conseqüències immediates: recessió i emigració","Conseqüències a mitjà termini: desenvolupisme, plans de desenvolupament i creixement industrial i turístic"],
+   bal:"L'informe de la Cambra de Comerç de Mallorca i Eivissa (1961) descriu el canvi de moneda i l'auge turístic a Palma."},
+  {q:"Què va ser la Transició democràtica i quins problemes hagué d'afrontar?",
+   items:["Definició: procés de 1975-1982 que passà de la dictadura a la democràcia sense ruptura violenta","Protagonistes: Joan Carles I, Adolfo Suárez, Torcuato Fernández-Miranda, oposició democràtica","Fites: Llei per a la Reforma Política (1976), legalització dels partits, eleccions de juny de 1977, Constitució de 1978","Problemes: crisi econòmica, terrorisme (ETA, GRAPO), involucionisme militar (23-F) i encaix territorial"],
+   bal:"Preautonomia i Estatut d'autonomia de les Illes Balears de 1983, per la via de l'article 143."},
+  {q:"Quines característiques presentà l'Estat de les autonomies de la Constitució de 1978?",
+   items:["Unitat de la nació i dret a l'autonomia de nacionalitats i regions (art. 2)","Dues vies d'accés: art. 151 (ràpida) i art. 143 (lenta)","Estatuts d'autonomia com a norma institucional bàsica","Repartiment competencial i finançament; caràcter obert del model"],
+   bal:"Les Illes Balears accediren per l'article 143 el 1983, amb els consells insulars com a institució pròpia."},
+  {q:"Elabora un esquema sobre les diverses classes socials presents a l'Espanya del segle XIX.",
+   items:["Vells privilegiats: noblesa terratinent i clergat, afeblits per les desamortitzacions","Burgesia: financera i industrial, i la burgesia agrària que compra terres desamortitzades","Classes mitjanes urbanes reduïdes: funcionaris, militars, professions liberals","Pagesia majoritària: jornalers del sud i petits propietaris del nord","Proletariat industrial minoritari, concentrat a Catalunya i el País Basc"],
+   bal:"A Mallorca, pes de la gran propietat (les possessions) i d'una burgesia comercial i manufacturera (calçat a Inca i Llucmajor)."}
+];
+
+const CONSTITUCIONS = [
+  {id:"1812", name:"Constitució de 1812", sub:"Corts de Cadis",
+   ctx:"Aprovada el 19 de març de 1812 en plena Guerra del Francès, per unes Corts reunides a Cadis amb la ciutat assetjada.",
+   f:{sobirania:{k:"nacional", t:"Sobirania nacional: resideix essencialment en la Nació"},
+      forma:{k:"monarquia-limitada", t:"Monarquia limitada i hereditària"},
+      poders:{k:"estricta", t:"Divisió estricta de poders, amb predomini de les Corts"},
+      sufragi:{k:"universal-masculi", t:"Sufragi universal masculí indirecte (per compromissaris)"},
+      drets:{k:"amplis", t:"Drets reconeguts: llibertat d'impremta, propietat, igualtat davant la llei"},
+      religio:{k:"confessional", t:"Confessionalitat catòlica exclusiva: prohibició d'altres cultes"},
+      territorial:{k:"centralista", t:"Estat centralista i uniforme; divisió provincial"},
+      corts:{k:"unicameral", t:"Corts unicamerals"}}},
+  {id:"1837", name:"Constitució de 1837", sub:"Regència de Maria Cristina",
+   ctx:"Text de transacció del liberalisme progressista durant la minoria d'edat d'Isabel II i la Primera Guerra Carlina.",
+   f:{sobirania:{k:"nacional", t:"Sobirania nacional, amb concessions a la Corona"},
+      forma:{k:"monarquia-limitada", t:"Monarquia constitucional"},
+      poders:{k:"compartida", t:"Divisió de poders amb àmplies prerrogatives reials (veto, dissolució)"},
+      sufragi:{k:"censatari", t:"Sufragi censatari directe, ampliat respecte del moderantisme"},
+      drets:{k:"amplis", t:"Declaració de drets amb llibertat d'impremta sense censura prèvia"},
+      religio:{k:"manteniment", t:"L'Estat manté el culte i els ministres, sense declaració confessional dura"},
+      territorial:{k:"centralista", t:"Estat centralista, amb ajuntaments electius"},
+      corts:{k:"bicameral", t:"Bicameralisme: Congrés i Senat"}}},
+  {id:"1845", name:"Constitució de 1845", sub:"Dècada Moderada",
+   ctx:"Constitució del moderantisme de Narváez, pensada per limitar la participació i reforçar la Corona.",
+   f:{sobirania:{k:"compartida", t:"Sobirania compartida entre el Rei i les Corts"},
+      forma:{k:"monarquia-limitada", t:"Monarquia constitucional de signe moderat"},
+      poders:{k:"compartida", t:"Predomini executiu: el Rei nomena el govern i pot dissoldre les Corts"},
+      sufragi:{k:"censatari", t:"Sufragi censatari molt restringit (aprox. 1 % de la població)"},
+      drets:{k:"restringits", t:"Drets retallats i remesos a lleis posteriors; censura de premsa"},
+      religio:{k:"confessional", t:"Confessionalitat catòlica de l'Estat"},
+      territorial:{k:"centralista", t:"Centralisme reforçat: alcaldes de nomenament reial"},
+      corts:{k:"bicameral", t:"Bicameralisme amb Senat de designació reial i vitalici"}}},
+  {id:"1869", name:"Constitució de 1869", sub:"Sexenni Democràtic",
+   ctx:"Primera constitució democràtica espanyola, redactada per unes Corts Constituents elegides per sufragi universal masculí després de La Gloriosa.",
+   f:{sobirania:{k:"nacional", t:"Sobirania nacional, sense participació de la Corona"},
+      forma:{k:"monarquia-democratica", t:"Monarquia democràtica: el rei és una institució elegida per les Corts"},
+      poders:{k:"estricta", t:"Divisió estricta de poders; el rei regna però no governa"},
+      sufragi:{k:"universal-masculi", t:"Sufragi universal masculí directe (majors de 25 anys)"},
+      drets:{k:"amplis", t:"Declaració de drets extensa i il·limitable: reunió, associació, expressió, inviolabilitat"},
+      religio:{k:"llibertat-cultes", t:"Llibertat de cultes, amb manteniment del clergat catòlic"},
+      territorial:{k:"centralista", t:"Estat unitari, amb ajuntaments i diputacions electius"},
+      corts:{k:"bicameral", t:"Bicameralisme amb Senat elegit"}}},
+  {id:"1876", name:"Constitució de 1876", sub:"Restauració",
+   ctx:"Text flexible dissenyat per Cánovas perquè hi poguessin governar tant conservadors com liberals; vigent fins al 1923.",
+   f:{sobirania:{k:"compartida", t:"Sobirania compartida entre el Rei i les Corts"},
+      forma:{k:"monarquia-limitada", t:"Monarquia constitucional amb un rei amb amplis poders"},
+      poders:{k:"compartida", t:"El Rei nomena i separa ministres, sanciona lleis i dissol les Corts"},
+      sufragi:{k:"variable", t:"Deixat a llei ordinària: censatari (1878) i universal masculí des de 1890"},
+      drets:{k:"restringits", t:"Drets enunciats però regulats i retallats per lleis posteriors"},
+      religio:{k:"confessional", t:"Confessionalitat catòlica amb tolerància privada d'altres cultes"},
+      territorial:{k:"centralista", t:"Centralisme, amb governadors civils com a peça del caciquisme"},
+      corts:{k:"bicameral", t:"Bicameralisme: Senat mixt (vitalicis, per dret propi i elegits)"}}},
+  {id:"1931", name:"Constitució de 1931", sub:"Segona República",
+   ctx:"Aprovada el 9 de desembre de 1931 per unes Corts Constituents d'esquerres, obre el període reformista de la Segona República.",
+   f:{sobirania:{k:"popular", t:"Sobirania popular: els poders emanen del poble"},
+      forma:{k:"republica", t:"República democràtica de treballadors de tota classe"},
+      poders:{k:"estricta", t:"Divisió de poders amb primacia del legislatiu; president de la República amb poders limitats"},
+      sufragi:{k:"universal", t:"Sufragi universal per a homes i dones majors de 23 anys (des de 1933)"},
+      drets:{k:"amplis", t:"Àmplia declaració de drets i llibertats, amb drets socials, divorci i igualtat jurídica"},
+      religio:{k:"laic", t:"Estat laic: separació Església-Estat, dissolució dels jesuïtes i fi del pressupost de culte"},
+      territorial:{k:"integral", t:"Estat integral: autonomia per a les regions que aprovin un estatut"},
+      corts:{k:"unicameral", t:"Corts unicamerals"}}},
+  {id:"1978", name:"Constitució de 1978", sub:"Transició",
+   ctx:"Fruit del consens de la Transició, elaborada pels set ponents i aprovada en referèndum el 6 de desembre de 1978.",
+   f:{sobirania:{k:"popular", t:"Sobirania popular: resideix en el poble espanyol"},
+      forma:{k:"monarquia-parlamentaria", t:"Monarquia parlamentària; Estat social i democràtic de dret"},
+      poders:{k:"estricta", t:"Divisió de poders amb Tribunal Constitucional i govern responsable davant el Congrés"},
+      sufragi:{k:"universal", t:"Sufragi universal per a majors de 18 anys"},
+      drets:{k:"amplis", t:"Àmplia taula de drets fonamentals, amb garanties, Defensor del Poble i recurs d'empara"},
+      religio:{k:"aconfessional", t:"Aconfessionalitat amb cooperació amb l'Església catòlica (art. 16)"},
+      territorial:{k:"autonomic", t:"Estat de les autonomies: unitat de la nació i dret a l'autonomia (art. 2, 137 i 143)"},
+      corts:{k:"bicameral", t:"Bicameralisme: Congrés dels Diputats i Senat"}}},
+  {id:"baiona", name:"Estatut de Baiona (1808)", sub:"Carta atorgada",
+   ctx:"Carta atorgada per Napoleó a Josep I: no és una constitució pactada, sinó concedida des de dalt.",
+   f:{sobirania:{k:"reial", t:"Sobirania reial: el text és atorgat, no emana de la Nació"},
+      forma:{k:"monarquia-limitada", t:"Monarquia de Josep I sota tutela napoleònica"},
+      poders:{k:"compartida", t:"Poder concentrat en el monarca, amb òrgans consultius"},
+      sufragi:{k:"censatari", t:"Representació estamental i restringida"},
+      drets:{k:"restringits", t:"Algunes reformes il·lustrades: llibertat d'impremta ajornada, fi de la tortura"},
+      religio:{k:"confessional", t:"Catolicisme com a única religió permesa"},
+      territorial:{k:"centralista", t:"Estat centralitzat a la manera napoleònica"},
+      corts:{k:"estamental", t:"Corts estamentals amb funcions consultives"}}},
+  {id:"1873", name:"Projecte de Constitució federal (1873)", sub:"Primera República",
+   ctx:"Projecte no promulgat de la Primera República: hauria convertit Espanya en una federació de 17 estats.",
+   f:{sobirania:{k:"popular", t:"Sobirania popular, amb sobirania compartida amb els estats federats"},
+      forma:{k:"republica", t:"República federal"},
+      poders:{k:"estricta", t:"Quatre poders: legislatiu, executiu, judicial i de relació (president)"},
+      sufragi:{k:"universal-masculi", t:"Sufragi universal masculí"},
+      drets:{k:"amplis", t:"Drets naturals anteriors i superiors a l'Estat"},
+      religio:{k:"separacio", t:"Separació radical de l'Església i l'Estat"},
+      territorial:{k:"federal", t:"Federació de 17 estats, amb les Balears com a estat propi"},
+      corts:{k:"bicameral", t:"Corts bicamerals: Congrés i Senat dels estats"}}}
+];
+
+const CMP_FIELDS = [
+  {k:"sobirania", label:"Sobirania"},
+  {k:"drets", label:"Drets i llibertats"},
+  {k:"sufragi", label:"Sufragi"},
+  {k:"forma", label:"Forma d'Estat i de govern"},
+  {k:"territorial", label:"Organització territorial"},
+  {k:"religio", label:"Qüestió religiosa"},
+  {k:"poders", label:"Divisió de poders"},
+  {k:"corts", label:"Corts"}
+];
+</script>
+
+<script>
+/* ===================== TEMES LLARGS (part C) ===================== */
+const TEMES = [
+  {id:"frances", t:"La Guerra del Francès (1808-1814)", sub:"Concepte, etapes i Corts de Cadis",
+   def:"Conflicte entre Espanya i la França napoleònica (1808-1814) que fou alhora una guerra d'alliberament i una revolució política: mentre es combatia l'ocupant, unes Corts reunides a Cadis desmuntaven l'Antic Règim.",
+   etapes:[
+     {y:"1807-1808", t:"Crisi de la monarquia", x:"Tractat de Fontainebleau (1807), motí d'Aranjuez (març de 1808) i abdicacions de Baiona (maig de 1808): Carles IV i Ferran VII cedeixen la corona a Napoleó, que la dona a Josep I."},
+     {y:"1808", t:"Aixecament i Bailèn", x:"2 de maig a Madrid, formació de juntes provincials i de la Junta Central Suprema; victòria de Bailèn (juliol) i retirada francesa fins a l'Ebre."},
+     {y:"1808-1812", t:"Domini francès i guerrilla", x:"Napoleó entra amb la Grande Armée; setges de Saragossa i Girona; la guerrilla (l'Empecinado, Espoz y Mina) desgasta l'ocupant."},
+     {y:"1810-1814", t:"Les Corts de Cadis", x:"Corts reunides el 1810: sobirania nacional, decrets abolicionistes (senyorius, Inquisició, gremis) i Constitució de 1812."},
+     {y:"1812-1814", t:"Contraofensiva i final", x:"Arapiles (1812), Vitòria (1813) i Tractat de Valençay (desembre de 1813): Ferran VII torna i el 1814 deroga l'obra de Cadis."}],
+   noms:["Godoy","Carles IV","Ferran VII","Napoleó","Josep I","Agustina d'Aragó","Argüelles"],
+   concepts:["afrancesats","juntes","guerrilla","sobirania nacional","liberals i serviles"],
+   bal:"Mallorca no fou ocupada: la Junta Suprema de Mallorca assumí el poder, l'illa acollí milers de refugiats peninsulars i a Cabrera hi foren confinats milers de presoners francesos. Menorca havia retornat a la sobirania espanyola amb la Pau d'Amiens (1802).",
+   errors:["Dir «Guerra de la Independència» sense definir-la ni datar-la","Explicar només batalles i oblidar les Corts de Cadis","No connectar-la amb l'emancipació americana"]},
+
+  {id:"ferran", t:"El regnat de Ferran VII (1814-1833)", sub:"Absolutisme, Trienni i Dècada Ominosa",
+   def:"Regnat marcat per l'oscil·lació entre absolutisme i liberalisme, la pèrdua de l'imperi americà i el conflicte successori que desembocà en les guerres carlines.",
+   etapes:[
+     {y:"1814-1820", t:"Restauració de l'absolutisme", x:"Manifest dels Perses i decret de 4 de maig de 1814: derogació de la Constitució de 1812, repressió i pronunciaments liberals fracassats."},
+     {y:"1820-1823", t:"Trienni Liberal", x:"Pronunciament de Riego a Las Cabezas de San Juan; restabliment de la Constitució; divisió entre moderats i exaltats; reacció absolutista i partides realistes."},
+     {y:"1823-1833", t:"Dècada Ominosa", x:"Intervenció dels Cent Mil Fills de Sant Lluís; repressió (Riego, Mariana Pineda, Torrijos); crisi de la hisenda per la pèrdua d'Amèrica; Pragmàtica Sanció (1830) i conflicte successori."}],
+   noms:["Ferran VII","Riego","Mariana Pineda","Torrijos","Carles Maria Isidre","Maria Cristina"],
+   concepts:["absolutisme","pronunciament","Pragmàtica Sanció","emancipació americana","carlisme"],
+   bal:"El Trienni Liberal tingué eco a les illes amb societats patriòtiques i premsa liberal a Palma; l'emancipació americana afectà el comerç marítim balear i empenyé l'emigració posterior.",
+   errors:["Confondre les etapes o datar-les malament","Oblidar l'emancipació d'Amèrica com a conseqüència del regnat"]},
+
+  {id:"isabel", t:"El regnat d'Isabel II (1833-1868)", sub:"La construcció de l'Estat liberal",
+   def:"Període en què s'implanta l'Estat liberal a Espanya enmig d'inestabilitat política, guerres carlines, intervencionisme militar i un sistema de partits excloent.",
+   etapes:[
+     {y:"1833-1840", t:"Regència de Maria Cristina", x:"Primera Guerra Carlina (final amb el Conveni de Bergara, 1839); Estatut Reial (1834); desamortització de Mendizábal (1836); Constitució de 1837."},
+     {y:"1840-1843", t:"Regència d'Espartero", x:"Govern progressista i autoritari; bombardeig de Barcelona; caiguda el 1843."},
+     {y:"1844-1854", t:"Dècada Moderada", x:"Narváez: Constitució de 1845, Guàrdia Civil (1844), Concordat de 1851, sistema fiscal de Mon-Santillán i centralització administrativa."},
+     {y:"1854-1856", t:"Bienni Progressista", x:"Vicalvarada i Manifest de Manzanares; desamortització de Madoz (1855) i lleis de ferrocarrils i de societats."},
+     {y:"1856-1868", t:"Desintegració del sistema", x:"Alternança entre moderats i Unió Liberal (O'Donnell); crisi econòmica de 1866, escàndols i Pacte d'Ostende (1866)."}],
+   noms:["Isabel II","Maria Cristina","Espartero","Narváez","Mendizábal","Madoz","O'Donnell"],
+   concepts:["desamortització","sufragi censatari","Milícia Nacional","pronunciament","carlisme"],
+   bal:"Les desamortitzacions consolidaren la gran propietat i la burgesia urbana mallorquina; es desenvolupà una indústria del calçat a Inca i Llucmajor i una burgesia comercial vinculada al port de Palma.",
+   errors:["Descriure les constitucions sense comparar-les","No explicar què fou realment una desamortització (procés, beneficiaris, efectes)"]},
+
+  {id:"sexenni", t:"El Sexenni Democràtic (1868-1874)", sub:"Revolució, Amadeu I i Primera República",
+   def:"Període obert per la revolució de setembre de 1868 (La Gloriosa) en què s'assaja per primera vegada un règim democràtic a Espanya, amb sufragi universal masculí i una àmplia declaració de drets.",
+   etapes:[
+     {y:"1868-1870", t:"Revolució i govern provisional", x:"Pronunciament de Topete, Prim i Serrano; proclama «Visca Espanya amb honra»; juntes revolucionàries; Constitució democràtica de 1869; regència de Serrano i cerca de rei."},
+     {y:"1871-1873", t:"Monarquia d'Amadeu I de Savoia", x:"Assassinat de Prim (desembre de 1870); oposició de carlins, alfonsins i republicans; Tercera Guerra Carlina i guerra de Cuba (1868-1878); abdicació el febrer de 1873."},
+     {y:"1873-1874", t:"Primera República", x:"Proclamada per l'Assemblea Nacional; quatre presidents (Figueras, Pi i Margall, Salmerón, Castelar); projecte de constitució federal; insurrecció cantonal (Cartagena); cop de Pavía (gener de 1874) i any de Serrano."}],
+   noms:["Prim","Serrano","Topete","Amadeu I","Figueras","Pi i Margall","Salmerón","Castelar","Pavía"],
+   concepts:["sufragi universal masculí","federalisme","cantonalisme","AIT","Tercera Guerra Carlina"],
+   bal:"A les illes hi arrelaren el republicanisme federal i les primeres societats obreres vinculades a l'AIT; el projecte federal de 1873 preveia les Balears com a estat propi de la federació.",
+   errors:["Confondre la Primera República amb el cantonalisme","Oblidar els quatre presidents i el cop de Pavía"]},
+
+  {id:"restauracio", t:"La Restauració Borbònica (1875-1902)", sub:"El sistema de Cánovas i la crisi de 1898",
+   def:"Sistema polític dissenyat per Cánovas del Castillo a partir de 1875 que combinà la monarquia d'Alfons XII, la Constitució de 1876 i el torn pacífic entre dos partits dinàstics sostingut pel frau electoral.",
+   etapes:[
+     {y:"1874-1876", t:"Instauració", x:"Manifest de Sandhurst (1874) i pronunciament de Martínez Campos a Sagunt; fi de les guerres carlina i de Cuba (Pau de Zanjón, 1878)."},
+     {y:"1876", t:"Constitució de 1876", x:"Sobirania compartida Rei-Corts, bicameralisme, drets remesos a lleis ordinàries i confessionalitat amb tolerància privada."},
+     {y:"1881-1898", t:"Torn i falsejament", x:"Alternança Cánovas-Sagasta; sufragi universal masculí (1890) sense efectes reals pel caciquisme, l'encasellat i el pucherazo."},
+     {y:"1895-1898", t:"Crisi de 1898", x:"Guerra de Cuba i Filipines, ultimàtum i intervenció dels EUA, desastres de Cavite i Santiago, Tractat de París; regeneracionisme i creixement dels nacionalismes."}],
+   noms:["Cánovas","Sagasta","Alfons XII","Martínez Campos","Maria Cristina d'Habsburg","Joaquín Costa","Valentí Almirall"],
+   concepts:["torn de partits","caciquisme","encasellat","pucherazo","regeneracionisme","desastre del 98"],
+   bal:"El torn i les xarxes caciquils funcionaren també a les illes; el mallorquí Antoni Maura arribà a la direcció del Partit Conservador. La pèrdua de les colònies afectà el comerç i l'emigració balear cap a Amèrica i Algèria.",
+   errors:["Explicar la Constitució de 1876 sense dir per què era flexible","No distingir caciquisme, encasellat i pucherazo"]},
+
+  {id:"alfons13", t:"El regnat d'Alfons XIII (1902-1923)", sub:"Regeneracionisme, Gran Guerra i crisi del sistema",
+   def:"Darrera etapa de la Restauració, en què el sistema canovista intenta regenerar-se des de dalt i acaba esfondrant-se per la crisi de 1917, la guerra del Marroc i la conflictivitat social, fins al cop de Primo de Rivera.",
+   etapes:[
+     {y:"1902-1912", t:"Reformisme dinàstic", x:"Maura i la «revolució des de dalt» (llei electoral de 1907, projecte d'administració local), frenat per la Setmana Tràgica de 1909; Canalejas i la llei del cadenat, la substitució de les quintes i la llei de mancomunitats, fins al seu assassinat el 1912."},
+     {y:"1914-1918", t:"Impacte de la Gran Guerra", x:"Neutralitat i beneficis exportadors, però inflació i caiguda dels salaris reals; divisió entre aliadòfils i germanòfils; radicalització social."},
+     {y:"1917", t:"Triple crisi", x:"Juntes de Defensa militars, Assemblea de Parlamentaris a Barcelona i vaga general de l'agost; el sistema sobreviu, però queda deslegitimat."},
+     {y:"1918-1923", t:"Descomposició final", x:"Governs de concentració efímers, pistolerisme a Barcelona, trienni bolxevic a Andalusia, desastre d'Annual (1921) i expedient Picasso; cop del 13 de setembre de 1923."}],
+   noms:["Alfons XIII","Antoni Maura","José Canalejas","Eduardo Dato","Cambó","Primo de Rivera"],
+   concepts:["regeneracionisme","Setmana Tràgica","mancomunitat","Juntes de Defensa","Annual","pistolerisme"],
+   bal:"Antoni Maura, mallorquí, encarna el reformisme dinàstic. A les Balears, el primer terç del segle XX porta l'electrificació, el ferrocarril i els inicis del turisme (Foment del Turisme de Mallorca, 1905; Gran Hotel de Palma, 1903).",
+   errors:["Oblidar les tres cares de la crisi de 1917","No explicar com la Gran Guerra afectà els preus i els salaris"]},
+
+  {id:"primo", t:"La Dictadura de Primo de Rivera (1923-1930)", sub:"Directori militar, Directori civil i final",
+   def:"Règim autoritari nascut del cop d'estat del 13 de setembre de 1923, acceptat pel rei Alfons XIII, que suspengué la Constitució de 1876 i governà amb partit únic fins al 1930.",
+   etapes:[
+     {y:"1923-1925", t:"Directori militar", x:"Suspensió de garanties, dissolució de les Corts, repressió del catalanisme i de la CNT, Estatut municipal de Calvo Sotelo i desembarcament d'Alhucemas (1925), que resolgué la guerra del Marroc."},
+     {y:"1925-1930", t:"Directori civil", x:"Unió Patriòtica com a partit únic, Assemblea Nacional Consultiva (1927), Organització Corporativa Nacional amb comitès paritaris, obres públiques, monopolis (CAMPSA) i confederacions hidrogràfiques."},
+     {y:"1930-1931", t:"Final del règim", x:"Crisi econòmica i caiguda de la pesseta, oposició d'intel·lectuals, estudiants i militars; dimissió el gener de 1930, govern Berenguer (dictablanda), Pacte de Sant Sebastià (1930) i eleccions municipals del 12 d'abril de 1931."}],
+   noms:["Miguel Primo de Rivera","Alfons XIII","Calvo Sotelo","Berenguer","Aznar","Unamuno"],
+   concepts:["Directori","Unió Patriòtica","corporativisme","Alhucemas","dictablanda"],
+   bal:"A les illes la dictadura impulsà obres públiques i camins, i coincidí amb el creixement del turisme i de les comunicacions marítimes; el catalanisme cultural mallorquí en patí la censura.",
+   errors:["Presentar-la només com un parèntesi sense explicar-ne les bases socials","Oblidar la relació entre la dictadura, el rei i la caiguda de la monarquia"]},
+
+  {id:"republica", t:"La Segona República: el Bienni Reformista (1931-1933)", sub:"Definició i reformes estructurals",
+   def:"La Segona República (1931-1936) fou un règim democràtic i reformista proclamat el 14 d'abril de 1931 després de les eleccions municipals. El Bienni Reformista és la seva primera etapa, de govern de republicans d'esquerra i socialistes presidit per Manuel Azaña, que posà en marxa les reformes previstes per la Constitució de 1931.",
+   etapes:[
+     {y:"1931", t:"Proclamació i Constitució", x:"Govern provisional d'Alcalá-Zamora; eleccions a Corts Constituents (juny); Constitució de 9 de desembre: sobirania popular, Estat laic, unicameralisme, sufragi femení i Estat integral."},
+     {y:"1931-1932", t:"Reformes militar i religiosa", x:"Llei Azaña de retir de l'oficialitat, dissolució de l'Acadèmia General Militar; separació Església-Estat, dissolució dels jesuïtes, matrimoni civil i divorci, llei de congregacions (1933)."},
+     {y:"1932", t:"Reforma agrària i autonomia", x:"Llei de Bases de la Reforma Agrària i Institut de Reforma Agrària, de lenta aplicació; Estatut de Catalunya després del fracàs del cop de Sanjurjo (agost de 1932)."},
+     {y:"1931-1933", t:"Reformes sociolaboral i educativa", x:"Lleis de Largo Caballero (jurats mixts, termes municipals, vuit hores al camp); pla d'escoles i mestres, Missions Pedagògiques, La Barraca."},
+     {y:"1933", t:"Crisi i final del bienni", x:"Casas Viejas (gener de 1933), desgast del govern, creació de la CEDA i de Falange; eleccions de novembre de 1933 i pas al Bienni Conservador o radicalcedista."}],
+   noms:["Manuel Azaña","Niceto Alcalá-Zamora","Largo Caballero","Fernando de los Ríos","Clara Campoamor","Sanjurjo","Gil-Robles"],
+   concepts:["Estat integral","laïcisme","reforma agrària","jurats mixts","Missions Pedagògiques"],
+   bal:"El 1931 es redactà un projecte d'Estatut d'autonomia de Mallorca i Eivissa que no prosperà; Menorca, industrial i obrera, fou un dels bastions republicans de les illes, i les Missions Pedagògiques hi arribaren.",
+   errors:["Enumerar reformes sense dir per què generaren oposició","Confondre el Bienni Reformista amb tota la República","Oblidar la definició inicial que demana l'enunciat"]},
+
+  {id:"guerracivil", t:"La Guerra Civil (1936-1939)", sub:"Concepte, evolució i violència política",
+   def:"Conflicte obert pel cop d'estat del 17-18 de juliol de 1936 contra el govern del Front Popular: el fracàs parcial del cop convertí la insurrecció en una guerra de gairebé tres anys, amb forta dimensió internacional.",
+   etapes:[
+     {y:"1936", t:"El cop i la divisió del territori", x:"Triomf a Castella, Navarra, Galícia i part d'Andalusia; fracàs a Madrid, Barcelona i València; pas de l'Exèrcit d'Àfrica, marxa sobre Madrid i batalles de la carretera de la Corunya i el Jarama."},
+     {y:"1937", t:"La guerra al nord", x:"Caiguda de Bilbao, Santander i Astúries; bombardeig de Gernika; batalles de Brunete i Belchite; unificació política als dos bàndols (Decret d'Unificació; fets de maig a Barcelona)."},
+     {y:"1938-1939", t:"Cap a la derrota republicana", x:"Batalla de l'Ebre (juliol-novembre de 1938), ofensiva de Catalunya i exili de febrer de 1939; cop de Casado, caiguda de Madrid i comunicat final de l'1 d'abril de 1939."},
+     {y:"1936-1939", t:"Les dues reraguardes", x:"Zona republicana: revolució social, col·lectivitzacions i tensió entre revolució i guerra; zona revoltada: poder militar únic de Franco des d'octubre de 1936, partit únic i nacionalcatolicisme."},
+     {y:"1936-1939", t:"Dimensió internacional", x:"Comitè de No Intervenció; ajuda alemanya i italiana als revoltats; URSS i Brigades Internacionals a la República."}],
+   noms:["Franco","Mola","Queipo de Llano","Negrín","Largo Caballero","Companys","Alberto Bayo"],
+   concepts:["No Intervenció","Brigades Internacionals","col·lectivitzacions","repressió","exili"],
+   bal:"El cop triomfà a Mallorca, Eivissa i Formentera; Menorca romangué fidel a la República fins al febrer de 1939. El desembarcament del capità Bayo (agost-setembre de 1936) fracassà a Porto Cristo; el Conde Rossi dirigí una repressió brutal que Georges Bernanos denuncià a «Els grans cementiris sota la lluna». La Llei 10/2016 de fosses xifra en una cinquantena les fosses a Mallorca, Eivissa i Formentera.",
+   errors:["Explicar només batalles i oblidar les reraguardes","No quantificar ni caracteritzar la repressió a les dues zones"]},
+
+  {id:"franquisme1", t:"El franquisme: postguerra i autarquia (1939-1959)", sub:"Concepte, suports i primera etapa",
+   def:"Dictadura personal de Franco sorgida de la victòria de 1939: partit únic (FET y de las JONS), nacionalcatolicisme, supressió de llibertats i repressió institucionalitzada, sostinguda per l'exèrcit, l'Església i les elits econòmiques.",
+   etapes:[
+     {y:"1939-1945", t:"Feixistització i Segona Guerra Mundial", x:"Llei de Responsabilitats Polítiques (1939); no-bel·ligerància, entrevista d'Hendaia i Divisió Blava; Fuero del Trabajo (1938) i Fuero de los Españoles (1945) com a maquillatge."},
+     {y:"1945-1953", t:"Aïllament internacional", x:"Condemna de l'ONU (1946) i retirada d'ambaixadors; autarquia, racionament, estraperlo i INI; maquis i vagues de 1947 i 1951."},
+     {y:"1953-1959", t:"Reconeixement i esgotament", x:"Concordat amb la Santa Seu i acords amb els EUA (1953), entrada a l'ONU (1955); inflació i esgotament de reserves que obliguen al canvi de 1957 (tecnòcrates de l'Opus Dei)."}],
+   noms:["Franco","Serrano Suñer","Carrero Blanco","Ullastres","Navarro Rubio"],
+   concepts:["nacionalcatolicisme","autarquia","estraperlo","INI","famílies del règim"],
+   bal:"L'informe de la prefectura de Falange de les Balears (1941) descriu la fam, el mercat negre i la desigualtat a les illes; la repressió de postguerra hi tingué continuïtat amb fosses i depuracions.",
+   errors:["Descriure el règim sense anomenar-ne les famílies ni els suports socials","Confondre Fuero del Trabajo i Fuero de los Españoles"]},
+
+  {id:"franquisme2", t:"El franquisme: desenvolupisme i crisi final (1959-1975)", sub:"Del Pla d'Estabilització al tardofranquisme",
+   def:"Segona meitat de la dictadura: el Pla d'Estabilització de 1959 liquida l'autarquia i obre una etapa de fort creixement econòmic i canvi social que el règim no acompanya amb cap obertura política real.",
+   etapes:[
+     {y:"1959", t:"Pla d'Estabilització", x:"Devaluació de la pesseta, contenció de la despesa, liberalització del comerç exterior i entrada d'inversió estrangera; recessió inicial i emigració."},
+     {y:"1962-1973", t:"Desenvolupisme", x:"Plans de Desenvolupament, pols industrials, turisme de masses, emigració a Europa i remeses; èxode rural, creixement urbà i aparició d'una societat de consum."},
+     {y:"1966-1970", t:"Reformes cosmètiques", x:"Llei de Premsa de Fraga (1966), Llei Orgànica de l'Estat (1967) i designació de Joan Carles com a successor (1969)."},
+     {y:"1973-1975", t:"Tardofranquisme", x:"Assassinat de Carrero Blanco (desembre de 1973), crisi del petroli, govern d'Arias Navarro, procés 1001, execucions del setembre de 1975, Marxa Verda i mort de Franco el 20 de novembre de 1975."}],
+   noms:["Franco","Carrero Blanco","Fraga","Arias Navarro","Joan Carles de Borbó"],
+   concepts:["desenvolupisme","plans de desenvolupament","turisme de masses","oposició antifranquista","tardofranquisme"],
+   bal:"Les Balears són l'exemple de manual del desenvolupisme: l'informe de la Cambra de Comerç de 1961 mostra l'auge turístic de Palma, el rècord de trànsit de l'aeroport i l'arribada d'immigració peninsular que capgirà la societat illenca.",
+   errors:["Explicar el creixement sense dir què no canvià (les llibertats)","Oblidar el paper del turisme, les remeses i la inversió estrangera"]},
+
+  {id:"transicio", t:"La Transició democràtica (1975-1982)", sub:"Constitució de 1978 i Estat de les autonomies",
+   def:"Procés de desmantellament de la dictadura i construcció d'un règim democràtic sense ruptura violenta, entre la mort de Franco (1975) i la victòria del PSOE (1982).",
+   etapes:[
+     {y:"1975-1976", t:"De l'immobilisme a la reforma", x:"Proclamació de Joan Carles I; govern d'Arias Navarro; nomenament d'Adolfo Suárez (juliol de 1976) i Llei per a la Reforma Política, aprovada en referèndum el desembre de 1976."},
+     {y:"1977", t:"Eleccions i pactes", x:"Legalització del PCE (abril), eleccions del 15 de juny guanyades per la UCD, amnistia i Pactes de la Moncloa (octubre)."},
+     {y:"1978", t:"Constitució", x:"Ponència dels set pares de la Constitució; aprovada en referèndum el 6 de desembre: monarquia parlamentària, Estat social i democràtic de dret, aconfessionalitat i Estat de les autonomies."},
+     {y:"1979-1982", t:"Dificultats i consolidació", x:"Terrorisme d'ETA i el GRAPO, crisi econòmica, dimissió de Suárez, cop d'estat del 23-F (1981), LOAPA i victòria del PSOE l'octubre de 1982."}],
+   noms:["Joan Carles I","Adolfo Suárez","Torcuato Fernández-Miranda","Santiago Carrillo","Felipe González","Tejero"],
+   concepts:["reforma pactada","consens","amnistia","Estat de les autonomies","involucionisme"],
+   bal:"Les Illes Balears accediren a l'autonomia per la via lenta de l'article 143, amb el règim preautonòmic de 1978 i l'Estatut de 1983, que recuperà els consells insulars com a institucions pròpies de cada illa.",
+   errors:["Explicar la Constitució sense les dues vies d'accés a l'autonomia","Oblidar el context de crisi econòmica i terrorisme"]},
+
+  {id:"democracia", t:"La consolidació democràtica (des de 1982)", sub:"De González a l'actualitat",
+   def:"Etapa d'alternança democràtica, integració europea i transformació social, iniciada amb la majoria absoluta del PSOE el 1982.",
+   etapes:[
+     {y:"1982-1996", t:"Governs de Felipe González (PSOE)", x:"Entrada a la CEE (1986) i referèndum de l'OTAN (1986); reconversió industrial i creació de l'estat del benestar; 1992 com a aparador; GAL i corrupció."},
+     {y:"1996-2004", t:"Governs de José María Aznar (PP)", x:"Convergència amb l'euro, creixement econòmic i immigració; final d'ETA en crisi, 11-M (2004)."},
+     {y:"2004-2011", t:"Governs de Rodríguez Zapatero (PSOE)", x:"Ampliació de drets civils, Llei de Memòria Històrica (2007), crisi financera des de 2008 i reforma constitucional de l'article 135 (2011)."},
+     {y:"2011-2018", t:"Govern de Mariano Rajoy (PP)", x:"Retallades i rescat bancari, moviment 15-M, abdicació de Joan Carles I (2014), procés independentista català i moció de censura (2018)."},
+     {y:"2018-avui", t:"Pedro Sánchez (PSOE)", x:"Governs de coalició, exhumació de Franco (2019), pandèmia de la covid-19 i fons europeus."}],
+   noms:["Felipe González","José María Aznar","Rodríguez Zapatero","Mariano Rajoy","Pedro Sánchez","Felip VI"],
+   concepts:["alternança","integració europea","estat del benestar","memòria democràtica","bombolla immobiliària"],
+   bal:"El Parlament balear s'ha repartit entre governs del PP i pactes de progrés; el debat públic gira entorn de la dependència del turisme (ecotaxa del 2001 i impost de turisme sostenible del 2016), la pressió sobre el territori i l'habitatge, i la Llei 10/2016 de recuperació de desapareguts.",
+   errors:["Fer una llista de presidents sense caracteritzar cada etapa","Oblidar la integració europea i les seves conseqüències"]}
+];
+
+/* ===================== COMENTARIS (part B) ===================== */
+const FONTS = [
+  {id:"baiona", label:"Abdicacions de Baiona (1808) + Goya, El 3 de maig de 1808",
+   tipus:"Text jurídic (dues cartes d'abdicació) + document gràfic (pintura d'història)",
+   enunciat:"1r Situa cronològicament el document A (any i breu contextualització) i identifica els personatges que hi apareixen. Assenyala els aspectes principals del text. 2n Respon, incorporant al·lusions als dos documents: què fou la Guerra del Francès, quines circumstàncies l'iniciaren i quines en foren les principals conseqüències?",
+   text:"De Ferran a Carles: «Mi muy caro padre y señor: para dar a V.M. una prueba de mi amor, de mi obediencia y de mi sumisión y para acceder a los deseos que V.M. me ha manifestado reiteradas veces, renuncio mi corona en favor de V.M. deseando que V.M. pueda disfrutarla durante muchos años».<br><br>De Carles a Napoleó: «Su Majestad el rey Carlos [...] ha resuelto ceder como cede por el presente todos sus derechos al trono de España y de las Indias a Su Majestad el emperador Napoleón como el único que, en el estado en el que han llegado las cosas, puede establecer el orden; entendiéndose que dicha cesión solo ha de tener efecto para hacer gozar a sus vasallos de las condiciones siguientes: 1º La integridad del reino será mantenida [...] 2º La religión católica, apostólica y romana será la única de España.»",
+   font:"Abdicacions de Baiona, 5 de maig de 1808",
+   imatge:"goya",
+   imatgePeu:"Document B · Francisco de Goya, El 3 de maig de 1808 a Madrid (1814). Museu del Prado.",
+   passos:[
+     {t:"1. Identificació de la font", q:"Tipus de document, autoria, destinatari i cronologia.",
+      model:"Ens trobam davant dos fragments de textos jurídics i epistolars: les cartes d'abdicació signades a Baiona el 5 de maig de 1808. Els emissors són Ferran VII i Carles IV, reis d'Espanya, i el destinatari final és Napoleó Bonaparte, emperador dels francesos. El document B és una font gràfica: el quadre d'història El 3 de maig de 1808 a Madrid, pintat per Francisco de Goya el 1814."},
+     {t:"2. Context i idees principals", q:"Què diu el text i en quin moment s'escriu.",
+      model:"El text recull una doble abdicació: primer Ferran VII retorna la corona al seu pare Carles IV i, tot seguit, Carles IV cedeix «todos sus derechos al trono de España y de las Indias» a Napoleó, amb dues condicions: la integritat del regne i el manteniment de la religió catòlica com a única. S'ha de situar dins la crisi de la monarquia de Carles IV: el Tractat de Fontainebleau (1807), l'entrada de tropes franceses, el motí d'Aranjuez (març de 1808) i el parany de Baiona, que acabà donant el tron a Josep I."},
+     {t:"3. Resposta a la pregunta", q:"Desenvolupa el contingut històric que et demanen, no el text.",
+      model:"La Guerra del Francès (1808-1814) fou el conflicte entre Espanya i la França napoleònica iniciat arran d'aquestes abdicacions. Començà amb l'aixecament del 2 de maig de 1808 a Madrid i s'estengué amb la formació de juntes, la victòria de Bailèn, els setges de Saragossa i Girona i una guerrilla que desgastà l'ocupant. Les conseqüències foren enormes: destrucció demogràfica i econòmica, obra revolucionària de les Corts de Cadis amb la Constitució de 1812, el retorn absolutista de Ferran VII el 1814 i l'inici de l'emancipació de les colònies americanes."},
+     {t:"4. Citar el document (i les Balears)", q:"Cada afirmació important, ancorada al text o a la imatge.",
+      model:"El caràcter fictici de la cessió es veu quan Carles IV diu que Napoleó és «el único que [...] puede establecer el orden», i la condició que «la religión católica [...] será la única de España» explica per què l'Església es convertí en un motor de la resistència. El document B illustra la reacció popular: Goya retrata els afusellaments de la matinada del 3 de maig, posteriors a l'aixecament del poble de Madrid contra les tropes franceses. Referència balear: Mallorca no fou ocupada, la Junta Suprema de Mallorca assumí el poder de l'illa, que acollí milers de refugiats, i a Cabrera hi foren confinats milers de presoners francesos."}
+   ]},
+
+  {id:"palazon", label:"Testimoni oral de Julia Palazón (Guerra Civil, la Soledat)",
+   tipus:"Testimoni oral (font oral, entrevista de 1997)",
+   enunciat:"1r Indica si el document consisteix en un informe econòmic, un testimoni oral, un text historiogràfic o un text jurídic i a quin període històric es refereix. Resumeix-ne breument el contingut. 2n Respon: quines característiques presentà la violència política practicada durant la Guerra Civil a Espanya? Explica algun aspecte relatiu a la guerra i/o la repressió a les Balears.",
+   text:"«La culpa era de les beates del barri. Quatre beates de la barriada anaven amb la llista de les dones que s'havien de dur a prendre oli de ricí [...]. Després venia un camió de Falange, feia el recorregut, tres d'aquí, quatre d'allà i se les enduien al local de Falange [...]. A més de l'oli de ricí, aquella pelada de cap que varen haver de dur fins que varen créixer els cabells. [...] La culpa d'això també va ser d'aquell pocavergonya del Conde Rossi, que un dia va venir a la Soledat a dir: “¡Vosotras, mallorquinas! Tenéis que capturar a las rojas y darles aceite de ricino y pelarlas al rape.”»",
+   font:"Entrevista a Julia Palazón Cano (1919-2002), veïnada del barri de la Soledat (Palma), 18 de juliol de 1997",
+   passos:[
+     {t:"1. Identificació de la font", q:"Tipus de document i període.",
+      model:"És un testimoni oral: una entrevista feta el 1997 a Julia Palazón Cano (1919-2002), veïnada del barri de la Soledat de Palma, que recorda fets viscuts durant la Guerra Civil. Com a font oral, és un testimoni directe però construït sobre la memòria seixanta anys després, i això obliga a tractar-lo amb sentit crític."},
+     {t:"2. Idees principals", q:"Resumeix el contingut amb vocabulari històric precís.",
+      model:"El text descriu mecanismes concrets de la repressió franquista de reraguarda contra les dones identificades amb la República a Mallorca: delació veïnal amb la complicitat del clergat local, actuació de les esquadres de Falange, humiliació pública mitjançant l'oli de ricí i la rapada de cap, i el paper del feixista italià Arconovaldo Bonaccorsi, el Conde Rossi."},
+     {t:"3. Resposta a la pregunta", q:"Caracteritza la violència política de la guerra.",
+      model:"La violència política durant la Guerra Civil es practicà a les dues zones, però amb lògiques diferents. A la zona republicana fou sobretot incontrolada els primers mesos, amb comitès i «passejades» (Paracuellos), i el govern anà recuperant-ne el control. A la zona revoltada fou sistemàtica i planificada des dels bans de guerra i les instruccions de Mola, avalada institucionalment i sense fi el 1939: continuà amb consells de guerra, depuracions, presons i treballs forçats. Les víctimes foren càrrecs republicans, sindicalistes, mestres i, com mostra el text, dones sotmeses a una repressió específica de gènere."},
+     {t:"4. Citar el document (i les Balears)", q:"Ancora la resposta al testimoni.",
+      model:"El testimoni ho concreta quan descriu com «venia un camió de Falange» amb llistes elaborades al barri, cosa que mostra la trama local de la repressió. Les Balears quedaren dividides: el cop triomfà a Mallorca, Eivissa i Formentera, mentre Menorca es mantingué fidel a la República fins al febrer de 1939. El desembarcament del capità Bayo (agost-setembre de 1936) fracassà, i la repressió posterior, amb el Conde Rossi com a figura visible, fou denunciada per Georges Bernanos a «Els grans cementiris sota la lluna». La Llei 10/2016 calcula una cinquantena de fosses a Mallorca, Eivissa i Formentera."}
+   ]},
+
+  {id:"cambra", label:"Informe de la Cambra de Comerç de Mallorca i Eivissa (1961)",
+   tipus:"Informe econòmic emès per una institució",
+   enunciat:"1r Indica de quin tipus de document es tracta, si l'emet una persona o una institució, sobre quina qüestió informa i dins quin període històric s'ubica. 2n Respon: què va ser el règim franquista, com evolucionà econòmicament i socialment entre 1959 i 1973 i com afectaren aquests canvis les Illes Balears?",
+   text:"«La situación económica general de la jurisdicción de esta cámara ha seguido, durante el año 1961, la trayectoria iniciada en julio de 1959 con el Plan de Estabilización, el cambio real de moneda y la actual reactivación de la Economía, tras la depresión ocasionada por los primeros pasos de la Estabilización. En Baleares se han presentado fenómenos específicos derivados [...] de su especial característica turística y del desarrollo y auge de la exportación [...]. Palma de Mallorca ocupa hoy un lugar destacado en la economía española, estando, en relación con su número de habitantes, en cabeza de las ciudades españolas en múltiples manifestaciones económicas (índice de vehículos, de tráfico, de hostelería, posiblemente de televisores y frigoríficos, etc.) y su aeropuerto es el que mayor tráfico tiene en España durante los meses del largo verano turístico.»",
+   font:"Cambra de Comerç, Indústria i Navegació de Mallorca i Eivissa, «Informe general sobre la situación económica de Baleares en 1961»",
+   passos:[
+     {t:"1. Identificació de la font", q:"Tipus, emissor i període.",
+      model:"És un informe econòmic de caràcter institucional, emès el 1961 per la Cambra de Comerç, Indústria i Navegació de Mallorca i Eivissa. No és el testimoni d'una persona, sinó un document corporatiu que informa sobre la conjuntura econòmica de les illes; se situa en el franquisme, just a l'inici del desenvolupisme."},
+     {t:"2. Idees principals", q:"Què informa i a quines conclusions arriba.",
+      model:"L'informe constata que l'economia balear segueix la trajectòria oberta pel Pla d'Estabilització de juliol de 1959 i pel nou canvi de la pesseta, després d'una depressió inicial. Assenyala uns «fenòmens específics» de les illes, derivats del turisme i de l'auge exportador, i conclou que Palma encapçala molts indicadors econòmics per habitant i que el seu aeroport és el de més trànsit de l'Estat durant l'estiu."},
+     {t:"3. Resposta a la pregunta", q:"Règim franquista i evolució 1959-1973.",
+      model:"El franquisme fou la dictadura personal de Franco (1939-1975), amb partit únic, nacionalcatolicisme i absència de llibertats. El 1959 el Pla d'Estabilització liquidà l'autarquia amb la devaluació de la pesseta, la contenció de la despesa i l'obertura exterior. S'obrí el desenvolupisme (1959-1973): plans de desenvolupament, inversió estrangera, turisme de masses, emigració a Europa i remeses. El resultat fou un canvi social profund (èxode rural, creixement urbà, societat de consum, incorporació de la dona al treball) sense cap obertura política equivalent."},
+     {t:"4. Citar el document (i les Balears)", q:"Connecta el text amb la teva explicació.",
+      model:"El document ho documenta des de dins quan lliga la reactivació a «la trayectoria iniciada en julio de 1959 con el Plan de Estabilización» i quan enumera els indicadors de consum de Palma —vehicles, hoteleria, televisors i frigorífics—, que són el retrat d'una societat que entra al consum de masses. A les Balears, el turisme substituí l'agricultura com a motor, atragué immigració peninsular, disparà la construcció i convertí l'aeroport de Son Sant Joan en el de més trànsit estival de l'Estat, amb els costos territorials que arrossegam fins avui."}
+   ]},
+
+  {id:"c1876", label:"Constitució de 1876 + Ramon Casas, La càrrega",
+   tipus:"Text jurídic (articulat constitucional) + document gràfic",
+   enunciat:"1r Indica si el document A és un text jurídic, epistolar, literari o historiogràfic, situa'l cronològicament i assenyala'n els aspectes principals. 2n Respon, amb al·lusions als dos documents: quines foren les característiques principals del sistema polític espanyol durant la Restauració Borbònica (1875-1923)?",
+   text:"«Artículo 11: La religión Católica, Apostólica, Romana es la del Estado. [...] Nadie será molestado en el territorio español por sus opiniones religiosas ni por el ejercicio de su respectivo culto, salvo el respeto debido a la moral cristiana. No se permitirán, sin embargo, otras manifestaciones públicas que las de la religión del Estado. Artículo 13: Todo español tiene derecho: de emitir libremente sus ideas y opiniones [...] sin sujeción a censura previa; de reunirse pacíficamente; de asociarse [...]. Artículo 18: La potestad de hacer las leyes reside en las Cortes con el Rey. Artículo 19: Las Cortes se componen de dos cuerpos colegisladores, iguales en facultades: el Senado y el Congreso de los Diputados.»",
+   font:"Constitució espanyola de 1876 (fragments)",
+   imatge:"carrega",
+   imatgePeu:"Document B · Ramon Casas, La càrrega (1899-1902). Museu Comarcal de la Garrotxa.",
+   passos:[
+     {t:"1. Identificació de la font", q:"Tipus i cronologia.",
+      model:"És un text jurídic: quatre articles de la Constitució espanyola de 1876, promulgada sota Alfons XII i inspirada per Cánovas del Castillo. Es tracta d'una font primària de caràcter normatiu, vigent fins al cop de Primo de Rivera el 1923. El document B és una pintura de Ramon Casas, La càrrega (1899-1902), testimoni visual de la repressió de la protesta obrera."},
+     {t:"2. Idees principals", q:"Què estableixen els articles.",
+      model:"L'article 11 declara la confessionalitat catòlica de l'Estat però admet la pràctica privada d'altres cultes: una fórmula de compromís entre moderats i liberals. L'article 13 enuncia drets d'expressió, reunió i associació que després les lleis ordinàries retallaven. Els articles 18 i 19 fixen la clau del sistema: la sobirania compartida entre el Rei i les Corts, i un parlament bicameral amb Congrés i Senat."},
+     {t:"3. Resposta a la pregunta", q:"Característiques del sistema de la Restauració.",
+      model:"El sistema canovista es basà en una constitució flexible, el bipartidisme dinàstic (conservadors de Cánovas i liberals de Sagasta) i el torn pacífic, que garantia l'alternança pactada. Per fer-lo funcionar, les eleccions es falsejaven des del Ministeri de la Governació amb l'encasellat, els governadors civils i els cacics locals, fins i tot després del sufragi universal masculí de 1890. El preu fou l'exclusió de carlins, republicans, obreristes i nacionalismes perifèrics, i una desafecció creixent que esclatà el 1898 i el 1917."},
+     {t:"4. Citar el document (i les Balears)", q:"Connecta els dos documents.",
+      model:"Que «la potestad de hacer las leyes reside en las Cortes con el Rey» resumeix la sobirania compartida, i que els drets de l'article 13 quedassin en mans de lleis posteriors explica la distància entre el text i la realitat. Aquesta distància és el que pinta Ramon Casas a La càrrega: la Guàrdia Civil dispersant una manifestació obrera mostra que la resposta a la protesta social fou l'ordre públic, no la representació. Referència balear: el mallorquí Antoni Maura dirigí el Partit Conservador i intentà una «revolució des de dalt» per trencar el caciquisme, que a les illes també organitzava el vot."}
+   ]}
+];
+
+/* ===================== BONUS BALEAR ===================== */
+const BAL_HOOKS = [
+  {p:"s. XIX", t:"Guerra del Francès", x:"Mallorca no fou ocupada: la Junta Suprema de Mallorca assumí el poder, l'illa acollí milers de refugiats peninsulars i a Cabrera hi foren confinats milers de presoners francesos."},
+  {p:"s. XIX", t:"Desamortitzacions", x:"A Mallorca les desamortitzacions consolidaren la gran propietat (les possessions) i la burgesia urbana, sense repartiment entre la pagesia."},
+  {p:"s. XIX", t:"Industrialització", x:"La industrialització balear fou lleugera i especialitzada: calçat a Inca, Llucmajor i Alaior, bijuteria a Menorca i indústria agroalimentària."},
+  {p:"s. XIX", t:"Migracions", x:"A final del segle XIX i començament del XX hi hagué una forta emigració balear cap a Amèrica (Cuba, Argentina) i cap a Algèria."},
+  {p:"Restauració", t:"Caciquisme i torn", x:"El torn de partits funcionà a les illes amb xarxes caciquils pròpies; el mallorquí Antoni Maura arribà a dirigir el Partit Conservador i a ser cap de govern."},
+  {p:"Restauració", t:"Primer turisme", x:"El Foment del Turisme de Mallorca (1905) i el Gran Hotel de Palma (1903) mostren que les illes s'incorporaren aviat a la modernització i al turisme d'elit."},
+  {p:"República i Guerra", t:"Estatut de 1931", x:"El 1931 es redactà un projecte d'Estatut d'autonomia de Mallorca i Eivissa, que preveia la cooficialitat de la llengua i unes diputacions insulars, però no prosperà."},
+  {p:"República i Guerra", t:"Divisió de les illes", x:"El cop de juliol de 1936 triomfà a Mallorca, Eivissa i Formentera; Menorca es mantingué fidel a la República fins al febrer de 1939."},
+  {p:"República i Guerra", t:"Desembarcament de Bayo", x:"L'expedició republicana del capità Alberto Bayo desembarcà a Mallorca l'agost de 1936 i hagué de retirar-se de Porto Cristo el setembre."},
+  {p:"República i Guerra", t:"Repressió i memòria", x:"La repressió a Mallorca, amb el feixista italià Conde Rossi com a figura visible, fou denunciada per Georges Bernanos a «Els grans cementiris sota la lluna»; la Llei 10/2016 en compta una cinquantena de fosses."},
+  {p:"Franquisme", t:"Autarquia i fam", x:"Un informe de la prefectura de Falange de les Balears (1941) descriu la fam, l'estraperlo i la desigualtat entre rics i pobres a les illes."},
+  {p:"Franquisme", t:"Boom turístic", x:"L'informe de la Cambra de Comerç de Mallorca i Eivissa (1961) mostra l'auge turístic: Palma encapçala els indicadors de consum i el seu aeroport és el de més trànsit estival de l'Estat."},
+  {p:"Franquisme", t:"Immigració peninsular", x:"Als anys seixanta les Balears passaren de terra d'emigració a terra d'immigració, amb l'arribada de treballadors andalusos, murcians i extremenys atrets pel turisme."},
+  {p:"Transició", t:"Estatut de 1983", x:"Les Illes Balears accediren a l'autonomia per la via lenta de l'article 143, amb l'Estatut de 1983 i els consells insulars com a institució pròpia de cada illa."},
+  {p:"Democràcia", t:"Monocultiu turístic", x:"El debat polític balear gira entorn del monocultiu turístic: ecotaxa del 2001, impost de turisme sostenible del 2016 i pressió sobre el territori i l'habitatge."},
+  {p:"Democràcia", t:"Crisi de 2007", x:"La crisi financera de 2007 colpejà les illes per la doble dependència de la construcció i del turisme, amb un fort augment de l'atur."}
+];
+
+const BAL_QUIZ = [
+  {q:"Tema C: La Guerra Civil (1936-1939)", ok:"Menorca romangué fidel a la República fins al febrer de 1939, mentre el cop triomfava a Mallorca, Eivissa i Formentera.", bad:["Les Balears foren neutrals durant tota la guerra.","El desembarcament de Bayo va recuperar Mallorca per a la República."]},
+  {q:"A.1: El Pla d'Estabilització de 1959", ok:"L'informe de la Cambra de Comerç de Mallorca i Eivissa (1961) recull l'auge turístic posterior al canvi de moneda.", bad:["A les Balears el Pla d'Estabilització provocà el tancament de la indústria pesant.","Les Balears quedaren al marge del creixement dels anys seixanta."]},
+  {q:"Comentari B: Constitució de 1978 i autonomies", ok:"Les Illes Balears accediren a l'autonomia per la via de l'article 143, amb l'Estatut de 1983.", bad:["Les Balears accediren a l'autonomia per la via ràpida de l'article 151.","L'Estatut balear és de 1979, com el català i el basc."]},
+  {q:"Tema C: La Guerra del Francès", ok:"Mallorca no fou ocupada i acollí milers de refugiats; a Cabrera hi hagué presoners francesos.", bad:["Les Balears foren ocupades per Napoleó el 1808.","Menorca era britànica durant la Guerra del Francès."]},
+  {q:"A.3: Constitucions de 1931 i 1978", ok:"El projecte d'Estatut de Mallorca i Eivissa (1931) no prosperà; l'autonomia arribà amb l'Estatut de 1983.", bad:["Les Balears aprovaren el seu estatut durant la Segona República.","La Constitució de 1931 creà els consells insulars."]}
+];
+
+/* ===================== ARENA ===================== */
+const ARENA = [
+  {id:"a2", part:"A.2", label:"A.2 · Defineix breument (1 a 3 línies cadascuna)", max:1, mins:6,
+   enunciat:"Defineix breument (d'1 a 3 línies en cada cas): Primera República Espanyola, desamortització de Mendizábal, cop d'estat del 23-F, Mariano Rajoy (en aquest darrer cas, indica el càrrec principal que va ocupar, la seva adscripció política i l'època històrica o els anys de mandat).",
+   nota:"Cada definició val fins a 0,25 punts.",
+   rub:[
+     {w:0.25, l:"Primera República: cronologia 1873-1874 i caràcter democràtic i republicà que reemplaça Amadeu de Savoia", any:["1873","1874","amadeu","republic"]},
+     {w:0.25, l:"Mendizábal: cronologia (1836) i béns del clergat regular", any:["1836","clergat regular","clero regular","regular"]},
+     {w:0.25, l:"23-F: etapa de la Transició posterior a la mort de Franco i fracàs del cop", any:["1981","tejero","transici","fracass","congrés","congres"]},
+     {w:0.25, l:"Rajoy: president del Govern, PP i anys 2011-2018 o etapa democràtica actual", any:["2011","2018","pp","partit popular","president"]}
+   ],
+   model:"Primera República Espanyola: règim democràtic i republicà vigent entre febrer de 1873 i desembre de 1874, que reemplaçà la monarquia d'Amadeu de Savoia i acabà amb el cop de Pavía.\nDesamortització de Mendizábal: procés iniciat el 1836 d'expropiació i venda en subhasta pública dels béns del clergat regular, per finançar la guerra carlina.\nCop d'estat del 23-F: intent de cop del 23 de febrer de 1981, durant la Transició posterior a la mort de Franco, quan Tejero assaltà el Congrés; fracassà.\nMariano Rajoy: president del Govern espanyol entre 2011 i 2018, del Partit Popular, dins l'etapa democràtica actual."},
+
+  {id:"a3", part:"A.3", label:"A.3 · Constitucions de 1931 i 1978", max:1, mins:8, bal:0.25,
+   enunciat:"Elabora un esquema sobre les constitucions de 1931 i 1978 i indica'n (a més) dos punts en comú i dues diferències.",
+   nota:"No es pot avaluar positivament si no es relacionen ambdós textos: no basta definir-los per separat. +0,25 per referències balears.",
+   rub:[
+     {w:0.2, l:"Esquema correcte de la Constitució de 1931 (sobirania popular, laïcisme, unicameralisme, Estat integral)", any:["1931","laic","integral","unicameral","sobirania popular"]},
+     {w:0.2, l:"Esquema correcte de la Constitució de 1978 (monarquia parlamentària, Estat social i democràtic de dret, autonomies)", any:["1978","monarquia parlament","autonomi","estat social"]},
+     {w:0.3, l:"Dos punts en comú explícits (caràcter democràtic, ampli reconeixement de drets i llibertats)", any:["en comú","en comu","ambdues","totes dues","coincideixen","semblan"]},
+     {w:0.3, l:"Dues diferències explícites (forma d'Estat: república/monarquia; organització territorial o qüestió religiosa)", any:["diferènci","diferenci","en canvi","mentre que","república","monarquia"]}
+   ],
+   model:"Punts en comú: totes dues són constitucions de caràcter democràtic, amb sobirania popular, i totes dues reconeixen una extensa relació de drets i llibertats amb garanties.\nDiferències: la forma d'Estat (república democràtica de treballadors el 1931; monarquia parlamentària el 1978) i l'organització territorial (Estat integral, amb autonomia per a qui aprovàs un estatut, enfront de l'Estat de les autonomies generalitzat de 1978, art. 2 i 143). També difereixen en la qüestió religiosa: laïcisme de 1931 enfront de l'aconfessionalitat cooperativa de l'article 16.\nBalear: el projecte d'Estatut de Mallorca i Eivissa de 1931 no prosperà; l'autonomia arribà amb l'Estatut de 1983, per la via de l'article 143."},
+
+  {id:"a1", part:"A.1", label:"A.1 · Migracions dels anys seixanta", max:1, mins:10, bal:0.25,
+   enunciat:"Quins foren els principals moviments migratoris a l'Espanya del decenni dels seixanta del segle XX? Explica el cas de les Illes Balears. (S'aconsellen entre 6 i 10 línies.)",
+   nota:"Cal al·ludir a les migracions interiors i exteriors i caracteritzar el cas balear. +0,25 per referències balears.",
+   rub:[
+     {w:0.3, l:"Migracions interiors: èxode rural cap a Madrid, Catalunya, el País Basc i la costa", any:["èxode rural","exode rural","interior","camp a la ciutat","madrid","catalunya"]},
+     {w:0.3, l:"Emigració exterior cap a l'Europa desenvolupada i paper de les remeses", any:["europa","alemanya","suïssa","suissa","frança","remeses"]},
+     {w:0.2, l:"Causes i context (mecanització agrària, Pla d'Estabilització, demanda europea)", any:["estabilitzaci","1959","mecanitzaci","desenvolupisme"]},
+     {w:0.2, l:"Cas balear: immigració peninsular lligada a l'expansió turística", any:["balear","mallorca","turis","peninsular"]}
+   ],
+   model:"Durant els anys seixanta Espanya visqué dos grans fluxos. El primer fou interior: un èxode rural massiu del camp cap a Madrid, Catalunya, el País Basc i la costa mediterrània, provocat per la mecanització agrària i per l'atracció industrial. El segon fou exterior, cap a l'Europa desenvolupada (Alemanya, França, Suïssa), amb més d'un milió de sortides i unes remeses decisives per equilibrar la balança de pagaments després del Pla d'Estabilització de 1959. Les Illes Balears són el cas invers: deixaren de ser terra d'emigració i es convertiren en receptores d'immigració peninsular —andalusa, murciana i extremenya— atreta per l'expansió turística i per la construcció, cosa que en capgirà l'estructura demogràfica i social."},
+
+  {id:"b", part:"B", label:"B · Comentari 1: Abdicacions de Baiona i Goya", max:3, mins:28, bal:0.5,
+   enunciat:"1r Situa cronològicament el document A (any i breu contextualització) i identifica els personatges que hi apareixen. Assenyala els aspectes principals del text (1,5 punts). 2n Respon, incorporant al·lusions als dos documents: què fou la Guerra del Francès, quines circumstàncies n'explicaren l'inici i quines en foren les principals conseqüències (1,5 punts)?",
+   nota:"Document A: Abdicacions de Baiona, 5 de maig de 1808. Document B: Goya, El 3 de maig de 1808 a Madrid (1814). +0,5 per referències balears.",
+   rub:[
+     {w:0.4, l:"Indicar que el document és de 1808 i contextualitzar-lo (Fontainebleau, motí d'Aranjuez, abdicacions de Baiona)", any:["1808","fontainebleau","aranjuez","baiona","bayona"]},
+     {w:0.4, l:"Identificar Napoleó, Carles IV i Ferran VII", any:["napole","carles iv","carlos iv","ferran vii","fernando vii"]},
+     {w:0.4, l:"Explicar la doble abdicació i les condicions (integritat del regne, religió catòlica única)", any:["doble abdicaci","cedeix","cessi","integritat","religi"]},
+     {w:0.3, l:"Tipus de document: text jurídic i epistolar, font primària", any:["jurídic","juridic","epistolar","carta","font primària","font primaria"]},
+     {w:0.5, l:"Definir la Guerra del Francès i explicar les circumstàncies de l'inici (2 de maig, juntes, Bailèn)", any:["guerra del francès","guerra del frances","2 de maig","dos de maig","juntes","bailèn","bailen","guerrilla"]},
+     {w:0.5, l:"Apuntar conseqüències (Corts de Cadis i Constitució de 1812, crisi econòmica, emancipació americana)", any:["cadis","1812","constituci","emancipaci","colònies","colonies","conseqüènci","consequenci"]},
+     {w:0.5, l:"Al·ludir als documents: citar el text i explicar el quadre de Goya (afusellaments del 3 de maig)", any:["goya","afusellament","quadre","«","document b","pintura"]}
+   ],
+   model:"Vegeu la ruta «Comentari de font» per a la resposta model completa, pas per pas."},
+
+  {id:"c", part:"C", label:"C · Tema: La Segona República i el Bienni Reformista", max:3, mins:30, bal:0.5,
+   enunciat:"La Segona República (1931-1936): breu definició. Explica el Bienni Reformista (1931-1933). (S'aconsella entre cara i cara i mitja de full.)",
+   nota:"Es valora l'ordre cronològic, els noms propis i les dates precises. +0,5 per referències balears.",
+   rub:[
+     {w:0.5, l:"Definició breu de la Segona República: caràcter democràtic i reformista i problemes que afrontà", any:["14 d'abril","1931","democràtic","democratic","reformista","proclamaci"]},
+     {w:0.4, l:"Identificar el Bienni Reformista com a govern de republicans d'esquerra i socialistes (Azaña)", any:["azaña","azana","esquerra","socialista","coalici"]},
+     {w:0.4, l:"Reforma religiosa i educativa (laïcisme, congregacions, escoles, Missions Pedagògiques)", any:["laic","jesuïtes","jesuites","congregacion","escoles","missions pedag","educativ"]},
+     {w:0.4, l:"Reforma agrària i sociolaboral (Llei de Bases, IRA, Largo Caballero, jurats mixts)", any:["agràri","agrari","largo caballero","jurats mixts","vuit hores","terra"]},
+     {w:0.4, l:"Reforma militar i autonòmica (llei Azaña, Estatut de Catalunya de 1932)", any:["militar","retir","estatut de catalunya","1932","autonomi"]},
+     {w:0.4, l:"Constitució de 1931: sobirania popular, Estat integral, sufragi femení, unicameralisme", any:["constitució de 1931","constitucio de 1931","estat integral","sufragi femení","sufragi femeni","unicameral"]},
+     {w:0.5, l:"Problemes i crisi final del bienni (Casas Viejas, Sanjurjo, CEDA, eleccions de 1933)", any:["casas viejas","sanjurjo","ceda","1933","crisi","oposici"]}
+   ],
+   model:"Vegeu la ruta «Tema llarg» → La Segona República: el Bienni Reformista, amb l'esquema cronològic complet."}
+];
+
+const CRITERIS = [
+  {t:"Coneixement global i síntesi", x:"Demostra que domines el conjunt de la matèria i que saps resumir-la sense perdre el fil."},
+  {t:"Capacitat analítica, no descriptiva", x:"A les qüestions polítiques, indica els trets fonamentals de cada programa o constitució: divisió de poders, programa econòmic, sufragi."},
+  {t:"Causes i conseqüències", x:"Cada procés s'ha d'explicar amb el que el provoca i el que en deriva, no com una llista de fets."},
+  {t:"Contextualització", x:"Cronologia, espai, personatges transcendents i relació amb la situació europea."},
+  {t:"Vocabulari específic", x:"Termes històrics correctes i rigorosos, amb definició clara dels conceptes."},
+  {t:"Claredat expositiva", x:"Ordre, absència de contradiccions i capacitat de concreció."},
+  {t:"Referències a les Illes Balears", x:"Al marge de les preguntes específiques, incorporar-ne es valora de forma especialment positiva al llarg de tota la prova."}
+];
+</script>
+
+<script>
+/* ===================== ESTAT I UTILITATS ===================== */
+const KEY = "historia10.v1";
+const DEFAULT_STATE = {fc:{}, cronoW:0, cronoT:0, bal:[], temes:[], arena:{}, drafts:{}, examDate:"2026-06-09", theme:null};
+let S = Object.assign({}, DEFAULT_STATE);
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign({}, DEFAULT_STATE, JSON.parse(raw)); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+
+const $ = (sel, root) => (root || document).querySelector(sel);
+const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+const norm = s => (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const fmt = n => n.toFixed(2).replace(".", ",");
+const shuffle = a => { const b = a.slice(); for (let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+
+/* ===================== TEMA CLAR / FOSC ===================== */
+function applyTheme(){
+  if (S.theme) document.documentElement.setAttribute("data-theme", S.theme);
+  else document.documentElement.removeAttribute("data-theme");
+}
+applyTheme();
+$("#themeBtn").addEventListener("click", () => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark" ||
+    (!S.theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  S.theme = dark ? "light" : "dark"; applyTheme(); save();
+});
+
+/* ===================== NAVEGACIÓ ===================== */
+const TITLES = {panel:"Panell de control", breus:"Qüestions breus · part A", comentari:"Comentari de font · part B",
+  tema:"Tema llarg · part C", comparador:"Comparador constitucional", balear:"Bonus balear",
+  criteris:"Criteris i penalitzacions", arena:"Arena d'avaluació"};
+function go(id){
+  $$(".sec").forEach(s => { s.hidden = s.id !== "sec-" + id; });
+  $$(".navitem").forEach(b => b.setAttribute("aria-current", String(b.dataset.go === id)));
+  $("#crumb").textContent = TITLES[id] || "";
+  document.body.classList.remove("nav-open");
+  window.scrollTo({top:0, behavior:"instant"});
+  if (location.hash !== "#" + id) history.replaceState(null, "", "#" + id);
+}
+$$(".navitem").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+$("#burger").addEventListener("click", () => document.body.classList.toggle("nav-open"));
+$("#scrim").addEventListener("click", () => document.body.classList.remove("nav-open"));
+
+/* ===================== RELLOTGE DE PROVA ===================== */
+let tLeft = 90*60, tRun = false, tId = null;
+function paintTimer(){
+  const m = Math.floor(Math.abs(tLeft)/60), s = Math.abs(tLeft)%60;
+  const txt = (tLeft < 0 ? "-" : "") + String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+  $("#timerBig").textContent = txt; $("#timerChip").textContent = txt;
+  $("#timerChip").hidden = !tRun;
+  $("#timerBig").style.color = tLeft <= 300 ? "var(--wine)" : "var(--ink)";
+}
+$("#timerToggle").addEventListener("click", () => {
+  tRun = !tRun; $("#timerToggle").textContent = tRun ? "Pausa" : "Iniciar";
+  clearInterval(tId);
+  if (tRun) tId = setInterval(() => { tLeft--; paintTimer(); }, 1000);
+  paintTimer();
+});
+$("#timerReset").addEventListener("click", () => {
+  clearInterval(tId); tRun = false; tLeft = 90*60; $("#timerToggle").textContent = "Iniciar"; paintTimer();
+});
+paintTimer();
+
+/* ===================== PANELL ===================== */
+const STRUCTURE = [
+  {c:"A.1", t:"Resposta breu (6-10 línies)", p:"1 punt"},
+  {c:"A.2", t:"Quatre definicions d'1 a 3 línies", p:"1 punt"},
+  {c:"A.3", t:"Esquema comparatiu amb comuns i diferències", p:"1 punt"},
+  {c:"A.4", t:"Ordenació cronològica (bloc A)", p:"1 punt"},
+  {c:"B", t:"Comentari de font: identificació + pregunta", p:"1,5 + 1,5"},
+  {c:"C", t:"Tema a desenvolupar", p:"3 punts"}
+];
+$("#structureList").innerHTML = STRUCTURE.map(r => `
+  <div style="display:flex; gap:10px; align-items:baseline">
+    <span class="num" style="color:var(--wine-ink); font-size:12px; min-width:26px">${r.c}</span>
+    <span style="flex:1; font-size:13.5px; color:var(--ink-soft)">${r.t}</span>
+    <span class="num" style="font-size:12px; color:var(--muted); white-space:nowrap">${r.p}</span>
+  </div>`).join("");
+
+(function(){
+  const d = new Date(S.examDate + "T09:00:00");
+  if (isNaN(d) || d < new Date()){
+    const y = new Date().getMonth() > 5 ? new Date().getFullYear() + 1 : new Date().getFullYear();
+    S.examDate = y + "-06-09"; save();
+  }
+})();
+$("#examDate").value = S.examDate;
+function paintCountdown(){
+  const d = new Date(S.examDate + "T09:00:00");
+  const diff = Math.ceil((d - new Date()) / 86400000);
+  $("#countdown").textContent = isNaN(diff) ? "—" : (diff > 0 ? diff : 0);
+  $("#countdownSub").textContent = diff > 1 ? "dies fins a la prova" : (diff === 1 ? "demà és la prova" : "la prova ja ha passat");
+}
+$("#examDate").addEventListener("change", e => { S.examDate = e.target.value; save(); paintCountdown(); });
+paintCountdown();
+
+function paintProgress(){
+  const known = Object.values(S.fc).filter(v => v === 1).length;
+  const rows = [
+    {l:"Definicions dominades", n:known, d:FLASHCARDS.length},
+    {l:"Sèries cronològiques encertades", n:Math.min(S.cronoW, 8), d:8},
+    {l:"Temes repassats", n:S.temes.length, d:TEMES.length},
+    {l:"Exercicis corregits a l'arena", n:Object.keys(S.arena).length, d:ARENA.length}
+  ];
+  $("#progressList").innerHTML = rows.map(r => `
+    <div>
+      <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--ink-soft)">
+        <span>${r.l}</span><span class="num">${r.n}/${r.d}</span>
+      </div>
+      <div class="meter" style="margin-top:6px"><i style="width:${Math.round(100*r.n/r.d)}%"></i></div>
+    </div>`).join("");
+}
+$("#resetProgress").addEventListener("click", () => {
+  if (!confirm("Segur que vols esborrar tot el progrés d'aquest dispositiu?")) return;
+  S = Object.assign({}, DEFAULT_STATE); save();
+  paintProgress(); buildDeck(); paintBal(); paintTemes(); location.reload();
+});
+
+const CALC = [
+  {k:"a1", l:"A.1", max:1}, {k:"a2", l:"A.2", max:1}, {k:"a3", l:"A.3", max:1}, {k:"a4", l:"A.4 · tot o res", max:1},
+  {k:"b1", l:"B.1 identificació", max:1.5}, {k:"b2", l:"B.2 pregunta", max:1.5}, {k:"c", l:"C tema", max:3}
+];
+$("#calcInputs").innerHTML = CALC.map(c => `
+  <div>
+    <label class="eyebrow" for="calc-${c.k}" style="display:block; margin-bottom:5px">${c.l} <span style="color:var(--muted)">/ ${fmt(c.max)}</span></label>
+    <input class="field num" type="number" id="calc-${c.k}" min="0" max="${c.max}" step="0.05" value="0">
+  </div>`).join("") + `
+  <div>
+    <div class="eyebrow" style="margin-bottom:5px">Bonus balear</div>
+    <div class="stack" style="gap:4px; font-size:13px">
+      <label><input type="checkbox" class="calcbal" data-v="0.25"> A.1 (+0,25)</label>
+      <label><input type="checkbox" class="calcbal" data-v="0.25"> A.3 (+0,25)</label>
+      <label><input type="checkbox" class="calcbal" data-v="0.5"> B (+0,5)</label>
+      <label><input type="checkbox" class="calcbal" data-v="0.5"> C (+0,5)</label>
+    </div>
+  </div>
+  <div>
+    <label class="eyebrow" for="calc-faltes" style="display:block; margin-bottom:5px">Faltes d'ortografia</label>
+    <input class="field num" type="number" id="calc-faltes" min="0" max="30" step="1" value="0">
+    <label class="eyebrow" for="calc-red" style="display:block; margin:10px 0 5px">Redacció i cohesió</label>
+    <select class="field" id="calc-red">
+      <option value="0">Correcta</option><option value="0.2">−0,2</option><option value="0.35">−0,35</option><option value="0.5">−0,5</option>
+    </select>
+  </div>`;
+function ortoPenalty(n){ return n <= 2 ? 0 : Math.min(1, (n - 2) * 0.1); }
+function paintCalc(){
+  let base = 0;
+  CALC.forEach(c => { base += Math.min(c.max, Math.max(0, parseFloat($("#calc-" + c.k).value) || 0)); });
+  let bonus = 0; $$(".calcbal").forEach(cb => { if (cb.checked) bonus += parseFloat(cb.dataset.v); });
+  const faltes = parseInt($("#calc-faltes").value) || 0;
+  const red = parseFloat($("#calc-red").value) || 0;
+  const pen = Math.min(1, ortoPenalty(faltes) + red);
+  const total = Math.max(0, Math.min(10, base + bonus - pen));
+  $("#calcTotal").textContent = fmt(total);
+  $("#calcTotal").style.color = total >= 9 ? "var(--ok)" : (total < 5 ? "var(--bad)" : "var(--ink)");
+  $("#calcBreakdown").innerHTML = `
+    <span>Contingut: <b class="num">${fmt(base)}</b> / 10</span>
+    <span>Bonus balear: <b class="num" style="color:var(--gold)">+${fmt(bonus)}</b></span>
+    <span>Penalització lingüística: <b class="num" style="color:var(--bad)">−${fmt(pen)}</b> ${faltes > 2 ? `(${faltes} faltes: les dues primeres no descompten)` : ""}</span>`;
+}
+$("#calcInputs").addEventListener("input", paintCalc);
+$("#calcInputs").addEventListener("change", paintCalc);
+paintCalc();
+
+/* ===================== A.2 · FITXES ===================== */
+const BLOCS = ["Tots"].concat(Array.from(new Set(FLASHCARDS.map(f => f.b))));
+$("#fcBloc").innerHTML = BLOCS.map(b => `<option value="${b}">${b}</option>`).join("");
+let deck = [], di = 0;
+function buildDeck(){
+  const bloc = $("#fcBloc").value, hard = $("#fcOnlyHard").checked;
+  deck = FLASHCARDS.filter(f => (bloc === "Tots" || f.b === bloc) && (!hard || S.fc[f.t] === 2));
+  if (!deck.length) deck = FLASHCARDS.slice();
+  deck = shuffle(deck); di = 0; paintCard();
+}
+function paintCard(){
+  const f = deck[di]; if (!f) return;
+  $("#fcCard").classList.remove("is-flipped");
+  $("#fcTerm").textContent = f.t; $("#fcTermBloc").textContent = f.b;
+  $("#fcTermBack").textContent = f.t; $("#fcDef").textContent = f.d;
+  $("#fcBal").textContent = f.bal ? "Bonus balear · " + f.bal : "";
+  $("#fcCounter").textContent = (di + 1) + " / " + deck.length;
+  const known = Object.values(S.fc).filter(v => v === 1).length;
+  $("#fcMeter").style.width = Math.round(100 * known / FLASHCARDS.length) + "%";
+  $("#fcProgressTxt").textContent = known + " de " + FLASHCARDS.length + " definicions marcades com a sabudes en aquest dispositiu.";
+}
+function nextCard(){ di = (di + 1) % deck.length; paintCard(); }
+$("#fcCard").addEventListener("click", () => $("#fcCard").classList.toggle("is-flipped"));
+$("#fcFlip").addEventListener("click", e => { e.stopPropagation(); $("#fcCard").classList.toggle("is-flipped"); });
+$("#fcNext").addEventListener("click", nextCard);
+$("#fcShuffle").addEventListener("click", buildDeck);
+$("#fcKnow").addEventListener("click", () => { S.fc[deck[di].t] = 1; save(); paintProgress(); nextCard(); });
+$("#fcHard").addEventListener("click", () => { S.fc[deck[di].t] = 2; save(); paintProgress(); nextCard(); });
+$("#fcBloc").addEventListener("change", buildDeck);
+$("#fcOnlyHard").addEventListener("change", buildDeck);
+buildDeck();
+
+$("#breusTabs").addEventListener("click", e => {
+  const b = e.target.closest("[data-tab]"); if (!b) return;
+  $$("#breusTabs .btn").forEach(x => x.classList.toggle("btn-primary", x === b));
+  ["a2","a4","a1"].forEach(t => { $("#tab-" + t).hidden = t !== b.dataset.tab; });
+});
+$$("#breusTabs .btn")[0].classList.add("btn-primary");
+
+/* ===================== A.4 · MINIJOC CRONOLÒGIC ===================== */
+let cSet = null, cOrder = [], cPool = [];
+function newCrono(){
+  const pool = CRONO_SETS.filter(s => s !== cSet);
+  cSet = pool[Math.floor(Math.random() * pool.length)];
+  cOrder = []; cPool = shuffle(cSet.items);
+  $("#cronoFeedback").innerHTML = "";
+  paintCrono();
+}
+function paintCrono(){
+  $("#cronoPool").innerHTML = cPool.map((it, i) => `
+    <button class="sortitem" data-i="${i}" ${cOrder.includes(it) ? "disabled" : ""}>
+      <span class="idx">${cOrder.includes(it) ? cOrder.indexOf(it) + 1 : "·"}</span>
+      <span>${esc(it.n)}</span>
+    </button>`).join("");
+  $("#cronoAnswer").innerHTML = cOrder.length
+    ? cOrder.map((it, i) => `<div class="sortitem" style="cursor:default"><span class="idx">${i+1}</span><span>${esc(it.n)}</span></div>`).join("")
+    : `<p class="lead" style="font-size:13px; color:var(--muted)">Encara no has col·locat cap element.</p>`;
+  $("#cronoWins").textContent = S.cronoW; $("#cronoTries").textContent = S.cronoT;
+}
+$("#cronoPool").addEventListener("click", e => {
+  const b = e.target.closest(".sortitem"); if (!b || b.disabled) return;
+  const it = cPool[parseInt(b.dataset.i)];
+  if (!cOrder.includes(it) && cOrder.length < 4) cOrder.push(it);
+  paintCrono();
+});
+$("#cronoUndo").addEventListener("click", () => { cOrder.pop(); paintCrono(); });
+$("#cronoNew").addEventListener("click", newCrono);
+$("#cronoCheck").addEventListener("click", () => {
+  if (cOrder.length < 4) { $("#cronoFeedback").innerHTML = `<p class="lead warn">Col·loca els quatre elements abans de comprovar.</p>`; return; }
+  const ok = cOrder.every((it, i) => i === 0 || cOrder[i-1].y <= it.y);
+  S.cronoT++; if (ok) S.cronoW++; save(); paintProgress();
+  $("#cronoWins").textContent = S.cronoW; $("#cronoTries").textContent = S.cronoT;
+  const sorted = cSet.items.slice().sort((a,b) => a.y - b.y);
+  $("#cronoFeedback").innerHTML = `
+    <div class="card-flat" style="border:1px solid ${ok ? "var(--ok)" : "var(--bad)"}">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span class="pill-score num" style="background:${ok ? "rgba(47,107,79,.14)" : "rgba(155,44,44,.14)"}; color:${ok ? "var(--ok)" : "var(--bad)"}">${ok ? "1,00" : "0,00"}</span>
+        <strong>${ok ? "Ordre correcte: 1 punt sencer." : "Hi ha una errada: la qüestió es puntua amb 0 punts."}</strong>
+      </div>
+      <div class="timeline" style="margin-top:14px">
+        ${sorted.map(it => `<div class="tl-item"><div class="tl-year">${esc(it.d)}</div><div style="font-size:14px">${esc(it.n)}</div><div class="lead" style="font-size:13px">${esc(it.note)}</div></div>`).join("")}
+      </div>
+    </div>`;
+});
+newCrono();
+
+/* ===================== A.1 · BANC DE PREGUNTES ===================== */
+$("#a1List").innerHTML = A1_BANK.map((q, i) => `
+  <details class="acc">
+    <summary>
+      <span class="num" style="font-size:12px; color:var(--wine-ink)">${String(i+1).padStart(2,"0")}</span>
+      <span style="flex:1; font-size:14.5px">${esc(q.q)}</span>
+    </summary>
+    <div class="acc-body">
+      <div class="eyebrow">Guió d'ítems que cerca el corrector</div>
+      <ul class="lead" style="margin:10px 0 0; padding-left:18px; display:grid; gap:6px">
+        ${q.items.map(it => `<li>${esc(it)}</li>`).join("")}
+      </ul>
+      <div class="card-flat" style="margin-top:14px; background:var(--tint-gold)">
+        <div class="eyebrow" style="color:var(--gold)">Frase balear (+0,25)</div>
+        <p style="margin-top:6px; font-size:14px">${esc(q.bal)}</p>
+      </div>
+      <p class="lead" style="font-size:12.5px; color:var(--muted); margin-top:12px">Per assolir la meitat de la puntuació cal resoldre positivament la meitat dels ítems.</p>
+    </div>
+  </details>`).join("");
+
+/* ===================== B · COMENTARI DE FONT ===================== */
+const SVGS = {
+  goya: `<svg viewBox="0 0 320 160" role="img" aria-label="Esquema del quadre de Goya: el fusellament del 3 de maig" style="width:100%; height:auto; max-width:100%; display:block; border-radius:10px; background:#1B1815">
+    <rect x="0" y="0" width="320" height="160" fill="#1B1815"/>
+    <rect x="0" y="118" width="320" height="42" fill="#2A241E"/>
+    <rect x="128" y="92" width="26" height="26" fill="#F0C96B"/>
+    <circle cx="141" cy="84" r="30" fill="#F0C96B" opacity="0.16"/>
+    <g fill="#EDE6D8">
+      <rect x="96" y="60" width="13" height="58" rx="5"/>
+      <circle cx="102" cy="52" r="9"/>
+      <rect x="86" y="44" width="9" height="26" rx="4" transform="rotate(-38 90 57)"/>
+      <rect x="116" y="70" width="11" height="48" rx="5" opacity="0.65"/>
+      <circle cx="121" cy="63" r="8" opacity="0.65"/>
+    </g>
+    <g fill="#4A423A">
+      <rect x="196" y="64" width="15" height="54" rx="4"/><rect x="214" y="62" width="15" height="56" rx="4"/>
+      <rect x="232" y="64" width="15" height="54" rx="4"/><rect x="250" y="62" width="15" height="56" rx="4"/>
+      <rect x="172" y="76" width="42" height="5" rx="2"/><rect x="190" y="84" width="42" height="5" rx="2"/>
+    </g>
+    <path d="M40 118 q18 -10 34 0 q-16 6 -34 0z" fill="#6E2B2B"/>
+    <text x="12" y="20" fill="#8C8276" font-family="monospace" font-size="9">ESQUEMA · Goya, 3 de maig de 1808 (1814)</text>
+  </svg>`,
+  carrega: `<svg viewBox="0 0 320 160" role="img" aria-label="Esquema del quadre La càrrega de Ramon Casas" style="width:100%; height:auto; max-width:100%; display:block; border-radius:10px; background:#D8D2C6">
+    <rect x="0" y="0" width="320" height="160" fill="#D8D2C6"/>
+    <rect x="0" y="120" width="320" height="40" fill="#C3BBAC"/>
+    <g fill="#3A3229">
+      <ellipse cx="196" cy="96" rx="46" ry="22"/>
+      <rect x="160" y="96" width="10" height="26" rx="4"/><rect x="226" y="96" width="10" height="26" rx="4"/>
+      <path d="M238 84 q16 -6 20 -22 q-2 20 -14 28z"/>
+      <rect x="186" y="56" width="12" height="42" rx="5"/><circle cx="192" cy="50" r="9"/>
+      <rect x="196" y="52" width="30" height="5" rx="2" transform="rotate(-24 196 52)"/>
+    </g>
+    <g fill="#55493D">
+      <rect x="64" y="92" width="12" height="30" rx="5"/><circle cx="70" cy="86" r="8"/>
+      <rect x="92" y="100" width="28" height="10" rx="5" transform="rotate(-14 92 100)"/>
+      <circle cx="120" cy="104" r="8"/>
+      <rect x="40" y="104" width="11" height="18" rx="5" opacity="0.7"/>
+    </g>
+    <text x="12" y="20" fill="#6B6255" font-family="monospace" font-size="9">ESQUEMA · Casas, La càrrega (1899-1902)</text>
+  </svg>`
+};
+$("#srcSelect").innerHTML = FONTS.map(f => `<option value="${f.id}">${esc(f.label)}</option>`).join("");
+function paintFont(){
+  const f = FONTS.find(x => x.id === $("#srcSelect").value) || FONTS[0];
+  $("#srcDoc").innerHTML = `
+    <div class="card">
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center">
+        <span class="chip chip-wine">${esc(f.tipus)}</span>
+        <span class="chip">1,5 + 1,5 punts</span>
+        <span class="chip chip-gold">+0,5 balear</span>
+      </div>
+      <p class="lead" style="margin-top:14px; font-size:14px"><strong style="color:var(--ink)">Enunciat.</strong> ${esc(f.enunciat)}</p>
+      <hr class="rule" style="margin:16px 0">
+      <blockquote class="doc">${f.text}</blockquote>
+      <p class="lead" style="font-size:12.5px; color:var(--muted); margin-top:10px">${esc(f.font)}</p>
+      ${f.imatge ? `<div style="margin-top:16px">${SVGS[f.imatge]}<p class="lead" style="font-size:12.5px; color:var(--muted); margin-top:8px">${esc(f.imatgePeu)} · Reproducció esquemàtica: a l'examen tindràs la imatge real, que has de <em>descriure</em> per citar-la.</p></div>` : ""}
+    </div>`;
+  $("#srcSteps").innerHTML = f.passos.map((p, i) => `
+    <details class="acc" ${i === 0 ? "open" : ""}>
+      <summary>
+        <span class="num" style="font-size:12px; color:var(--wine-ink)">${i+1}</span>
+        <span style="flex:1; font-size:15px">${esc(p.t)}</span>
+        <span class="chip" style="font-size:11px">${i < 2 ? "1r bloc · 1,5" : "2n bloc · 1,5"}</span>
+      </summary>
+      <div class="acc-body">
+        <p class="lead" style="font-size:13.5px">${esc(p.q)}</p>
+        <textarea class="field" style="margin-top:10px; min-height:110px" data-step="${f.id}-${i}" placeholder="Escriu aquí la teva versió…"></textarea>
+        <button class="btn btn-sm" style="margin-top:10px" data-model="${i}">Comparar amb el model</button>
+        <div class="card-flat" style="margin-top:12px" hidden data-modelout="${i}">
+          <div class="eyebrow">Resposta model</div>
+          <p style="margin-top:8px; font-size:14.5px; line-height:1.7">${esc(p.model)}</p>
+        </div>
+      </div>
+    </details>`).join("");
+  $$("#srcSteps textarea").forEach(t => {
+    const k = t.dataset.step;
+    if (S.drafts[k]) t.value = S.drafts[k];
+    t.addEventListener("input", () => { S.drafts[k] = t.value; save(); });
+  });
+  $$("#srcSteps [data-model]").forEach(b => b.addEventListener("click", () => {
+    const out = $(`[data-modelout="${b.dataset.model}"]`, b.parentElement);
+    out.hidden = !out.hidden; b.textContent = out.hidden ? "Comparar amb el model" : "Amagar el model";
+  }));
+}
+$("#srcSelect").addEventListener("change", paintFont);
+paintFont();
+
+/* ===================== C · TEMES ===================== */
+function paintTemes(){
+  const q = norm($("#temaSearch").value);
+  const list = TEMES.filter(t => !q || norm(JSON.stringify(t)).includes(q));
+  $("#temaCount").textContent = list.length + " / " + TEMES.length + " temes";
+  $("#temaList").innerHTML = list.map(t => `
+    <details class="acc">
+      <summary>
+        <span style="flex:1">
+          <span style="font-family:Newsreader,serif; font-size:17px">${esc(t.t)}</span>
+          <span class="lead" style="display:block; font-size:12.5px">${esc(t.sub)}</span>
+        </span>
+        ${S.temes.includes(t.id) ? `<span class="chip" style="color:var(--ok); border-color:var(--ok)">repassat</span>` : ""}
+      </summary>
+      <div class="acc-body">
+        <div class="card-flat">
+          <div class="eyebrow">Definició d'obertura</div>
+          <p style="margin-top:8px; font-size:15px; line-height:1.7">${esc(t.def)}</p>
+        </div>
+        <div class="timeline" style="margin-top:18px">
+          ${t.etapes.map(e => `<div class="tl-item">
+            <div class="tl-year">${esc(e.y)}</div>
+            <div style="font-size:14.5px; font-weight:500">${esc(e.t)}</div>
+            <div class="lead" style="font-size:14px">${esc(e.x)}</div>
+          </div>`).join("")}
+        </div>
+        <div class="grid-auto" style="margin-top:16px">
+          <div><div class="eyebrow">Noms propis obligatoris</div><div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px">${t.noms.map(n => `<span class="chip" style="font-size:12px">${esc(n)}</span>`).join("")}</div></div>
+          <div><div class="eyebrow">Vocabulari específic</div><div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px">${t.concepts.map(n => `<span class="chip chip-wine" style="font-size:12px">${esc(n)}</span>`).join("")}</div></div>
+        </div>
+        <div class="card-flat" style="margin-top:16px; background:var(--tint-gold)">
+          <div class="eyebrow" style="color:var(--gold)">Bonus balear (+0,5)</div>
+          <p style="margin-top:8px; font-size:14px; line-height:1.7">${esc(t.bal)}</p>
+        </div>
+        <div style="margin-top:16px">
+          <div class="eyebrow">Errors que et costen el 10</div>
+          <ul class="lead" style="margin:8px 0 0; padding-left:18px; display:grid; gap:5px; font-size:14px">${t.errors.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
+        </div>
+        <button class="btn btn-sm" style="margin-top:16px" data-tema="${t.id}">${S.temes.includes(t.id) ? "Desmarcar" : "Marcar com a repassat"}</button>
+      </div>
+    </details>`).join("") || `<p class="lead">Cap tema no coincideix amb la cerca.</p>`;
+  $$("[data-tema]").forEach(b => b.addEventListener("click", () => {
+    const id = b.dataset.tema;
+    S.temes = S.temes.includes(id) ? S.temes.filter(x => x !== id) : S.temes.concat([id]);
+    save(); paintProgress(); paintTemes();
+  }));
+}
+$("#temaSearch").addEventListener("input", paintTemes);
+paintTemes();
+
+/* ===================== COMPARADOR CONSTITUCIONAL ===================== */
+const cmpOpts = CONSTITUCIONS.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join("");
+$("#cmpA").innerHTML = cmpOpts; $("#cmpB").innerHTML = cmpOpts;
+$("#cmpA").value = "1931"; $("#cmpB").value = "1978";
+function paintCmp(){
+  const a = CONSTITUCIONS.find(c => c.id === $("#cmpA").value);
+  const b = CONSTITUCIONS.find(c => c.id === $("#cmpB").value);
+  if (a === b){ $("#cmpOut").innerHTML = `<p class="lead warn">Tria dos textos diferents: la A.3 exigeix comparar-ne dos.</p>`; return; }
+  const comuns = CMP_FIELDS.filter(f => a.f[f.k].k === b.f[f.k].k);
+  const difs = CMP_FIELDS.filter(f => a.f[f.k].k !== b.f[f.k].k);
+  const frase = `Totes dues coincideixen en ${comuns.slice(0,2).map(f => f.label.toLowerCase()).join(" i en ") || "pocs aspectes"}` +
+    `, però es diferencien en ${difs.slice(0,2).map(f => f.label.toLowerCase()).join(" i en ")}.`;
+  $("#cmpOut").innerHTML = `
+    <div class="grid-auto">
+      ${[a,b].map(c => `<div class="card"><div class="eyebrow">${esc(c.sub)}</div><h3 style="font-size:19px; margin-top:6px">${esc(c.name)}</h3><p class="lead" style="font-size:13.5px; margin-top:8px">${esc(c.ctx)}</p></div>`).join("")}
+    </div>
+    <div class="tablewrap" style="margin-top:18px">
+      <table>
+        <thead><tr><th>Element</th><th>${esc(a.name)}</th><th>${esc(b.name)}</th></tr></thead>
+        <tbody>${CMP_FIELDS.map(f => {
+          const same = a.f[f.k].k === b.f[f.k].k;
+          return `<tr style="${same ? "background:var(--tint-gold)" : ""}">
+            <td class="rowlabel">${esc(f.label)}${same ? ` <span class="num" style="color:var(--gold); font-size:11px">=</span>` : ""}</td>
+            <td>${esc(a.f[f.k].t)}</td><td>${esc(b.f[f.k].t)}</td></tr>`;
+        }).join("")}</tbody>
+      </table>
+    </div>
+    <div class="grid-auto" style="margin-top:18px">
+      <div class="card" style="border-color:color-mix(in srgb,var(--gold) 45%,transparent)">
+        <div class="eyebrow" style="color:var(--gold)">Dos punts en comú</div>
+        <ol class="lead" style="margin:10px 0 0; padding-left:20px; display:grid; gap:8px; font-size:14px">
+          ${comuns.slice(0,2).map(f => `<li><strong style="color:var(--ink)">${esc(f.label)}.</strong> ${esc(a.f[f.k].t)}</li>`).join("") || `<li>Aquests dos textos no comparteixen cap element estructural: explica-ho com a tret de la comparació.</li>`}
+        </ol>
+      </div>
+      <div class="card" style="border-color:color-mix(in srgb,var(--wine) 45%,transparent)">
+        <div class="eyebrow" style="color:var(--wine-ink)">Dues diferències</div>
+        <ol class="lead" style="margin:10px 0 0; padding-left:20px; display:grid; gap:8px; font-size:14px">
+          ${difs.slice(0,2).map(f => `<li><strong style="color:var(--ink)">${esc(f.label)}.</strong> ${esc(a.f[f.k].t)} <em>enfront de</em> ${esc(b.f[f.k].t)}</li>`).join("")}
+        </ol>
+      </div>
+    </div>
+    <div class="card-flat" style="margin-top:18px">
+      <div class="eyebrow">Frase de tancament que relaciona els dos textos</div>
+      <p style="margin-top:8px; font-family:Newsreader,serif; font-size:16.5px; line-height:1.7">${esc(frase)}</p>
+      <p class="lead" style="font-size:12.5px; color:var(--muted); margin-top:10px">Recorda: no es pot avaluar positivament la A.3 si no es relacionen ambdós conceptes. Afegeix-hi una referència balear i sumes 0,25.</p>
+    </div>`;
+}
+$("#cmpA").addEventListener("change", paintCmp);
+$("#cmpB").addEventListener("change", paintCmp);
+$("#cmpSwap").addEventListener("click", () => { const v = $("#cmpA").value; $("#cmpA").value = $("#cmpB").value; $("#cmpB").value = v; paintCmp(); });
+paintCmp();
+
+/* ===================== BONUS BALEAR ===================== */
+const BAL_PERIODS = ["Tots"].concat(Array.from(new Set(BAL_HOOKS.map(h => h.p))));
+let balFilter = "Tots";
+$("#balFilters").innerHTML = BAL_PERIODS.map(p => `<button class="btn btn-sm" data-p="${p}">${p}</button>`).join("");
+function paintBal(){
+  $$("#balFilters .btn").forEach(b => b.classList.toggle("btn-primary", b.dataset.p === balFilter));
+  const list = BAL_HOOKS.filter(h => balFilter === "Tots" || h.p === balFilter);
+  $("#balList").innerHTML = list.map(h => {
+    const on = S.bal.includes(h.t);
+    return `<div class="card" style="${on ? "border-color:var(--gold)" : ""}">
+      <div style="display:flex; justify-content:space-between; gap:8px; align-items:baseline">
+        <div class="eyebrow">${esc(h.p)}</div>${on ? `<span class="num" style="color:var(--gold); font-size:12px">al guió</span>` : ""}
+      </div>
+      <h3 style="font-size:17px; margin-top:6px">${esc(h.t)}</h3>
+      <p class="lead" style="font-size:14px; margin-top:8px">${esc(h.x)}</p>
+      <button class="btn btn-sm" style="margin-top:12px" data-bal="${esc(h.t)}">${on ? "Llevar del guió" : "Afegir al meu guió"}</button>
+    </div>`;
+  }).join("");
+  $$("[data-bal]").forEach(b => b.addEventListener("click", () => {
+    const t = b.dataset.bal;
+    S.bal = S.bal.includes(t) ? S.bal.filter(x => x !== t) : S.bal.concat([t]);
+    save(); paintBal();
+  }));
+  const plan = BAL_HOOKS.filter(h => S.bal.includes(h.t));
+  $("#balPlan").innerHTML = plan.length
+    ? plan.map(h => `<div style="padding:10px 0; border-bottom:1px solid var(--line-soft)"><div class="eyebrow">${esc(h.p)} · ${esc(h.t)}</div><p style="margin-top:5px; font-size:14px">${esc(h.x)}</p></div>`).join("") +
+      `<p class="lead" style="font-size:13px; margin-top:12px; color:var(--gold)">${plan.length} frase${plan.length === 1 ? "" : "s"} al guió. Amb quatre ben col·locades tens +1,5 punts.</p>`
+    : `<p class="lead" style="font-size:13.5px; color:var(--muted)">Encara no hi has afegit cap frase. Tria'n una per període i memoritza-la.</p>`;
+}
+$("#balFilters").addEventListener("click", e => { const b = e.target.closest("[data-p]"); if (!b) return; balFilter = b.dataset.p; paintBal(); });
+paintBal();
+
+let bq = 0, bqStreak = 0;
+function paintQuiz(){
+  const q = BAL_QUIZ[bq % BAL_QUIZ.length];
+  const opts = shuffle([{t:q.ok, ok:true}].concat(q.bad.map(b => ({t:b, ok:false}))));
+  $("#balQuiz").innerHTML = `
+    <div class="eyebrow">Enunciat ${bq % BAL_QUIZ.length + 1} de ${BAL_QUIZ.length}</div>
+    <h3 style="font-size:18px; margin-top:6px">${esc(q.q)}</h3>
+    <div class="stack" style="gap:8px; margin-top:14px">
+      ${opts.map((o, i) => `<button class="sortitem" data-ok="${o.ok}" data-i="${i}"><span class="idx">${String.fromCharCode(97+i)}</span><span>${esc(o.t)}</span></button>`).join("")}
+    </div>
+    <div id="bqFeedback" style="margin-top:12px"></div>
+    <div class="num" style="margin-top:12px; font-size:13px; color:var(--muted)">Ratxa: <b>${bqStreak}</b></div>`;
+  $$("#balQuiz .sortitem").forEach(b => b.addEventListener("click", () => {
+    const ok = b.dataset.ok === "true";
+    bqStreak = ok ? bqStreak + 1 : 0;
+    b.style.borderColor = ok ? "var(--ok)" : "var(--bad)";
+    $("#bqFeedback").innerHTML = ok
+      ? `<p class="lead ok" style="font-size:14px">Correcte. Aquesta frase val +0,25 o +0,5 segons l'apartat.</p>`
+      : `<p class="lead bad" style="font-size:14px">No. Una referència balear ha de ser exacta: si és falsa, no suma i resta credibilitat. La correcta és: «${esc(q.ok)}»</p>`;
+    setTimeout(() => { bq++; paintQuiz(); }, ok ? 1200 : 3800);
+  }));
+}
+paintQuiz();
+
+/* ===================== CRITERIS ===================== */
+$("#critList").innerHTML = CRITERIS.map((c, i) => `
+  <div class="card">
+    <div class="num" style="font-size:12px; color:var(--wine-ink)">${String(i+1).padStart(2,"0")}</div>
+    <h3 style="font-size:17px; margin-top:6px">${esc(c.t)}</h3>
+    <p class="lead" style="font-size:14px; margin-top:8px">${esc(c.x)}</p>
+  </div>`).join("");
+</script>
+
+<script>
+/* ===================== ARENA D'AVALUACIÓ ===================== */
+const CONNECTORS = ["per tant","en canvi","mentre que","a mes","tanmateix","en consequencia","aixi doncs","d'una banda","d'altra banda","finalment","en definitiva","per contra","no obstant","aixi mateix"];
+const CAUSALS = ["causa","consequencia","provoc","perque","explica","origen","resultat","va permetre","desemboc","arran"];
+const BALWORDS = ["balear","mallorca","menorca","eivissa","formentera","palma","cabrera","illes","porto cristo","rossi","bayo","soledat"];
+const ORTO_TRAPS = [
+  {re:/\bhi havien\b/gi, t:"«hi havien» → «hi havia» (haver-hi és impersonal)"},
+  {re:/\btambe\b/gi, t:"«tambe» → «també»"},
+  {re:/\baixi\b/gi, t:"«aixi» → «així»"},
+  {re:/\bperque\b/gi, t:"«perque» → «perquè»"},
+  {re:/\bhistoria\b/g, t:"«historia» → «història»"},
+  {re:/\bpolitica\b/g, t:"«politica» → «política»"},
+  {re:/\beconomica\b/g, t:"«economica» → «econòmica»"},
+  {re:/\beconomiques\b/g, t:"«economiques» → «econòmiques»"},
+  {re:/\bpolitiques\b/g, t:"«politiques» → «polítiques»"},
+  {re:/\bpublica\b/g, t:"«publica» (adjectiu) → «pública»"},
+  {re:/\brepublica\b/g, t:"«republica» → «república»"},
+  {re:/\bdemocracia\b/g, t:"«democracia» → «democràcia»"},
+  {re:/\besglesia\b/g, t:"«esglesia» → «església»"},
+  {re:/\bconstitucio\b/g, t:"«constitucio» → «constitució»"},
+  {re:/\bespanya\b/g, t:"«espanya» amb minúscula → «Espanya»"},
+  {re:/\bentonces\b/gi, t:"castellanisme «entonces» → «aleshores», «llavors»"},
+  {re:/\bpero\b/g, t:"«pero» → «però»"}
+];
+const EXPECTED = {a2:90, a3:170, a1:170, b:430, c:520};
+
+$("#arenaSelect").innerHTML = ARENA.map(a => `<option value="${a.id}">${esc(a.label)}</option>`).join("");
+let arenaEx = ARENA[0];
+
+function paintArena(){
+  arenaEx = ARENA.find(a => a.id === $("#arenaSelect").value) || ARENA[0];
+  $("#arenaPrompt").innerHTML = `
+    <div class="card">
+      <div style="display:flex; flex-wrap:wrap; gap:8px">
+        <span class="chip chip-wine">Part ${esc(arenaEx.part)}</span>
+        <span class="chip">${fmt(arenaEx.max)} punts</span>
+        <span class="chip">≈ ${arenaEx.mins} min</span>
+        ${arenaEx.bal ? `<span class="chip chip-gold">+${fmt(arenaEx.bal)} balear</span>` : ""}
+      </div>
+      <p style="margin-top:14px; font-size:15.5px; line-height:1.7; font-family:Newsreader,serif">${esc(arenaEx.enunciat)}</p>
+      <p class="lead" style="font-size:13px; color:var(--muted); margin-top:10px">${esc(arenaEx.nota)}</p>
+    </div>`;
+  $("#arenaText").value = S.drafts["arena-" + arenaEx.id] || "";
+  $("#arenaOut").innerHTML = ""; $("#arenaModelOut").innerHTML = "";
+  paintMeta();
+}
+function paintMeta(){
+  const t = $("#arenaText").value.trim();
+  const w = t ? t.split(/\s+/).length : 0;
+  const lines = Math.round(w / 11);
+  const exp = EXPECTED[arenaEx.id] || 200;
+  const state = w === 0 ? "" : (w < exp*0.55 ? " · massa curt" : (w > exp*1.7 ? " · et passes d'extensió" : " · extensió adequada"));
+  $("#arenaMeta").textContent = `${w} paraules · ~${lines} línies${state}`;
+}
+$("#arenaText").addEventListener("input", () => {
+  paintMeta(); S.drafts["arena-" + arenaEx.id] = $("#arenaText").value; save();
+});
+$("#arenaSelect").addEventListener("change", paintArena);
+$("#arenaRandom").addEventListener("click", () => {
+  const others = ARENA.filter(a => a.id !== arenaEx.id);
+  $("#arenaSelect").value = others[Math.floor(Math.random()*others.length)].id; paintArena();
+});
+$("#arenaFaltes").addEventListener("input", e => { $("#arenaFaltesN").textContent = e.target.value; });
+$("#arenaClear").addEventListener("click", () => { $("#arenaText").value = ""; paintMeta(); S.drafts["arena-" + arenaEx.id] = ""; save(); $("#arenaOut").innerHTML = ""; });
+$("#arenaModel").addEventListener("click", () => {
+  const box = $("#arenaModelOut");
+  if (box.innerHTML) { box.innerHTML = ""; return; }
+  box.innerHTML = `<div class="card" style="border-color:color-mix(in srgb,var(--gold) 45%,transparent)">
+    <div class="eyebrow" style="color:var(--gold)">Resposta model</div>
+    <p style="margin-top:10px; font-size:15px; line-height:1.75; white-space:pre-wrap">${esc(arenaEx.model)}</p></div>`;
+});
+
+function bar(label, pct, note){
+  const color = pct >= 75 ? "var(--ok)" : (pct >= 45 ? "var(--warn)" : "var(--bad)");
+  return `<div>
+    <div style="display:flex; justify-content:space-between; font-size:13px"><span>${esc(label)}</span><span class="num" style="color:${color}">${pct}%</span></div>
+    <div class="meter" style="margin-top:6px"><i style="width:${pct}%; background:${color}"></i></div>
+    <p class="lead" style="font-size:12.5px; color:var(--muted); margin-top:4px">${esc(note)}</p>
+  </div>`;
+}
+
+$("#arenaCorrect").addEventListener("click", () => {
+  const raw = $("#arenaText").value.trim();
+  if (raw.split(/\s+/).filter(Boolean).length < 15){
+    $("#arenaOut").innerHTML = `<div class="card"><p class="lead warn">Escriu almenys unes línies: amb menys de 15 paraules no hi ha res a corregir.</p></div>`;
+    return;
+  }
+  const n = norm(raw);
+  const words = raw.split(/\s+/).length;
+  const exp = EXPECTED[arenaEx.id] || 200;
+
+  const hits = arenaEx.rub.map(r => ({r, ok: r.any.some(k => n.includes(norm(k)))}));
+  const score = hits.filter(h => h.ok).reduce((a, h) => a + h.r.w, 0);
+  const balHit = BALWORDS.filter(b => n.includes(b));
+  const bonus = (arenaEx.bal && balHit.length) ? arenaEx.bal : 0;
+
+  const faltes = parseInt($("#arenaFaltes").value) || 0;
+  const red = parseFloat($("#arenaRedaccio").value) || 0;
+  const pen = Math.min(1, ortoPenalty(faltes) + red);
+  const final = Math.max(0, score + bonus - pen);
+
+  const causals = CAUSALS.filter(c => n.includes(c)).length;
+  const conns = CONNECTORS.filter(c => n.includes(norm(c))).length;
+  const dates = (raw.match(/\b1[0-9]{3}\b/g) || []).length;
+  const vocab = Array.from(new Set(arenaEx.rub.flatMap(r => r.any).filter(k => n.includes(norm(k)))));
+  const parag = raw.split(/\n{1,}/).filter(p => p.trim()).length;
+  const longSentences = raw.split(/[.!?]/).filter(s => s.trim().split(/\s+/).length > 45).length;
+
+  const pct = v => Math.max(0, Math.min(100, Math.round(v * 100)));
+  const dCon = pct(score / arenaEx.max);
+  const dAna = pct((causals / 4) * 0.6 + (score / arenaEx.max) * 0.4);
+  const dCla = pct(Math.min(1, conns / 3) * 0.4 + Math.min(1, words / (exp * 0.8)) * 0.4 + (longSentences ? 0 : 0.2));
+  const dVoc = pct(Math.min(1, vocab.length / Math.max(4, arenaEx.rub.length)) * 0.75 + Math.min(1, dates / 4) * 0.25);
+
+  const traps = ORTO_TRAPS.map(t => ({t: t.t, n: (raw.match(t.re) || []).length})).filter(x => x.n);
+  const trapTotal = traps.reduce((a, x) => a + x.n, 0);
+
+  const missing = hits.filter(h => !h.ok);
+  const tips = [];
+  if (missing.length) tips.push("Incorpora els ítems que has deixat fora: són exactament el que el corrector busca.");
+  if (!balHit.length && arenaEx.bal) tips.push(`No hi ha cap referència a les Illes Balears: hi deixes ${fmt(arenaEx.bal)} punts sense recollir.`);
+  if (dates < 3) tips.push("Posa-hi més dates precises: la contextualització cronològica és un criteri explícit.");
+  if (causals < 2) tips.push("Analitza, no descriguis: escriu explícitament causes i conseqüències.");
+  if (conns < 2) tips.push("Travar el text amb connectors (en canvi, per tant, mentre que) és el que evita la penalització per cohesió.");
+  if (words < exp * 0.6) tips.push(`Et quedes curt: per a aquest apartat s'espera una extensió d'unes ${Math.round(exp/11)} línies.`);
+  if (longSentences) tips.push("Hi ha frases de més de 45 paraules: parteix-les o perdràs claredat expositiva.");
+  if (parag < 2 && arenaEx.max >= 3) tips.push("Estructura la resposta en paràgrafs: la presentació també es valora.");
+
+  S.arena[arenaEx.id] = Number(final.toFixed(2)); save(); paintProgress();
+
+  $("#arenaOut").innerHTML = `
+    <div class="card">
+      <div style="display:flex; flex-wrap:wrap; gap:18px; align-items:flex-end; justify-content:space-between">
+        <div>
+          <div class="eyebrow">Correcció simulada · criteris oficials</div>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-top:4px">
+            <span class="num" style="font-size:44px; letter-spacing:-.03em; color:${final >= arenaEx.max*0.85 ? "var(--ok)" : (final < arenaEx.max*0.5 ? "var(--bad)" : "var(--ink)")}">${fmt(final)}</span>
+            <span class="num" style="color:var(--muted)">/ ${fmt(arenaEx.max)}${arenaEx.bal ? " + " + fmt(arenaEx.bal) + " de bonus" : ""}</span>
+          </div>
+        </div>
+        <div class="stack num" style="gap:3px; font-size:13px; color:var(--ink-soft)">
+          <span>Contingut: <b class="num">${fmt(score)}</b> / ${fmt(arenaEx.max)}</span>
+          <span>Bonus balear: <b class="num" style="color:var(--gold)">+${fmt(bonus)}</b> ${arenaEx.bal ? (balHit.length ? `(${esc(balHit.slice(0,3).join(", "))})` : "(cap referència detectada)") : "(no puntua en aquest apartat)"}</span>
+          <span>Penalització lingüística: <b class="num" style="color:var(--bad)">−${fmt(pen)}</b></span>
+        </div>
+      </div>
+
+      <hr class="rule" style="margin:20px 0">
+      <div class="eyebrow">Criteris específics d'aquest apartat</div>
+      <div class="stack" style="gap:9px; margin-top:12px">
+        ${hits.map(h => `<div style="display:flex; gap:10px; align-items:flex-start">
+          <span class="num" style="color:${h.ok ? "var(--ok)" : "var(--bad)"}; font-size:13px; min-width:46px">${h.ok ? "+" + fmt(h.r.w) : "0,00"}</span>
+          <span style="font-size:14px; color:${h.ok ? "var(--ink)" : "var(--ink-soft)"}">${h.ok ? "" : "<span class='bad'>Falta: </span>"}${esc(h.r.l)}</span>
+        </div>`).join("")}
+      </div>
+
+      <hr class="rule" style="margin:20px 0">
+      <div class="eyebrow">Criteris generals d'avaluació</div>
+      <div class="grid-auto" style="margin-top:12px">
+        ${bar("Coneixement global i síntesi", dCon, `${hits.filter(h=>h.ok).length} de ${hits.length} ítems del guió oficial`)}
+        ${bar("Capacitat analítica", dAna, `${causals} marques de causa/conseqüència al text`)}
+        ${bar("Claredat expositiva", dCla, `${conns} connectors · ${parag} paràgraf${parag===1?"":"s"} · ${words} paraules`)}
+        ${bar("Vocabulari específic", dVoc, `${vocab.length} termes històrics i ${dates} dates precises`)}
+      </div>
+
+      <hr class="rule" style="margin:20px 0">
+      <div class="eyebrow" style="color:var(--wine-ink)">Advertència d'ortografia i redacció (simulació)</div>
+      <div class="card-flat" style="margin-top:10px">
+        <p style="font-size:14px; line-height:1.7">
+          Recorda que <strong>les dues primeres incorreccions ortogràfiques no descompten</strong> i que una mateixa falta repetida compta una sola vegada.
+          A partir de la tercera es dedueixen <strong>−0,10 punts</strong> per falta, fins a un <strong>màxim d'1 punt</strong> a tot l'exercici.
+          La mala redacció, la presentació descurada o la manca de coherència i cohesió poden restar fins a <strong>−0,5 punts</strong> més,
+          sense que la suma total pugui superar el punt de deducció.
+        </p>
+        <p class="lead" style="font-size:13px; margin-top:10px">
+          En aquesta correcció simulada has declarat <b class="num">${faltes}</b> faltes (descompte de <b class="num">${fmt(ortoPenalty(faltes))}</b>)
+          i una penalització de redacció de <b class="num">${fmt(red)}</b>.
+        </p>
+        ${traps.length ? `<div style="margin-top:12px">
+          <div class="eyebrow">Possibles incorreccions detectades al teu text (${trapTotal})</div>
+          <ul class="lead" style="margin:8px 0 0; padding-left:18px; font-size:13.5px; display:grid; gap:4px">${traps.map(t => `<li>${esc(t.t)}${t.n > 1 ? ` <span class="num">(×${t.n})</span>` : ""}</li>`).join("")}</ul>
+          <button class="btn btn-sm" style="margin-top:10px" id="arenaApplyTraps">Comptar-les al simulador</button>
+        </div>` : `<p class="lead" style="font-size:13px; margin-top:10px; color:var(--ok)">El detector automàtic no ha trobat cap de les incorreccions més típiques.</p>`}
+      </div>
+
+      ${tips.length ? `<hr class="rule" style="margin:20px 0">
+      <div class="eyebrow">Com arribar al 10 en aquesta pregunta</div>
+      <ul class="lead" style="margin:10px 0 0; padding-left:18px; display:grid; gap:7px; font-size:14px">${tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` :
+      `<hr class="rule" style="margin:20px 0"><p class="lead ok" style="font-size:14px">Resposta completa: hi ets tot, amb dates, anàlisi i referència balear. Ara repeteix-ho amb el rellotge en marxa.</p>`}
+
+      <p class="lead" style="font-size:12px; color:var(--muted); margin-top:18px">
+        Correcció generada automàticament a partir dels criteris publicats per a aquest model d'examen. És un assaig, no una nota oficial:
+        el corrector humà valora també la coherència global i el rigor de cada afirmació.
+      </p>
+    </div>`;
+
+  const apply = $("#arenaApplyTraps");
+  if (apply) apply.addEventListener("click", () => {
+    $("#arenaFaltes").value = Math.min(15, trapTotal);
+    $("#arenaFaltesN").textContent = $("#arenaFaltes").value;
+    $("#arenaCorrect").click();
+  });
+  $("#arenaOut").scrollIntoView({behavior:"smooth", block:"start"});
+});
+paintArena();
+
+/* ===================== ARRENCADA ===================== */
+paintProgress();
+const initial = (location.hash || "#panel").slice(1);
+go(TITLES[initial] ? initial : "panel");
+</script>

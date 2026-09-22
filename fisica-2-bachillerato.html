@@ -1,0 +1,2791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Física de 2.º de bachillerato · Illes Balears</title>
+<meta name="description" content="Temario completo de Física de 2.º de bachillerato de las Illes Balears: teoría, formulario, simulaciones interactivas y preguntas de autoevaluación.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --tinta:#0E1834;
+  --tinta-2:#17234A;
+  --tinta-3:#26355F;
+  --papel:#F4F6FB;
+  --blanco:#FFFFFF;
+  --texto:#14203F;
+  --texto-2:#4E5B7C;
+  --texto-3:#7B87A4;
+  --borde:#DBE2F0;
+  --borde-2:#C6D0E6;
+  --campo:#2B4CE0;
+  --campo-claro:#EAEEFD;
+  --energia:#E9930B;
+  --energia-claro:#FDF2DC;
+  --verde:#12805C;
+  --verde-claro:#E4F4EE;
+  --rojo:#C0322B;
+  --rojo-claro:#FBEBEA;
+  --rail:284px;
+  --sans:"Bricolage Grotesque","Segoe UI",Roboto,-apple-system,system-ui,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --radio:10px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--papel);
+  color:var(--texto);
+  font-family:var(--serif);
+  font-size:17px;
+  line-height:1.68;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.sans{font-family:var(--sans);letter-spacing:-0.015em}
+a{color:var(--campo)}
+:focus-visible{outline:3px solid var(--energia);outline-offset:2px;border-radius:4px}
+
+/* ---------- estructura ---------- */
+.app{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);min-height:100vh}
+
+.rail{
+  background:var(--tinta);
+  color:#C9D3EC;
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;
+  border-right:1px solid #000;
+}
+.rail__marca{padding:22px 22px 14px;border-bottom:1px solid rgba(255,255,255,.09)}
+.rail__marca button{
+  all:unset;cursor:pointer;display:block;width:100%;
+}
+.rail__titulo{font-family:var(--sans);font-weight:800;font-size:19px;color:#fff;line-height:1.15;letter-spacing:-0.02em}
+.rail__sub{font-family:var(--sans);font-size:12.5px;color:#8FA0C8;margin-top:5px;line-height:1.35}
+
+.rail__scroll{overflow-y:auto;flex:1;padding:12px 12px 28px;scrollbar-width:thin;scrollbar-color:#3A4874 transparent}
+.rail__scroll::-webkit-scrollbar{width:8px}
+.rail__scroll::-webkit-scrollbar-thumb{background:#33406A;border-radius:8px}
+
+.rail__grupo{font-family:var(--sans);font-size:11.5px;font-weight:600;color:#7285B4;padding:16px 10px 7px;letter-spacing:.03em}
+
+.nav-item{
+  display:flex;gap:11px;align-items:flex-start;width:100%;
+  background:none;border:0;cursor:pointer;text-align:left;
+  color:#BDC8E4;font-family:var(--sans);font-size:14.2px;line-height:1.32;
+  padding:8px 10px;border-radius:8px;position:relative;
+}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-item[aria-current="true"]{background:#22315C;color:#fff}
+.nav-item[aria-current="true"]::before{
+  content:"";position:absolute;left:-12px;top:7px;bottom:7px;width:3px;
+  background:var(--energia);border-radius:0 3px 3px 0;
+}
+.nav-item__n{
+  flex:none;width:22px;height:22px;border-radius:6px;
+  background:rgba(255,255,255,.09);color:#9FAFD6;
+  font-size:11.5px;font-weight:600;display:grid;place-items:center;margin-top:1px;
+}
+.nav-item[aria-current="true"] .nav-item__n{background:var(--campo);color:#fff}
+.nav-item.hecho .nav-item__n{background:var(--verde);color:#fff}
+.nav-item.hecho .nav-item__n::after{content:"✓"}
+.nav-item.hecho .nav-item__n span{display:none}
+.nav-item__txt{flex:1;min-width:0}
+
+.rail__pie{padding:12px 20px 16px;border-top:1px solid rgba(255,255,255,.09);font-family:var(--sans);font-size:12px;color:#7285B4}
+.barra{height:5px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden;margin:7px 0}
+.barra i{display:block;height:100%;background:var(--energia);width:0;transition:width .35s ease}
+
+/* ---------- cabecera móvil ---------- */
+.topbar{display:none}
+
+/* ---------- contenido ---------- */
+.main{min-width:0}
+.vista{max-width:860px;margin:0 auto;padding:44px 40px 110px}
+.vista--ancha{max-width:1040px}
+
+.crumb{font-family:var(--sans);font-size:13px;color:var(--texto-3);margin:0 0 10px}
+h1.titulo{font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.08;margin:0 0 14px}
+.entradilla{font-size:19px;color:var(--texto-2);margin:0 0 28px;max-width:62ch}
+
+h2.seccion{
+  font-size:22px;font-weight:700;margin:44px 0 12px;padding-top:16px;
+  border-top:1px solid var(--borde);
+}
+h3{font-size:17.5px;font-weight:600;margin:26px 0 8px;font-family:var(--sans)}
+p{margin:0 0 14px;max-width:70ch}
+ul,ol{margin:0 0 16px;padding-left:22px;max-width:70ch}
+li{margin-bottom:7px}
+li::marker{color:var(--campo)}
+strong{font-weight:600}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.9em;background:var(--campo-claro);padding:1px 5px;border-radius:4px}
+
+/* ---------- portada ---------- */
+.hero{position:relative;border-bottom:1px solid var(--borde);overflow:hidden;background:var(--blanco)}
+.hero__grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(var(--borde) 1px,transparent 1px),linear-gradient(90deg,var(--borde) 1px,transparent 1px);
+  background-size:26px 26px;opacity:.5;
+}
+.hero__onda{position:absolute;left:0;right:0;bottom:0;height:210px;width:100%;display:block}
+.hero__txt{position:relative;max-width:860px;margin:0 auto;padding:64px 40px 150px}
+.hero h1{font-size:clamp(34px,5.4vw,56px);font-weight:800;line-height:1.02;margin:0 0 16px;letter-spacing:-0.03em}
+.hero p{font-size:19.5px;color:var(--texto-2);max-width:56ch;margin:0}
+.hero__meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.pastilla{
+  font-family:var(--sans);font-size:13px;background:var(--campo-claro);color:var(--campo);
+  padding:5px 12px;border-radius:100px;border:1px solid #D3DCFB;
+}
+.pastilla--ambar{background:var(--energia-claro);color:#9A6003;border-color:#F3DFB6}
+
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;margin:22px 0 0}
+.tarjeta{
+  background:var(--blanco);border:1px solid var(--borde);border-radius:var(--radio);
+  padding:16px 17px;text-align:left;cursor:pointer;font:inherit;color:inherit;
+  display:flex;flex-direction:column;gap:7px;transition:border-color .15s,transform .15s;
+}
+.tarjeta:hover{border-color:var(--campo);transform:translateY(-2px)}
+.tarjeta__n{font-family:var(--sans);font-size:12.5px;font-weight:700;color:var(--campo)}
+.tarjeta.hecho .tarjeta__n{color:var(--verde)}
+.tarjeta__t{font-family:var(--sans);font-weight:600;font-size:16px;line-height:1.25}
+.tarjeta__d{font-size:14.5px;color:var(--texto-2);line-height:1.45}
+
+/* ---------- buscador ---------- */
+.buscador{position:relative;margin:0 0 6px}
+.buscador input{
+  width:100%;font:inherit;font-family:var(--sans);font-size:15px;
+  padding:11px 14px;border:1px solid var(--borde-2);border-radius:9px;background:var(--blanco);color:var(--texto);
+}
+.buscador input::placeholder{color:var(--texto-3)}
+.resultados{list-style:none;padding:0;margin:8px 0 0;max-width:none}
+.resultados li{margin:0 0 6px}
+.resultados button{
+  width:100%;text-align:left;background:var(--blanco);border:1px solid var(--borde);border-radius:8px;
+  padding:9px 12px;cursor:pointer;font-family:var(--sans);font-size:14px;color:var(--texto);
+}
+.resultados button:hover{border-color:var(--campo)}
+.resultados small{display:block;color:var(--texto-3);font-size:12.5px}
+
+/* ---------- fórmulas ---------- */
+.formulario{display:grid;gap:10px;margin:16px 0 8px}
+.formula{
+  background:var(--blanco);border:1px solid var(--borde);border-left:3px solid var(--campo);
+  border-radius:0 var(--radio) var(--radio) 0;padding:13px 16px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;justify-content:space-between;
+}
+.formula__tex{font-size:18px;overflow-x:auto;max-width:100%}
+.formula__d{font-family:var(--sans);font-size:13.5px;color:var(--texto-2);text-align:right;flex:1;min-width:180px}
+.formula--clave{border-left-color:var(--energia);background:#FFFDF8}
+
+/* ---------- avisos ---------- */
+.aviso{
+  background:var(--blanco);border:1px solid var(--borde);border-radius:var(--radio);
+  padding:16px 18px;margin:20px 0;
+}
+.aviso h4{margin:0 0 8px;font-size:15px;font-family:var(--sans);font-weight:600}
+.aviso ul{margin-bottom:0}
+.aviso--clave{background:var(--energia-claro);border-color:#F1DEBA}
+.aviso--clave h4{color:#8A5604}
+.aviso--dato{background:var(--campo-claro);border-color:#D3DCFB}
+.aviso--dato h4{color:var(--campo)}
+
+/* ---------- simulación ---------- */
+.sim{background:var(--blanco);border:1px solid var(--borde);border-radius:var(--radio);margin:22px 0;overflow:hidden}
+.sim__cab{padding:13px 17px;border-bottom:1px solid var(--borde);display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+.sim__cab h4{margin:0;font-size:15.5px;font-family:var(--sans);font-weight:600}
+.sim__cab span{font-family:var(--sans);font-size:13px;color:var(--texto-3)}
+.sim__lienzo{display:block;width:100%;background:var(--blanco)}
+.sim__mandos{padding:14px 17px;border-top:1px solid var(--borde);background:#FAFBFE;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.mando{font-family:var(--sans);font-size:13px;color:var(--texto-2)}
+.mando__fila{display:flex;justify-content:space-between;gap:8px;margin-bottom:4px}
+.mando b{color:var(--texto);font-variant-numeric:tabular-nums;font-weight:600}
+input[type=range]{width:100%;accent-color:var(--campo);height:20px}
+.sim__lectura{padding:12px 17px;border-top:1px solid var(--borde);display:flex;flex-wrap:wrap;gap:8px 26px;font-family:var(--sans);font-size:13.5px;background:#FAFBFE}
+.sim__lectura b{font-variant-numeric:tabular-nums}
+.btn{
+  font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;
+  background:var(--campo);color:#fff;border:0;border-radius:8px;padding:8px 15px;
+}
+.btn:hover{background:#2340C7}
+.btn--fantasma{background:transparent;color:var(--campo);border:1px solid var(--borde-2)}
+.btn--fantasma:hover{background:var(--campo-claro)}
+.btn--verde{background:var(--verde)}
+.btn--verde:hover{background:#0C6B4C}
+.sim__botones{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select{font-family:var(--sans);font-size:13.5px;padding:7px 10px;border:1px solid var(--borde-2);border-radius:8px;background:var(--blanco);color:var(--texto)}
+
+/* ---------- test ---------- */
+.test{background:var(--blanco);border:1px solid var(--borde);border-radius:var(--radio);padding:18px 20px;margin:14px 0}
+.test__p{font-family:var(--sans);font-weight:600;font-size:16px;margin:0 0 12px;display:flex;gap:10px}
+.test__p i{color:var(--texto-3);font-style:normal;font-variant-numeric:tabular-nums}
+.opciones{display:grid;gap:7px;margin:0;padding:0;list-style:none;max-width:none}
+.opcion{
+  display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;
+  border:1px solid var(--borde);background:var(--papel);border-radius:8px;
+  padding:10px 13px;cursor:pointer;font:inherit;font-size:16px;line-height:1.45;color:var(--texto);
+}
+.opcion:hover:not(:disabled){border-color:var(--campo);background:var(--campo-claro)}
+.opcion:disabled{cursor:default}
+.opcion__l{font-family:var(--sans);font-weight:600;color:var(--texto-3);flex:none}
+.opcion.bien{background:var(--verde-claro);border-color:#A8DCC9}
+.opcion.bien .opcion__l{color:var(--verde)}
+.opcion.mal{background:var(--rojo-claro);border-color:#EEC3C0}
+.opcion.mal .opcion__l{color:var(--rojo)}
+.explica{margin:11px 0 0;padding:11px 14px;background:var(--papel);border-left:3px solid var(--campo);border-radius:0 8px 8px 0;font-size:15.5px}
+.explica[hidden]{display:none}
+
+.marcador{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  background:var(--tinta);color:#fff;border-radius:var(--radio);padding:16px 20px;margin:20px 0;
+  font-family:var(--sans);
+}
+.marcador b{font-size:26px;font-weight:800}
+
+/* ---------- problema resuelto ---------- */
+.problema{border:1px solid var(--borde);border-radius:var(--radio);background:var(--blanco);margin:16px 0;overflow:hidden}
+.problema__cab{padding:15px 18px}
+.problema__cab h4{margin:0 0 8px;font-size:14.5px;font-family:var(--sans);color:var(--campo)}
+.problema__cab p{margin:0}
+.problema__sol{padding:0 18px 16px;border-top:1px dashed var(--borde-2);margin-top:12px;padding-top:14px}
+.problema__sol[hidden]{display:none}
+.problema__sol ol{margin-bottom:0}
+.problema__sol li{margin-bottom:11px}
+
+/* ---------- pie de tema ---------- */
+.pie-tema{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:52px;padding-top:20px;border-top:1px solid var(--borde);flex-wrap:wrap}
+
+/* ---------- tablas ---------- */
+.tabla{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:15.5px;background:var(--blanco)}
+.tabla th,.tabla td{border:1px solid var(--borde);padding:9px 12px;text-align:left;vertical-align:top}
+.tabla th{background:var(--papel);font-family:var(--sans);font-size:13.5px;font-weight:600}
+.tabla-envoltura{overflow-x:auto}
+
+.katex{font-size:1.03em}
+.katex-display{margin:.6em 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .rail{
+    position:fixed;inset:0 auto 0 0;width:min(300px,86vw);z-index:40;
+    transform:translateX(-102%);transition:transform .25s ease;box-shadow:0 0 40px rgba(0,0,0,.3);
+  }
+  body.menu-abierto .rail{transform:none}
+  .topbar{
+    display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:30;
+    background:var(--tinta);color:#fff;padding:10px 14px;
+  }
+  .topbar button{background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:8px;padding:8px 11px;cursor:pointer;font-size:16px;line-height:1}
+  .topbar span{font-family:var(--sans);font-weight:600;font-size:15px}
+  .velo{position:fixed;inset:0;background:rgba(10,16,34,.55);z-index:35;display:none}
+  body.menu-abierto .velo{display:block}
+  .vista{padding:26px 20px 90px}
+  .hero__txt{padding:40px 20px 120px}
+  body{font-size:16.5px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+
+.mf{font-family:var(--serif);font-style:italic;white-space:nowrap}
+.mf sub,.mf sup{font-style:normal}
+.hero__grid,.hero__onda{pointer-events:none}
+.test__p span{flex:1}
+.opcion span:last-child{flex:1}
+
+</style>
+</head>
+<body>
+<div class="velo" id="velo"></div>
+
+<header class="topbar">
+  <button id="btnMenu" aria-label="Abrir el índice de temas">&#9776;</button>
+  <span id="tbTitulo">Física 2.º de bachillerato</span>
+</header>
+
+<div class="app">
+  <aside class="rail" aria-label="Índice">
+    <div class="rail__marca">
+      <button id="marca" aria-label="Ir a la portada">
+        <span class="rail__titulo">Física</span>
+        <span class="rail__sub">2.º de bachillerato<br>Temario de las Illes Balears</span>
+      </button>
+    </div>
+    <nav class="rail__scroll" id="railScroll"></nav>
+    <div class="rail__pie">
+      <span id="progTexto">0 de 12 temas marcados</span>
+      <div class="barra"><i id="progBarra"></i></div>
+    </div>
+  </aside>
+
+  <main class="main" id="main" tabindex="-1"></main>
+</div>
+
+<noscript><div class="vista"><h1 class="titulo">Activa JavaScript</h1><p>Esta web necesita JavaScript para mostrar el temario, las simulaciones y los tests.</p></div></noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+/* === Contenidos: temas 1 a 6 === */
+const R = String.raw;
+
+const TEMAS_1_6 = [
+{
+  n:1, id:"t1", titulo:"Movimientos vibratorios", lema:"El movimiento armónico simple",
+  bloque:"C. Vibraciones y ondas",
+  resumen:"Todo lo que oscila —un muelle, un péndulo, un átomo en un cristal, una molécula de aire al pasar el sonido— se describe con el mismo modelo: el movimiento armónico simple. Es el punto de partida de los dos temas siguientes.",
+  secciones:[
+    {h:"Qué es un movimiento armónico simple",
+     p:[R`Un cuerpo describe un **movimiento armónico simple (MAS)** cuando oscila alrededor de una posición de equilibrio bajo la acción de una fuerza recuperadora proporcional a la separación de dicha posición y dirigida siempre hacia ella: $F = -k\,x$.`,
+        R`Aplicando la segunda ley de Newton, $ma = -kx$, se llega a la condición cinemática que define el MAS: la aceleración es proporcional a la elongación y de signo contrario, $a = -\omega^2 x$, con $\omega^2 = k/m$.`],
+     ul:[R`Es un movimiento **periódico** (se repite cada periodo $T$) y **oscilatorio** (va y viene entre $+A$ y $-A$).`,
+         R`No es uniformemente acelerado: $a$ cambia en cada punto. En los extremos $a$ es máxima y $v=0$; en el equilibrio $a=0$ y $v$ es máxima.`,
+         R`La proyección sobre un diámetro de un movimiento circular uniforme es un MAS. De ahí vienen los nombres de $\omega$ (pulsación o frecuencia angular) y de la fase.`]},
+    {h:"Ecuaciones del movimiento",
+     p:[R`La solución de $a=-\omega^2x$ es una función senoidal. Si se toma el seno, $x(t)=A\sin(\omega t+\varphi_0)$, y derivando se obtienen velocidad y aceleración.`,
+        R`$A$ es la **amplitud** (elongación máxima), $\omega t+\varphi_0$ la **fase** y $\varphi_0$ la **fase inicial**, que se determina siempre con las condiciones iniciales del problema (dónde está y hacia dónde va el cuerpo en $t=0$).`],
+     ul:[R`Si en $t=0$ el cuerpo parte del equilibrio hacia el sentido positivo: $\varphi_0 = 0$.`,
+         R`Si parte de la elongación máxima positiva: $\varphi_0 = \pi/2$ (con la forma en seno) o bien se escribe directamente con coseno.`,
+         R`La velocidad va adelantada $\pi/2$ respecto de la elongación, y la aceleración $\pi$ (están en oposición de fase).`]},
+    {h:"Dinámica: muelle y péndulo",
+     p:[R`En un **muelle** de constante elástica $k$ con una masa $m$ colgada o apoyada, $\omega=\sqrt{k/m}$: el periodo depende solo de la masa y del muelle, **no de la amplitud**.`,
+        R`En un **péndulo simple** de longitud $l$, para oscilaciones pequeñas (menos de unos 10°) la componente tangencial del peso hace de fuerza recuperadora y $\omega=\sqrt{g/l}$. Aquí el periodo tampoco depende de la masa.`]},
+    {h:"Energía del oscilador",
+     p:[R`La fuerza elástica es conservativa, así que la energía mecánica se conserva y va intercambiándose entre cinética y potencial elástica a lo largo de cada oscilación.`,
+        R`En los extremos toda la energía es potencial; en el punto de equilibrio, toda cinética. El valor total, $E_m=\tfrac12 k A^2$, depende del cuadrado de la amplitud: duplicar la amplitud multiplica por cuatro la energía.`]}
+  ],
+  formulas:[
+    {tex:R`x(t)=A\sin(\omega t+\varphi_0)`, d:"Elongación", clave:true},
+    {tex:R`v(t)=A\omega\cos(\omega t+\varphi_0)`, d:"Velocidad"},
+    {tex:R`a(t)=-A\omega^2\sin(\omega t+\varphi_0)=-\omega^2x`, d:"Aceleración", clave:true},
+    {tex:R`v=\pm\,\omega\sqrt{A^2-x^2}`, d:"Velocidad en función de la elongación"},
+    {tex:R`\omega=\frac{2\pi}{T}=2\pi f`, d:"Pulsación, periodo y frecuencia"},
+    {tex:R`F=-kx \qquad \omega=\sqrt{\frac{k}{m}} \qquad T=2\pi\sqrt{\frac{m}{k}}`, d:"Oscilador con muelle", clave:true},
+    {tex:R`T=2\pi\sqrt{\frac{l}{g}}`, d:"Péndulo simple (amplitudes pequeñas)", clave:true},
+    {tex:R`E_c=\tfrac12 m\omega^2(A^2-x^2)`, d:"Energía cinética"},
+    {tex:R`E_p=\tfrac12 k x^2`, d:"Energía potencial elástica"},
+    {tex:R`E_m=\tfrac12 kA^2=\tfrac12 m\omega^2A^2`, d:"Energía mecánica total", clave:true}
+  ],
+  sim:"mas",
+  claves:[
+    R`La fase inicial no se inventa: se obtiene sustituyendo $t=0$ en $x(t)$ y en $v(t)$ con los datos del enunciado.`,
+    R`Trabaja siempre en radianes. Si la calculadora está en grados, todos los resultados saldrán mal.`,
+    R`El periodo de un muelle **no** depende de la amplitud ni de $g$; el de un péndulo **no** depende de la masa.`,
+    R`Cuidado con $k$ (constante elástica, en N/m) y $k$ (número de onda, tema 2): son magnitudes distintas.`
+  ],
+  problemas:[
+  {
+    e:R`Una masa de 0,5 kg unida a un muelle de $k=200$ N/m oscila con amplitud 10 cm. En $t=0$ pasa por el punto de equilibrio moviéndose en sentido positivo. Halla el periodo, la ecuación del movimiento, la velocidad máxima y la energía mecánica.`,
+    pasos:[
+      R`Pulsación: $\omega=\sqrt{k/m}=\sqrt{200/0{,}5}=20$ rad/s.`,
+      R`Periodo: $T=2\pi/\omega=2\pi/20=0{,}314$ s.`,
+      R`Condiciones iniciales: en $t=0$, $x=0$ y $v>0$, luego con la forma seno $\varphi_0=0$. Ecuación: $x(t)=0{,}1\sin(20t)$ m.`,
+      R`Velocidad máxima: $v_{max}=A\omega=0{,}1\cdot20=2$ m/s (se alcanza en el equilibrio).`,
+      R`Energía mecánica: $E_m=\tfrac12kA^2=\tfrac12\cdot200\cdot0{,}1^2=1$ J.`
+    ]
+  },
+  {
+    e:R`Un objeto de 200 g oscila unido a un muelle de constante $k=50$ N/m con amplitud 5 cm. En $t=0$ se encuentra en la elongación máxima positiva. Determina $\omega$, $T$, la ecuación $x(t)$ y las expresiones de $v(t)$ y $a(t)$.`,
+    pasos:[
+      R`Pulsación: $\omega=\sqrt{k/m}=\sqrt{50/0{,}2}=\sqrt{250}=15{,}8$ rad/s.`,
+      R`Periodo: $T=2\pi/\omega=2\pi/15{,}8=0{,}397$ s.`,
+      R`En $t=0$ el cuerpo está en $x=+A$, así que con la forma $x=A\sin(\omega t+\varphi_0)$ hace falta $\varphi_0=\pi/2$: $x(t)=0{,}05\sin(15{,}8t+\pi/2)$ m (equivale a $0{,}05\cos(15{,}8t)$).`,
+      R`Velocidad: $v(t)=A\omega\cos(\omega t+\varphi_0)=0{,}79\cos(15{,}8t+\pi/2)$ m/s.`,
+      R`Aceleración: $a(t)=-A\omega^2\sin(\omega t+\varphi_0)=-12{,}5\sin(15{,}8t+\pi/2)$ m/s².`
+    ]
+  },
+  {
+    e:R`Una partícula realiza un MAS de amplitud 0,12 m y periodo 0,8 s. En $t=0$ se encuentra en $x=0{,}06$ m, la mitad de la amplitud, moviéndose hacia valores crecientes de $x$. Calcula la fase inicial y escribe la ecuación $x(t)$.`,
+    pasos:[
+      R`Pulsación: $\omega=2\pi/T=2\pi/0{,}8=7{,}85$ rad/s.`,
+      R`De $x(0)=A\sin\varphi_0$: $0{,}06=0{,}12\sin\varphi_0\Rightarrow\sin\varphi_0=0{,}5$, lo que da $\varphi_0=\pi/6$ o $\varphi_0=5\pi/6$.`,
+      R`Como en $t=0$ la velocidad es positiva, hace falta $\cos\varphi_0>0$, así que se descarta $5\pi/6$ y queda $\varphi_0=\pi/6$ (30°).`,
+      R`Ecuación: $x(t)=0{,}12\sin(7{,}85t+\pi/6)$ m.`
+    ]
+  },
+  {
+    e:R`Se quiere construir un péndulo simple que oscile con un periodo de 2 s en un lugar donde $g=9{,}8$ m/s². Calcula la longitud necesaria y la frecuencia. Si se traslada ese mismo péndulo a la Luna ($g=1{,}62$ m/s²), ¿cuál será su nuevo periodo?`,
+    pasos:[
+      R`De $T=2\pi\sqrt{l/g}$ se despeja: $l=\dfrac{gT^2}{4\pi^2}=\dfrac{9{,}8\cdot2^2}{4\pi^2}=0{,}993$ m ≈ 1 m.`,
+      R`Frecuencia: $f=1/T=1/2=0{,}5$ Hz.`,
+      R`En la Luna la longitud no cambia, solo $g$: $T'=2\pi\sqrt{l/g_{Luna}}=2\pi\sqrt{0{,}993/1{,}62}=4{,}92$ s.`,
+      R`El péndulo oscila más despacio en la Luna porque la gravedad es menor: el periodo casi se multiplica por 2,5.`
+    ]
+  },
+  {
+    e:R`Un oscilador de masa 0,4 kg y constante elástica $k=90$ N/m tiene una amplitud de 8 cm. Calcula la energía mecánica total y la energía cinética y potencial cuando la elongación es $x=5$ cm. Comprueba que $E_c+E_p=E_m$.`,
+    pasos:[
+      R`Energía mecánica: $E_m=\tfrac12kA^2=\tfrac12\cdot90\cdot0{,}08^2=0{,}288$ J.`,
+      R`Energía potencial en $x=0{,}05$ m: $E_p=\tfrac12kx^2=\tfrac12\cdot90\cdot0{,}05^2=0{,}1125$ J.`,
+      R`Energía cinética: $E_c=E_m-E_p=0{,}288-0{,}1125=0{,}1755$ J.`,
+      R`Comprobación: $E_c+E_p=0{,}1755+0{,}1125=0{,}288$ J $=E_m$. ✓`
+    ]
+  },
+  {
+    e:R`Un cuerpo en MAS con $\omega=6$ rad/s tiene, en el instante en que su elongación es 3 cm, una velocidad de 40 cm/s. Calcula la amplitud del movimiento y la velocidad máxima.`,
+    pasos:[
+      R`Se usa $v^2=\omega^2(A^2-x^2)$ con $v=0{,}4$ m/s y $x=0{,}03$ m: $0{,}16=36\,(A^2-0{,}0009)$.`,
+      R`Despejando: $A^2-0{,}0009=0{,}00444\Rightarrow A^2=0{,}00534\Rightarrow A=0{,}0731$ m $\approx7{,}3$ cm.`,
+      R`Velocidad máxima: $v_{max}=A\omega=0{,}0731\cdot6=0{,}439$ m/s.`
+    ]
+  },
+  {
+    e:R`Se cuelga una masa de 0,5 kg de un muelle vertical y este se alarga 4,9 cm hasta el equilibrio. A continuación se separa 3 cm de esa posición y se suelta, iniciando un MAS. Calcula la constante elástica del muelle, el periodo de la oscilación y la velocidad máxima de la masa.`,
+    pasos:[
+      R`En el equilibrio, la fuerza del muelle iguala al peso: $kx_0=mg\Rightarrow k=\dfrac{mg}{x_0}=\dfrac{0{,}5\cdot9{,}8}{0{,}049}=100$ N/m.`,
+      R`Pulsación: $\omega=\sqrt{k/m}=\sqrt{100/0{,}5}=\sqrt{200}=14{,}1$ rad/s.`,
+      R`Periodo: $T=2\pi/\omega=0{,}444$ s.`,
+      R`Velocidad máxima, con $A=0{,}03$ m: $v_{max}=A\omega=0{,}03\cdot14{,}1=0{,}424$ m/s.`
+    ]
+  },
+  {
+    e:R`Dos osciladores armónicos tienen la misma constante elástica $k$. El primero tiene amplitud $A$ y masa $m$; el segundo, amplitud $2A$ y masa $2m$. ¿Qué relación hay entre sus energías mecánicas? ¿Y entre sus periodos?`,
+    pasos:[
+      R`Energía del primero: $E_{m1}=\tfrac12kA^2$. Energía del segundo: $E_{m2}=\tfrac12k(2A)^2=4\left(\tfrac12kA^2\right)=4E_{m1}$.`,
+      R`La energía mecánica solo depende de $k$ y $A$, no de la masa, así que $E_{m2}=4E_{m1}$.`,
+      R`Periodo del primero: $T_1=2\pi\sqrt{m/k}$. Periodo del segundo: $T_2=2\pi\sqrt{2m/k}=\sqrt2\,T_1$.`,
+      R`La amplitud no interviene en el periodo: $T_2\approx1{,}41\,T_1$, solo por haber duplicado la masa.`
+    ]
+  },
+  {
+    e:R`Un cuerpo que realiza un MAS tiene una aceleración máxima de 8 m/s² y una velocidad máxima de 1,6 m/s. Calcula la pulsación, el periodo, la amplitud y el valor absoluto de la elongación en el instante en que la velocidad vale 0,8 m/s.`,
+    pasos:[
+      R`Dividiendo las dos magnitudes máximas se elimina $A$: $\dfrac{a_{max}}{v_{max}}=\dfrac{A\omega^2}{A\omega}=\omega\Rightarrow\omega=\dfrac{8}{1{,}6}=5$ rad/s.`,
+      R`Amplitud: $A=v_{max}/\omega=1{,}6/5=0{,}32$ m.`,
+      R`Periodo: $T=2\pi/\omega=1{,}257$ s.`,
+      R`Con $v=0{,}8$ m/s: $v^2=\omega^2(A^2-x^2)\Rightarrow0{,}64=25(0{,}1024-x^2)\Rightarrow x^2=0{,}0768\Rightarrow|x|=0{,}277$ m.`
+    ]
+  },
+  {
+    e:R`En un experimento se observa que una masa unida a un muelle tarda 0,25 s en pasar de la posición de máxima elongación al punto de equilibrio por primera vez. Determina el periodo y la frecuencia del movimiento. Si la amplitud es de 6 cm, calcula la velocidad con la que pasa por el punto de equilibrio.`,
+    pasos:[
+      R`De la elongación máxima al equilibrio la fase avanza $\pi/2$, es decir, un cuarto de periodo: $T/4=0{,}25\Rightarrow T=1$ s.`,
+      R`Frecuencia: $f=1/T=1$ Hz. Pulsación: $\omega=2\pi/T=6{,}28$ rad/s.`,
+      R`En el punto de equilibrio toda la velocidad es la máxima: $v=A\omega=0{,}06\cdot6{,}28=0{,}377$ m/s.`
+    ]
+  }
+  ],
+  test:[
+    {q:R`En un MAS, ¿en qué punto coinciden velocidad máxima y aceleración nula?`,
+     op:["En los extremos de la trayectoria","En el punto de equilibrio","En x = A/2","En ningún punto"], sol:1,
+     why:R`En $x=0$ la fuerza recuperadora se anula, así que $a=0$, y toda la energía es cinética, de modo que $v=\pm A\omega$.`},
+    {q:R`Si se duplica la amplitud de un oscilador con muelle, la energía mecánica...`,
+     op:["se duplica","se multiplica por cuatro","no cambia","se reduce a la mitad"], sol:1,
+     why:R`$E_m=\tfrac12kA^2$ depende del cuadrado de la amplitud.`},
+    {q:R`El periodo de un péndulo simple depende de...`,
+     op:["la masa y la longitud","la longitud y la gravedad","la masa y la amplitud","solo de la amplitud"], sol:1,
+     why:R`$T=2\pi\sqrt{l/g}$: ni la masa ni (para ángulos pequeños) la amplitud intervienen.`},
+    {q:R`Un cuerpo con $a=-16x$ (SI) tiene un periodo de:`,
+     op:["0,39 s","1,57 s","3,14 s","16 s"], sol:1,
+     why:R`$\omega^2=16 \Rightarrow \omega=4$ rad/s y $T=2\pi/4\approx1{,}57$ s.`},
+    {q:R`La velocidad en un MAS está desfasada respecto de la elongación en:`,
+     op:["0","π/4","π/2","π"], sol:2,
+     why:R`Derivando el seno se obtiene un coseno, que va adelantado $\pi/2$ rad.`}
+  ]
+},
+
+{
+  n:2, id:"t2", titulo:"Movimiento ondulatorio", lema:"Ondas, energía y fenómenos ondulatorios",
+  bloque:"C. Vibraciones y ondas",
+  resumen:"Una onda es un MAS que viaja: transporta energía y cantidad de movimiento de un punto a otro sin que haya transporte neto de materia. Con la ecuación de onda y los fenómenos ondulatorios se explican el sonido, la luz y buena parte de la tecnología actual.",
+  secciones:[
+    {h:"Concepto y tipos de onda",
+     p:[R`Una **onda** es la propagación de una perturbación por un medio (o por el vacío) transportando energía sin transporte neto de materia: las partículas del medio oscilan alrededor de su posición de equilibrio.`],
+     ul:[R`Según necesiten medio: **mecánicas** (sonido, cuerda, agua) y **electromagnéticas** (luz, radio), que se propagan también en el vacío.`,
+         R`Según la dirección de vibración: **transversales** (vibración perpendicular a la propagación: cuerda, luz) y **longitudinales** (vibración paralela: sonido).`,
+         R`Según el frente de onda: planas, cilíndricas o esféricas.`]},
+    {h:"Ecuación de la onda armónica",
+     p:[R`Si el foco realiza un MAS, cada punto del medio repite ese MAS con un retraso $x/v$. Sustituyendo se obtiene la **doble periodicidad** de la onda: es periódica en el tiempo (periodo $T$) y en el espacio (longitud de onda $\lambda$).`,
+        R`El signo menos delante de $kx$ indica que la onda avanza en el sentido positivo del eje $X$; el signo más, en sentido negativo.`],
+     ul:[R`**Número de onda** $k=2\pi/\lambda$ (rad/m). No confundir con la constante elástica.`,
+         R`**Velocidad de propagación** $v=\lambda f=\lambda/T=\omega/k$: depende solo del medio.`,
+         R`La **velocidad de vibración** de un punto, $v_y=\partial y/\partial t$, es otra cosa distinta y sí depende del tiempo.`]},
+    {h:"Energía e intensidad",
+     p:[R`La energía que transporta una onda es la del MAS de sus partículas: proporcional al cuadrado de la amplitud y al cuadrado de la frecuencia.`,
+        R`La **intensidad** es la potencia que atraviesa la unidad de superficie perpendicular. En una onda esférica la energía se reparte sobre esferas cada vez mayores, de modo que la intensidad disminuye con el cuadrado de la distancia y la amplitud con la distancia.`],
+     ul:[R`Nivel de intensidad sonora: $\beta=10\log(I/I_0)$ en decibelios, con $I_0=10^{-12}$ W/m².`,
+         R`En medios reales hay además **absorción**: $I=I_0e^{-\beta_a x}$.`]},
+    {h:"Fenómenos ondulatorios",
+     ul:[R`**Reflexión**: la onda vuelve al mismo medio. Si el extremo es fijo, la onda reflejada se invierte (cambio de fase $\pi$).`,
+         R`**Refracción**: cambia de medio, cambia $v$ y $\lambda$, pero **la frecuencia no cambia nunca**.`,
+         R`**Difracción**: la onda bordea obstáculos o se abre al pasar por una rendija de tamaño comparable a $\lambda$.`,
+         R`**Interferencias**: al superponerse dos ondas coherentes, es constructiva si la diferencia de caminos es $\Delta r=n\lambda$ y destructiva si $\Delta r=(2n+1)\lambda/2$.`,
+         R`**Ondas estacionarias**: interferencia de dos ondas iguales en sentidos opuestos. Hay nodos fijos y vientres; no transportan energía neta. En una cuerda fija por ambos extremos, $\lambda_n=2L/n$ y $f_n=n\,v/2L$.`,
+         R`**Efecto Doppler**: si emisor y receptor se acercan la frecuencia percibida aumenta, y disminuye si se alejan.`]}
+  ],
+  formulas:[
+    {tex:R`y(x,t)=A\sin\!\left(\omega t- kx+\varphi_0\right)`, d:"Onda armónica que avanza en +X", clave:true},
+    {tex:R`k=\frac{2\pi}{\lambda}\qquad \omega=\frac{2\pi}{T}`, d:"Número de onda y pulsación"},
+    {tex:R`v=\lambda f=\frac{\lambda}{T}=\frac{\omega}{k}`, d:"Velocidad de propagación", clave:true},
+    {tex:R`v=\sqrt{\frac{T_{cuerda}}{\mu}}`, d:"Velocidad en una cuerda tensa"},
+    {tex:R`I=\frac{P}{S}=\frac{P}{4\pi r^2}\quad\Rightarrow\quad \frac{I_1}{I_2}=\frac{r_2^{\,2}}{r_1^{\,2}}=\frac{A_1^2}{A_2^2}`, d:"Intensidad de una onda esférica", clave:true},
+    {tex:R`\beta=10\log\frac{I}{I_0}`, d:"Nivel de intensidad sonora (dB)", clave:true},
+    {tex:R`\Delta r=n\lambda\ \text{(constructiva)};\quad \Delta r=(2n+1)\tfrac{\lambda}{2}\ \text{(destructiva)}`, d:"Interferencias"},
+    {tex:R`\lambda_n=\frac{2L}{n}\qquad f_n=n\frac{v}{2L}`, d:"Armónicos en cuerda fija en ambos extremos"},
+    {tex:R`f'=f\,\frac{v\pm v_{o}}{v\mp v_{f}}`, d:"Efecto Doppler (acercarse: numerador +, denominador −)"}
+  ],
+  sim:"onda",
+  claves:[
+    R`Al cambiar de medio **la frecuencia se mantiene**: lo que cambian son $v$ y $\lambda$.`,
+    R`Distingue la velocidad de propagación $v=\omega/k$ (constante) de la velocidad de vibración $v_y=A\omega\cos(\ldots)$.`,
+    R`En los decibelios, sumar 10 dB significa multiplicar la intensidad por 10, no sumarla.`,
+    R`Para el signo en Doppler, razona físicamente: si se acercan, $f'$ debe salir mayor.`
+  ],
+  problemas:[{
+    e:R`Una onda armónica se propaga por una cuerda según $y(x,t)=0{,}02\sin(50t-4x)$ (SI). Calcula amplitud, frecuencia, longitud de onda, velocidad de propagación y la velocidad máxima de vibración de un punto.`,
+    pasos:[
+      R`Comparando con $y=A\sin(\omega t-kx)$: $A=0{,}02$ m, $\omega=50$ rad/s, $k=4$ rad/m.`,
+      R`Frecuencia: $f=\omega/2\pi=50/6{,}28=7{,}96$ Hz.`,
+      R`Longitud de onda: $\lambda=2\pi/k=6{,}28/4=1{,}57$ m.`,
+      R`Velocidad de propagación: $v=\omega/k=50/4=12{,}5$ m/s.`,
+      R`Velocidad máxima de vibración: $v_{max}=A\omega=0{,}02\cdot50=1$ m/s. Fíjate en que es muy distinta de los 12,5 m/s de propagación.`
+    ]
+  }],
+  test:[
+    {q:R`Cuando una onda pasa de un medio a otro, ¿qué magnitud no cambia?`,
+     op:["La velocidad","La longitud de onda","La frecuencia","La amplitud"], sol:2,
+     why:R`La frecuencia la impone el foco emisor; el medio determina $v$, y por tanto $\lambda=v/f$.`},
+    {q:R`En $y=0{,}05\sin(100\pi t-2\pi x)$ (SI), la velocidad de propagación vale:`,
+     op:["50 m/s","100 m/s","2 m/s","314 m/s"], sol:0,
+     why:R`$v=\omega/k=100\pi/2\pi=50$ m/s.`},
+    {q:R`Si te alejas al doble de distancia de una fuente sonora puntual, la intensidad que recibes:`,
+     op:["se reduce a la mitad","se reduce a la cuarta parte","no cambia","se reduce a la octava parte"], sol:1,
+     why:R`En ondas esféricas $I\propto1/r^2$, así que al duplicar $r$ la intensidad cae cuatro veces.`},
+    {q:R`En una onda estacionaria, los nodos son puntos que:`,
+     op:["vibran con amplitud máxima","no vibran nunca","vibran con la frecuencia doble","se desplazan con la onda"], sol:1,
+     why:R`En los nodos la interferencia es siempre destructiva y la amplitud resultante es nula.`},
+    {q:R`Un sonido de 60 dB tiene una intensidad de:`,
+     op:["10⁻⁶ W/m²","10⁻⁹ W/m²","60 W/m²","10⁻¹² W/m²"], sol:0,
+     why:R`$60=10\log(I/10^{-12})\Rightarrow I/I_0=10^{6}\Rightarrow I=10^{-6}$ W/m².`}
+  ]
+},
+
+{
+  n:3, id:"t3", titulo:"Ondas electromagnéticas", lema:"La luz como onda",
+  bloque:"C. Vibraciones y ondas",
+  resumen:"Maxwell unificó electricidad, magnetismo y óptica en cuatro ecuaciones y predijo ondas que viajan a 3·10⁸ m/s sin necesidad de medio. La luz es una de ellas; el resto del espectro sostiene las telecomunicaciones, la medicina y la astronomía.",
+  secciones:[
+    {h:"La síntesis electromagnética",
+     p:[R`Un campo eléctrico variable crea un campo magnético y un campo magnético variable crea un campo eléctrico (tema 9). La combinación se automantiene y se propaga: eso es una **onda electromagnética**.`,
+        R`Maxwell dedujo su velocidad a partir de dos constantes medidas en el laboratorio, $c=1/\sqrt{\varepsilon_0\mu_0}\approx3\cdot10^8$ m/s, que coincidía con la velocidad de la luz medida por Fizeau. Hertz las produjo y detectó experimentalmente en 1887.`],
+     ul:[R`Son **transversales**: $\vec E$, $\vec B$ y la dirección de propagación son perpendiculares entre sí.`,
+         R`Los campos oscilan **en fase** y se cumple $E=cB$.`,
+         R`**No necesitan medio**: se propagan en el vacío, lo que descartó la hipótesis del éter.`]},
+    {h:"El espectro electromagnético",
+     p:[R`Todas las ondas electromagnéticas son idénticas en naturaleza y solo se diferencian en frecuencia (y por tanto en longitud de onda y energía por fotón). El reparto en bandas es convencional y sus límites no son nítidos.`],
+     tabla:{head:["Banda","Longitud de onda","Usos y origen"],rows:[
+       ["Ondas de radio","> 1 m","Radio, TV, RMN"],
+       ["Microondas","1 m – 1 mm","Radar, móviles, hornos"],
+       ["Infrarrojo","1 mm – 780 nm","Calor, mandos, visión nocturna"],
+       ["Visible","780 – 380 nm","Del rojo al violeta"],
+       ["Ultravioleta","380 – 10 nm","Sol, esterilización, fluorescencia"],
+       ["Rayos X","10 – 0,01 nm","Radiografías, cristalografía"],
+       ["Rayos gamma","< 0,01 nm","Núcleos, astrofísica, radioterapia"]
+     ]}},
+    {h:"Propagación y fenómenos",
+     p:[R`En un medio material la luz se frena: $v=c/n$, donde $n$ es el **índice de refracción**. Como la frecuencia no cambia, lo que se acorta es la longitud de onda.`],
+     ul:[R`**Dispersión**: $n$ depende de la frecuencia, por eso un prisma separa los colores y aparece el arcoíris.`,
+         R`**Polarización**: solo se da en ondas transversales; fue una prueba decisiva del carácter transversal de la luz.`,
+         R`**Difracción e interferencias**: el experimento de la doble rendija de Young demostró el carácter ondulatorio de la luz.`,
+         R`**Efecto Doppler luminoso**: el corrimiento al rojo de las galaxias lejanas indica que se alejan (ley de Hubble).`,
+         R`La energía de cada fotón, $E=hf$, crece con la frecuencia: de ahí que los rayos X y gamma sean radiaciones ionizantes y las de radio no.`]}
+  ],
+  formulas:[
+    {tex:R`c=\frac{1}{\sqrt{\varepsilon_0\mu_0}}=3\cdot10^{8}\ \mathrm{m/s}`, d:"Velocidad de la luz en el vacío", clave:true},
+    {tex:R`c=\lambda f \qquad E=cB`, d:"Relaciones básicas de la onda electromagnética", clave:true},
+    {tex:R`n=\frac{c}{v}\qquad \lambda_{medio}=\frac{\lambda_0}{n}`, d:"Índice de refracción", clave:true},
+    {tex:R`E=hf=\frac{hc}{\lambda}`, d:"Energía de un fotón (tema 11)"},
+    {tex:R`I=\frac{P}{4\pi r^2}`, d:"Intensidad de una fuente puntual"}
+  ],
+  sim:"espectro",
+  claves:[
+    R`Al entrar en un medio, $f$ se conserva y $\lambda$ disminuye: un láser rojo sigue siendo rojo dentro del agua.`,
+    R`$c$ es el límite de velocidad del universo (tema 10) y solo se alcanza en el vacío.`,
+    R`Recuerda el orden del espectro por energía creciente: radio, microondas, IR, visible, UV, X, gamma.`,
+    R`Dentro del visible, el rojo es el de mayor $\lambda$ y menor energía; el violeta, al revés.`
+  ],
+  problemas:[{
+    e:R`Una emisora de radio FM emite a 98,5 MHz y un láser verde tiene $\lambda=532$ nm en el vacío. Calcula la longitud de onda de la emisora, la frecuencia del láser y la velocidad y longitud de onda de ese láser al entrar en agua ($n=1{,}33$).`,
+    pasos:[
+      R`Emisora: $\lambda=c/f=3\cdot10^{8}/98{,}5\cdot10^{6}=3{,}05$ m.`,
+      R`Láser: $f=c/\lambda=3\cdot10^{8}/532\cdot10^{-9}=5{,}64\cdot10^{14}$ Hz.`,
+      R`En el agua: $v=c/n=3\cdot10^{8}/1{,}33=2{,}26\cdot10^{8}$ m/s.`,
+      R`Longitud de onda en el agua: $\lambda'=\lambda_0/n=532/1{,}33=400$ nm. La frecuencia sigue siendo $5{,}64\cdot10^{14}$ Hz.`
+    ]
+  }],
+  test:[
+    {q:R`En una onda electromagnética, los campos eléctrico y magnético están:`,
+     op:["en oposición de fase y son paralelos","en fase y son perpendiculares entre sí","desfasados π/2","siempre en reposo"], sol:1,
+     why:R`Oscilan en fase, perpendiculares entre sí y a la dirección de propagación, cumpliendo $E=cB$.`},
+    {q:R`¿Cuál de estas radiaciones tiene mayor energía por fotón?`,
+     op:["Microondas","Luz roja","Ultravioleta","Ondas de radio"], sol:2,
+     why:R`$E=hf$: de las cuatro, el ultravioleta es la de mayor frecuencia.`},
+    {q:R`Al pasar la luz del aire al vidrio (n = 1,5):`,
+     op:["aumenta su frecuencia","disminuye su longitud de onda","aumenta su velocidad","cambia su color"], sol:1,
+     why:R`$v$ y $\lambda$ se reducen en un factor $n$; la frecuencia, y con ella el color, no cambian.`},
+    {q:R`La polarización de la luz demuestra que:`,
+     op:["la luz es longitudinal","la luz es transversal","la luz necesita un medio","la luz tiene masa"], sol:1,
+     why:R`Solo las ondas transversales pueden polarizarse, ya que su vibración es perpendicular a la propagación.`},
+    {q:R`El valor de c se obtiene teóricamente a partir de:`,
+     op:["la constante de Planck","la permitividad y la permeabilidad del vacío","la constante de gravitación","el índice de refracción del aire"], sol:1,
+     why:R`$c=1/\sqrt{\varepsilon_0\mu_0}$, resultado obtenido por Maxwell.`}
+  ]
+},
+
+{
+  n:4, id:"t4", titulo:"Óptica geométrica", lema:"Espejos y lentes",
+  bloque:"C. Vibraciones y ondas",
+  resumen:"Cuando los objetos son mucho mayores que la longitud de onda podemos olvidarnos de la naturaleza ondulatoria de la luz y trabajar con rayos. Con dos leyes y una ecuación se explican el ojo, las gafas, la lupa, el microscopio y el telescopio.",
+  secciones:[
+    {h:"Reflexión y refracción",
+     p:[R`En la **reflexión**, el rayo incidente, la normal y el reflejado están en el mismo plano y el ángulo de incidencia es igual al de reflexión.`,
+        R`En la **refracción**, el rayo cambia de dirección al cambiar de medio según la **ley de Snell**: $n_1\sin\hat\imath=n_2\sin\hat r$. Si pasa a un medio más refringente se acerca a la normal; si pasa a uno menos refringente, se aleja.`],
+     ul:[R`**Ángulo límite**: cuando la luz va del medio más denso al menos denso, existe un ángulo a partir del cual no hay rayo refractado, $\sin\hat\imath_L=n_2/n_1$.`,
+         R`Por encima de ese ángulo se produce **reflexión total**, principio de la fibra óptica y de los endoscopios.`]},
+    {h:"Convenio de signos DIN",
+     p:[R`Se sitúa el origen en el centro óptico (lentes) o en el vértice (espejos) y la luz se dibuja viajando de izquierda a derecha. Las distancias medidas en el sentido de propagación son positivas; las contrarias, negativas.`],
+     ul:[R`Un objeto real está siempre a la izquierda, así que $s<0$.`,
+         R`Si al resolver sale $s'>0$ en una lente, la imagen es **real** (está a la derecha, donde llega la luz). Si sale $s'<0$, es **virtual**.`,
+         R`En espejos es al revés, porque la luz vuelve hacia atrás: $s'<0$ corresponde a imagen real.`,
+         R`Si el aumento $\beta$ es negativo, la imagen es invertida; si es positivo, derecha. Si $|\beta|>1$, mayor que el objeto.`]},
+    {h:"Espejos esféricos",
+     p:[R`Un espejo cóncavo ($R<0$ en el convenio DIN) puede dar imágenes reales o virtuales según dónde esté el objeto; un espejo convexo da siempre imagen virtual, derecha y menor, por eso se usa como retrovisor y en las esquinas de los aparcamientos.`],
+     ul:[R`Rayos notables: el paralelo al eje se refleja pasando por el foco; el que pasa por el foco sale paralelo; el que pasa por el centro de curvatura vuelve sobre sí mismo.`]},
+    {h:"Lentes delgadas e instrumentos",
+     p:[R`Una lente **convergente** ($f'>0$) da imagen real e invertida si el objeto está más lejos del foco, y virtual, derecha y mayor si está más cerca: ese es el funcionamiento de la **lupa**. Una lente **divergente** ($f'<0$) da siempre imagen virtual, derecha y menor.`,
+        R`La **potencia** de una lente, $P=1/f'$, se mide en dioptrías (m⁻¹) y es el dato que aparece en las recetas de gafas.`],
+     ul:[R`**Miopía**: el ojo enfoca antes de la retina; se corrige con lente divergente.`,
+         R`**Hipermetropía**: enfoca detrás de la retina; se corrige con lente convergente.`,
+         R`El **microscopio** y el **telescopio** combinan objetivo y ocular; en el telescopio el aumento angular es $f'_{obj}/f'_{oc}$.`]}
+  ],
+  formulas:[
+    {tex:R`\hat\imath=\hat r`, d:"Ley de la reflexión"},
+    {tex:R`n_1\sin\hat\imath = n_2\sin\hat r`, d:"Ley de Snell de la refracción", clave:true},
+    {tex:R`\sin\hat\imath_L=\frac{n_2}{n_1}\quad (n_1>n_2)`, d:"Ángulo límite y reflexión total", clave:true},
+    {tex:R`\frac{1}{s'}+\frac{1}{s}=\frac{2}{R}=\frac{1}{f}`, d:"Ecuación de los espejos esféricos", clave:true},
+    {tex:R`\beta=\frac{y'}{y}=-\frac{s'}{s}`, d:"Aumento lateral en espejos"},
+    {tex:R`\frac{1}{s'}-\frac{1}{s}=\frac{1}{f'}`, d:"Ecuación de las lentes delgadas", clave:true},
+    {tex:R`\beta=\frac{y'}{y}=\frac{s'}{s}`, d:"Aumento lateral en lentes", clave:true},
+    {tex:R`P=\frac{1}{f'}`, d:"Potencia óptica, en dioptrías"}
+  ],
+  sim:"optica",
+  claves:[
+    R`Escribe siempre el signo de los datos antes de sustituir: un objeto a 30 cm a la izquierda es $s=-0{,}30$ m.`,
+    R`No basta con el número: hay que decir si la imagen es real o virtual, derecha o invertida, mayor o menor.`,
+    R`La reflexión total solo puede darse yendo del medio de mayor índice al de menor.`,
+    R`En un espejo plano la imagen es siempre virtual, derecha y del mismo tamaño ($s'=-s$).`
+  ],
+  problemas:[{
+    e:R`Un objeto de 2 cm de altura se coloca a 30 cm de una lente convergente de 10 cm de distancia focal. Determina la posición, el tamaño y la naturaleza de la imagen.`,
+    pasos:[
+      R`Datos con signos DIN: $s=-0{,}30$ m; $f'=+0{,}10$ m; $y=+0{,}02$ m.`,
+      R`Ecuación: $\dfrac{1}{s'}=\dfrac{1}{f'}+\dfrac{1}{s}=\dfrac{1}{0{,}10}+\dfrac{1}{-0{,}30}=10-3{,}33=6{,}67$ m⁻¹.`,
+      R`Posición: $s'=+0{,}15$ m, es decir, 15 cm a la derecha de la lente.`,
+      R`Aumento: $\beta=s'/s=0{,}15/(-0{,}30)=-0{,}5$, luego $y'=-0{,}01$ m.`,
+      R`Naturaleza: al ser $s'>0$ la imagen es **real**; al ser $\beta<0$ es **invertida**, y al ser $|\beta|<1$ es **menor** (1 cm).`
+    ]
+  }],
+  test:[
+    {q:R`Un espejo convexo forma siempre imágenes:`,
+     op:["reales, invertidas y mayores","virtuales, derechas y menores","reales y del mismo tamaño","virtuales e invertidas"], sol:1,
+     why:R`Es la razón de usarlo como retrovisor: abarca mucho campo, aunque los objetos parezcan más lejanos.`},
+    {q:R`Una lente de −4 dioptrías tiene una distancia focal de:`,
+     op:["+25 cm","−25 cm","−4 cm","+4 m"], sol:1,
+     why:R`$f'=1/P=1/(-4)=-0{,}25$ m. Es divergente: corrige la miopía.`},
+    {q:R`La reflexión total se produce cuando la luz:`,
+     op:["va de un medio menos refringente a otro más refringente","incide perpendicularmente","va del medio más refringente al menos refringente con ángulo mayor que el límite","atraviesa un espejo"], sol:2,
+     why:R`Por encima del ángulo límite no existe rayo refractado y toda la luz se refleja: es el principio de la fibra óptica.`},
+    {q:R`Si una lente convergente da una imagen con β = +3, la imagen es:`,
+     op:["real, invertida y mayor","virtual, derecha y mayor","real, derecha y menor","virtual, invertida y menor"], sol:1,
+     why:R`El signo positivo indica imagen derecha y, por tanto, virtual en una lente; $|\beta|>1$ indica que es mayor. Es el caso de la lupa.`},
+    {q:R`Al pasar la luz del agua (n = 1,33) al aire, el rayo refractado:`,
+     op:["se acerca a la normal","se aleja de la normal","no se desvía","desaparece siempre"], sol:1,
+     why:R`Al pasar a un medio menos refringente aumenta el ángulo, hasta que a partir del ángulo límite desaparece el rayo refractado.`}
+  ]
+},
+
+{
+  n:5, id:"t5", titulo:"El universo y las leyes de la gravitación", lema:"Fuerzas centrales",
+  bloque:"A. Campo gravitatorio",
+  resumen:"De Ptolomeo a Newton: cómo se pasó de describir el cielo a explicarlo con una sola ley que vale igual para una manzana y para Júpiter. Las fuerzas centrales y la conservación del momento angular son la clave matemática del movimiento planetario.",
+  secciones:[
+    {h:"Del geocentrismo a Newton",
+     p:[R`El modelo **geocéntrico** de Ptolomeo situaba la Tierra inmóvil en el centro y necesitaba epiciclos para explicar el movimiento retrógrado de los planetas. Copérnico propuso el **heliocéntrico**, Galileo lo apoyó con sus observaciones telescópicas y Kepler lo hizo preciso al sustituir los círculos por elipses.`,
+        R`Newton dio el paso definitivo: la misma fuerza que hace caer los cuerpos mantiene a la Luna en órbita. Es la **ley de gravitación universal**, válida para toda pareja de masas del universo.`]},
+    {h:"Las tres leyes de Kepler",
+     ul:[R`**1.ª (órbitas)**: los planetas describen elipses con el Sol en uno de los focos.`,
+         R`**2.ª (áreas)**: el radio vector barre áreas iguales en tiempos iguales, lo que equivale a decir que el planeta va más rápido en el perihelio que en el afelio.`,
+         R`**3.ª (periodos)**: el cuadrado del periodo es proporcional al cubo del semieje mayor, $T^2=\dfrac{4\pi^2}{GM}a^3$, con la misma constante para todos los cuerpos que orbitan el mismo astro.`]},
+    {h:"Fuerzas centrales y momento angular",
+     p:[R`Una **fuerza central** apunta siempre hacia un punto fijo. Su momento respecto de ese punto es nulo, $\vec M=\vec r\times\vec F=\vec 0$, y por tanto el **momento angular se conserva** en módulo, dirección y sentido.`],
+     ul:[R`Que $\vec L$ mantenga la dirección obliga a la órbita a ser **plana**.`,
+         R`Que $\vec L$ mantenga el módulo equivale exactamente a la segunda ley de Kepler: $\dfrac{dA}{dt}=\dfrac{L}{2m}=$ constante.`,
+         R`De ahí sale la relación entre perihelio y afelio: $r_p\,v_p=r_a\,v_a$.`]},
+    {h:"Aplicaciones de la ley de Newton",
+     p:[R`Igualando la fuerza gravitatoria a la fuerza centrípeta se obtiene la velocidad orbital y, con ella, la masa del astro central: así se “pesan” los planetas y el Sol.`,
+        R`La aceleración de la gravedad en la superficie de un astro, $g_0=GM/R^2$, se deduce de la misma ley, lo que unifica caída libre y movimiento celeste.`]}
+  ],
+  formulas:[
+    {tex:R`\vec F=-G\frac{Mm}{r^2}\,\vec u_r \qquad G=6{,}67\cdot10^{-11}\ \mathrm{N\,m^2/kg^2}`, d:"Ley de gravitación universal", clave:true},
+    {tex:R`T^2=\frac{4\pi^2}{GM}\,a^3`, d:"Tercera ley de Kepler", clave:true},
+    {tex:R`\vec L=\vec r\times m\vec v \qquad L=m\,v\,r\,\sin\alpha`, d:"Momento angular"},
+    {tex:R`\frac{dA}{dt}=\frac{L}{2m}=\text{cte}`, d:"Velocidad areolar (2.ª ley de Kepler)", clave:true},
+    {tex:R`r_p v_p = r_a v_a`, d:"Conservación de L entre perihelio y afelio"},
+    {tex:R`G\frac{Mm}{r^2}=m\frac{v^2}{r}\ \Rightarrow\ v=\sqrt{\frac{GM}{r}}`, d:"Velocidad orbital circular", clave:true},
+    {tex:R`g_0=\frac{GM}{R^2}`, d:"Gravedad en la superficie de un astro"}
+  ],
+  sim:"kepler",
+  claves:[
+    R`La constante de la tercera ley depende del astro central: no puedes comparar directamente un satélite de la Tierra con un planeta del Sol.`,
+    R`En las órbitas elípticas se conservan $L$ y $E_m$, pero **no** la velocidad ni la energía cinética.`,
+    R`En una órbita circular $\vec L$ tiene módulo $mvr$ porque $\vec r\perp\vec v$.`,
+    R`El peso aparente de un satélite es nulo, pero la gravedad **no** lo es: está en caída libre permanente.`
+  ],
+  problemas:[{
+    e:R`Un satélite gira alrededor de la Tierra en una órbita circular de radio 8000 km. Datos: $G=6{,}67\cdot10^{-11}$ SI, $M_T=5{,}98\cdot10^{24}$ kg. Calcula su velocidad orbital y su periodo.`,
+    pasos:[
+      R`Igualamos gravitatoria y centrípeta: $G\dfrac{M_Tm}{r^2}=m\dfrac{v^2}{r}$.`,
+      R`Velocidad: $v=\sqrt{GM_T/r}=\sqrt{6{,}67\cdot10^{-11}\cdot5{,}98\cdot10^{24}/8\cdot10^{6}}=7{,}06\cdot10^{3}$ m/s.`,
+      R`Periodo: $T=2\pi r/v = 2\pi\cdot8\cdot10^{6}/7{,}06\cdot10^{3}=7{,}12\cdot10^{3}$ s $\approx$ 1 h 59 min.`,
+      R`Comprobación con Kepler: $T=\sqrt{4\pi^2r^3/GM_T}$ da el mismo resultado.`
+    ]
+  }],
+  test:[
+    {q:R`La segunda ley de Kepler es consecuencia directa de:`,
+     op:["la conservación de la energía","la conservación del momento angular","la tercera ley de Newton","el principio de inercia"], sol:1,
+     why:R`Al ser la gravedad una fuerza central, $\vec M=0$ y $\vec L$ se conserva, lo que hace constante la velocidad areolar.`},
+    {q:R`Un planeta se mueve más deprisa cuando está:`,
+     op:["en el afelio","en el perihelio","siempre igual","en los nodos"], sol:1,
+     why:R`Como $r_pv_p=r_av_a$, al disminuir $r$ debe aumentar $v$.`},
+    {q:R`Si un satélite duplica el radio de su órbita, su periodo se multiplica por:`,
+     op:["2","2,83","4","8"], sol:1,
+     why:R`$T\propto r^{3/2}$, luego el factor es $2^{3/2}=2{,}83$.`},
+    {q:R`La ley de gravitación universal establece que la fuerza es:`,
+     op:["proporcional a la distancia","inversamente proporcional a la distancia","inversamente proporcional al cuadrado de la distancia","independiente de la distancia"], sol:2,
+     why:R`$F=GMm/r^2$: al triplicar la distancia, la fuerza se reduce nueve veces.`},
+    {q:R`Una fuerza central es aquella que:`,
+     op:["actúa siempre en el centro de masas","tiene dirección hacia un punto fijo","es siempre repulsiva","no realiza trabajo nunca"], sol:1,
+     why:R`Su línea de acción pasa por un punto fijo, de modo que su momento respecto de ese punto es nulo.`}
+  ]
+},
+
+{
+  n:6, id:"t6", titulo:"El campo gravitatorio", lema:"Intensidad, potencial y satélites",
+  bloque:"A. Campo gravitatorio",
+  resumen:"En lugar de hablar de fuerzas a distancia, decimos que una masa modifica el espacio a su alrededor creando un campo. Con dos magnitudes, la intensidad y el potencial, se resuelven todos los problemas de satélites y energías.",
+  secciones:[
+    {h:"Intensidad del campo",
+     p:[R`La **intensidad del campo gravitatorio** en un punto es la fuerza por unidad de masa que experimentaría una masa de prueba colocada allí: $\vec g=\vec F/m$, en N/kg o m/s². Es un campo vectorial, central y siempre atractivo.`,
+        R`Si hay varias masas, se aplica el **principio de superposición**: se suman vectorialmente las intensidades creadas por cada una.`],
+     ul:[R`Las **líneas de campo** son radiales y entrantes; su densidad indica la intensidad.`,
+         R`Las **superficies equipotenciales** son esferas concéntricas, siempre perpendiculares a las líneas de campo. Al moverse por una de ellas, el campo **no realiza trabajo**.`]},
+    {h:"Energía potencial y potencial",
+     p:[R`El campo gravitatorio es **conservativo**: el trabajo que realiza no depende del camino y se puede definir una energía potencial, $E_p=-GMm/r$, tomando el origen en el infinito.`,
+        R`El **potencial** es la energía potencial por unidad de masa, $V=-GM/r$ (J/kg). Es una magnitud escalar, así que se suma algebraicamente, lo que simplifica mucho los cálculos.`],
+     ul:[R`Trabajo del campo: $W_{A\to B}=-\Delta E_p=m(V_A-V_B)$.`,
+         R`Si el trabajo del campo es positivo, el cuerpo se mueve espontáneamente (hacia potenciales menores).`,
+         R`El signo negativo de $E_p$ indica que el sistema está **ligado**: hay que aportar energía para separar las masas.`]},
+    {h:"Satélites y velocidad de escape",
+     p:[R`Para un satélite en órbita circular de radio $r$, la energía mecánica vale $E_m=-GMm/2r$, exactamente la mitad de la potencial y de signo contrario a la cinética. Es negativa: la órbita es un estado ligado.`,
+        R`La **energía de puesta en órbita** es la diferencia entre la energía mecánica en órbita y en la superficie. Y si se quiere escapar del campo ($E_m\ge0$), la velocidad mínima necesaria es la **velocidad de escape**.`],
+     ul:[R`Un **satélite geoestacionario** tiene periodo de 24 h, órbita ecuatorial y radio de unos 42 200 km (unos 36 000 km de altura).`,
+         R`Cuanto más alto orbita un satélite, menor es su velocidad pero mayor es su energía mecánica.`]}
+  ],
+  formulas:[
+    {tex:R`\vec g=-G\frac{M}{r^2}\vec u_r \qquad g=\frac{GM}{r^2}`, d:"Intensidad del campo gravitatorio", clave:true},
+    {tex:R`g_h=\frac{GM}{(R+h)^2}=g_0\frac{R^2}{(R+h)^2}`, d:"Gravedad a una altura h"},
+    {tex:R`E_p=-G\frac{Mm}{r}`, d:"Energía potencial gravitatoria", clave:true},
+    {tex:R`V=-G\frac{M}{r}`, d:"Potencial gravitatorio (escalar)", clave:true},
+    {tex:R`W_{A\to B}=-\Delta E_p=m\,(V_A-V_B)`, d:"Trabajo del campo", clave:true},
+    {tex:R`v_{orb}=\sqrt{\frac{GM}{r}}\qquad E_m=-G\frac{Mm}{2r}`, d:"Órbita circular", clave:true},
+    {tex:R`v_{esc}=\sqrt{\frac{2GM}{R}}=\sqrt{2g_0R}`, d:"Velocidad de escape", clave:true},
+    {tex:R`E_{puesta}=E_{m,orbita}-E_{m,superficie}`, d:"Energía de puesta en órbita"}
+  ],
+  sim:"gravedad",
+  claves:[
+    R`$g$ es vectorial y $V$ escalar: en el punto medio entre dos masas iguales $\vec g=0$ pero $V\neq0$.`,
+    R`En las fórmulas de campo, $r$ se mide **desde el centro** del astro: si dan una altura, usa $r=R+h$.`,
+    R`La velocidad de escape no depende de la masa del objeto lanzado ni de la dirección del lanzamiento.`,
+    R`$v_{esc}=\sqrt2\,v_{orb}$ cuando ambas se calculan al mismo radio.`
+  ],
+  problemas:[{
+    e:R`Calcula la velocidad de escape desde la superficie de la Tierra y la energía necesaria para poner en órbita circular de 300 km de altura un satélite de 500 kg. Datos: $R_T=6370$ km, $g_0=9{,}8$ m/s², $M_T=5{,}98\cdot10^{24}$ kg, $G=6{,}67\cdot10^{-11}$ SI.`,
+    pasos:[
+      R`Escape: $v_{esc}=\sqrt{2g_0R_T}=\sqrt{2\cdot9{,}8\cdot6{,}37\cdot10^{6}}=1{,}12\cdot10^{4}$ m/s (11,2 km/s).`,
+      R`Radio orbital: $r=R_T+h=6{,}37\cdot10^{6}+3\cdot10^{5}=6{,}67\cdot10^{6}$ m.`,
+      R`Energía en órbita: $E_m=-GM_Tm/2r=-6{,}67\cdot10^{-11}\cdot5{,}98\cdot10^{24}\cdot500/(2\cdot6{,}67\cdot10^{6})=-1{,}49\cdot10^{10}$ J.`,
+      R`Energía en la superficie (en reposo): $E_p=-GM_Tm/R_T=-3{,}13\cdot10^{10}$ J.`,
+      R`Energía de puesta en órbita: $\Delta E=-1{,}49\cdot10^{10}-(-3{,}13\cdot10^{10})=1{,}64\cdot10^{10}$ J.`
+    ]
+  }],
+  test:[
+    {q:R`En el punto medio del segmento que une dos masas iguales:`,
+     op:["g = 0 y V = 0","g = 0 y V ≠ 0","g ≠ 0 y V = 0","ambos son máximos"], sol:1,
+     why:R`Las intensidades se cancelan por ser vectores opuestos, pero los potenciales, al ser escalares negativos, se suman.`},
+    {q:R`La energía mecánica de un satélite en órbita circular es:`,
+     op:["positiva","nula","negativa e igual a −GMm/2r","igual a su energía potencial"], sol:2,
+     why:R`$E_m=E_c+E_p=\tfrac{GMm}{2r}-\tfrac{GMm}{r}=-\tfrac{GMm}{2r}$; al ser negativa, el satélite está ligado.`},
+    {q:R`La velocidad de escape desde la superficie de un planeta depende de:`,
+     op:["la masa del objeto lanzado","la dirección del lanzamiento","la masa y el radio del planeta","la velocidad de rotación"], sol:2,
+     why:R`$v_{esc}=\sqrt{2GM/R}$: solo intervienen las características del planeta.`},
+    {q:R`El trabajo del campo gravitatorio al mover una masa por una superficie equipotencial es:`,
+     op:["máximo","nulo","negativo","igual a mgh"], sol:1,
+     why:R`$W=m(V_A-V_B)$ y en una equipotencial $V_A=V_B$, luego $W=0$.`},
+    {q:R`A una altura igual al radio terrestre, la gravedad vale:`,
+     op:["g₀/2","g₀/4","2g₀","g₀"], sol:1,
+     why:R`$g=g_0R^2/(2R)^2=g_0/4$.`}
+  ]
+}
+];
+
+/* === Contenidos: temas 7 a 12 === */
+const TEMAS_7_12 = [
+{
+  n:7, id:"t7", titulo:"El campo eléctrico", lema:"Cargas, potencial y teorema de Gauss",
+  bloque:"B. Campo electromagnético",
+  resumen:"La interacción eléctrica se describe con las mismas herramientas que la gravitatoria, pero con dos diferencias decisivas: hay cargas de dos signos y la fuerza es unas 10³⁹ veces más intensa. Por eso domina toda la química y la electrónica.",
+  secciones:[
+    {h:"Ley de Coulomb y campo eléctrico",
+     p:[R`La fuerza entre dos cargas puntuales en reposo es central, conservativa, proporcional al producto de las cargas e inversamente proporcional al cuadrado de la distancia. Es repulsiva entre cargas del mismo signo y atractiva entre cargas de signo contrario.`,
+        R`El **campo eléctrico** en un punto es la fuerza por unidad de carga positiva de prueba, $\vec E=\vec F/q$, y se mide en N/C (o V/m). Como la gravedad, cumple el principio de superposición.`],
+     ul:[R`Las líneas de campo **salen** de las cargas positivas y **entran** en las negativas; nunca se cortan.`,
+         R`Dentro de un conductor en equilibrio el campo es nulo y toda la carga se sitúa en la superficie: es la **jaula de Faraday**.`]},
+    {h:"Potencial y energía",
+     p:[R`El potencial eléctrico creado por una carga puntual es $V=Kq/r$, tomando el origen en el infinito. Al ser escalar, el potencial de varias cargas se suma algebraicamente respetando los signos.`,
+        R`El trabajo que realiza el campo al trasladar una carga es $W=q(V_A-V_B)$. Las cargas positivas se mueven espontáneamente hacia potenciales menores y las negativas al revés.`],
+     ul:[R`El **electronvoltio** es la energía que adquiere un electrón al ser acelerado por una diferencia de potencial de 1 V: $1\ \mathrm{eV}=1{,}6\cdot10^{-19}$ J.`,
+         R`En un campo uniforme (condensador plano), $E=V/d$ y el movimiento de una carga es análogo al tiro parabólico.`]},
+    {h:"Flujo y teorema de Gauss",
+     p:[R`El **flujo** del campo eléctrico a través de una superficie mide el número de líneas que la atraviesan: $\Phi=\vec E\cdot\vec S$. El **teorema de Gauss** afirma que el flujo a través de una superficie cerrada solo depende de la carga encerrada, $\Phi=q_{int}/\varepsilon_0$.`],
+     ul:[R`Esfera conductora cargada: fuera se comporta como una carga puntual en el centro; dentro, $E=0$ y $V$ es constante e igual al de la superficie.`,
+         R`Hilo infinito: $E=\lambda/2\pi\varepsilon_0 r$. Plano infinito: $E=\sigma/2\varepsilon_0$, independiente de la distancia.`]},
+    {h:"Comparación con el campo gravitatorio",
+     tabla:{head:["","Gravitatorio","Eléctrico"],rows:[
+       ["Fuente","Masa (siempre positiva)","Carga (positiva o negativa)"],
+       ["Sentido","Siempre atractivo","Atractivo o repulsivo"],
+       ["Constante","G = 6,67·10⁻¹¹","K = 9·10⁹"],
+       ["Intensidad relativa","Muy débil","Unas 10³⁹ veces mayor"],
+       ["Apantallamiento","No es posible","Sí (jaula de Faraday)"],
+       ["Dependencia","Ambos siguen la ley del inverso del cuadrado y son conservativos",""]
+     ]}}
+  ],
+  formulas:[
+    {tex:R`\vec F=K\frac{q_1q_2}{r^2}\vec u_r\qquad K=\frac{1}{4\pi\varepsilon_0}=9\cdot10^{9}\ \mathrm{N\,m^2/C^2}`, d:"Ley de Coulomb", clave:true},
+    {tex:R`\vec E=K\frac{q}{r^2}\vec u_r`, d:"Campo creado por una carga puntual", clave:true},
+    {tex:R`E_p=K\frac{q_1q_2}{r}\qquad V=K\frac{q}{r}`, d:"Energía potencial y potencial", clave:true},
+    {tex:R`W_{A\to B}=q\,(V_A-V_B)=-\Delta E_p`, d:"Trabajo del campo eléctrico", clave:true},
+    {tex:R`E=\frac{V}{d}`, d:"Campo uniforme entre placas"},
+    {tex:R`\Phi=\oint \vec E\cdot d\vec S=\frac{q_{int}}{\varepsilon_0}`, d:"Teorema de Gauss", clave:true},
+    {tex:R`1\ \mathrm{eV}=1{,}6\cdot10^{-19}\ \mathrm{J}`, d:"Electronvoltio"}
+  ],
+  sim:"campoE",
+  claves:[
+    R`Al sumar campos, hazlo **vectorialmente** (con componentes); al sumar potenciales, algebraicamente con su signo.`,
+    R`En las fórmulas de $\vec E$ y $\vec F$ se sustituye el valor absoluto de la carga y el sentido se decide dibujando; en $V$ y $E_p$, sí se sustituye el signo.`,
+    R`Un campo nulo no implica potencial nulo, ni al revés.`,
+    R`Comprueba las unidades: 1 N/C = 1 V/m.`
+  ],
+  problemas:[{
+    e:R`Dos cargas de $+3\ \mu$C y $-3\ \mu$C están separadas 20 cm. Calcula el campo y el potencial en el punto medio del segmento que las une. Dato: $K=9\cdot10^9$ SI.`,
+    pasos:[
+      R`Distancia de cada carga al punto: $r=0{,}10$ m.`,
+      R`Módulo del campo de cada carga: $E=Kq/r^2=9\cdot10^{9}\cdot3\cdot10^{-6}/0{,}10^{2}=2{,}7\cdot10^{6}$ N/C.`,
+      R`Sentidos: el campo de la positiva se aleja de ella y el de la negativa se dirige hacia ella, así que **ambos apuntan en el mismo sentido** y se suman: $E_{total}=5{,}4\cdot10^{6}$ N/C.`,
+      R`Potencial: $V=K(+3\cdot10^{-6})/0{,}10+K(-3\cdot10^{-6})/0{,}10=0$ V.`,
+      R`Resultado: campo máximo y potencial nulo, un buen ejemplo de que ambas magnitudes son independientes.`
+    ]
+  }],
+  test:[
+    {q:R`Las líneas del campo eléctrico creado por una carga negativa:`,
+     op:["salen de la carga","entran en la carga","son circunferencias","no existen"], sol:1,
+     why:R`Por convenio se dibujan según la fuerza sobre una carga positiva de prueba, que sería atraída hacia la negativa.`},
+    {q:R`En el interior de un conductor cargado en equilibrio electrostático:`,
+     op:["E = 0 y V constante","E es máximo","V = 0 siempre","la carga se reparte por el volumen"], sol:0,
+     why:R`Si hubiera campo las cargas se moverían. Toda la carga se acumula en la superficie.`},
+    {q:R`El trabajo para llevar una carga de 2 C desde un punto a 10 V hasta otro a 4 V lo realiza el campo y vale:`,
+     op:["12 J","−12 J","28 J","8 J"], sol:0,
+     why:R`$W=q(V_A-V_B)=2\cdot(10-4)=12$ J. Al ser positivo, el movimiento es espontáneo.`},
+    {q:R`El flujo eléctrico a través de una superficie cerrada que no encierra carga neta es:`,
+     op:["proporcional al área","nulo","infinito","igual a E·S siempre"], sol:1,
+     why:R`Por el teorema de Gauss, $\Phi=q_{int}/\varepsilon_0=0$: entran tantas líneas como salen.`},
+    {q:R`Una diferencia con el campo gravitatorio es que el eléctrico:`,
+     op:["no es conservativo","puede ser repulsivo y apantallarse","no cumple la ley del inverso del cuadrado","no tiene potencial"], sol:1,
+     why:R`Ambos son centrales y conservativos, pero solo el eléctrico tiene dos signos y admite apantallamiento.`}
+  ]
+},
+
+{
+  n:8, id:"t8", titulo:"Electromagnetismo", lema:"El campo magnético",
+  bloque:"B. Campo electromagnético",
+  resumen:"Oersted descubrió en 1820 que una corriente desvía una brújula: electricidad y magnetismo son la misma cosa. El campo magnético no actúa sobre cargas en reposo, sino sobre cargas en movimiento, y esa es la base de motores, altavoces y aceleradores.",
+  secciones:[
+    {h:"El campo magnético",
+     p:[R`El campo magnético $\vec B$ se mide en teslas (T) y se representa con líneas **cerradas** que salen del polo norte y entran por el sur del imán. No existen monopolos magnéticos: si partes un imán obtienes dos imanes completos.`,
+        R`El **experimento de Oersted** demostró que las corrientes eléctricas crean campo magnético; Ampère completó la idea mostrando que dos corrientes se atraen o se repelen.`]},
+    {h:"Fuerza sobre cargas y corrientes",
+     p:[R`La **fuerza de Lorentz** sobre una carga en movimiento es $\vec F=q\,\vec v\times\vec B$: perpendicular a la velocidad y al campo, de módulo $qvB\sin\alpha$. Al ser siempre perpendicular al desplazamiento, **no realiza trabajo** y no cambia el módulo de la velocidad, solo su dirección.`,
+        R`Si $\vec v\perp\vec B$ la trayectoria es una circunferencia de radio $r=mv/qB$, con un periodo que no depende de la velocidad. En eso se basan el ciclotrón y el espectrómetro de masas.`],
+     ul:[R`Sobre un hilo con corriente: $\vec F=I\,\vec L\times\vec B$.`,
+         R`Sobre una espira: el campo genera un par de fuerzas que la hace girar, principio del **motor eléctrico** y del galvanómetro.`,
+         R`Si hay campo eléctrico y magnético a la vez: $\vec F=q(\vec E+\vec v\times\vec B)$, que permite construir un **selector de velocidades** cuando ambas fuerzas se equilibran ($v=E/B$).`]},
+    {h:"Campos creados por corrientes",
+     ul:[R`**Hilo recto indefinido**: $B=\dfrac{\mu_0 I}{2\pi d}$, líneas circulares concéntricas (regla de la mano derecha).`,
+         R`**Espira circular** en su centro: $B=\dfrac{\mu_0 I}{2R}$.`,
+         R`**Solenoide**: $B=\dfrac{\mu_0 N I}{L}$, prácticamente uniforme en su interior.`,
+         R`**Ley de Ampère**: $\oint\vec B\cdot d\vec l=\mu_0 I_{int}$, el equivalente magnético del teorema de Gauss.`,
+         R`**Fuerza entre hilos paralelos**: $\dfrac{F}{L}=\dfrac{\mu_0I_1I_2}{2\pi d}$; se atraen si las corrientes tienen el mismo sentido.`]}
+  ],
+  formulas:[
+    {tex:R`\vec F=q\,\vec v\times\vec B \qquad F=qvB\sin\alpha`, d:"Fuerza de Lorentz", clave:true},
+    {tex:R`r=\frac{mv}{qB}\qquad T=\frac{2\pi m}{qB}`, d:"Movimiento circular en un campo magnético", clave:true},
+    {tex:R`\vec F=I\,\vec L\times\vec B`, d:"Fuerza sobre un conductor rectilíneo", clave:true},
+    {tex:R`B=\frac{\mu_0 I}{2\pi d}\qquad \mu_0=4\pi\cdot10^{-7}\ \mathrm{T\,m/A}`, d:"Campo de un hilo indefinido", clave:true},
+    {tex:R`B=\frac{\mu_0 I}{2R}\qquad B=\frac{\mu_0 N I}{L}`, d:"Espira y solenoide"},
+    {tex:R`\frac{F}{L}=\frac{\mu_0 I_1 I_2}{2\pi d}`, d:"Fuerza entre dos hilos paralelos"},
+    {tex:R`\vec F=q(\vec E+\vec v\times\vec B)`, d:"Fuerza electromagnética total"}
+  ],
+  sim:"lorentz",
+  claves:[
+    R`La fuerza magnética **nunca realiza trabajo** sobre una carga libre: no cambia su energía cinética.`,
+    R`Si $\vec v$ es paralela a $\vec B$, la fuerza es nula y la carga sigue recta.`,
+    R`Usa la regla de la mano derecha con cuidado y recuerda invertir el sentido si la carga es negativa.`,
+    R`El periodo del movimiento circular no depende de $v$ ni de $r$: por eso funciona el ciclotrón.`
+  ],
+  problemas:[{
+    e:R`Un protón ($q=1{,}6\cdot10^{-19}$ C, $m=1{,}67\cdot10^{-27}$ kg) entra perpendicularmente a un campo magnético de 0,5 T con una velocidad de $2\cdot10^{6}$ m/s. Calcula la fuerza, el radio de la trayectoria y el periodo.`,
+    pasos:[
+      R`Fuerza: $F=qvB\sin90^\circ=1{,}6\cdot10^{-19}\cdot2\cdot10^{6}\cdot0{,}5=1{,}6\cdot10^{-13}$ N.`,
+      R`Como $\vec F\perp\vec v$ siempre, la trayectoria es circular y $F$ actúa de fuerza centrípeta.`,
+      R`Radio: $r=mv/qB=1{,}67\cdot10^{-27}\cdot2\cdot10^{6}/(1{,}6\cdot10^{-19}\cdot0{,}5)=4{,}2\cdot10^{-2}$ m.`,
+      R`Periodo: $T=2\pi m/qB=2\pi\cdot1{,}67\cdot10^{-27}/(1{,}6\cdot10^{-19}\cdot0{,}5)=1{,}3\cdot10^{-7}$ s.`
+    ]
+  }],
+  test:[
+    {q:R`Una carga en reposo dentro de un campo magnético experimenta una fuerza:`,
+     op:["máxima","nula","perpendicular al campo","igual a qB"], sol:1,
+     why:R`$F=qvB\sin\alpha$ y si $v=0$ la fuerza es nula: el campo magnético solo actúa sobre cargas en movimiento.`},
+    {q:R`El trabajo realizado por la fuerza magnética sobre una carga libre es:`,
+     op:["positivo","negativo","nulo","depende del campo"], sol:2,
+     why:R`La fuerza es siempre perpendicular al desplazamiento, luego $W=0$ y la energía cinética no cambia.`},
+    {q:R`Dos hilos paralelos con corrientes del mismo sentido:`,
+     op:["se atraen","se repelen","no interaccionan","giran"], sol:0,
+     why:R`El campo de uno ejerce sobre el otro una fuerza dirigida hacia él cuando las corrientes son paralelas y del mismo sentido.`},
+    {q:R`Si se duplica la velocidad de una partícula que gira en un campo magnético, el periodo:`,
+     op:["se duplica","se reduce a la mitad","no cambia","se cuadruplica"], sol:2,
+     why:R`$T=2\pi m/qB$ no depende de la velocidad: el radio aumenta, pero el tiempo de vuelta es el mismo.`},
+    {q:R`El campo creado por un hilo indefinido a 10 cm de distancia con I = 5 A vale:`,
+     op:["1·10⁻⁵ T","1·10⁻⁶ T","5·10⁻⁵ T","2·10⁻⁴ T"], sol:0,
+     why:R`$B=\mu_0I/2\pi d=4\pi\cdot10^{-7}\cdot5/(2\pi\cdot0{,}1)=1\cdot10^{-5}$ T.`}
+  ]
+},
+
+{
+  n:9, id:"t9", titulo:"Inducción electromagnética", lema:"Faraday, Lenz y la corriente alterna",
+  bloque:"B. Campo electromagnético",
+  resumen:"Si una corriente crea un campo magnético, ¿puede un campo magnético crear una corriente? Faraday y Henry respondieron que sí, siempre que el flujo varíe. De esa respuesta salen los generadores, los transformadores y todo el sistema eléctrico moderno.",
+  secciones:[
+    {h:"Flujo magnético",
+     p:[R`El **flujo magnético** a través de una superficie mide cuántas líneas de campo la atraviesan: $\Phi=\vec B\cdot\vec S=BS\cos\alpha$, donde $\alpha$ es el ángulo entre $\vec B$ y la normal a la superficie. Se mide en webers (Wb).`,
+        R`Para inducir corriente hay tres formas de hacer variar el flujo: cambiar $B$ (acercando un imán), cambiar $S$ (deformando el circuito) o cambiar $\alpha$ (haciendo girar la espira, que es lo que hace un alternador).`]},
+    {h:"Ley de Faraday-Lenz",
+     p:[R`La **fuerza electromotriz inducida** es igual a la variación del flujo por unidad de tiempo, cambiada de signo: $\varepsilon=-N\dfrac{d\Phi}{dt}$.`,
+        R`El signo menos es la **ley de Lenz**: la corriente inducida se opone a la causa que la produce. No es un capricho, es la conservación de la energía: si fuera al revés obtendríamos energía de la nada.`],
+     ul:[R`Si acercas el polo norte de un imán a una espira, la cara enfrentada se comporta como un norte y lo repele.`,
+         R`Una **barra** de longitud $L$ que se mueve con velocidad $v$ perpendicular a $\vec B$ genera $\varepsilon=BLv$.`,
+         R`Aplicaciones de la ley de Lenz: frenos magnéticos, cocinas de inducción, placas de vitrocerámica y detectores de metales.`]},
+    {h:"Alternador y transformador",
+     p:[R`Una espira de $N$ vueltas y área $S$ que gira con velocidad angular $\omega$ dentro de un campo uniforme produce $\varepsilon=NBS\omega\sin(\omega t)$: una **fuerza electromotriz alterna sinusoidal**. Ese es el principio del alternador de cualquier central eléctrica.`,
+        R`El **transformador** aprovecha la inducción mutua entre dos bobinas sobre un núcleo de hierro: $\dfrac{V_1}{V_2}=\dfrac{N_1}{N_2}$. Permite elevar la tensión para transportar la energía con pocas pérdidas y reducirla luego para el consumo.`],
+     ul:[R`Valor eficaz: $V_{ef}=V_0/\sqrt2$. Los 230 V de la red son un valor eficaz.`,
+         R`La **autoinducción** de una bobina, $\varepsilon=-L\,dI/dt$, se opone a las variaciones bruscas de corriente.`]}
+  ],
+  formulas:[
+    {tex:R`\Phi=\vec B\cdot\vec S=B\,S\cos\alpha`, d:"Flujo magnético (Wb)", clave:true},
+    {tex:R`\varepsilon=-N\frac{d\Phi}{dt}`, d:"Ley de Faraday-Lenz", clave:true},
+    {tex:R`\varepsilon=B\,L\,v`, d:"Fem en una barra en movimiento", clave:true},
+    {tex:R`\varepsilon=N B S \omega \sin(\omega t)\qquad \varepsilon_0=NBS\omega`, d:"Alternador: fem alterna", clave:true},
+    {tex:R`\frac{V_1}{V_2}=\frac{N_1}{N_2}=\frac{I_2}{I_1}`, d:"Transformador ideal", clave:true},
+    {tex:R`V_{ef}=\frac{V_0}{\sqrt2}\qquad I_{ef}=\frac{I_0}{\sqrt2}`, d:"Valores eficaces"},
+    {tex:R`\varepsilon=-L\frac{dI}{dt}`, d:"Autoinducción"}
+  ],
+  sim:"induccion",
+  claves:[
+    R`Sin **variación** de flujo no hay fem inducida: un imán quieto dentro de una espira no induce nada.`,
+    R`El signo menos de la ley de Faraday no se puede quitar: indica oposición al cambio (Lenz).`,
+    R`Cuando la espira es paralela al campo el flujo es nulo, pero es justo ahí donde la fem es **máxima**, porque el flujo varía más deprisa.`,
+    R`En los problemas, escribe primero $\Phi(t)$ y después deriva; no derives magnitudes constantes.`
+  ],
+  problemas:[{
+    e:R`Una espira cuadrada de 10 cm de lado y 50 vueltas gira a 3000 rpm dentro de un campo de 0,2 T. Calcula la fem máxima y la expresión de la fem instantánea.`,
+    pasos:[
+      R`Área: $S=0{,}1^2=0{,}01$ m². Velocidad angular: $\omega=3000\cdot2\pi/60=314$ rad/s.`,
+      R`Flujo: $\Phi=NBS\cos(\omega t)=50\cdot0{,}2\cdot0{,}01\cos(314t)=0{,}1\cos(314t)$ Wb.`,
+      R`Fem: $\varepsilon=-d\Phi/dt=0{,}1\cdot314\sin(314t)=31{,}4\sin(314t)$ V.`,
+      R`Fem máxima: $\varepsilon_0=NBS\omega=31{,}4$ V, que se alcanza cuando el plano de la espira es paralelo al campo.`
+    ]
+  }],
+  test:[
+    {q:R`Se induce corriente en una espira cuando:`,
+     op:["hay campo magnético","el flujo magnético varía con el tiempo","la espira está en reposo en un campo uniforme","el campo es muy intenso"], sol:1,
+     why:R`Lo esencial es la variación: $\varepsilon=-d\Phi/dt$.`},
+    {q:R`La ley de Lenz es una consecuencia de:`,
+     op:["la conservación de la carga","la conservación de la energía","la ley de Ohm","el teorema de Gauss"], sol:1,
+     why:R`Si la corriente inducida favoreciese el cambio, se crearía energía indefinidamente.`},
+    {q:R`Un transformador con 200 espiras en el primario y 1000 en el secundario, alimentado a 230 V, da en el secundario:`,
+     op:["46 V","1150 V","230 V","500 V"], sol:1,
+     why:R`$V_2=V_1N_2/N_1=230\cdot1000/200=1150$ V. Es un transformador elevador.`},
+    {q:R`En un alternador, la fem es máxima cuando el flujo es:`,
+     op:["máximo","mínimo (plano paralelo al campo)","negativo","constante"], sol:1,
+     why:R`La fem depende de la derivada del flujo, que es máxima justo cuando el flujo pasa por cero.`},
+    {q:R`Una barra de 0,5 m se mueve a 4 m/s perpendicular a un campo de 0,3 T. La fem inducida vale:`,
+     op:["0,6 V","1,2 V","0,06 V","2,4 V"], sol:0,
+     why:R`$\varepsilon=BLv=0{,}3\cdot0{,}5\cdot4=0{,}6$ V.`}
+  ]
+},
+
+{
+  n:10, id:"t10", titulo:"Física relativista", lema:"Espacio, tiempo y energía",
+  bloque:"D. Física moderna",
+  resumen:"A finales del XIX la mecánica de Newton y el electromagnetismo de Maxwell eran incompatibles. Einstein resolvió el conflicto en 1905 renunciando a algo que parecía intocable: el tiempo absoluto.",
+  secciones:[
+    {h:"La crisis de la física clásica",
+     p:[R`En mecánica clásica las velocidades se suman según Galileo, pero las ecuaciones de Maxwell dan un valor fijo para $c$. Para salvar ambas cosas se supuso que la luz se propagaba por un medio, el **éter**.`,
+        R`El **experimento de Michelson y Morley** (1887) intentó medir la velocidad de la Tierra respecto del éter con un interferómetro y obtuvo un resultado negativo: no había diferencia. El éter no existía.`]},
+    {h:"Los postulados de Einstein",
+     ul:[R`**Principio de relatividad**: las leyes de la física son las mismas en todos los sistemas de referencia inerciales.`,
+         R`**Constancia de c**: la velocidad de la luz en el vacío es la misma para todos los observadores, independientemente del movimiento de la fuente o del observador.`],
+     p:[R`Del segundo postulado se sigue que el tiempo y las distancias no pueden ser absolutos: dos sucesos simultáneos para un observador no lo son para otro que se mueva respecto de él.`]},
+    {h:"Consecuencias: dilatación y contracción",
+     p:[R`Todos los efectos relativistas se concentran en el **factor de Lorentz** $\gamma=1/\sqrt{1-v^2/c^2}$, que vale 1 para velocidades pequeñas (por eso no notamos nada en la vida diaria) y tiende a infinito cuando $v\to c$.`],
+     ul:[R`**Dilatación del tiempo**: un reloj en movimiento va más lento, $\Delta t=\gamma\,\Delta t_0$, donde $\Delta t_0$ es el **tiempo propio**, medido en el sistema donde los dos sucesos ocurren en el mismo lugar.`,
+         R`**Contracción de longitudes**: solo en la dirección del movimiento, $L=L_0/\gamma$, con $L_0$ la longitud propia medida en reposo.`,
+         R`Comprobación experimental: los **muones** creados en la alta atmósfera llegan al suelo aunque su vida media clásica no lo permitiría. Los relojes de los satélites **GPS** deben corregirse a diario.`]},
+    {h:"Masa y energía",
+     p:[R`El momento lineal relativista es $p=\gamma m v$ y la energía total $E=\gamma mc^2$. Un cuerpo en reposo tiene ya una energía $E_0=mc^2$: masa y energía son dos formas de lo mismo, idea que explica la energía nuclear (tema 12).`,
+        R`La energía cinética es la diferencia entre ambas, $E_c=(\gamma-1)mc^2$, que para $v\ll c$ se reduce a $\tfrac12mv^2$. Acelerar una masa hasta $c$ exigiría energía infinita: $c$ es un límite insuperable.`]}
+  ],
+  formulas:[
+    {tex:R`\gamma=\frac{1}{\sqrt{1-\dfrac{v^2}{c^2}}}`, d:"Factor de Lorentz", clave:true},
+    {tex:R`\Delta t=\gamma\,\Delta t_0`, d:"Dilatación del tiempo", clave:true},
+    {tex:R`L=\frac{L_0}{\gamma}`, d:"Contracción de la longitud", clave:true},
+    {tex:R`p=\gamma m v`, d:"Momento lineal relativista"},
+    {tex:R`E=\gamma mc^2 \qquad E_0=mc^2`, d:"Energía total y energía en reposo", clave:true},
+    {tex:R`E_c=(\gamma-1)mc^2`, d:"Energía cinética relativista", clave:true},
+    {tex:R`E^2=p^2c^2+m^2c^4`, d:"Relación energía-momento"}
+  ],
+  sim:"relatividad",
+  claves:[
+    R`El tiempo propio $\Delta t_0$ es siempre el **menor**; la longitud propia $L_0$, siempre la **mayor**.`,
+    R`Los efectos son **simétricos**: cada observador ve al otro más lento y más corto. No hay un sistema privilegiado.`,
+    R`La contracción se da solo en la dirección del movimiento, no en las perpendiculares.`,
+    R`Trabaja con $v/c$ en lugar de con $v$ en m/s: los números salen mucho más limpios.`
+  ],
+  problemas:[{
+    e:R`Una nave viaja a 0,8c respecto de la Tierra. Su tripulación mide un viaje de 3 años y la nave tiene 100 m de longitud en reposo. Calcula el tiempo transcurrido en la Tierra y la longitud de la nave vista desde la Tierra.`,
+    pasos:[
+      R`Factor de Lorentz: $\gamma=1/\sqrt{1-0{,}8^2}=1/\sqrt{0{,}36}=1/0{,}6=1{,}67$.`,
+      R`El tiempo propio es el de la tripulación: $\Delta t_0=3$ años.`,
+      R`En la Tierra: $\Delta t=\gamma\Delta t_0=1{,}67\cdot3=5$ años.`,
+      R`Longitud: $L=L_0/\gamma=100/1{,}67=60$ m (la longitud propia, 100 m, la miden los tripulantes).`
+    ]
+  }],
+  test:[
+    {q:R`El resultado del experimento de Michelson y Morley fue:`,
+     op:["que el éter se movía","negativo: no se detectó movimiento respecto al éter","que la luz era más rápida en verano","que la Tierra estaba en reposo absoluto"], sol:1,
+     why:R`No apareció la diferencia esperada, lo que acabó con la hipótesis del éter.`},
+    {q:R`Para v = 0,6c, el factor de Lorentz vale:`,
+     op:["1,25","0,8","1,67","2"], sol:0,
+     why:R`$\gamma=1/\sqrt{1-0{,}36}=1/0{,}8=1{,}25$.`},
+    {q:R`La longitud propia de un objeto es la medida:`,
+     op:["desde un sistema en movimiento","en el sistema donde el objeto está en reposo","siempre por un observador terrestre","cuando v = c"], sol:1,
+     why:R`Es la mayor de todas las longitudes medidas; cualquier observador en movimiento la ve contraída.`},
+    {q:R`La energía en reposo de un electrón (m = 9,1·10⁻³¹ kg) es aproximadamente:`,
+     op:["8,2·10⁻¹⁴ J","0,511 MeV","ambas son correctas","nula"], sol:2,
+     why:R`$E_0=mc^2=8{,}2\cdot10^{-14}$ J, que al dividir entre $1{,}6\cdot10^{-19}$ da 0,511 MeV.`},
+    {q:R`Ningún cuerpo con masa puede alcanzar la velocidad de la luz porque:`,
+     op:["se rompería","haría falta energía infinita","el tiempo se pararía para el resto","la masa se anularía"], sol:1,
+     why:R`Cuando $v\to c$, $\gamma\to\infty$ y por tanto $E=\gamma mc^2\to\infty$.`}
+  ]
+},
+
+{
+  n:11, id:"t11", titulo:"Elementos de física cuántica", lema:"Cuantización y dualidad",
+  bloque:"D. Física moderna",
+  resumen:"A escala atómica la energía no es continua: se intercambia en paquetes. Y la distinción entre onda y partícula deja de tener sentido. Con estas dos ideas se explican el efecto fotoeléctrico, los espectros atómicos y la electrónica actual.",
+  secciones:[
+    {h:"La hipótesis de Planck",
+     p:[R`La física clásica predecía que un cuerpo negro emitiría energía infinita en el ultravioleta (la llamada catástrofe ultravioleta). En 1900 Planck resolvió el problema suponiendo que la energía se emite y absorbe en **cuantos** de valor $E=hf$, con $h=6{,}63\cdot10^{-34}$ J·s.`]},
+    {h:"El efecto fotoeléctrico",
+     p:[R`Al iluminar un metal con luz de frecuencia suficiente, se arrancan electrones. Lo que la física clásica no podía explicar es que **no dependiera de la intensidad** sino de la frecuencia, y que la emisión fuera instantánea.`,
+        R`Einstein (1905) lo explicó tratando la luz como un chorro de **fotones**: cada electrón absorbe un fotón completo. Si su energía supera el **trabajo de extracción** $W_0$, el sobrante se convierte en energía cinética.`],
+     ul:[R`**Frecuencia umbral**: $f_0=W_0/h$. Por debajo de ella no hay emisión, por intensa que sea la luz.`,
+         R`Aumentar la intensidad aumenta el **número** de electrones, no su energía.`,
+         R`El **potencial de frenado** mide la energía cinética máxima: $eV_0=E_{c,max}$.`,
+         R`Aplicaciones: células fotovoltaicas, sensores de cámaras, detectores de humo, puertas automáticas.`]},
+    {h:"Espectros y modelo de Bohr",
+     p:[R`Los gases emiten y absorben solo ciertas frecuencias, formando espectros de líneas característicos de cada elemento. Bohr lo explicó postulando órbitas estacionarias con energías fijas: el átomo emite un fotón al saltar de un nivel a otro, con $\Delta E=hf$.`]},
+    {h:"Dualidad e incertidumbre",
+     p:[R`De Broglie propuso que la dualidad también funciona al revés: toda partícula lleva asociada una onda de longitud $\lambda=h/p$. Se confirmó al observar difracción de electrones, y es la base del microscopio electrónico.`,
+        R`El **principio de incertidumbre** de Heisenberg pone un límite a lo que se puede conocer: no es una limitación de los aparatos, sino una propiedad de la naturaleza. Por eso en cuántica se habla de probabilidades y no de trayectorias.`]}
+  ],
+  formulas:[
+    {tex:R`E=hf=\frac{hc}{\lambda}\qquad h=6{,}63\cdot10^{-34}\ \mathrm{J\,s}`, d:"Cuanto de energía (fotón)", clave:true},
+    {tex:R`hf=W_0+E_{c,max}`, d:"Ecuación de Einstein del efecto fotoeléctrico", clave:true},
+    {tex:R`W_0=hf_0=\frac{hc}{\lambda_0}`, d:"Trabajo de extracción y frecuencia umbral", clave:true},
+    {tex:R`E_{c,max}=eV_0=\tfrac12mv_{max}^2`, d:"Potencial de frenado"},
+    {tex:R`\lambda=\frac{h}{p}=\frac{h}{mv}`, d:"Longitud de onda de De Broglie", clave:true},
+    {tex:R`\Delta x\cdot\Delta p\ \ge\ \frac{\hbar}{2}\qquad \Delta E\cdot\Delta t\ \ge\ \frac{\hbar}{2}`, d:"Principio de incertidumbre", clave:true},
+    {tex:R`\Delta E=E_2-E_1=hf`, d:"Transición entre niveles atómicos"}
+  ],
+  sim:"fotoelectrico",
+  claves:[
+    R`En el efecto fotoeléctrico manda la **frecuencia**, no la intensidad: es el error más repetido en los exámenes.`,
+    R`Pasa siempre $W_0$ de eV a julios (multiplicando por $1{,}6\cdot10^{-19}$) antes de sustituir.`,
+    R`Si $f<f_0$ no sale ningún electrón, aunque esperes horas.`,
+    R`La longitud de onda de De Broglie de un objeto cotidiano es tan pequeña que no se observan efectos cuánticos.`
+  ],
+  problemas:[{
+    e:R`El trabajo de extracción del sodio es 2,3 eV. Se ilumina con luz de 400 nm. Datos: $h=6{,}63\cdot10^{-34}$ J·s, $c=3\cdot10^{8}$ m/s, $m_e=9{,}1\cdot10^{-31}$ kg. Calcula la frecuencia umbral, la energía cinética máxima de los electrones y su velocidad.`,
+    pasos:[
+      R`Trabajo de extracción en julios: $W_0=2{,}3\cdot1{,}6\cdot10^{-19}=3{,}68\cdot10^{-19}$ J.`,
+      R`Frecuencia umbral: $f_0=W_0/h=3{,}68\cdot10^{-19}/6{,}63\cdot10^{-34}=5{,}55\cdot10^{14}$ Hz ($\lambda_0=540$ nm).`,
+      R`Energía del fotón: $E=hc/\lambda=6{,}63\cdot10^{-34}\cdot3\cdot10^{8}/400\cdot10^{-9}=4{,}97\cdot10^{-19}$ J.`,
+      R`Energía cinética máxima: $E_c=E-W_0=4{,}97\cdot10^{-19}-3{,}68\cdot10^{-19}=1{,}29\cdot10^{-19}$ J (0,81 eV).`,
+      R`Velocidad: $v=\sqrt{2E_c/m}=\sqrt{2\cdot1{,}29\cdot10^{-19}/9{,}1\cdot10^{-31}}=5{,}3\cdot10^{5}$ m/s.`
+    ]
+  }],
+  test:[
+    {q:R`En el efecto fotoeléctrico, al aumentar la intensidad de la luz manteniendo la frecuencia:`,
+     op:["aumenta la energía de cada electrón","aumenta el número de electrones emitidos","no se emite ningún electrón","disminuye la frecuencia umbral"], sol:1,
+     why:R`Más intensidad significa más fotones, luego más electrones, pero cada uno sale con la misma energía máxima.`},
+    {q:R`Si la frecuencia de la luz es menor que la frecuencia umbral:`,
+     op:["los electrones salen más lentos","no se emite ningún electrón","los electrones salen con retraso","se emiten protones"], sol:1,
+     why:R`El fotón no tiene energía suficiente para vencer el trabajo de extracción y el electrón no escapa.`},
+    {q:R`La longitud de onda de De Broglie de una partícula es inversamente proporcional a:`,
+     op:["su energía","su momento lineal","su carga","su temperatura"], sol:1,
+     why:R`$\lambda=h/p$: cuanto mayor es el momento, más corta es la onda asociada.`},
+    {q:R`La hipótesis de Planck introdujo la idea de que la energía:`,
+     op:["es continua","está cuantizada en múltiplos de hf","no se conserva","es siempre cinética"], sol:1,
+     why:R`Con ella se resolvió el problema del cuerpo negro y nació la física cuántica.`},
+    {q:R`El principio de incertidumbre afirma que no se pueden conocer simultáneamente y con precisión:`,
+     op:["la masa y la carga","la posición y el momento lineal","la energía y la carga","la velocidad y la masa"], sol:1,
+     why:R`$\Delta x\cdot\Delta p\ge\hbar/2$ es una propiedad de la naturaleza, no un defecto de los instrumentos.`}
+  ]
+},
+
+{
+  n:12, id:"t12", titulo:"Física nuclear", lema:"Partículas y fuerzas fundamentales",
+  bloque:"D. Física moderna",
+  resumen:"Dentro del núcleo, una fuerza intensísima mantiene unidos protones que se repelen. Entender ese equilibrio explica la radiactividad, la energía de las estrellas, la datación arqueológica y el mapa actual de las partículas elementales.",
+  secciones:[
+    {h:"El núcleo y la energía de enlace",
+     p:[R`Un núcleo se representa como $^{A}_{Z}X$: $Z$ es el número de protones y $A$ el de nucleones. Los **isótopos** de un elemento tienen igual $Z$ y distinto $A$.`,
+        R`La masa de un núcleo es siempre **menor** que la suma de las masas de sus nucleones. Esa diferencia, el **defecto de masa**, se ha convertido en la energía que los mantiene unidos: $E=\Delta m\,c^2$.`],
+     ul:[R`La **energía de enlace por nucleón** mide la estabilidad. Es máxima en torno al hierro-56.`,
+         R`Por eso los núcleos muy pesados liberan energía al partirse (**fisión**) y los muy ligeros al unirse (**fusión**).`,
+         R`Unidad práctica: $1\ \mathrm{u}=1{,}66\cdot10^{-27}$ kg $=931{,}5$ MeV/c².`]},
+    {h:"Radiactividad",
+     p:[R`Los núcleos inestables se desintegran emitiendo radiación. Descubierta por Becquerel y estudiada por Marie y Pierre Curie, es un proceso **aleatorio y espontáneo**: no se puede predecir cuándo se desintegrará un núcleo concreto, solo la proporción del conjunto.`],
+     ul:[R`**Alfa ($\alpha$)**: emisión de un núcleo de helio; $Z$ disminuye en 2 y $A$ en 4. Poco penetrante (la detiene un papel).`,
+         R`**Beta ($\beta^-$)**: un neutrón se transforma en protón y sale un electrón; $Z$ aumenta en 1 y $A$ no cambia. La detiene una lámina de aluminio.`,
+         R`**Gamma ($\gamma$)**: radiación electromagnética muy energética emitida por un núcleo excitado; no cambia $Z$ ni $A$. Hace falta plomo u hormigón.`,
+         R`En toda desintegración se conservan la carga y el número de nucleones (leyes de Soddy y Fajans).`]},
+    {h:"Ley de desintegración",
+     p:[R`El número de núcleos sin desintegrar disminuye exponencialmente: $N=N_0e^{-\lambda t}$, donde $\lambda$ es la constante de desintegración. El **periodo de semidesintegración** $T_{1/2}$ es el tiempo que tarda en reducirse a la mitad y no depende de la cantidad inicial.`,
+        R`La **actividad** es el número de desintegraciones por segundo, $A=\lambda N$, y se mide en becquerelios (Bq). En ella se basa la datación con carbono-14 y el uso de trazadores en medicina.`]},
+    {h:"Partículas y fuerzas fundamentales",
+     p:[R`El **modelo estándar** organiza la materia en dos familias de partículas elementales: **quarks** (up, down, charm, strange, top, bottom), que forman protones y neutrones, y **leptones** (electrón, muón, tau y sus neutrinos).`,
+        R`Las interacciones se describen como intercambio de **bosones**: el fotón (electromagnética), los bosones W y Z (nuclear débil), los gluones (nuclear fuerte) y el hipotético gravitón (gravitatoria). El bosón de Higgs, detectado en el LHC en 2012, explica el origen de la masa.`],
+     tabla:{head:["Interacción","Intensidad relativa","Alcance","Partícula mediadora"],rows:[
+       ["Nuclear fuerte","1","10⁻¹⁵ m","Gluones"],
+       ["Electromagnética","10⁻²","Infinito","Fotón"],
+       ["Nuclear débil","10⁻⁶","10⁻¹⁸ m","Bosones W y Z"],
+       ["Gravitatoria","10⁻³⁸","Infinito","Gravitón (no detectado)"]
+     ]}}
+  ],
+  formulas:[
+    {tex:R`\Delta m=Z\,m_p+(A-Z)\,m_n-m_{nucleo}`, d:"Defecto de masa", clave:true},
+    {tex:R`E_{enlace}=\Delta m\,c^2`, d:"Energía de enlace", clave:true},
+    {tex:R`\frac{E_{enlace}}{A}`, d:"Energía de enlace por nucleón (estabilidad)"},
+    {tex:R`N=N_0e^{-\lambda t}`, d:"Ley de desintegración radiactiva", clave:true},
+    {tex:R`T_{1/2}=\frac{\ln 2}{\lambda}\qquad \tau=\frac{1}{\lambda}`, d:"Periodo de semidesintegración y vida media", clave:true},
+    {tex:R`A=\lambda N = A_0e^{-\lambda t}`, d:"Actividad, en becquerelios", clave:true},
+    {tex:R`^{A}_{Z}X\rightarrow\ ^{A-4}_{Z-2}Y+\ ^{4}_{2}\alpha`, d:"Desintegración alfa"},
+    {tex:R`^{A}_{Z}X\rightarrow\ ^{A}_{Z+1}Y+\ ^{0}_{-1}\beta`, d:"Desintegración beta"}
+  ],
+  sim:"desintegracion",
+  claves:[
+    R`$T_{1/2}$ no depende de la cantidad de muestra ni de la temperatura o la presión: es una propiedad del isótopo.`,
+    R`Tras $n$ periodos queda $N_0/2^n$. Con eso resuelves muchos apartados sin tocar la exponencial.`,
+    R`Comprueba siempre que en la reacción nuclear cuadran la suma de $A$ y la de $Z$ a ambos lados.`,
+    R`Convierte el defecto de masa a kg antes de multiplicar por $c^2$, o trabaja directamente con 931,5 MeV por cada u.`
+  ],
+  problemas:[{
+    e:R`Una muestra de un isótopo radiactivo con $T_{1/2}=8$ días tiene inicialmente $2\cdot10^{20}$ núcleos. Calcula la constante de desintegración, la actividad inicial y los núcleos que quedan al cabo de 24 días.`,
+    pasos:[
+      R`Periodo en segundos: $T_{1/2}=8\cdot24\cdot3600=6{,}91\cdot10^{5}$ s.`,
+      R`Constante: $\lambda=\ln2/T_{1/2}=0{,}693/6{,}91\cdot10^{5}=1{,}00\cdot10^{-6}$ s⁻¹.`,
+      R`Actividad inicial: $A_0=\lambda N_0=1{,}00\cdot10^{-6}\cdot2\cdot10^{20}=2{,}0\cdot10^{14}$ Bq.`,
+      R`24 días son 3 periodos, luego $N=N_0/2^3=2\cdot10^{20}/8=2{,}5\cdot10^{19}$ núcleos.`
+    ]
+  }],
+  test:[
+    {q:R`En una desintegración alfa, el número atómico Z:`,
+     op:["aumenta en 2","disminuye en 2","no cambia","aumenta en 1"], sol:1,
+     why:R`Se emite un núcleo de helio, así que $Z$ baja 2 unidades y $A$ baja 4.`},
+    {q:R`Tras 4 periodos de semidesintegración queda:`,
+     op:["1/4 de la muestra","1/8","1/16","nada"], sol:2,
+     why:R`$N=N_0/2^4=N_0/16$.`},
+    {q:R`El defecto de masa de un núcleo se debe a que:`,
+     op:["se pierden nucleones","parte de la masa se convirtió en energía de enlace","se midió mal","los neutrones no tienen masa"], sol:1,
+     why:R`$E=\Delta mc^2$: esa energía es la que habría que aportar para separar los nucleones.`},
+    {q:R`La fusión nuclear libera energía porque:`,
+     op:["los núcleos ligeros tienen mayor energía de enlace por nucleón que el producto","el producto tiene mayor energía de enlace por nucleón que los reactivos","se conserva la masa","no hay radiación"], sol:1,
+     why:R`Al acercarse al máximo de la curva (hierro-56) sobra energía, que se libera. Es lo que ocurre en las estrellas.`},
+    {q:R`El bosón mediador de la interacción nuclear fuerte es:`,
+     op:["el fotón","el gluón","el bosón W","el gravitón"], sol:1,
+     why:R`Los gluones mantienen unidos los quarks dentro de protones y neutrones.`}
+  ]
+}
+];
+
+const TEMAS = TEMAS_1_6.concat(TEMAS_7_12);
+
+/* === Información del curso, currículo y constantes === */
+
+const CURSO = {
+  centro:"IES CTEIB — Departamento de Física y Química",
+  curso:"2026-2027",
+  materia:"Física, 2º de bachillerato",
+  profesora:"Alicia López",
+  evaluacion:[
+    {clave:"60 %", txt:"Tres exámenes parciales, uno por evaluación, con un peso del 20 % cada uno."},
+    {clave:"10 %", txt:"Examen global de final de curso."},
+    {clave:"30 %", txt:"Evaluación continua en el aula, incluidas las tareas de Classroom."}
+  ],
+  nota:"Si la nota calculada con estos porcentajes es inferior a 5 pero el examen global de final de curso está aprobado, la nota de la evaluación ordinaria será 5.",
+  instrumentos:[
+    "Pruebas escritas breves de evaluación continua en el aula.",
+    "Tareas en Classroom.",
+    "Experimentación real o virtual en el laboratorio.",
+    "Un examen escrito largo por evaluación (parcial).",
+    "Un examen global al final del curso."
+  ],
+  material:[
+    "Estuche con material de escritura, regla y hojas.",
+    "Funda de plástico identificada con FÍSICA y el nombre.",
+    "Calculadora científica: es el único dispositivo electrónico permitido.",
+    "Libro recomendado (opcional): Física 2n Batxillerat Mediterrània, McGraw Hill, ISBN 978-84-486-3968-6.",
+    "Material didáctico y recursos de apoyo en el Classroom de la asignatura."
+  ],
+  normas:[
+    "La asistencia a clase es obligatoria y las faltas se justifican según la normativa del centro.",
+    "Si faltas a un examen con justificación, se acuerda una nueva fecha con la profesora; sin justificación, el examen se valora con un cero.",
+    "Copiar en un examen o en cualquier tarea supone un cero en esa actividad, tanto para quien copia como para quien facilita la copia.",
+    "El uso de dispositivos electrónicos está prohibido en todo el recinto escolar."
+  ],
+  pau:{
+    txt:"En la asignatura se aplican los mismos criterios de corrección y evaluación que en las pruebas PAU de la UIB.",
+    url:"https://estudis.uib.cat/estudis-de-grau/com-hi-pots-accedir/acces/batxiller/materies/fisica"
+  },
+  competencias:[
+    {id:"CE 1", txt:"Utilizar las teorías, principios y leyes que rigen los procesos físicos más importantes, considerando su base experimental y su desarrollo matemático en la resolución de problemas, para reconocer la física como una ciencia relevante implicada en el desarrollo de la tecnología, la economía, la sociedad y la sostenibilidad ambiental.",
+     ca:["CA 1.1 Reconocer la relevancia de la física en el desarrollo de la ciencia, la tecnología, la economía, la sociedad y la sostenibilidad ambiental.","CA 1.2 Resolver problemas de manera experimental y analítica utilizando principios, leyes y teorías de la física."]},
+    {id:"CE 2", txt:"Adoptar los modelos, teorías y leyes aceptados de la física como base de estudio de los sistemas naturales y predecir su evolución para inferir soluciones generales a problemas cotidianos relacionados con las aplicaciones prácticas que demanda la sociedad en el campo tecnológico, industrial y biosanitario.",
+     ca:["CA 2.1 Analizar y comprender la evolución de los sistemas naturales con modelos, leyes y teorías.","CA 2.2 Inferir soluciones a problemas generales a partir del análisis de situaciones particulares.","CA 2.3 Conocer aplicaciones prácticas y productos útiles para la sociedad y analizarlos con los modelos de la física."]},
+    {id:"CE 3", txt:"Utilizar el lenguaje de la física con la formulación matemática de sus principios, magnitudes, unidades y ecuaciones para establecer una comunicación adecuada entre comunidades científicas y como herramienta fundamental en la investigación.",
+     ca:["CA 3.1 Aplicar principios, leyes y teorías en el análisis crítico de procesos físicos del entorno.","CA 3.2 Utilizar con rigor las unidades, la notación científica, las cifras significativas y las gráficas.","CA 3.3 Expresar adecuadamente los resultados y argumentar las soluciones obtenidas."]},
+    {id:"CE 4", txt:"Utilizar de manera autónoma, eficiente, crítica y responsable recursos en distintos formatos y plataformas digitales en el trabajo individual y colectivo, fomentando la creatividad mediante la producción e intercambio de materiales científicos y divulgativos.",
+     ca:["CA 4.1 Consultar, elaborar e intercambiar materiales científicos y divulgativos en plataformas digitales.","CA 4.2 Usar de manera crítica, ética y responsable los medios de comunicación digitales y tradicionales."]},
+    {id:"CE 5", txt:"Aplicar técnicas de trabajo e indagación propias de la física, así como la experimentación, el razonamiento lógico-matemático y la cooperación en la resolución de problemas, para poner en valor el papel de la física en una sociedad basada en valores éticos y sostenibles.",
+     ca:["CA 5.1 Obtener relaciones entre variables físicas midiendo y tratando datos experimentales y determinando los errores.","CA 5.2 Reproducir en laboratorios reales o virtuales procesos físicos y elaborar el informe correspondiente.","CA 5.3 Valorar la física mediante el debate fundamentado sobre sus avances y su implicación social."]},
+    {id:"CE 6", txt:"Reconocer y analizar el carácter multidisciplinar de la física, considerando su recorrido histórico y sus contribuciones al avance del conocimiento científico como un proceso en continua evolución.",
+     ca:["CA 6.1 Identificar los principales avances científicos relacionados con la física y su metodología.","CA 6.2 Reconocer el carácter multidisciplinar de la ciencia y relacionar la física con la química, la biología, la geología o las matemáticas."]}
+  ],
+  bloques:[
+    {id:"A", nombre:"Campo gravitatorio", temas:[5,6],
+     puntos:["Campo gravitatorio e intensidad creada por una masa; relación con la gravedad de los planetas.",
+             "Determinación del campo producido por un sistema de masas mediante cálculo vectorial.",
+             "Trabajo del campo gravitatorio a partir de la energía potencial y del potencial.",
+             "Líneas de campo y superficies equipotenciales.",
+             "Momento angular y fuerzas centrales: aplicación de su conservación.",
+             "Energía mecánica de un objeto en un campo gravitatorio y tipo de movimiento resultante.",
+             "Ley de gravitación universal y leyes de Kepler aplicadas a planetas, satélites y cuerpos celestes.",
+             "Introducción a la cosmología y la astrofísica, con las aportaciones de instituciones y observatorios de las Illes Balears."]},
+    {id:"B", nombre:"Campo electromagnético", temas:[7,8,9],
+     puntos:["Campos eléctrico y magnético: tratamiento vectorial y variables cinemáticas y dinámicas de las cargas libres.",
+             "Ley de Coulomb; la fuerza eléctrica como fuerza central y conservativa.",
+             "Energía potencial eléctrica, potencial, líneas de campo y superficies equipotenciales.",
+             "Flujo del campo eléctrico y aplicación a conductores esféricos.",
+             "Campo magnético creado por imanes y por corrientes: hilos, espiras, solenoides y toroides.",
+             "Efecto del campo magnético sobre cargas en movimiento y aplicaciones tecnológicas.",
+             "Inducción electromagnética: flujo magnético y leyes de Faraday-Henry y de Lenz.",
+             "Generación de fuerza electromotriz: motores, generadores y transformadores."]},
+    {id:"C", nombre:"Vibraciones y ondas", temas:[1,2,3,4],
+     puntos:["Movimiento oscilatorio (MAS): variables cinemáticas, representación gráfica y energía.",
+             "Movimiento ondulatorio: ecuación de onda, gráficas en función de la posición y del tiempo.",
+             "Propagación de las ondas y fenómenos ondulatorios en la naturaleza.",
+             "Ondas sonoras y sus cualidades: nivel de intensidad sonora y efecto Doppler.",
+             "Naturaleza de la luz: controversias históricas, la luz como onda electromagnética y el espectro.",
+             "Propagación entre medios con distinto índice de refracción: ley de Snell, ángulo límite y reflexión total.",
+             "Formación de imágenes en espejos planos y esféricos y en lentes delgadas, con el criterio DIN.",
+             "Aplicaciones: cristalino, lupa, telescopio."]},
+    {id:"D", nombre:"Física relativista, cuántica, nuclear y de partículas", temas:[10,11,12],
+     puntos:["Principios de la relatividad especial y experimento de Michelson y Morley.",
+             "Postulados de Einstein, contracción de la longitud, dilatación del tiempo, energía y masa relativistas.",
+             "Dualidad onda-corpúsculo y cuantización: hipótesis de Planck y de De Broglie.",
+             "Efecto fotoeléctrico y principio de incertidumbre.",
+             "Modelo estándar: clasificación de las partículas fundamentales y bosones mediadores.",
+             "Aceleradores de partículas.",
+             "Núcleos atómicos y estabilidad de isótopos; radiactividad natural y cinética de la desintegración.",
+             "Riesgos y aplicaciones en ingeniería, tecnología y salud."]}
+  ]
+};
+
+const CONSTANTES = [
+  ["Velocidad de la luz en el vacío", "c", "3,00·10⁸ m/s"],
+  ["Constante de gravitación universal", "G", "6,67·10⁻¹¹ N·m²/kg²"],
+  ["Constante de Coulomb", "K = 1/4πε₀", "9,00·10⁹ N·m²/C²"],
+  ["Permitividad del vacío", "ε₀", "8,85·10⁻¹² C²/N·m²"],
+  ["Permeabilidad del vacío", "μ₀", "4π·10⁻⁷ T·m/A"],
+  ["Constante de Planck", "h", "6,63·10⁻³⁴ J·s"],
+  ["Carga del electrón", "e", "1,60·10⁻¹⁹ C"],
+  ["Masa del electrón", "mₑ", "9,11·10⁻³¹ kg"],
+  ["Masa del protón", "m_p", "1,673·10⁻²⁷ kg"],
+  ["Masa del neutrón", "m_n", "1,675·10⁻²⁷ kg"],
+  ["Unidad de masa atómica", "u", "1,66·10⁻²⁷ kg = 931,5 MeV/c²"],
+  ["Electronvoltio", "eV", "1,60·10⁻¹⁹ J"],
+  ["Gravedad en la superficie terrestre", "g₀", "9,80 m/s²"],
+  ["Masa de la Tierra", "M_T", "5,98·10²⁴ kg"],
+  ["Radio de la Tierra", "R_T", "6,37·10⁶ m"],
+  ["Masa del Sol", "M_S", "1,99·10³⁰ kg"],
+  ["Intensidad sonora umbral", "I₀", "1,0·10⁻¹² W/m²"]
+];
+
+/* === Simulaciones: base común y temas 1-6 === */
+const COL={tinta:"#14203F",campo:"#2B4CE0",energia:"#E9930B",gris:"#C6D0E6",grisC:"#EDF1F9",
+  verde:"#12805C",rojo:"#C0322B",tx2:"#4E5B7C",morado:"#6B3FA0"};
+
+let SIM_STOP=[];
+function pararSims(){SIM_STOP.forEach(function(f){try{f();}catch(e){}});SIM_STOP=[];}
+
+function nfmt(x,d){
+  if(!isFinite(x))return "∞";
+  if(x!==0&&(Math.abs(x)>=1e5||Math.abs(x)<1e-3)){
+    var e=Math.floor(Math.log10(Math.abs(x))),m=x/Math.pow(10,e);
+    return m.toFixed(2).replace(".",",")+"·10"+sup(e);
+  }
+  return x.toFixed(d===undefined?2:d).replace(".",",");
+}
+function sup(n){
+  var s=String(n),r="",m={"-":"⁻","0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+  for(var i=0;i<s.length;i++)r+=m[s[i]]||s[i];
+  return r;
+}
+
+/* Constructor genérico de simulación */
+function crearSim(host,opts){
+  var wrap=document.createElement("div");wrap.className="sim";
+  var cab=document.createElement("div");cab.className="sim__cab";
+  var h=document.createElement("h4");h.textContent=opts.titulo;
+  var sp=document.createElement("span");sp.textContent=opts.nota||"";
+  cab.appendChild(h);cab.appendChild(sp);wrap.appendChild(cab);
+
+  var canvas=document.createElement("canvas");canvas.className="sim__lienzo";wrap.appendChild(canvas);
+  var lect=document.createElement("div");lect.className="sim__lectura";wrap.appendChild(lect);
+  var zona=document.createElement("div");zona.className="sim__mandos";wrap.appendChild(zona);
+  host.appendChild(wrap);
+
+  var ctx=canvas.getContext("2d"),W=0,H=0,v={},t0=performance.now(),animando=opts.anim!==false,raf=null,estado={};
+
+  (opts.selects||[]).forEach(function(s){
+    v[s.id]=s.val;
+    var d=document.createElement("label");d.className="mando";
+    var fila=document.createElement("div");fila.className="mando__fila";
+    var sp2=document.createElement("span");sp2.textContent=s.label;fila.appendChild(sp2);
+    d.appendChild(fila);
+    var sel=document.createElement("select");
+    s.opciones.forEach(function(o){var op=document.createElement("option");op.value=o.v;op.textContent=o.t;sel.appendChild(op);});
+    sel.value=s.val;
+    sel.addEventListener("change",function(){
+      v[s.id]=isNaN(parseFloat(sel.value))?sel.value:(s.texto?sel.value:parseFloat(sel.value));
+      if(s.numerico===false)v[s.id]=sel.value;
+      if(opts.alCambiar)opts.alCambiar(v,estado);
+      if(!animando)pintar();
+    });
+    d.appendChild(sel);zona.appendChild(d);
+  });
+
+  (opts.mandos||[]).forEach(function(m){
+    v[m.id]=m.val;
+    var d=document.createElement("label");d.className="mando";
+    var fila=document.createElement("div");fila.className="mando__fila";
+    var sp2=document.createElement("span");sp2.textContent=m.label;
+    var b=document.createElement("b");
+    fila.appendChild(sp2);fila.appendChild(b);d.appendChild(fila);
+    var inp=document.createElement("input");inp.type="range";
+    inp.min=m.min;inp.max=m.max;inp.step=m.step;inp.value=m.val;
+    function pinta(){b.textContent=m.texto?m.texto(v[m.id]):(nfmt(v[m.id],m.dec)+(m.unidad?" "+m.unidad:""));}
+    inp.addEventListener("input",function(){
+      v[m.id]=parseFloat(inp.value);pinta();
+      if(opts.alCambiar)opts.alCambiar(v,estado);
+      if(!animando)pintar();
+    });
+    pinta();d.appendChild(inp);zona.appendChild(d);
+  });
+
+  if(opts.botones&&opts.botones.length){
+    var cajaB=document.createElement("div");cajaB.className="mando sim__botones";
+    opts.botones.forEach(function(bt){
+      var b=document.createElement("button");b.className="btn btn--fantasma";b.textContent=bt.txt;
+      b.addEventListener("click",function(){bt.accion(v,estado,b);if(!animando)pintar();});
+      cajaB.appendChild(b);
+    });
+    zona.appendChild(cajaB);
+  }
+
+  function ajustar(){
+    var w=canvas.clientWidth||600;
+    var alto=Math.round(w*(opts.ratio||0.52));
+    alto=Math.max(opts.minAlto||200,Math.min(opts.maxAlto||420,alto));
+    var dpr=window.devicePixelRatio||1;
+    canvas.width=w*dpr;canvas.height=alto*dpr;
+    canvas.style.height=alto+"px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    W=w;H=alto;
+  }
+
+  var contador=0;
+  function lecturas(){
+    if(!opts.lecturas)return;
+    var arr=opts.lecturas(v,estado,(performance.now()-t0)/1000);
+    var html="";
+    for(var i=0;i<arr.length;i++)html+="<span>"+arr[i][0]+" <b>"+arr[i][1]+"</b></span>";
+    lect.innerHTML=html;
+  }
+  function pintar(){
+    ctx.clearRect(0,0,W,H);
+    opts.dibujar(ctx,W,H,v,(performance.now()-t0)/1000,estado);
+    if(contador++%5===0)lecturas();
+  }
+  function bucle(){pintar();raf=requestAnimationFrame(bucle);}
+
+  if(opts.iniciar)opts.iniciar(v,estado);
+  ajustar();
+  var onResize=function(){ajustar();if(!animando)pintar();};
+  window.addEventListener("resize",onResize);
+
+  if(opts.raton){
+    var pos=function(ev){
+      var r=canvas.getBoundingClientRect();
+      var cx=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;
+      var cy=(ev.touches?ev.touches[0].clientY:ev.clientY)-r.top;
+      return {x:cx,y:cy};
+    };
+    canvas.addEventListener("mousemove",function(ev){var p=pos(ev);opts.raton(p.x,p.y,v,estado,W,H);if(!animando)pintar();});
+    canvas.addEventListener("mouseleave",function(){opts.raton(null,null,v,estado,W,H);if(!animando)pintar();});
+  }
+
+  if(animando)bucle();else pintar();
+  SIM_STOP.push(function(){if(raf)cancelAnimationFrame(raf);window.removeEventListener("resize",onResize);});
+  return {canvas:canvas,v:v,pintar:pintar,estado:estado};
+}
+
+/* utilidades de dibujo */
+function ejeH(ctx,x0,x1,y,color){ctx.strokeStyle=color||COL.gris;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();}
+function txt(ctx,s,x,y,color,size,align){
+  ctx.fillStyle=color||COL.tx2;
+  ctx.font=(size||12)+"px 'Bricolage Grotesque', system-ui, sans-serif";
+  ctx.textAlign=align||"left";ctx.textBaseline="middle";ctx.fillText(s,x,y);
+}
+function flecha(ctx,x1,y1,x2,y2,color,ancho){
+  var dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy);if(L<0.5)return;
+  var ux=dx/L,uy=dy/L,c=Math.min(6,L*0.4);
+  ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=ancho||1.6;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-c*ux+c*0.5*uy,y2-c*uy-c*0.5*ux);
+  ctx.lineTo(x2-c*ux-c*0.5*uy,y2-c*uy+c*0.5*ux);
+  ctx.closePath();ctx.fill();
+}
+
+const SIMS={};
+
+/* --- Tema 1: MAS --- */
+SIMS.mas=function(host){
+  return crearSim(host,{
+    titulo:"Oscilador armónico: muelle y gráfica",
+    nota:"Mueve los controles y observa cómo cambian x, v y a",
+    ratio:0.5,
+    mandos:[
+      {id:"A",label:"Amplitud A",min:0.02,max:0.20,step:0.01,val:0.10,dec:2,unidad:"m"},
+      {id:"T",label:"Periodo T",min:0.4,max:3,step:0.1,val:1.2,dec:1,unidad:"s"},
+      {id:"f0",label:"Fase inicial φ₀",min:0,max:6.28,step:0.1,val:0,dec:2,unidad:"rad"}
+    ],
+    lecturas:function(v,e,t){
+      var w=2*Math.PI/v.T,x=v.A*Math.sin(w*t+v.f0);
+      return [["x =",nfmt(x,3)+" m"],["v =",nfmt(v.A*w*Math.cos(w*t+v.f0),2)+" m/s"],
+              ["a =",nfmt(-v.A*w*w*Math.sin(w*t+v.f0),2)+" m/s²"],
+              ["ω =",nfmt(w,2)+" rad/s"],["Eₘ ∝",nfmt(v.A*v.A*1000,1)+" (A²)"]];
+    },
+    dibujar:function(ctx,W,H,v,t){
+      var w=2*Math.PI/v.T,yc=H*0.27,esc=(W*0.34)/0.20;
+      var x=v.A*Math.sin(w*t+v.f0);
+      var x0=W*0.14,xm=x0+W*0.36+x*esc;
+      // guía y equilibrio
+      ctx.setLineDash([4,4]);ctx.strokeStyle=COL.gris;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(x0+W*0.36,yc-38);ctx.lineTo(x0+W*0.36,yc+30);ctx.stroke();ctx.setLineDash([]);
+      txt(ctx,"equilibrio",x0+W*0.36,yc+40,COL.tx2,11,"center");
+      // pared
+      ctx.fillStyle=COL.tinta;ctx.fillRect(x0-10,yc-30,6,60);
+      // muelle
+      ctx.strokeStyle=COL.tx2;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x0-4,yc);
+      var n=14,L=xm-18-(x0-4);
+      for(var i=0;i<=n;i++){var xx=x0-4+L*i/n,yy=yc+(i>0&&i<n?(i%2?-11:11):0);ctx.lineTo(xx,yy);}
+      ctx.lineTo(xm-18,yc);ctx.stroke();
+      // masa
+      ctx.fillStyle=COL.campo;ctx.fillRect(xm-18,yc-20,36,40);
+      txt(ctx,"m",xm,yc,"#fff",13,"center");
+      // vectores v y a
+      flecha(ctx,xm,yc-32,xm+v.A*w*Math.cos(w*t+v.f0)*26,yc-32,COL.verde,2);
+      txt(ctx,"v",xm+6,yc-44,COL.verde,12);
+      flecha(ctx,xm,yc+34,xm-v.A*w*w*Math.sin(w*t+v.f0)*8,yc+34,COL.rojo,2);
+      txt(ctx,"a",xm+6,yc+48,COL.rojo,12);
+      // gráfica
+      var gy=H*0.74,gx0=W*0.08,gx1=W*0.94,dur=2.4*v.T;
+      ejeH(ctx,gx0,gx1,gy);
+      ctx.strokeStyle=COL.gris;ctx.beginPath();ctx.moveTo(gx0,gy-52);ctx.lineTo(gx0,gy+52);ctx.stroke();
+      txt(ctx,"x(t)",gx0-4,gy-58,COL.tx2,12,"left");
+      ctx.strokeStyle=COL.campo;ctx.lineWidth=2;ctx.beginPath();
+      for(var p=0;p<=240;p++){
+        var tt=t-dur+dur*p/240;
+        var xx2=gx0+(gx1-gx0)*p/240,yy2=gy-v.A*Math.sin(w*tt+v.f0)*(46/0.20);
+        p?ctx.lineTo(xx2,yy2):ctx.moveTo(xx2,yy2);
+      }
+      ctx.stroke();
+      ctx.fillStyle=COL.energia;ctx.beginPath();ctx.arc(gx1,gy-x*(46/0.20),5,0,6.29);ctx.fill();
+      txt(ctx,"ahora",gx1-6,gy+62,COL.tx2,11,"right");
+      txt(ctx,"−2,4 T",gx0,gy+62,COL.tx2,11,"left");
+    }
+  });
+};
+
+/* --- Tema 2: onda viajera --- */
+SIMS.onda=function(host){
+  return crearSim(host,{
+    titulo:"Onda armónica que se propaga",
+    nota:"El punto naranja solo sube y baja: la materia no viaja con la onda",
+    ratio:0.46,
+    mandos:[
+      {id:"A",label:"Amplitud A",min:0.1,max:1,step:0.05,val:0.6,dec:2,unidad:"m"},
+      {id:"lam",label:"Longitud de onda λ",min:0.5,max:4,step:0.1,val:2,dec:1,unidad:"m"},
+      {id:"T",label:"Periodo T",min:0.5,max:4,step:0.1,val:2,dec:1,unidad:"s"}
+    ],
+    selects:[{id:"sent",label:"Sentido de propagación",val:"1",opciones:[{v:"1",t:"Hacia +X"},{v:"-1",t:"Hacia −X"}]}],
+    lecturas:function(v){
+      var s=parseFloat(v.sent);
+      return [["f =",nfmt(1/v.T,2)+" Hz"],["ω =",nfmt(2*Math.PI/v.T,2)+" rad/s"],
+              ["k =",nfmt(2*Math.PI/v.lam,2)+" rad/m"],
+              ["v = λ/T =",nfmt(s*v.lam/v.T,2)+" m/s"],
+              ["v vibración máx =",nfmt(v.A*2*Math.PI/v.T,2)+" m/s"]];
+    },
+    dibujar:function(ctx,W,H,v,t){
+      var s=parseFloat(v.sent),yc=H*0.5,mx=W*0.06,Lx=W-mx*2,mts=8,esc=Lx/mts,ampl=Math.min(H*0.33,v.A*H*0.33);
+      ejeH(ctx,mx,W-mx,yc);
+      for(var m=0;m<=mts;m++){
+        var xx=mx+m*esc;ctx.strokeStyle=COL.grisC;ctx.beginPath();ctx.moveTo(xx,yc-ampl-14);ctx.lineTo(xx,yc+ampl+14);ctx.stroke();
+        if(m%2===0)txt(ctx,m+" m",xx,yc+ampl+26,COL.tx2,11,"center");
+      }
+      var w=2*Math.PI/v.T,k=2*Math.PI/v.lam;
+      ctx.strokeStyle=COL.campo;ctx.lineWidth=2.4;ctx.beginPath();
+      for(var p=0;p<=400;p++){
+        var xm=mts*p/400,y=v.A*Math.sin(w*t-s*k*xm);
+        var px=mx+xm*esc,py=yc-y*(ampl/Math.max(v.A,0.001));
+        p?ctx.lineTo(px,py):ctx.moveTo(px,py);
+      }
+      ctx.stroke();
+      // partícula marcada
+      var xp=3,yp=v.A*Math.sin(w*t-s*k*xp);
+      var pxp=mx+xp*esc,pyp=yc-yp*(ampl/Math.max(v.A,0.001));
+      ctx.setLineDash([3,3]);ctx.strokeStyle=COL.energia;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(pxp,yc-ampl-6);ctx.lineTo(pxp,yc+ampl+6);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle=COL.energia;ctx.beginPath();ctx.arc(pxp,pyp,7,0,6.29);ctx.fill();
+      // longitud de onda
+      var x1=mx+1*esc,x2=x1+v.lam*esc;
+      if(x2<W-mx){
+        ctx.strokeStyle=COL.morado;ctx.lineWidth=1.4;
+        ctx.beginPath();ctx.moveTo(x1,yc-ampl-24);ctx.lineTo(x2,yc-ampl-24);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(x1,yc-ampl-29);ctx.lineTo(x1,yc-ampl-19);ctx.moveTo(x2,yc-ampl-29);ctx.lineTo(x2,yc-ampl-19);ctx.stroke();
+        txt(ctx,"λ",(x1+x2)/2,yc-ampl-36,COL.morado,13,"center");
+      }
+      flecha(ctx,W/2-s*26,yc+ampl+44,W/2+s*26,yc+ampl+44,COL.campo,2);
+      txt(ctx,"propagación",W/2,yc+ampl+58,COL.campo,11,"center");
+    }
+  });
+};
+
+/* --- Tema 3: espectro electromagnético --- */
+SIMS.espectro=function(host){
+  var BANDAS=[
+    {f:[1e4,3e8],n:"Ondas de radio",c:"#6E7DAE"},
+    {f:[3e8,3e11],n:"Microondas",c:"#4B5FBF"},
+    {f:[3e11,3.85e14],n:"Infrarrojo",c:"#B23A2E"},
+    {f:[3.85e14,7.9e14],n:"Visible",c:"#2E9E5B"},
+    {f:[7.9e14,3e16],n:"Ultravioleta",c:"#6B3FA0"},
+    {f:[3e16,3e19],n:"Rayos X",c:"#2B4CE0"},
+    {f:[3e19,1e23],n:"Rayos gamma",c:"#14203F"}
+  ];
+  function colorVisible(lnm){
+    if(lnm>=645)return "#E2372B";if(lnm>=585)return "#F0A202";if(lnm>=565)return "#E8D51E";
+    if(lnm>=490)return "#31A354";if(lnm>=440)return "#2B4CE0";return "#6B3FA0";
+  }
+  return crearSim(host,{
+    titulo:"Espectro electromagnético",
+    nota:"Todas son la misma onda: solo cambia la frecuencia",
+    anim:false,ratio:0.34,minAlto:190,
+    mandos:[{id:"lf",label:"Frecuencia (escala logarítmica)",min:4,max:23,step:0.01,val:14.7,
+      texto:function(x){return nfmt(Math.pow(10,x),2)+" Hz";}}],
+    lecturas:function(v){
+      var f=Math.pow(10,v.lf),lam=3e8/f,E=6.63e-34*f,b="";
+      BANDAS.forEach(function(B){if(f>=B.f[0]&&f<B.f[1])b=B.n;});
+      return [["Banda:",b],["λ =",nfmt(lam,2)+" m"],["E = hf =",nfmt(E,2)+" J"],["E =",nfmt(E/1.6e-19,3)+" eV"]];
+    },
+    dibujar:function(ctx,W,H,v){
+      var mx=W*0.05,bw=W-2*mx,by=H*0.34,bh=42,lmin=4,lmax=23;
+      BANDAS.forEach(function(B){
+        var a=mx+bw*(Math.log10(B.f[0])-lmin)/(lmax-lmin);
+        var b=mx+bw*(Math.log10(B.f[1])-lmin)/(lmax-lmin);
+        ctx.fillStyle=B.c;ctx.globalAlpha=.85;ctx.fillRect(a,by,b-a,bh);ctx.globalAlpha=1;
+        if(b-a>54)txt(ctx,B.n,(a+b)/2,by+bh/2,"#fff",11,"center");
+      });
+      ctx.strokeStyle=COL.gris;ctx.strokeRect(mx,by,bw,bh);
+      for(var e=lmin;e<=lmax;e+=2){
+        var x=mx+bw*(e-lmin)/(lmax-lmin);
+        ctx.strokeStyle=COL.gris;ctx.beginPath();ctx.moveTo(x,by+bh);ctx.lineTo(x,by+bh+5);ctx.stroke();
+        txt(ctx,"10"+sup(e),x,by+bh+15,COL.tx2,10,"center");
+      }
+      txt(ctx,"frecuencia (Hz)",W/2,by+bh+34,COL.tx2,11,"center");
+      var f=Math.pow(10,v.lf),xm=mx+bw*(v.lf-lmin)/(lmax-lmin);
+      ctx.strokeStyle=COL.tinta;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(xm,by-16);ctx.lineTo(xm,by+bh+2);ctx.stroke();
+      ctx.fillStyle=COL.tinta;ctx.beginPath();ctx.arc(xm,by-18,5,0,6.29);ctx.fill();
+      // ventana visible ampliada
+      var vy=H*0.86,vx0=W*0.28,vx1=W*0.72;
+      for(var i=0;i<=100;i++){
+        var lnm=380+(780-380)*i/100;
+        ctx.fillStyle=colorVisible(lnm);
+        ctx.fillRect(vx1-(vx1-vx0)*i/100-2,vy-13,4,26);
+      }
+      ctx.strokeStyle=COL.gris;ctx.strokeRect(vx0,vy-13,vx1-vx0,26);
+      txt(ctx,"380 nm",vx0-6,vy,COL.tx2,10,"right");
+      txt(ctx,"780 nm",vx1+6,vy,COL.tx2,10,"left");
+      txt(ctx,"luz visible",W/2,vy-24,COL.tx2,11,"center");
+      var lam=3e8/f*1e9;
+      if(lam>=380&&lam<=780){
+        var xv=vx1-(vx1-vx0)*(lam-380)/400;
+        ctx.strokeStyle=COL.tinta;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(xv,vy-18);ctx.lineTo(xv,vy+18);ctx.stroke();
+      }
+    }
+  });
+};
+
+/* --- Tema 4: óptica geométrica --- */
+SIMS.optica=function(host){
+  return crearSim(host,{
+    titulo:"Formación de imágenes con el convenio DIN",
+    nota:"Trazado de rayos en lentes delgadas y espejos esféricos",
+    anim:false,ratio:0.5,
+    selects:[{id:"tipo",label:"Sistema óptico",val:"lc",numerico:false,opciones:[
+      {v:"lc",t:"Lente convergente"},{v:"ld",t:"Lente divergente"},
+      {v:"ec",t:"Espejo cóncavo"},{v:"ex",t:"Espejo convexo"}]}],
+    mandos:[
+      {id:"fo",label:"Distancia focal |f|",min:4,max:20,step:1,val:10,dec:0,unidad:"cm"},
+      {id:"so",label:"Objeto: distancia al sistema",min:3,max:45,step:1,val:30,dec:0,unidad:"cm"},
+      {id:"yo",label:"Objeto: altura",min:1,max:6,step:0.5,val:4,dec:1,unidad:"cm"}
+    ],
+    lecturas:function(v){
+      var r=SIMS._optica(v);
+      if(!isFinite(r.sp)||Math.abs(r.sp)>1e6)return [["s′ =","infinito"],["Imagen:","no se forma (objeto en el foco)"]];
+      return [["s =",nfmt(r.s,0)+" cm"],["s′ =",nfmt(r.sp,1)+" cm"],["β =",nfmt(r.b,2)],
+              ["y′ =",nfmt(r.yp,2)+" cm"],
+              ["Imagen:",(r.real?"real":"virtual")+", "+(r.b<0?"invertida":"derecha")+" y "+(Math.abs(r.b)>1.01?"mayor":(Math.abs(r.b)<0.99?"menor":"igual"))]];
+    },
+    dibujar:function(ctx,W,H,v){
+      var r=SIMS._optica(v),cx=W*0.5,cy=H*0.52,esc=Math.min(W*0.46/48,7.5);
+      var espejo=r.espejo,izq=12,der=W-12,hh=Math.min(H*0.36,62);
+      ejeH(ctx,izq,der,cy);
+      // elemento óptico
+      ctx.strokeStyle=COL.tinta;ctx.lineWidth=2.6;
+      if(espejo){
+        var curv=(v.tipo==="ec"?1:-1)*15;
+        ctx.beginPath();ctx.moveTo(cx+curv,cy-hh);ctx.quadraticCurveTo(cx-curv,cy,cx+curv,cy+hh);ctx.stroke();
+      }else{
+        ctx.beginPath();ctx.moveTo(cx,cy-hh);ctx.lineTo(cx,cy+hh);ctx.stroke();
+        var d=(v.tipo==="lc")?1:-1;
+        ctx.beginPath();ctx.moveTo(cx-7*d,cy-hh+8);ctx.lineTo(cx,cy-hh);ctx.lineTo(cx+7*d,cy-hh+8);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(cx-7*d,cy+hh-8);ctx.lineTo(cx,cy+hh);ctx.lineTo(cx+7*d,cy+hh-8);ctx.stroke();
+      }
+      // puntos característicos
+      function punto(xc,et){
+        var px=cx+xc*esc;if(px<izq||px>der)return;
+        ctx.fillStyle=COL.tx2;ctx.beginPath();ctx.arc(px,cy,3.5,0,6.29);ctx.fill();
+        txt(ctx,et,px,cy+17,COL.tx2,12,"center");
+      }
+      if(espejo){punto(r.f1,"F");punto(2*r.f1,"C");}
+      else{punto(r.f1,"F′");punto(-r.f1,"F");}
+      // objeto
+      var ox=cx+r.s*esc,y=v.yo*esc;
+      flecha(ctx,ox,cy,ox,cy-y,COL.tinta,2.6);
+      txt(ctx,"objeto",ox,cy+17,COL.tinta,12,"center");
+
+      ctx.lineWidth=1.6;
+      function rayo(pts,color,dash){
+        ctx.setLineDash(dash||[]);ctx.strokeStyle=color;ctx.beginPath();
+        for(var i=0;i<pts.length;i++)i?ctx.lineTo(pts[i][0],pts[i][1]):ctx.moveTo(pts[i][0],pts[i][1]);
+        ctx.stroke();ctx.setLineDash([]);
+      }
+      var fpx=r.f1*esc;
+      if(espejo){
+        // 1) paralelo al eje y reflejado pasando por F
+        var m1=y/fpx;
+        rayo([[ox,cy-y],[cx,cy-y]],COL.campo);
+        rayo([[cx,cy-y],[izq,cy-y+m1*(izq-cx)]],COL.campo);
+        if(!r.real)rayo([[cx,cy-y],[der,cy-y+m1*(der-cx)]],COL.campo,[5,4]);
+        // 2) al vértice, reflejado simétrico respecto del eje
+        var m2=y/(ox-cx);
+        rayo([[ox,cy-y],[cx,cy]],COL.energia);
+        rayo([[cx,cy],[izq,cy+m2*(izq-cx)]],COL.energia);
+        if(!r.real)rayo([[cx,cy],[der,cy+m2*(der-cx)]],COL.energia,[5,4]);
+      }else{
+        // 1) paralelo al eje y refractado por F'
+        var p1=y/fpx;
+        rayo([[ox,cy-y],[cx,cy-y]],COL.campo);
+        rayo([[cx,cy-y],[der,cy-y+p1*(der-cx)]],COL.campo);
+        if(!r.real)rayo([[cx,cy-y],[izq,cy-y+p1*(izq-cx)]],COL.campo,[5,4]);
+        // 2) por el centro óptico, sin desviarse
+        var p2=y/(cx-ox);
+        rayo([[ox,cy-y],[der,cy+p2*(der-cx)]],COL.energia);
+        if(!r.real)rayo([[ox,cy-y],[izq,cy+p2*(izq-cx)]],COL.energia,[5,4]);
+      }
+      // imagen
+      if(isFinite(r.sp)&&Math.abs(r.sp*esc)<W*0.48){
+        var ix=cx+r.sp*esc,iy=cy-r.yp*esc;
+        flecha(ctx,ix,cy,ix,iy,r.real?COL.verde:COL.rojo,2.8);
+        txt(ctx,r.real?"imagen real":"imagen virtual",ix,r.yp>0?cy+17:cy-6,r.real?COL.verde:COL.rojo,12,"center");
+      }
+      txt(ctx,"la luz llega desde la izquierda",der,16,COL.tx2,11,"right");
+    }
+  });
+};
+SIMS._optica=function(v){
+  var espejo=(v.tipo==="ec"||v.tipo==="ex"),s=-v.so,sp,b,f1;
+  if(espejo){
+    f1=(v.tipo==="ec"?-1:1)*v.fo;          // cóncavo: R<0 y f<0 en el convenio DIN
+    sp=1/(1/f1-1/s);b=-sp/s;
+    return {s:s,sp:sp,b:b,yp:b*v.yo,real:sp<0,espejo:true,f1:f1};
+  }
+  f1=(v.tipo==="lc"?1:-1)*v.fo;            // f' positiva en convergentes
+  sp=1/(1/f1+1/s);b=sp/s;
+  return {s:s,sp:sp,b:b,yp:b*v.yo,real:sp>0,espejo:false,f1:f1};
+};
+
+/* --- Tema 5: órbitas y ley de áreas --- */
+SIMS.kepler=function(host){
+  return crearSim(host,{
+    titulo:"Órbita y segunda ley de Kepler",
+    nota:"El sector sombreado tiene siempre la misma área: la velocidad areolar es constante",
+    ratio:0.62,maxAlto:400,
+    mandos:[{id:"vi",label:"Velocidad inicial (respecto de la circular)",min:0.55,max:1.38,step:0.01,val:0.82,dec:2,unidad:"× v_circ"}],
+    botones:[{txt:"Reiniciar órbita",accion:function(v,e){SIMS._kepIni(v,e);}}],
+    iniciar:function(v,e){SIMS._kepIni(v,e);},
+    alCambiar:function(v,e){SIMS._kepIni(v,e);},
+    lecturas:function(v,e){
+      if(!e.p)return [];
+      var r=Math.hypot(e.p.x,e.p.y),vel=Math.hypot(e.p.vx,e.p.vy);
+      var E=0.5*vel*vel-1/r;
+      return [["r =",nfmt(r,2)+" ua"],["v =",nfmt(vel,2)+" u.a."],
+              ["Energía mecánica:",E<0?"negativa (órbita cerrada)":"positiva (escapa)"],
+              ["Tipo de órbita:",E<-0.001?(Math.abs(v.vi-1)<0.02?"circular":"elíptica"):(E>0.001?"hiperbólica":"parabólica")]];
+    },
+    dibujar:function(ctx,W,H,v,t,e){
+      var cx=W*0.5,cy=H*0.5,esc=Math.min(W,H)*0.17;
+      // integración
+      for(var k=0;k<8;k++)SIMS._kepPaso(e,0.0025);
+      // estela
+      ctx.strokeStyle=COL.gris;ctx.lineWidth=1.2;ctx.beginPath();
+      e.estela.forEach(function(p,i){var X=cx+p.x*esc,Y=cy+p.y*esc;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);});
+      ctx.stroke();
+      // sector barrido reciente
+      if(e.sector.length>2){
+        ctx.fillStyle="rgba(233,147,11,.30)";ctx.beginPath();ctx.moveTo(cx,cy);
+        e.sector.forEach(function(p){ctx.lineTo(cx+p.x*esc,cy+p.y*esc);});
+        ctx.closePath();ctx.fill();
+      }
+      // estrella
+      var g=ctx.createRadialGradient(cx,cy,2,cx,cy,16);
+      g.addColorStop(0,"#F7C948");g.addColorStop(1,"rgba(247,201,72,0)");
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,16,0,6.29);ctx.fill();
+      ctx.fillStyle=COL.energia;ctx.beginPath();ctx.arc(cx,cy,7,0,6.29);ctx.fill();
+      // planeta
+      var X=cx+e.p.x*esc,Y=cy+e.p.y*esc;
+      ctx.strokeStyle=COL.campo;ctx.lineWidth=1;
+      ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(X,Y);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle=COL.campo;ctx.beginPath();ctx.arc(X,Y,7,0,6.29);ctx.fill();
+      flecha(ctx,X,Y,X+e.p.vx*esc*0.30,Y+e.p.vy*esc*0.30,COL.verde,2);
+      txt(ctx,"v",X+e.p.vx*esc*0.3+7,Y+e.p.vy*esc*0.3,COL.verde,12);
+    }
+  });
+};
+SIMS._kepIni=function(v,e){
+  e.p={x:1.4,y:0,vx:0,vy:v.vi*Math.sqrt(1/1.4)};
+  e.estela=[];e.sector=[];
+};
+SIMS._kepPaso=function(e,dt){
+  var p=e.p,r=Math.hypot(p.x,p.y);
+  if(r<0.08){SIMS._kepIni({vi:0.82},e);return;}
+  var a=-1/(r*r*r);
+  p.vx+=a*p.x*dt;p.vy+=a*p.y*dt;
+  p.x+=p.vx*dt;p.y+=p.vy*dt;
+  e.estela.push({x:p.x,y:p.y});if(e.estela.length>1400)e.estela.shift();
+  e.sector.push({x:p.x,y:p.y});if(e.sector.length>70)e.sector.shift();
+  if(Math.hypot(p.x,p.y)>9)SIMS._kepIni({vi:0.82},e);
+};
+
+/* --- Tema 6: campo gravitatorio y satélites --- */
+SIMS.gravedad=function(host){
+  var ASTROS={
+    tierra:{n:"Tierra",M:5.98e24,R:6.37e6,c:"#2B6CB0"},
+    luna:{n:"Luna",M:7.35e22,R:1.74e6,c:"#8A94A6"},
+    marte:{n:"Marte",M:6.42e23,R:3.39e6,c:"#C1553B"},
+    jupiter:{n:"Júpiter",M:1.90e27,R:6.99e7,c:"#C89B6B"}
+  };
+  var G=6.67e-11;
+  return crearSim(host,{
+    titulo:"Satélites: gravedad, órbita y escape",
+    nota:"Elige un astro y una altura orbital",
+    ratio:0.5,
+    selects:[{id:"astro",label:"Astro",val:"tierra",numerico:false,opciones:[
+      {v:"tierra",t:"Tierra"},{v:"luna",t:"Luna"},{v:"marte",t:"Marte"},{v:"jupiter",t:"Júpiter"}]}],
+    mandos:[{id:"h",label:"Altura sobre la superficie",min:100,max:40000,step:100,val:400,dec:0,unidad:"km"}],
+    lecturas:function(v){
+      var A=ASTROS[v.astro],r=A.R+v.h*1000;
+      var g=G*A.M/(r*r),vo=Math.sqrt(G*A.M/r),T=2*Math.PI*r/vo,ve=Math.sqrt(2*G*A.M/A.R);
+      return [["g a esa altura =",nfmt(g,2)+" m/s²"],["g₀ superficie =",nfmt(G*A.M/(A.R*A.R),2)+" m/s²"],
+              ["v orbital =",nfmt(vo/1000,2)+" km/s"],["Periodo =",nfmt(T/3600,2)+" h"],
+              ["v escape =",nfmt(ve/1000,2)+" km/s"],["V potencial =",nfmt(-G*A.M/r,2)+" J/kg"]];
+    },
+    dibujar:function(ctx,W,H,v,t){
+      var A=ASTROS[v.astro],cx=W*0.5,cy=H*0.52;
+      var r=A.R+v.h*1000,rmax=A.R+40000000;
+      var Rpx=Math.min(W,H)*0.15,rpx=Rpx*(r/A.R);
+      var escala=Math.min(1,(Math.min(W,H)*0.45)/(Rpx*(rmax/A.R)));
+      rpx=Rpx+(rpx-Rpx)*escala*2.2;
+      ctx.setLineDash([4,5]);ctx.strokeStyle=COL.gris;ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(cx,cy,rpx,0,6.29);ctx.stroke();ctx.setLineDash([]);
+      // astro
+      var g2=ctx.createRadialGradient(cx-Rpx*0.3,cy-Rpx*0.3,Rpx*0.2,cx,cy,Rpx);
+      g2.addColorStop(0,A.c);g2.addColorStop(1,"#0D1836");
+      ctx.fillStyle=g2;ctx.beginPath();ctx.arc(cx,cy,Rpx,0,6.29);ctx.fill();
+      txt(ctx,A.n,cx,cy+Rpx+16,COL.tx2,12,"center");
+      // satélite
+      var vo=Math.sqrt(G*A.M/r),T=2*Math.PI*r/vo,ang=2*Math.PI*t/Math.max(T/2200,1);
+      var sx=cx+rpx*Math.cos(ang),sy=cy+rpx*Math.sin(ang);
+      ctx.fillStyle=COL.campo;ctx.beginPath();ctx.arc(sx,sy,6,0,6.29);ctx.fill();
+      flecha(ctx,sx,sy,sx-Math.sin(ang)*30,sy+Math.cos(ang)*30,COL.verde,2);
+      flecha(ctx,sx,sy,sx+(cx-sx)*0.22,sy+(cy-sy)*0.22,COL.rojo,2);
+      txt(ctx,"v",sx-Math.sin(ang)*38,sy+Math.cos(ang)*38,COL.verde,12,"center");
+      txt(ctx,"g",sx+(cx-sx)*0.3,sy+(cy-sy)*0.3,COL.rojo,12,"center");
+    }
+  });
+};
+
+/* === Simulaciones: temas 7-12 === */
+
+/* --- Tema 7: campo eléctrico de dos cargas --- */
+SIMS.campoE=function(host){
+  var K=9e9;
+  function campo(v,X,Y,cx,cy,ppm){
+    var d=v.d/100/2,q1=v.q1*1e-6,q2=v.q2*1e-6;
+    var x=(X-cx)/ppm,y=(Y-cy)/ppm;
+    var r1=Math.hypot(x+d,y),r2=Math.hypot(x-d,y);
+    if(r1<0.012||r2<0.012)return null;
+    var e1=K*q1/(r1*r1),e2=K*q2/(r2*r2);
+    var Ex=e1*(x+d)/r1+e2*(x-d)/r2, Ey=e1*y/r1+e2*y/r2;
+    return {Ex:Ex,Ey:Ey,E:Math.hypot(Ex,Ey),V:K*q1/r1+K*q2/r2};
+  }
+  return crearSim(host,{
+    titulo:"Campo y potencial de dos cargas puntuales",
+    nota:"Pasa el cursor por el mapa para leer E y V en ese punto",
+    anim:false,ratio:0.56,maxAlto:380,
+    mandos:[
+      {id:"q1",label:"Carga izquierda q₁",min:-5,max:5,step:0.5,val:3,dec:1,unidad:"µC"},
+      {id:"q2",label:"Carga derecha q₂",min:-5,max:5,step:0.5,val:-3,dec:1,unidad:"µC"},
+      {id:"d",label:"Separación",min:6,max:30,step:1,val:16,dec:0,unidad:"cm"}
+    ],
+    raton:function(x,y,v,e){e.mx=x;e.my=y;},
+    lecturas:function(v,e){
+      var base=[["q₁ =",nfmt(v.q1,1)+" µC"],["q₂ =",nfmt(v.q2,1)+" µC"],["d =",nfmt(v.d,0)+" cm"]];
+      if(e.lect)base=base.concat(e.lect);
+      else base.push(["","pasa el cursor por el mapa"]);
+      return base;
+    },
+    dibujar:function(ctx,W,H,v,t,e){
+      var cx=W/2,cy=H/2,ppm=Math.min(W,H)/0.62;
+      var paso=Math.max(26,Math.round(W/22));
+      for(var X=paso/2;X<W;X+=paso)for(var Y=paso/2;Y<H;Y+=paso){
+        var c=campo(v,X,Y,cx,cy,ppm);if(!c||c.E<1)continue;
+        var L=Math.min(paso*0.46,4+10*Math.log10(c.E));
+        if(!isFinite(L)||L<2)continue;
+        var ux=c.Ex/c.E,uy=c.Ey/c.E;
+        var alpha=Math.min(.9,Math.max(.18,Math.log10(c.E)/7));
+        ctx.globalAlpha=alpha;
+        flecha(ctx,X-ux*L,Y-uy*L,X+ux*L,Y+uy*L,COL.campo,1.4);
+        ctx.globalAlpha=1;
+      }
+      // cargas
+      [[-v.d/200,v.q1],[v.d/200,v.q2]].forEach(function(p){
+        var X=cx+p[0]*ppm,q=p[1];
+        var rad=9+Math.abs(q)*1.6;
+        ctx.fillStyle=q>=0?COL.rojo:COL.campo;
+        ctx.beginPath();ctx.arc(X,cy,rad,0,6.29);ctx.fill();
+        txt(ctx,q>=0?"+":"−",X,cy,"#fff",16,"center");
+      });
+      // lectura en el cursor
+      e.lect=null;
+      if(e.mx!=null){
+        var c2=campo(v,e.mx,e.my,cx,cy,ppm);
+        if(c2){
+          ctx.strokeStyle=COL.energia;ctx.lineWidth=1.5;
+          ctx.beginPath();ctx.arc(e.mx,e.my,7,0,6.29);ctx.stroke();
+          var Lm=34;
+          flecha(ctx,e.mx,e.my,e.mx+c2.Ex/c2.E*Lm,e.my+c2.Ey/c2.E*Lm,COL.energia,2.2);
+          e.lect=[["E =",nfmt(c2.E,2)+" N/C"],["V =",nfmt(c2.V,2)+" V"]];
+        }
+      }
+    }
+  });
+};
+
+/* --- Tema 8: fuerza de Lorentz --- */
+SIMS.lorentz=function(host){
+  var PART={
+    proton:{n:"Protón",m:1.67e-27,q:1.6e-19,c:COL.rojo},
+    electron:{n:"Electrón",m:9.11e-31,q:-1.6e-19,c:COL.campo},
+    alfa:{n:"Partícula alfa",m:6.64e-27,q:3.2e-19,c:COL.morado}
+  };
+  return crearSim(host,{
+    titulo:"Carga en un campo magnético perpendicular",
+    nota:"El campo entra en la pantalla (símbolos ×)",
+    ratio:0.56,maxAlto:360,
+    selects:[{id:"p",label:"Partícula",val:"proton",numerico:false,opciones:[
+      {v:"proton",t:"Protón"},{v:"electron",t:"Electrón"},{v:"alfa",t:"Partícula alfa"}]}],
+    mandos:[
+      {id:"v",label:"Velocidad",min:0.5,max:8,step:0.1,val:2,dec:1,unidad:"·10⁶ m/s"},
+      {id:"B",label:"Campo magnético B",min:0.1,max:2,step:0.05,val:0.5,dec:2,unidad:"T"}
+    ],
+    lecturas:function(v){
+      var P=PART[v.p],vel=v.v*1e6,q=Math.abs(P.q);
+      var F=q*vel*v.B,r=P.m*vel/(q*v.B),T=2*Math.PI*P.m/(q*v.B);
+      return [["F = qvB =",nfmt(F,2)+" N"],["r = mv/qB =",nfmt(r,3)+" m"],
+              ["T =",nfmt(T,2)+" s"],["f =",nfmt(1/T,2)+" Hz"],
+              ["Giro:",P.q>0?"horario":"antihorario"]];
+    },
+    dibujar:function(ctx,W,H,v,t){
+      var P=PART[v.p],vel=v.v*1e6,q=Math.abs(P.q);
+      var r=P.m*vel/(q*v.B),w=q*v.B/P.m;
+      var rref=1.67e-27*2e6/(1.6e-19*0.5);
+      var rpx=Math.max(16,Math.min(H*0.40,90*Math.sqrt(r/rref)));
+      // campo entrante
+      ctx.strokeStyle=COL.gris;ctx.lineWidth=1.2;
+      for(var X=22;X<W-10;X+=34)for(var Y=22;Y<H-10;Y+=34){
+        ctx.beginPath();ctx.moveTo(X-4,Y-4);ctx.lineTo(X+4,Y+4);ctx.moveTo(X+4,Y-4);ctx.lineTo(X-4,Y+4);ctx.stroke();
+      }
+      txt(ctx,"B entrante",W-14,16,COL.tx2,11,"right");
+      var cx=W/2,cy=H/2,signo=P.q>0?1:-1;
+      ctx.strokeStyle=COL.grisC;ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(cx,cy,rpx,0,6.29);ctx.stroke();
+      var ang=signo*w*t*1e-8+Math.PI;
+      var px=cx+rpx*Math.cos(ang),py=cy+rpx*Math.sin(ang);
+      // vectores
+      var vx=-signo*Math.sin(ang),vy=signo*Math.cos(ang);
+      flecha(ctx,px,py,px+vx*42,py+vy*42,COL.verde,2.2);
+      txt(ctx,"v",px+vx*52,py+vy*52,COL.verde,12,"center");
+      flecha(ctx,px,py,px+(cx-px)*0.42,py+(cy-py)*0.42,COL.rojo,2.2);
+      txt(ctx,"F",px+(cx-px)*0.52,py+(cy-py)*0.52,COL.rojo,12,"center");
+      ctx.fillStyle=P.c;ctx.beginPath();ctx.arc(px,py,8,0,6.29);ctx.fill();
+      txt(ctx,P.q>0?"+":"−",px,py,"#fff",13,"center");
+      // radio
+      ctx.setLineDash([4,4]);ctx.strokeStyle=COL.gris;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(px,py);ctx.stroke();ctx.setLineDash([]);
+      txt(ctx,"r = "+nfmt(r,3)+" m",cx+(px-cx)/2,cy+(py-cy)/2-10,COL.tx2,11,"center");
+      txt(ctx,PART[v.p].n,14,16,P.c,12,"left");
+    }
+  });
+};
+
+/* --- Tema 9: alternador --- */
+SIMS.induccion=function(host){
+  return crearSim(host,{
+    titulo:"Espira giratoria: cómo nace la corriente alterna",
+    nota:"La fem es máxima justo cuando el flujo vale cero",
+    ratio:0.46,
+    mandos:[
+      {id:"rpm",label:"Velocidad de giro",min:120,max:3000,step:60,val:600,dec:0,unidad:"rpm"},
+      {id:"B",label:"Campo magnético B",min:0.05,max:1,step:0.05,val:0.4,dec:2,unidad:"T"},
+      {id:"N",label:"Número de espiras N",min:1,max:200,step:1,val:50,dec:0}
+    ],
+    lecturas:function(v,e,t){
+      var w=v.rpm*2*Math.PI/60,S=0.01,e0=v.N*v.B*S*w,ang=w*t*0.25;
+      return [["ω =",nfmt(w,1)+" rad/s"],["f =",nfmt(w/(2*Math.PI),1)+" Hz"],
+              ["Φ =",nfmt(v.N*v.B*S*Math.cos(ang),3)+" Wb"],
+              ["ε =",nfmt(e0*Math.sin(ang),2)+" V"],
+              ["ε₀ =",nfmt(e0,2)+" V"],["ε eficaz =",nfmt(e0/Math.SQRT2,2)+" V"]];
+    },
+    dibujar:function(ctx,W,H,v,t){
+      var w=v.rpm*2*Math.PI/60,ang=w*t*0.25,S=0.01,e0=v.N*v.B*S*w;
+      var pw=W*0.40,cx=pw/2,cy=H/2;
+      // campo uniforme
+      ctx.strokeStyle=COL.grisC;ctx.lineWidth=1.4;
+      for(var Y=20;Y<H-10;Y+=26)flecha(ctx,10,Y,pw-14,Y,COL.grisC,1.4);
+      txt(ctx,"B",pw-18,14,COL.tx2,12,"right");
+      // espira en perspectiva
+      var an=Math.abs(Math.cos(ang)),hh=Math.min(H*0.3,58);
+      ctx.strokeStyle=COL.campo;ctx.lineWidth=3;
+      ctx.beginPath();ctx.ellipse(cx,cy,Math.max(3,hh*0.62*Math.abs(Math.sin(ang))),hh,0,0,6.29);ctx.stroke();
+      // eje
+      ctx.strokeStyle=COL.tinta;ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(cx,cy-hh-14);ctx.lineTo(cx,cy+hh+14);ctx.stroke();
+      // normal de la espira
+      flecha(ctx,cx,cy,cx+Math.cos(ang)*42,cy-Math.sin(ang)*0,COL.energia,2);
+      txt(ctx,"normal",cx+Math.cos(ang)*50,cy-12,COL.energia,11,"center");
+      txt(ctx,"flujo ∝ cos α",cx,H-12,COL.tx2,11,"center");
+      // gráfica
+      var gx0=W*0.46,gx1=W-14,gy=H/2,amp=Math.min(H*0.36,62);
+      ejeH(ctx,gx0,gx1,gy);
+      ctx.strokeStyle=COL.gris;ctx.beginPath();ctx.moveTo(gx0,gy-amp-6);ctx.lineTo(gx0,gy+amp+6);ctx.stroke();
+      var per=2*Math.PI/(w*0.25),dur=2.2*per;
+      function curva(f,color,ancho,dash){
+        ctx.setLineDash(dash||[]);ctx.strokeStyle=color;ctx.lineWidth=ancho;ctx.beginPath();
+        for(var p=0;p<=200;p++){
+          var tt=t-dur+dur*p/200,X=gx0+(gx1-gx0)*p/200,Y=gy-f(tt)*amp;
+          p?ctx.lineTo(X,Y):ctx.moveTo(X,Y);
+        }
+        ctx.stroke();ctx.setLineDash([]);
+      }
+      curva(function(tt){return Math.cos(w*tt*0.25);},COL.gris,1.6,[5,4]);
+      curva(function(tt){return Math.sin(w*tt*0.25);},COL.campo,2.4);
+      ctx.fillStyle=COL.energia;ctx.beginPath();ctx.arc(gx1,gy-Math.sin(ang)*amp,5,0,6.29);ctx.fill();
+      txt(ctx,"ε(t)",gx0+4,gy-amp-16,COL.campo,12,"left");
+      txt(ctx,"Φ(t)",gx0+40,gy-amp-16,COL.tx2,12,"left");
+      txt(ctx,"ε₀ = "+nfmt(e0,1)+" V",gx1,gy+amp+18,COL.tx2,11,"right");
+    }
+  });
+};
+
+/* --- Tema 10: relatividad --- */
+SIMS.relatividad=function(host){
+  return crearSim(host,{
+    titulo:"Dilatación del tiempo y contracción de la longitud",
+    nota:"Arriba, el observador en reposo; abajo, la nave que se mueve a v",
+    ratio:0.48,
+    mandos:[{id:"b",label:"Velocidad de la nave",min:0,max:0.995,step:0.005,val:0.8,dec:3,unidad:"c"}],
+    lecturas:function(v){
+      var g=1/Math.sqrt(1-v.b*v.b);
+      return [["γ =",nfmt(g,3)],["Δt₀ = 1 s en la nave →",nfmt(g,3)+" s en la Tierra"],
+              ["L₀ = 100 m →",nfmt(100/g,1)+" m vistos desde la Tierra"],
+              ["Eₒ = mc² →",nfmt(g,2)+" mc² de energía total"]];
+    },
+    dibujar:function(ctx,W,H,v,t){
+      var g=1/Math.sqrt(1-v.b*v.b);
+      function reloj(cx,cy,r,vueltas,etiqueta,color){
+        ctx.strokeStyle=COL.gris;ctx.lineWidth=2;
+        ctx.beginPath();ctx.arc(cx,cy,r,0,6.29);ctx.stroke();
+        for(var i=0;i<12;i++){
+          var a=i*Math.PI/6;
+          ctx.strokeStyle=COL.gris;ctx.lineWidth=1;
+          ctx.beginPath();ctx.moveTo(cx+Math.sin(a)*(r-5),cy-Math.cos(a)*(r-5));
+          ctx.lineTo(cx+Math.sin(a)*r,cy-Math.cos(a)*r);ctx.stroke();
+        }
+        var ang=vueltas*2*Math.PI;
+        ctx.strokeStyle=color;ctx.lineWidth=2.6;
+        ctx.beginPath();ctx.moveTo(cx,cy);
+        ctx.lineTo(cx+Math.sin(ang)*(r-9),cy-Math.cos(ang)*(r-9));ctx.stroke();
+        ctx.fillStyle=color;ctx.beginPath();ctx.arc(cx,cy,3.5,0,6.29);ctx.fill();
+        txt(ctx,etiqueta,cx,cy+r+16,COL.tx2,12,"center");
+      }
+      var r=Math.min(H*0.19,42);
+      reloj(W*0.16,H*0.30,r,t*0.35,"reloj en la Tierra",COL.campo);
+      reloj(W*0.16,H*0.76,r,t*0.35/g,"reloj en la nave",COL.rojo);
+      // reglas
+      var x0=W*0.36,L0=W*0.56;
+      function regla(y,largo,color,etiqueta){
+        ctx.fillStyle=color;ctx.globalAlpha=.18;ctx.fillRect(x0,y-13,largo,26);ctx.globalAlpha=1;
+        ctx.strokeStyle=color;ctx.lineWidth=2;ctx.strokeRect(x0,y-13,largo,26);
+        for(var i=1;i<10;i++){
+          var X=x0+largo*i/10;ctx.strokeStyle=color;ctx.globalAlpha=.5;
+          ctx.beginPath();ctx.moveTo(X,y-13);ctx.lineTo(X,y-6);ctx.stroke();ctx.globalAlpha=1;
+        }
+        txt(ctx,etiqueta,x0,y+28,COL.tx2,12,"left");
+      }
+      regla(H*0.30,L0,COL.campo,"nave en reposo: L₀ = 100 m");
+      regla(H*0.76,L0/g,COL.rojo,"la misma nave a "+nfmt(v.b,2)+"c: L = "+nfmt(100/g,1)+" m");
+      txt(ctx,"γ = "+nfmt(g,3),W-14,16,COL.tinta,15,"right");
+    }
+  });
+};
+
+/* --- Tema 11: efecto fotoeléctrico --- */
+SIMS.fotoelectrico=function(host){
+  var METALES={cesio:{n:"Cesio",W:2.14},sodio:{n:"Sodio",W:2.28},zinc:{n:"Zinc",W:4.30},cobre:{n:"Cobre",W:4.70},platino:{n:"Platino",W:5.65}};
+  function colorLam(l){
+    if(l<380)return "#8E44AD";if(l>=645)return "#E2372B";if(l>=585)return "#F0A202";
+    if(l>=565)return "#E8D51E";if(l>=490)return "#31A354";if(l>=440)return "#2B4CE0";return "#6B3FA0";
+  }
+  return crearSim(host,{
+    titulo:"Efecto fotoeléctrico",
+    nota:"Baja la longitud de onda hasta superar la frecuencia umbral",
+    ratio:0.46,
+    selects:[{id:"metal",label:"Metal",val:"sodio",numerico:false,opciones:Object.keys(METALES).map(function(k){return {v:k,t:METALES[k].n};})}],
+    mandos:[
+      {id:"lam",label:"Longitud de onda de la luz",min:150,max:700,step:5,val:400,dec:0,unidad:"nm"},
+      {id:"I",label:"Intensidad (número de fotones)",min:1,max:6,step:1,val:3,dec:0}
+    ],
+    lecturas:function(v){
+      var M=METALES[v.metal],E=1240/v.lam,Ec=E-M.W,l0=1240/M.W;
+      return [["E fotón =",nfmt(E,2)+" eV"],["W₀ =",nfmt(M.W,2)+" eV"],
+              ["λ umbral =",nfmt(l0,0)+" nm"],["f umbral =",nfmt(M.W*1.6e-19/6.63e-34,2)+" Hz"],
+              ["Ec máx =",Ec>0?nfmt(Ec,2)+" eV":"no hay emisión"],
+              ["V frenado =",Ec>0?nfmt(Ec,2)+" V":"—"]];
+    },
+    dibujar:function(ctx,W,H,v,t,e){
+      var M=METALES[v.metal],E=1240/v.lam,Ec=E-M.W,col=colorLam(v.lam);
+      var placaX=W*0.58,cy=H*0.5;
+      // placa metálica
+      ctx.fillStyle="#6E7B96";ctx.fillRect(placaX,H*0.12,20,H*0.76);
+      txt(ctx,M.n,placaX+10,H*0.06,COL.tx2,12,"center");
+      // fotones
+      if(!e.fot)e.fot=[];
+      if(e.fot.length<v.I*4&&Math.random()<0.4)
+        e.fot.push({x:0,y:H*0.18+Math.random()*H*0.64,vel:2.6+Math.random()});
+      e.fot=e.fot.filter(function(f){
+        f.x+=f.vel*1.8;
+        if(f.x>=placaX){
+          if(Ec>0&&Math.random()<0.9)e.el.push({x:placaX,y:f.y,v:Math.sqrt(Math.max(Ec,0))*2.4,ang:(Math.random()-0.5)*0.5});
+          return false;
+        }
+        ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();
+        for(var i=0;i<14;i++){
+          var X=f.x-14+i,Y=f.y+Math.sin(i*0.9+f.x*0.1)*4;
+          i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);
+        }
+        ctx.stroke();return true;
+      });
+      // electrones
+      if(!e.el)e.el=[];
+      e.el=e.el.filter(function(el){
+        el.x+=el.v*1.6;el.y+=el.ang*el.v;
+        if(el.x>W)return false;
+        ctx.fillStyle=COL.campo;ctx.beginPath();ctx.arc(el.x+20,el.y,5,0,6.29);ctx.fill();
+        txt(ctx,"−",el.x+20,el.y,"#fff",11,"center");
+        return true;
+      });
+      // diagrama de energías
+      var bx=W*0.06,by=H*0.86,alto=H*0.66,escE=alto/7;
+      ctx.strokeStyle=COL.gris;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx,by-alto);ctx.stroke();
+      ctx.fillStyle=COL.gris;ctx.fillRect(bx,by-M.W*escE,26,M.W*escE);
+      txt(ctx,"W₀",bx+34,by-M.W*escE/2,COL.tx2,11,"left");
+      ctx.fillStyle=col;ctx.fillRect(bx+60,by-E*escE,26,E*escE);
+      txt(ctx,"hf",bx+94,by-E*escE/2,COL.tx2,11,"left");
+      if(Ec>0){
+        ctx.fillStyle=COL.verde;ctx.fillRect(bx+120,by-Ec*escE,26,Ec*escE);
+        txt(ctx,"Ec",bx+154,by-Ec*escE/2,COL.verde,11,"left");
+      }else{
+        txt(ctx,"hf < W₀: ningún electrón escapa",bx,by-alto-6,COL.rojo,12,"left");
+      }
+      txt(ctx,"energía (eV)",bx-2,by+16,COL.tx2,11,"left");
+    }
+  });
+};
+
+/* --- Tema 12: desintegración radiactiva --- */
+SIMS.desintegracion=function(host){
+  return crearSim(host,{
+    titulo:"Ley de desintegración radiactiva",
+    nota:"400 núcleos que se desintegran al azar; la curva sale sola",
+    ratio:0.5,
+    mandos:[{id:"T",label:"Periodo de semidesintegración",min:2,max:20,step:1,val:6,dec:0,unidad:"s"}],
+    botones:[{txt:"Reiniciar muestra",accion:function(v,e){SIMS._desIni(e);}}],
+    iniciar:function(v,e){SIMS._desIni(e);},
+    lecturas:function(v,e){
+      var lam=Math.LN2/v.T;
+      return [["t =",nfmt(e.t,1)+" s"],["N =",e.N+" de 400"],
+              ["N/N₀ =",nfmt(e.N/400,3)],["λ =",nfmt(lam,3)+" s⁻¹"],
+              ["Actividad ≈",nfmt(lam*e.N,1)+" Bq"],["Periodos:",nfmt(e.t/v.T,2)]];
+    },
+    dibujar:function(ctx,W,H,v,t,e){
+      var ahora=performance.now(),dt=Math.min(0.05,(ahora-e.ult)/1000);e.ult=ahora;
+      var lam=Math.LN2/v.T,p=1-Math.exp(-lam*dt);
+      e.t+=dt;
+      for(var i=0;i<e.nuc.length;i++)if(!e.nuc[i].d&&Math.random()<p){e.nuc[i].d=true;e.N--;}
+      e.hist.push({t:e.t,N:e.N});if(e.hist.length>900)e.hist.shift();
+      // muestra
+      var pw=W*0.46,cols=20,paso=Math.min(pw/cols,(H-20)/cols);
+      var ox=(pw-cols*paso)/2+paso/2,oy=(H-cols*paso)/2+paso/2;
+      for(var k=0;k<400;k++){
+        var cxx=ox+(k%cols)*paso,cyy=oy+Math.floor(k/cols)*paso;
+        ctx.fillStyle=e.nuc[k].d?"#DFE5F1":COL.campo;
+        ctx.beginPath();ctx.arc(cxx,cyy,Math.max(2.2,paso*0.28),0,6.29);ctx.fill();
+      }
+      txt(ctx,"núcleos sin desintegrar",pw/2,H-4,COL.tx2,11,"center");
+      // gráfica
+      var gx0=W*0.54,gx1=W-14,gy1=H-26,gy0=18,dur=Math.max(6*v.T,e.t);
+      ejeH(ctx,gx0,gx1,gy1);
+      ctx.strokeStyle=COL.gris;ctx.beginPath();ctx.moveTo(gx0,gy0);ctx.lineTo(gx0,gy1);ctx.stroke();
+      // curva teórica
+      ctx.strokeStyle=COL.energia;ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.beginPath();
+      for(var q=0;q<=120;q++){
+        var tt=dur*q/120,NN=400*Math.exp(-lam*tt);
+        var X=gx0+(gx1-gx0)*tt/dur,Y=gy1-(gy1-gy0)*NN/400;
+        q?ctx.lineTo(X,Y):ctx.moveTo(X,Y);
+      }
+      ctx.stroke();ctx.setLineDash([]);
+      // curva experimental
+      ctx.strokeStyle=COL.campo;ctx.lineWidth=2;ctx.beginPath();
+      e.hist.forEach(function(h,i){
+        var X=gx0+(gx1-gx0)*Math.min(h.t,dur)/dur,Y=gy1-(gy1-gy0)*h.N/400;
+        i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);
+      });
+      ctx.stroke();
+      // marcas de semidesintegración
+      for(var n=1;n<=5;n++){
+        var X2=gx0+(gx1-gx0)*(n*v.T)/dur;if(X2>gx1)break;
+        ctx.strokeStyle=COL.grisC;ctx.setLineDash([3,3]);
+        ctx.beginPath();ctx.moveTo(X2,gy0);ctx.lineTo(X2,gy1);ctx.stroke();ctx.setLineDash([]);
+        txt(ctx,n+"·T",X2,gy1+12,COL.tx2,10,"center");
+        var Y2=gy1-(gy1-gy0)*(1/Math.pow(2,n));
+        ctx.fillStyle=COL.energia;ctx.beginPath();ctx.arc(X2,Y2,3,0,6.29);ctx.fill();
+      }
+      txt(ctx,"N₀",gx0-4,gy0+4,COL.tx2,10,"right");
+      txt(ctx,"N/2",gx0-4,gy1-(gy1-gy0)/2,COL.tx2,10,"right");
+      txt(ctx,"N(t) = N₀e^(−λt)",gx1,gy0+6,COL.energia,11,"right");
+    }
+  });
+};
+SIMS._desIni=function(e){
+  e.nuc=[];for(var i=0;i<400;i++)e.nuc.push({d:false});
+  e.N=400;e.t=0;e.hist=[];e.ult=performance.now();
+};
+
+/* === Aplicación === */
+const ESTADO={hechos:{},vista:"inicio"};
+
+/* --- almacenamiento opcional del progreso --- */
+async function cargarProgreso(){
+  try{
+    if(window.storage&&window.storage.get){
+      var r=await window.storage.get("fisica2bach:progreso");
+      if(r&&r.value)ESTADO.hechos=JSON.parse(r.value);
+    }
+  }catch(e){/* sin almacenamiento: el progreso dura lo que dure la sesión */}
+}
+async function guardarProgreso(){
+  try{
+    if(window.storage&&window.storage.set)
+      await window.storage.set("fisica2bach:progreso",JSON.stringify(ESTADO.hechos));
+  }catch(e){}
+}
+
+/* --- texto y fórmulas --- */
+function texPlano(s){
+  var g={alpha:"α",beta:"β",gamma:"γ",delta:"δ",Delta:"Δ",epsilon:"ε",varepsilon:"ε",eta:"η",
+    theta:"θ",lambda:"λ",mu:"μ",nu:"ν",pi:"π",rho:"ρ",sigma:"σ",tau:"τ",phi:"φ",varphi:"φ",
+    Phi:"Φ",omega:"ω",Omega:"Ω",imath:"i"};
+  for(var i=0;i<6;i++){
+    s=s.replace(/\\[tdc]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g,"($1)/($2)");
+    s=s.replace(/\\sqrt\s*\{([^{}]*)\}/g,"√($1)");
+    s=s.replace(/\\(mathrm|text|vec|hat|mathbf|operatorname)\s*\{([^{}]*)\}/g,"$2");
+  }
+  s=s.replace(/\\hat\\imath/g,"î").replace(/\\hat\\jmath/g,"ĵ");
+  s=s.replace(/\\(vec|hat|mathrm|mathbf)\s*([A-Za-z])/g,"$2");
+  s=s.replace(/\\left|\\right/g,"");
+  s=s.replace(/\\cdot/g,"·").replace(/\\times/g,"×").replace(/\\pm/g,"±")
+   .replace(/\\ge/g,"≥").replace(/\\le/g,"≤").replace(/\\approx/g,"≈")
+   .replace(/\\Rightarrow/g,"⇒").replace(/\\rightarrow/g,"→").replace(/\\infty/g,"∞")
+   .replace(/\\partial/g,"∂").replace(/\\oint/g,"∮").replace(/\\hbar/g,"ℏ")
+   .replace(/\\ln/g,"ln").replace(/\\log/g,"log").replace(/\\sin/g,"sen")
+   .replace(/\\cos/g,"cos").replace(/\\tan/g,"tg").replace(/\\circ/g,"°");
+  for(var k in g)s=s.replace(new RegExp("\\\\"+k+"(?![a-zA-Z])","g"),g[k]);
+  s=s.replace(/\^\{([^{}]*)\}/g,"<sup>$1</sup>").replace(/\^(-?\w)/g,"<sup>$1</sup>");
+  s=s.replace(/_\{([^{}]*)\}/g,"<sub>$1</sub>").replace(/_(\w)/g,"<sub>$1</sub>");
+  s=s.replace(/[{}]/g,"").replace(/\\[,;:!\s]/g," ").replace(/\\\\/g," ");
+  return s;
+}
+function md(s){
+  s=String(s).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+  if(!window.katex)s=s.replace(/\$([^$]+)\$/g,function(m,t){return '<span class="mf">'+texPlano(t)+"</span>";});
+  return s;
+}
+function pintaMate(el){
+  if(window.katex&&window.renderMathInElement){
+    try{
+      renderMathInElement(el,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});
+    }catch(e){}
+  }
+  el.querySelectorAll("[data-tex]").forEach(function(n){
+    var t=n.getAttribute("data-tex");
+    if(window.katex){try{katex.render(t,n,{throwOnError:false,displayMode:false});return;}catch(e){}}
+    n.innerHTML=texPlano(t);
+  });
+}
+
+/* --- utilidades DOM --- */
+function h(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function tema(id){for(var i=0;i<TEMAS.length;i++)if(TEMAS[i].id===id)return TEMAS[i];return null;}
+
+/* --- barra lateral --- */
+function pintarRail(){
+  var cont=document.getElementById("railScroll");
+  cont.innerHTML="";
+  cont.appendChild(h("div","rail__grupo","Los 12 temas"));
+  TEMAS.forEach(function(T){
+    var b=h("button","nav-item"+(ESTADO.hechos[T.id]?" hecho":""));
+    b.innerHTML='<span class="nav-item__n"><span>'+T.n+'</span></span><span class="nav-item__txt">'+T.titulo+"</span>";
+    b.setAttribute("aria-current",ESTADO.vista===T.id?"true":"false");
+    b.addEventListener("click",function(){ir(T.id);});
+    cont.appendChild(b);
+  });
+  cont.appendChild(h("div","rail__grupo","Herramientas"));
+  [["formulario","Formulario y constantes"],["examen","Examen rápido"],["curso","Cómo se evalúa el curso"]].forEach(function(p){
+    var b=h("button","nav-item");
+    b.innerHTML='<span class="nav-item__n"><span>·</span></span><span class="nav-item__txt">'+p[1]+"</span>";
+    b.setAttribute("aria-current",ESTADO.vista===p[0]?"true":"false");
+    b.addEventListener("click",function(){ir(p[0]);});
+    cont.appendChild(b);
+  });
+  var n=TEMAS.filter(function(T){return ESTADO.hechos[T.id];}).length;
+  document.getElementById("progTexto").textContent=n+" de 12 temas marcados";
+  document.getElementById("progBarra").style.width=(n/12*100)+"%";
+}
+
+/* --- portada --- */
+function vistaInicio(){
+  var m=document.getElementById("main");
+  m.innerHTML="";
+  var hero=h("section","hero");
+  hero.innerHTML='<div class="hero__grid"></div><canvas class="hero__onda" id="heroOnda"></canvas>'+
+    '<div class="hero__txt"><h1>Física de 2º de bachillerato</h1>'+
+    '<p>Todo el temario de las Illes Balears en un solo sitio: teoría, formulario, simulaciones y preguntas para comprobar si lo llevas.</p>'+
+    '<div class="hero__meta"><span class="pastilla">12 temas</span><span class="pastilla">12 simulaciones</span>'+
+    '<span class="pastilla">60 preguntas</span><span class="pastilla pastilla--ambar">Curso 2026-2027</span></div></div>';
+  m.appendChild(hero);
+
+  var v=h("div","vista vista--ancha");
+  var buscador=h("div","buscador");
+  buscador.innerHTML='<input type="search" id="buscar" placeholder="Busca un concepto: efecto Doppler, Lenz, velocidad de escape…" aria-label="Buscar en el temario">';
+  v.appendChild(buscador);
+  var res=h("ul","resultados");res.id="resultados";v.appendChild(res);
+
+  var rej=h("div","rejilla");
+  TEMAS.forEach(function(T){
+    var c=h("button","tarjeta"+(ESTADO.hechos[T.id]?" hecho":""));
+    c.innerHTML='<span class="tarjeta__n">Tema '+T.n+(ESTADO.hechos[T.id]?" estudiado":"")+'</span>'+
+      '<span class="tarjeta__t">'+T.titulo+'</span><span class="tarjeta__d">'+T.lema+"</span>";
+    c.addEventListener("click",function(){ir(T.id);});
+    rej.appendChild(c);
+  });
+  v.appendChild(rej);
+
+  var extra=h("div");
+  extra.innerHTML='<h2 class="seccion">Cómo usar esta web</h2>'+
+    "<p>Cada tema tiene la misma estructura: primero la teoría con los razonamientos que hay que saber explicar, "+
+    "después una simulación con la que puedes trastear, el formulario completo, los avisos sobre los errores que "+
+    "más se repiten, un problema resuelto paso a paso y cinco preguntas para comprobar si te ha quedado claro.</p>"+
+    "<p>Cuando termines un tema, márcalo como estudiado y lo verás reflejado en la barra lateral. "+
+    "En el formulario tienes todas las fórmulas juntas y filtrables, y en el examen rápido, doce preguntas al azar de todo el temario.</p>";
+  v.appendChild(extra);
+  m.appendChild(v);
+
+  heroOnda();
+  var inp=document.getElementById("buscar");
+  inp.addEventListener("input",function(){buscar(inp.value);});
+}
+
+function heroOnda(){
+  var c=document.getElementById("heroOnda");if(!c)return;
+  var ctx=c.getContext("2d"),reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function ajustar(){
+    var dpr=window.devicePixelRatio||1;
+    c.width=c.clientWidth*dpr;c.height=c.clientHeight*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  ajustar();
+  var t0=performance.now(),raf;
+  function dib(){
+    var W=c.clientWidth,H=c.clientHeight,t=reduce?0:(performance.now()-t0)/1000;
+    ctx.clearRect(0,0,W,H);
+    var ondas=[{a:26,k:0.011,w:0.7,y:0.62,col:"rgba(43,76,224,.16)"},
+               {a:18,k:0.017,w:-1.0,y:0.72,col:"rgba(233,147,11,.20)"},
+               {a:34,k:0.007,w:0.45,y:0.82,col:"rgba(20,32,63,.10)"}];
+    ondas.forEach(function(o){
+      ctx.beginPath();ctx.moveTo(0,H);
+      for(var x=0;x<=W;x+=4)ctx.lineTo(x,H*o.y+Math.sin(x*o.k+t*o.w)*o.a);
+      ctx.lineTo(W,H);ctx.closePath();ctx.fillStyle=o.col;ctx.fill();
+    });
+    if(!reduce)raf=requestAnimationFrame(dib);
+  }
+  dib();
+  window.addEventListener("resize",function(){ajustar();if(reduce)dib();});
+  SIM_STOP.push(function(){if(raf)cancelAnimationFrame(raf);});
+}
+
+/* --- buscador --- */
+function indice(){
+  var idx=[];
+  TEMAS.forEach(function(T){
+    idx.push({t:T.titulo+" "+T.lema+" "+T.resumen,id:T.id,tit:T.titulo,sub:"Tema "+T.n});
+    (T.secciones||[]).forEach(function(s){if(s.h)idx.push({t:s.h+" "+(s.p||[]).join(" ")+" "+(s.ul||[]).join(" "),id:T.id,tit:s.h,sub:"Tema "+T.n+". "+T.titulo});});
+    (T.formulas||[]).forEach(function(f){idx.push({t:f.d+" "+f.tex,id:T.id,tit:f.d,sub:"Fórmula del tema "+T.n});});
+    (T.claves||[]).forEach(function(k){idx.push({t:k,id:T.id,tit:k.replace(/\$[^$]*\$/g,"…").replace(/\*\*/g,""),sub:"Aviso del tema "+T.n});});
+  });
+  return idx;
+}
+var IDX=null;
+function buscar(q){
+  var cont=document.getElementById("resultados");if(!cont)return;
+  cont.innerHTML="";
+  q=(q||"").trim().toLowerCase();
+  if(q.length<3)return;
+  if(!IDX)IDX=indice();
+  var norm=function(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();};
+  var qq=norm(q),vistos={},n=0;
+  IDX.forEach(function(it){
+    if(n>=7)return;
+    if(norm(it.t).indexOf(qq)<0)return;
+    var clave=it.id+it.tit;if(vistos[clave])return;vistos[clave]=1;n++;
+    var li=document.createElement("li");
+    var b=document.createElement("button");
+    b.innerHTML=md(it.tit)+"<small>"+it.sub+"</small>";
+    b.addEventListener("click",function(){ir(it.id);});
+    li.appendChild(b);cont.appendChild(li);
+  });
+  if(!n)cont.innerHTML='<li><button disabled>No hay resultados para esa búsqueda. Prueba con otra palabra.</button></li>';
+  pintaMate(cont);
+}
+
+/* --- vista de tema --- */
+function vistaTema(T){
+  var m=document.getElementById("main");m.innerHTML="";
+  var v=h("div","vista");
+  v.appendChild(h("p","crumb","Tema "+T.n+" de 12. Bloque "+T.bloque));
+  v.appendChild(h("h1","titulo",T.titulo+". "+T.lema));
+  v.appendChild(h("p","entradilla",md(T.resumen)));
+
+  (T.secciones||[]).forEach(function(s){
+    if(s.h)v.appendChild(h("h2","seccion",s.h));
+    (s.p||[]).forEach(function(p){v.appendChild(h("p",null,md(p)));});
+    if(s.ul){
+      var ul=h("ul");
+      s.ul.forEach(function(li){ul.appendChild(h("li",null,md(li)));});
+      v.appendChild(ul);
+    }
+    if(s.tabla){
+      var w=h("div","tabla-envoltura"),tb=h("table","tabla"),thead=h("thead"),tr=h("tr");
+      s.tabla.head.forEach(function(c){tr.appendChild(h("th",null,c));});
+      thead.appendChild(tr);tb.appendChild(thead);
+      var tbody=h("tbody");
+      s.tabla.rows.forEach(function(r){
+        var f=h("tr");r.forEach(function(c){f.appendChild(h("td",null,md(c)));});tbody.appendChild(f);
+      });
+      tb.appendChild(tbody);w.appendChild(tb);v.appendChild(w);
+    }
+  });
+
+  if(T.sim&&SIMS[T.sim]){
+    v.appendChild(h("h2","seccion","Simulación"));
+    var host=h("div");v.appendChild(host);
+    setTimeout(function(){try{SIMS[T.sim](host);}catch(e){host.innerHTML='<div class="aviso">La simulación no ha podido cargarse en este navegador.</div>';}},0);
+  }
+
+  v.appendChild(h("h2","seccion","Formulario del tema"));
+  v.appendChild(cajaFormulas(T.formulas));
+
+  if(T.claves&&T.claves.length){
+    var av=h("div","aviso aviso--clave");
+    av.appendChild(h("h4",null,"Errores frecuentes y avisos para el examen"));
+    var ul2=h("ul");
+    T.claves.forEach(function(c){ul2.appendChild(h("li",null,md(c)));});
+    av.appendChild(ul2);v.appendChild(av);
+  }
+
+  if(T.problemas&&T.problemas.length){
+    var varios=T.problemas.length>1;
+    v.appendChild(h("h2","seccion",varios?"Problemas para practicar":"Problema resuelto"));
+    if(varios)v.appendChild(h("p",null,"Intenta resolver cada uno antes de mirar la solución."));
+    T.problemas.forEach(function(pr,i){
+      var box=h("div","problema"),cab=h("div","problema__cab");
+      cab.appendChild(h("h4",null,varios?("Problema "+(i+1)):"Enunciado"));
+      cab.appendChild(h("p",null,md(pr.e)));
+      var bt=h("button","btn btn--fantasma","Ver la solución paso a paso");
+      cab.appendChild(bt);box.appendChild(cab);
+      var sol=h("div","problema__sol");sol.hidden=true;
+      var ol=h("ol");
+      pr.pasos.forEach(function(p){ol.appendChild(h("li",null,md(p)));});
+      sol.appendChild(ol);box.appendChild(sol);
+      bt.addEventListener("click",function(){
+        sol.hidden=!sol.hidden;
+        bt.textContent=sol.hidden?"Ver la solución paso a paso":"Ocultar la solución";
+      });
+      v.appendChild(box);
+    });
+  }
+
+  v.appendChild(h("h2","seccion","Comprueba si lo llevas"));
+  var zonaTest=h("div");
+  T.test.forEach(function(p,i){zonaTest.appendChild(tarjetaPregunta(p,i+1));});
+  v.appendChild(zonaTest);
+
+  var pie=h("div","pie-tema");
+  var marcar=h("button","btn"+(ESTADO.hechos[T.id]?" btn--verde":""),ESTADO.hechos[T.id]?"Tema estudiado":"Marcar como estudiado");
+  marcar.addEventListener("click",function(){
+    ESTADO.hechos[T.id]=!ESTADO.hechos[T.id];
+    marcar.textContent=ESTADO.hechos[T.id]?"Tema estudiado":"Marcar como estudiado";
+    marcar.className="btn"+(ESTADO.hechos[T.id]?" btn--verde":"");
+    guardarProgreso();pintarRail();
+  });
+  pie.appendChild(marcar);
+  var nav=h("div","sim__botones");
+  var i=TEMAS.indexOf(T);
+  if(i>0){var a=h("button","btn btn--fantasma","Tema "+TEMAS[i-1].n);a.addEventListener("click",function(){ir(TEMAS[i-1].id);});nav.appendChild(a);}
+  if(i<TEMAS.length-1){var b2=h("button","btn btn--fantasma","Tema "+TEMAS[i+1].n+": "+TEMAS[i+1].titulo);b2.addEventListener("click",function(){ir(TEMAS[i+1].id);});nav.appendChild(b2);}
+  pie.appendChild(nav);
+  v.appendChild(pie);
+  m.appendChild(v);
+  pintaMate(v);
+}
+
+function cajaFormulas(lista){
+  var cont=h("div","formulario");
+  (lista||[]).forEach(function(f){
+    var d=h("div","formula"+(f.clave?" formula--clave":""));
+    var tex=h("span","formula__tex");tex.setAttribute("data-tex",f.tex);
+    d.appendChild(tex);
+    d.appendChild(h("span","formula__d",f.d));
+    cont.appendChild(d);
+  });
+  return cont;
+}
+
+function tarjetaPregunta(p,num,alResponder){
+  var box=h("div","test");
+  box.appendChild(h("p","test__p",'<i>'+num+'</i><span>'+md(p.q)+"</span>"));
+  var ul=h("ul","opciones"),letras="abcd";
+  var expl=h("p","explica");expl.hidden=true;
+  p.op.forEach(function(o,j){
+    var li=document.createElement("li");
+    var b=h("button","opcion",'<span class="opcion__l">'+letras[j]+"</span><span>"+md(o)+"</span>");
+    b.addEventListener("click",function(){
+      ul.querySelectorAll("button").forEach(function(x,k){
+        x.disabled=true;
+        if(k===p.sol)x.classList.add("bien");
+      });
+      if(j!==p.sol)b.classList.add("mal");
+      expl.innerHTML=(j===p.sol?"<strong>Correcto. </strong>":"<strong>No es esa. </strong>")+md(p.why);
+      expl.hidden=false;pintaMate(expl);
+      if(alResponder)alResponder(j===p.sol);
+    });
+    li.appendChild(b);ul.appendChild(li);
+  });
+  box.appendChild(ul);box.appendChild(expl);
+  return box;
+}
+
+/* --- formulario general --- */
+function vistaFormulario(){
+  var m=document.getElementById("main");m.innerHTML="";
+  var v=h("div","vista");
+  v.appendChild(h("p","crumb","Herramientas"));
+  v.appendChild(h("h1","titulo","Formulario completo"));
+  v.appendChild(h("p","entradilla","Todas las fórmulas del curso, tema a tema. Las destacadas en ámbar son las que conviene tener automatizadas. Debajo, la tabla de constantes que se entrega en las PAU."));
+  var bus=h("div","buscador");
+  bus.innerHTML='<input type="search" id="filtroF" placeholder="Filtrar fórmulas: potencial, Lorentz, escape…" aria-label="Filtrar fórmulas">';
+  v.appendChild(bus);
+  var zona=h("div");zona.id="zonaF";v.appendChild(zona);
+
+  function pintar(q){
+    zona.innerHTML="";
+    var norm=function(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();};
+    var qq=norm(q||"");
+    TEMAS.forEach(function(T){
+      var fs=(T.formulas||[]).filter(function(f){return !qq||norm(f.d+" "+f.tex+" "+T.titulo).indexOf(qq)>=0;});
+      if(!fs.length)return;
+      var t=h("h2","seccion","Tema "+T.n+". "+T.titulo);
+      t.style.cursor="pointer";
+      t.addEventListener("click",function(){ir(T.id);});
+      zona.appendChild(t);
+      zona.appendChild(cajaFormulas(fs));
+    });
+    if(!zona.children.length)zona.appendChild(h("p",null,"Ninguna fórmula coincide con esa búsqueda."));
+    pintaMate(zona);
+  }
+  pintar("");
+
+  var tc=h("div");
+  tc.innerHTML='<h2 class="seccion">Constantes y datos</h2>';
+  var w=h("div","tabla-envoltura"),tb=h("table","tabla");
+  tb.innerHTML="<thead><tr><th>Magnitud</th><th>Símbolo</th><th>Valor</th></tr></thead>";
+  var tbody=h("tbody");
+  CONSTANTES.forEach(function(c){
+    var tr=h("tr");
+    tr.appendChild(h("td",null,c[0]));tr.appendChild(h("td",null,"<code>"+c[1]+"</code>"));tr.appendChild(h("td",null,c[2]));
+    tbody.appendChild(tr);
+  });
+  tb.appendChild(tbody);w.appendChild(tb);tc.appendChild(w);
+  v.appendChild(tc);
+  m.appendChild(v);
+  document.getElementById("filtroF").addEventListener("input",function(e){pintar(e.target.value);});
+}
+
+/* --- examen rápido --- */
+function vistaExamen(){
+  var m=document.getElementById("main");m.innerHTML="";
+  var v=h("div","vista");
+  v.appendChild(h("p","crumb","Herramientas"));
+  v.appendChild(h("h1","titulo","Examen rápido"));
+  v.appendChild(h("p","entradilla","Doce preguntas al azar, una de cada tema. No puntúa para nada: sirve para detectar qué toca repasar."));
+
+  var marcador=h("div","marcador");
+  marcador.innerHTML="<div><b id='mNota'>0</b> de <span id='mTotal'>0</span> respondidas correctamente</div>";
+  var rehacer=h("button","btn","Otras doce preguntas");
+  rehacer.addEventListener("click",vistaExamen);
+  marcador.appendChild(rehacer);
+  v.appendChild(marcador);
+
+  var aciertos=0,hechas=0;
+  var preguntas=TEMAS.map(function(T){
+    var p=T.test[Math.floor(Math.random()*T.test.length)];
+    return {p:p,T:T};
+  }).sort(function(){return Math.random()-0.5;});
+
+  preguntas.forEach(function(o,i){
+    var c=tarjetaPregunta(o.p,i+1,function(ok){
+      hechas++;if(ok)aciertos++;
+      document.getElementById("mNota").textContent=aciertos;
+      document.getElementById("mTotal").textContent=hechas;
+      if(hechas===12){
+        var msg=aciertos>=10?"Muy bien, lo llevas.":(aciertos>=7?"Vas bien, pero repasa los temas fallados.":"Toca volver a la teoría de los temas que has fallado.");
+        marcador.insertAdjacentHTML("beforeend","<div style='flex-basis:100%'>"+msg+"</div>");
+      }
+    });
+    c.insertBefore(h("p","crumb","Tema "+o.T.n+". "+o.T.titulo),c.firstChild);
+    v.appendChild(c);
+  });
+  m.appendChild(v);
+  pintaMate(v);
+}
+
+/* --- curso --- */
+function vistaCurso(){
+  var m=document.getElementById("main");m.innerHTML="";
+  var v=h("div","vista");
+  v.appendChild(h("p","crumb",CURSO.centro));
+  v.appendChild(h("h1","titulo","Cómo funciona el curso"));
+  v.appendChild(h("p","entradilla",CURSO.materia+", curso "+CURSO.curso+". Profesora: "+CURSO.profesora+". Esta sección resume la hoja informativa del departamento y el currículo oficial de las Illes Balears."));
+
+  v.appendChild(h("h2","seccion","Cómo se calcula la nota"));
+  var rej=h("div","rejilla");
+  CURSO.evaluacion.forEach(function(e){
+    var c=h("div","tarjeta");c.style.cursor="default";
+    c.innerHTML='<span class="tarjeta__n">'+e.clave+'</span><span class="tarjeta__d">'+e.txt+"</span>";
+    rej.appendChild(c);
+  });
+  v.appendChild(rej);
+  var av=h("div","aviso aviso--dato");
+  av.appendChild(h("h4",null,"Regla de la nota final"));
+  av.appendChild(h("p",null,CURSO.nota));
+  v.appendChild(av);
+
+  v.appendChild(h("h3",null,"Instrumentos de evaluación"));
+  var u1=h("ul");CURSO.instrumentos.forEach(function(x){u1.appendChild(h("li",null,x));});v.appendChild(u1);
+  v.appendChild(h("h3",null,"Material necesario"));
+  var u2=h("ul");CURSO.material.forEach(function(x){u2.appendChild(h("li",null,x));});v.appendChild(u2);
+  v.appendChild(h("h3",null,"Normas de aula y exámenes"));
+  var u3=h("ul");CURSO.normas.forEach(function(x){u3.appendChild(h("li",null,x));});v.appendChild(u3);
+  v.appendChild(h("p",null,CURSO.pau.txt+' <a href="'+CURSO.pau.url+'" target="_blank" rel="noopener">Información de la materia en la UIB</a>.'));
+
+  v.appendChild(h("h2","seccion","Saberes básicos y su reparto por temas"));
+  v.appendChild(h("p",null,"El currículo organiza los contenidos en cuatro bloques. El orden en que se dan en clase es el del temario, que combina estos bloques como se indica aquí."));
+  CURSO.bloques.forEach(function(B){
+    var t=h("h3",null,"Bloque "+B.id+". "+B.nombre);
+    v.appendChild(t);
+    var p=h("p",null,"Se trabaja en los temas "+B.temas.join(", ")+".");
+    v.appendChild(p);
+    var ul=h("ul");B.puntos.forEach(function(x){ul.appendChild(h("li",null,x));});v.appendChild(ul);
+    var bs=h("div","sim__botones");bs.style.margin="0 0 18px";
+    B.temas.forEach(function(n){
+      var T=TEMAS[n-1];
+      var b=h("button","btn btn--fantasma","Tema "+n+": "+T.titulo);
+      b.addEventListener("click",function(){ir(T.id);});
+      bs.appendChild(b);
+    });
+    v.appendChild(bs);
+  });
+
+  v.appendChild(h("h2","seccion","Competencias específicas y criterios de evaluación"));
+  CURSO.competencias.forEach(function(C){
+    v.appendChild(h("h3",null,C.id));
+    v.appendChild(h("p",null,C.txt));
+    var ul=h("ul");C.ca.forEach(function(x){ul.appendChild(h("li",null,x));});v.appendChild(ul);
+  });
+  m.appendChild(v);
+}
+
+/* --- enrutado --- */
+function ir(id){
+  pararSims();
+  ESTADO.vista=id;
+  try{if(location.hash!=="#"+id)history.replaceState(null,"","#"+id);}catch(e){}
+  document.body.classList.remove("menu-abierto");
+  if(id==="inicio")vistaInicio();
+  else if(id==="formulario")vistaFormulario();
+  else if(id==="curso")vistaCurso();
+  else if(id==="examen")vistaExamen();
+  else{
+    var T=tema(id);
+    if(T)vistaTema(T);else{ESTADO.vista="inicio";vistaInicio();}
+  }
+  pintarRail();
+  var t=document.getElementById("tbTitulo");
+  if(t)t.textContent=ESTADO.vista==="inicio"?"Física 2º bach":(tema(ESTADO.vista)?"Tema "+tema(ESTADO.vista).n:"Física 2º bach");
+  window.scrollTo(0,0);
+  document.getElementById("main").focus({preventScroll:true});
+}
+
+/* --- arranque --- */
+(async function(){
+  await cargarProgreso();
+  document.getElementById("btnMenu").addEventListener("click",function(){
+    document.body.classList.toggle("menu-abierto");
+  });
+  document.getElementById("velo").addEventListener("click",function(){
+    document.body.classList.remove("menu-abierto");
+  });
+  document.getElementById("marca").addEventListener("click",function(){ir("inicio");});
+  var inicial="inicio";
+  try{inicial=(location.hash||"").replace("#","")||"inicio";}catch(e){}
+  ir(inicial);
+  window.addEventListener("hashchange",function(){
+    try{
+      var id=(location.hash||"").replace("#","")||"inicio";
+      if(id!==ESTADO.vista)ir(id);
+    }catch(e){}
+  });
+})();
+
+</script>
+</body>
+</html>
