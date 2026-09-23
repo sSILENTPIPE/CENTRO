@@ -299,6 +299,274 @@ select{font-family:var(--sans);font-size:13.5px;padding:7px 10px;border:1px soli
 .opcion span:last-child{flex:1}
 
 </style>
+<!-- ===== estilo del portal: inicio ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ---------- fichas de color, iguales en las seis páginas ---------- */
+:root, :root[data-theme="light"]{
+  --pz-paper:#F7F8FB; --pz-surface:#FFFFFF; --pz-surface-2:#F1F4F9; --pz-surface-3:#E7ECF3;
+  --pz-ink:#0F1A2A; --pz-ink-2:#35435A; --pz-muted:#5C6A7E;
+  --pz-line:#E4E9F0; --pz-line-2:#D3DAE5;
+  --pz-acc:16 163 127;
+  --pz-sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --pz-disp:"Space Grotesk","IBM Plex Sans",ui-sans-serif,sans-serif;
+  --pz-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --pz-paper:#070B14; --pz-surface:#101828; --pz-surface-2:#172033; --pz-surface-3:#1F2A3D;
+  --pz-ink:#EEF2F8; --pz-ink-2:#C6D0DE; --pz-muted:#94A3B8;
+  --pz-line:#1E293B; --pz-line-2:#2C3A50;
+  color-scheme:dark;
+}
+
+/* ---------- los tokens propios de la página pasan a los de arriba ---------- */
+:root, :root[data-theme="light"], :root[data-theme="dark"]{
+    --papel:var(--pz-paper);
+    --blanco:var(--pz-surface);
+    --texto:var(--pz-ink);
+    --texto-2:var(--pz-ink-2);
+    --texto-3:var(--pz-muted);
+    --borde:var(--pz-line);
+    --borde-2:var(--pz-line-2);
+    --sans:var(--pz-sans);
+    --serif:var(--pz-sans);
+}
+
+/* ---------- el fondo lo pinta <html> ----------
+   Si el fondo lo pinta <body>, tapa a los hijos con z-index negativo (las capas
+   del fondo), porque el fondo del body se dibuja después de esos hijos. */
+html{background:var(--pz-paper) !important}
+body{background:transparent !important}
+
+/* ---------- tipografía ---------- */
+body{font-family:var(--pz-sans) !important}
+h1,h2,h3,h4,.titulo,.hero__txt h1{font-family:var(--pz-disp) !important; letter-spacing:-.015em}
+button, input, select, textarea{font-family:inherit}
+
+/* ---------- fondo: halos fijos, trama de puntos y ondas ---------- */
+.pz-aurora{position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(46rem 34rem at 6% -8%,  rgb(var(--pz-acc)/.22), rgb(var(--pz-acc)/0) 70%),
+    radial-gradient(40rem 30rem at 97% -6%, rgb(var(--pz-acc)/.16), rgb(var(--pz-acc)/0) 70%)}
+:root[data-theme="dark"] .pz-aurora{
+  background:
+    radial-gradient(46rem 34rem at 6% -8%,  rgb(var(--pz-acc)/.20), rgb(var(--pz-acc)/0) 70%),
+    radial-gradient(40rem 30rem at 97% -6%, rgb(var(--pz-acc)/.14), rgb(var(--pz-acc)/0) 70%)}
+.pz-trama{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:radial-gradient(rgba(15,26,42,.06) 1px, transparent 1px);background-size:26px 26px;
+  -webkit-mask-image:radial-gradient(ellipse 85% 60% at 50% 0%, #000 35%, transparent 100%);
+          mask-image:radial-gradient(ellipse 85% 60% at 50% 0%, #000 35%, transparent 100%)}
+:root[data-theme="dark"] .pz-trama{background-image:radial-gradient(rgba(190,210,255,.07) 1px, transparent 1px)}
+.pz-ondas{position:fixed;left:0;right:0;bottom:0;width:100%;height:46vh;min-height:260px;
+  z-index:-1;pointer-events:none;display:block;opacity:.6}
+:root[data-theme="dark"] .pz-ondas{opacity:.75}
+
+/* ---------- pastilla de controles ---------- */
+.pz-mando{position:fixed;right:16px;bottom:16px;z-index:90;display:flex;align-items:center;gap:6px;
+  padding:6px;border-radius:14px;border:1px solid var(--pz-line);background:rgb(var(--pz-fondo-mando,255 255 255)/.86);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  box-shadow:0 10px 30px -14px rgba(15,26,42,.45)}
+:root[data-theme="dark"] .pz-mando{--pz-fondo-mando:16 24 40}
+.pz-mando a, .pz-mando button{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;
+  padding:0 11px;border:0;border-radius:10px;background:transparent;color:var(--pz-ink-2);cursor:pointer;
+  font-family:var(--pz-sans);font-size:.83rem;font-weight:600;text-decoration:none;
+  transition:background-color .25s ease,color .25s ease}
+.pz-mando a:hover, .pz-mando button:hover{background:rgb(var(--pz-acc)/.12);color:rgb(var(--pz-acc))}
+.pz-mando a:focus-visible, .pz-mando button:focus-visible{outline:2px solid rgb(var(--pz-acc));outline-offset:2px}
+.pz-mando button{width:36px;padding:0}
+.pz-mando svg{width:17px;height:17px}
+.pz-mando .pz-sol{display:none}
+:root[data-theme="dark"] .pz-mando .pz-sol{display:block}
+:root[data-theme="dark"] .pz-mando .pz-luna{display:none}
+@media (max-width:640px){ .pz-mando{right:10px;bottom:10px} .pz-mando a span{display:none} }
+@media print{ .pz-mando,.pz-ondas,.pz-aurora,.pz-trama{display:none !important} }
+
+
+/* --- modo oscuro propio de Física: la página nació solo en claro --- */
+:root[data-theme="dark"]{
+  --campo:#7FA0F5; --campo-claro:#161E36;
+  --energia:#E7B75C; --energia-claro:#251E11;
+  --verde:#5FC9B4; --verde-claro:#102723;
+  --rojo:#E98A99; --rojo-claro:#2A1720;
+  --tinta:#0C1322; --tinta-2:#121B2E; --tinta-3:#1B2740;
+}
+:root[data-theme="dark"] .pastilla{border-color:rgba(127,160,245,.3)}
+:root[data-theme="dark"] .pastilla--ambar{color:#E7B75C;border-color:rgba(231,183,92,.32)}
+:root[data-theme="dark"] .formula--clave{background:rgba(231,183,92,.06)}
+:root[data-theme="dark"] .aviso--clave{border-color:rgba(231,183,92,.3)}
+:root[data-theme="dark"] .aviso--dato{border-color:rgba(127,160,245,.3)}
+:root[data-theme="dark"] .sim__mandos,
+:root[data-theme="dark"] .sim__lectura{background:var(--pz-surface-2)}
+:root[data-theme="dark"] .opcion.bien{border-color:rgba(95,201,180,.45);color:#BFF0E0}
+:root[data-theme="dark"] .opcion.mal{border-color:rgba(233,138,153,.45);color:#F8C8D0}
+:root[data-theme="dark"] .marcador{background:var(--pz-surface-2);color:var(--pz-ink)}
+:root[data-theme="dark"] .hero__grid{opacity:.35}
+
+</style>
+<script>
+(function () {
+  var raiz = document.documentElement;
+
+  function aplicar(oscuro) {
+    raiz.setAttribute('data-theme', oscuro ? 'dark' : 'light');
+    raiz.classList.toggle('dark', oscuro);
+  }
+  function guardado() { try { return localStorage.getItem('tema'); } catch (e) { return null; } }
+  function guardar(v) { try { localStorage.setItem('tema', v ? 'oscuro' : 'claro'); } catch (e) {} }
+
+  var g = guardado();
+  var quiero = g ? g === 'oscuro' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var asentado = false;                 // hasta que la página termina de arrancar
+  aplicar(quiero);
+
+  /* Tres de estas páginas traen su propio interruptor de tema y fijan el suyo al
+     arrancar. Mientras la página se monta devolvemos el tema del portal; una vez
+     asentada, cualquier cambio ya es cosa de quien lee, así que lo anotamos. */
+  new MutationObserver(function () {
+    var valor = raiz.getAttribute('data-theme');
+    /* El interruptor de Català cicla claro -> oscuro -> tema del sistema. Ese
+       tercer paso aquí no pinta nada, así que lo tratamos como un cambio más:
+       el sitio entero funciona con dos temas y uno solo guardado. */
+    if (valor === '' || valor === null) {
+      if (asentado) { quiero = !quiero; guardar(quiero); }
+      aplicar(quiero);
+      return;
+    }
+    var ahora = valor === 'dark';
+    if (ahora === quiero) { raiz.classList.toggle('dark', ahora); return; }
+    if (!asentado) { aplicar(quiero); return; }
+    quiero = ahora;
+    raiz.classList.toggle('dark', ahora);
+    guardar(ahora);
+  }).observe(raiz, { attributes: true, attributeFilter: ['data-theme'] });
+
+  document.addEventListener('DOMContentLoaded', function () { aplicar(quiero); });
+  window.addEventListener('load', function () {
+    aplicar(quiero);
+    setTimeout(function () { asentado = true; }, 150);
+  });
+
+  // Sin preferencia guardada seguimos al sistema
+  try {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+      if (!guardado()) { quiero = e.matches; aplicar(quiero); }
+    });
+  } catch (e) {}
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- fondo ---
+    var capas = document.createElement('div');
+    capas.innerHTML = '<div class="pz-aurora" aria-hidden="true"></div>' +
+                      '<div class="pz-trama" aria-hidden="true"></div>' +
+                      '<canvas class="pz-ondas" aria-hidden="true"></canvas>';
+    while (capas.firstChild) document.body.appendChild(capas.firstChild);
+
+    // --- pastilla de controles ---
+    var mando = document.createElement('div');
+    mando.className = 'pz-mando';
+    mando.innerHTML =
+      '<a href="index.html" title="Volver al portal">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>' +
+        '<span>Portal</span></a>' +
+      '<button type="button" id="pzTema" aria-label="Cambiar entre claro y oscuro">' +
+        '<svg class="pz-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>' +
+        '<svg class="pz-luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>' +
+      '</button>';
+    document.body.appendChild(mando);
+    mando.querySelector('#pzTema').addEventListener('click', function () {
+      quiero = raiz.getAttribute('data-theme') !== 'dark';
+      aplicar(quiero);
+      guardar(quiero);
+      if (quieto) pintar();
+    });
+
+    // --- ondas ---
+    var lienzo = document.querySelector('.pz-ondas'), ctx = lienzo.getContext('2d');
+    var ONDAS = [
+        { c:[ 10,140,150], y:0.22, a:24, k:0.0055, w:-0.62, f:0.0, par:.08 },
+        { c:[ 16,163,127], y:0.38, a:21, k:0.0074, w: 0.85, f:1.1, par:.06 },
+        { c:[ 34,175,110], y:0.54, a:19, k:0.0096, w:-1.10, f:2.3, par:.05 },
+        { c:[ 20,168,184], y:0.70, a:22, k:0.0065, w: 1.35, f:0.6, par:.04 },
+        { c:[ 60,190,140], y:0.86, a:17, k:0.0120, w:-0.80, f:3.0, par:.03 }
+    ];
+    ONDAS.forEach(function (o, i) {
+      o.sig = ONDAS[(i + 1) % ONDAS.length].c;
+      o.burbujas = [];
+      for (var j = 0; j < 4; j++) o.burbujas.push({
+        x0: (j * 227 + i * 91) % 1000 / 1000, v: 9 + ((i * 3 + j * 7) % 11),
+        r: 1.3 + ((i + j) % 4) * 0.6, d: j * 1.7 + i * 0.9 });
+    });
+    var rgba = function (c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; };
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+
+    function ajustar() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      lienzo.width = lienzo.clientWidth * dpr; lienzo.height = lienzo.clientHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    var t0 = performance.now(), raf = 0;
+
+    function altura(o, x, t, H, desp) {
+      var amp = o.a * (1 + 0.22 * Math.sin(t * 0.37 + o.f));
+      return H * o.y - desp * o.par
+           + Math.sin(x * o.k + t * o.w + o.f) * amp
+           + Math.sin(x * o.k * 2.3 - t * o.w * 0.7 + o.f) * amp * 0.28
+           + Math.sin(x * o.k * 3.7 + t * o.w * 1.3) * amp * 0.12;
+    }
+    function pintar() {
+      var W = lienzo.clientWidth, H = lienzo.clientHeight;
+      var t = quieto ? 0 : (performance.now() - t0) / 1000;
+      var os = raiz.getAttribute('data-theme') === 'dark';
+      var alfa = os ? .24 : .20, linea = os ? .62 : .46, halo = os ? .14 : .09;
+      var desp = Math.min(window.scrollY || 0, 400);
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < ONDAS.length; i++) {
+        var o = ONDAS[i], base = H * o.y - desp * o.par;
+        ctx.beginPath();
+        for (var x = 0; x <= W + 6; x += 6) {
+          var y = altura(o, x, t, H, desp);
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = rgba(o.c, halo); ctx.lineWidth = 7; ctx.stroke();
+        var gl = ctx.createLinearGradient(0, 0, W, 0);
+        gl.addColorStop(0, rgba(o.c, linea)); gl.addColorStop(1, rgba(o.sig, linea * .85));
+        ctx.strokeStyle = gl; ctx.lineWidth = 1.5; ctx.stroke();
+        var hondo = base + H * 0.12, clave = (os ? 'o' : 'c') + Math.round(base) + '|' + Math.round(H);
+        if (o._gk !== clave) {
+          var g2 = ctx.createLinearGradient(0, base - o.a, 0, hondo);
+          g2.addColorStop(0, rgba(o.c, alfa)); g2.addColorStop(1, rgba(o.c, 0));
+          o._g = g2; o._gk = clave;
+        }
+        ctx.lineTo(W, hondo); ctx.lineTo(0, hondo); ctx.closePath();
+        ctx.fillStyle = o._g; ctx.fill();
+        for (var j = 0; j < o.burbujas.length; j++) {
+          var b = o.burbujas[j];
+          var bx = (b.x0 * W + t * b.v) % (W + 60) - 30;
+          var by = altura(o, bx, t, H, desp) - 6 - Math.sin(t * 1.3 + b.d) * 5;
+          ctx.beginPath(); ctx.arc(bx, by, b.r, 0, 6.283);
+          ctx.fillStyle = rgba(o.c, (os ? .55 : .40) * (0.55 + 0.45 * Math.sin(t * 0.9 + b.d * 2.1)));
+          ctx.fill();
+        }
+      }
+      if (!quieto) raf = requestAnimationFrame(pintar);
+    }
+    ajustar(); pintar();
+    window.addEventListener('resize', function () { ajustar(); if (quieto) pintar(); });
+    window.addEventListener('scroll', function () { if (quieto) pintar(); }, { passive: true });
+    document.addEventListener('visibilitychange', function () {
+      if (quieto) return;
+      cancelAnimationFrame(raf);
+      if (!document.hidden) raf = requestAnimationFrame(pintar);
+    });
+  });
+})();
+</script>
+<!-- ===== estilo del portal: fin ===== -->
 </head>
 <body>
 <div class="velo" id="velo"></div>
@@ -2428,9 +2696,10 @@ function heroOnda(){
   function dib(){
     var W=c.clientWidth,H=c.clientHeight,t=reduce?0:(performance.now()-t0)/1000;
     ctx.clearRect(0,0,W,H);
-    var ondas=[{a:26,k:0.011,w:0.7,y:0.62,col:"rgba(43,76,224,.16)"},
-               {a:18,k:0.017,w:-1.0,y:0.72,col:"rgba(233,147,11,.20)"},
-               {a:34,k:0.007,w:0.45,y:0.82,col:"rgba(20,32,63,.10)"}];
+    /* Los colores de la asignatura en el portal: verdes y cianes. */
+    var ondas=[{a:26,k:0.011,w:0.7,y:0.62,col:"rgba(16,163,127,.17)"},
+               {a:18,k:0.017,w:-1.0,y:0.72,col:"rgba(20,168,184,.18)"},
+               {a:34,k:0.007,w:0.45,y:0.82,col:"rgba(34,175,110,.12)"}];
     ondas.forEach(function(o){
       ctx.beginPath();ctx.moveTo(0,H);
       for(var x=0;x<=W;x+=4)ctx.lineTo(x,H*o.y+Math.sin(x*o.k+t*o.w)*o.a);
