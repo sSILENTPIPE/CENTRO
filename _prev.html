@@ -55,21 +55,16 @@
     transition:background-color .45s ease, color .45s ease;
   }
 
-  /* ===================== FONDO =====================
-     Tres halos de color como degradados fijos. Antes eran divs con
-     filter:blur(90px) y animación, y repintar ese desenfoque en cada
-     fotograma se comía la tasa de refresco entera. */
-  .aurora{position:fixed;inset:0;z-index:-3;pointer-events:none;
-    background:
-      radial-gradient(46rem 34rem at 6% -8%,  rgba(122,162,247,.42), rgba(122,162,247,0) 70%),
-      radial-gradient(40rem 30rem at 97% -6%, rgba(196,165,245,.42), rgba(196,165,245,0) 70%),
-      radial-gradient(44rem 32rem at 28% 112%, rgba(126,211,178,.34), rgba(126,211,178,0) 70%);
-    transition:opacity .45s ease}
-  :root.dark .aurora{
-    background:
-      radial-gradient(46rem 34rem at 6% -8%,  rgba(96,132,214,.30), rgba(96,132,214,0) 70%),
-      radial-gradient(40rem 30rem at 97% -6%, rgba(150,120,214,.30), rgba(150,120,214,0) 70%),
-      radial-gradient(44rem 32rem at 28% 112%, rgba(64,168,132,.24), rgba(64,168,132,0) 70%)}
+  /* ===================== FONDO ===================== */
+  .aurora{position:fixed;inset:0;z-index:-3;overflow:hidden;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.24;will-change:transform}
+  :root.dark .blob{opacity:.22;filter:blur(110px)}
+  .b1{width:34rem;height:34rem;top:-14rem;left:-10rem;background:#7AA2F7;animation:flota1 11.8s ease-in-out infinite alternate}
+  .b2{width:30rem;height:30rem;top:-6rem;right:-10rem;background:#C4A5F5;animation:flota2 14.5s ease-in-out infinite alternate}
+  .b3{width:32rem;height:32rem;bottom:-16rem;left:22%;background:#7ED3B2;animation:flota3 13.2s ease-in-out infinite alternate}
+  @keyframes flota1{to{transform:translate3d(7rem,4rem,0) scale(1.12)}}
+  @keyframes flota2{to{transform:translate3d(-6rem,5rem,0) scale(.92)}}
+  @keyframes flota3{to{transform:translate3d(4rem,-5rem,0) scale(1.08)}}
 
   /* ===================== ONDAS ===================== */
   .ondas{position:fixed;left:0;right:0;bottom:0;width:100%;height:68vh;min-height:340px;
@@ -168,7 +163,9 @@
 <body class="min-h-screen font-sans antialiased">
 
   <!-- Fondo -->
-  <div class="aurora" aria-hidden="true"></div>
+  <div class="aurora" aria-hidden="true">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  </div>
   <canvas class="ondas" id="ondas" aria-hidden="true"></canvas>
 
   <div class="trama" aria-hidden="true"></div>
@@ -366,125 +363,65 @@
       }
 
       /* ============ ONDAS DEL FONDO ============
-         Siete senoides, una por color del arcoíris. Cada una lleva tres
-         armónicos, respira de amplitud, arrastra burbujas, se desplaza con
-         el scroll a su propio ritmo y se levanta al pasar el cursor. */
+         Senoides rellenas, una por color del arcoíris. Cada una con su
+         amplitud, su longitud de onda, su velocidad y su desfase, y las
+         lentas debajo, así el conjunto no se repite a ojo. */
       var lienzo = document.getElementById('ondas');
       var ctx = lienzo.getContext('2d');
 
       var ONDAS = [
-        { c:[139, 92,246], y:.17, a:26, k:.0052, w:-0.62, f:0.0, par:.10 },  // violeta
-        { c:[ 59,110,224], y:.29, a:22, k:.0071, w: 0.85, f:1.1, par:.08 },  // azul
-        { c:[ 20,168,184], y:.40, a:19, k:.0094, w:-1.10, f:2.3, par:.06 },  // cian
-        { c:[ 34,175,110], y:.52, a:23, k:.0063, w: 1.35, f:0.6, par:.05 },  // verde
-        { c:[233,176, 18], y:.64, a:18, k:.0118, w:-1.55, f:3.0, par:.04 },  // amarillo
-        { c:[240,124, 32], y:.76, a:21, k:.0082, w: 1.05, f:1.8, par:.03 },  // naranja
-        { c:[226, 64, 72], y:.88, a:16, k:.0135, w:-0.78, f:2.7, par:.02 }   // rojo
+        { c:'139 92 246', y:.17, a:26, k:.0052, w:-0.62, f:0.0 },  // violeta
+        { c:'59 110 224', y:.29, a:22, k:.0071, w: 0.85, f:1.1 },  // azul
+        { c:'20 168 184', y:.40, a:19, k:.0094, w:-1.10, f:2.3 },  // cian
+        { c:'34 175 110', y:.52, a:23, k:.0063, w: 1.35, f:0.6 },  // verde
+        { c:'233 176 18', y:.64, a:18, k:.0118, w:-1.55, f:3.0 },  // amarillo
+        { c:'240 124 32', y:.76, a:21, k:.0082, w: 1.05, f:1.8 },  // naranja
+        { c:'226 64  72', y:.88, a:16, k:.0135, w:-0.78, f:2.7 }   // rojo
       ];
 
-      // Burbujas: unas cuantas por onda, cada una con su tamaño y su deriva
-      ONDAS.forEach(function (o, i) {
-        o.sig = ONDAS[(i + 1) % ONDAS.length].c;   // color vecino, para el degradado de la cresta
-        o.burbujas = [];
-        for (var j = 0; j < 5; j++) {
-          o.burbujas.push({
-            x0: (j * 227 + i * 91) % 1000 / 1000,  // repartidas sin usar azar
-            v: 9 + ((i * 3 + j * 7) % 11),          // px/s
-            r: 1.4 + ((i + j) % 4) * 0.7,
-            d: (j * 1.7 + i * 0.9)                  // desfase del bamboleo
-          });
-        }
-      });
-
-      var rgb  = function (c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; };
-      var ptr  = { x: -1e4, y: 0, ax: -1e4 };       // cursor: destino y posición suavizada
-
       function ajustar() {
-        // el fondo es difuso: por encima de 2x no se nota y cuesta el doble
-        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var dpr = window.devicePixelRatio || 1;
         lienzo.width  = lienzo.clientWidth  * dpr;
         lienzo.height = lienzo.clientHeight * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
-      ctx.lineJoin = 'round';
-      ctx.lineCap = 'round';
       var t0 = performance.now(), raf = 0;
-
-      // Altura de una onda en un punto: tres armónicos + respiración + cursor + scroll
-      function altura(o, x, t, H, desp) {
-        var amp = o.a * (1 + 0.22 * Math.sin(t * 0.37 + o.f));
-        var y = H * o.y - desp * o.par
-              + Math.sin(x * o.k + t * o.w + o.f) * amp
-              + Math.sin(x * o.k * 2.3 - t * o.w * 0.7 + o.f) * amp * 0.28
-              + Math.sin(x * o.k * 3.7 + t * o.w * 1.3) * amp * 0.12;
-        if (ptr.ax > -9e3) {                        // el cursor levanta la onda a su paso
-          var d = (x - ptr.ax) / 150;
-          y -= Math.exp(-d * d) * 16;
-        }
-        return y;
-      }
 
       function dibujar() {
         var W = lienzo.clientWidth, H = lienzo.clientHeight;
         var t = quieto ? 0 : (performance.now() - t0) / 1000;
         var oscuro = raiz.classList.contains('dark');
-        var alfa   = oscuro ? .26 : .24;
-        var linea  = oscuro ? .70 : .58;
-        var halo   = oscuro ? .16 : .10;
-        var desp   = Math.min(window.scrollY || 0, 400);   // parallax, con tope
-
-        ptr.ax += (ptr.x - ptr.ax) * 0.08;                 // el cursor llega suave
+        var alfa  = oscuro ? .26 : .24;   // color justo debajo de la cresta
+        var linea = oscuro ? .60 : .52;   // el trazo de la cresta
 
         ctx.clearRect(0, 0, W, H);
 
         for (var i = 0; i < ONDAS.length; i++) {
-          var o = ONDAS[i], base = H * o.y - desp * o.par;
+          var o = ONDAS[i], base = H * o.y;
 
+          // La curva: dos senos de distinta frecuencia, para que la cresta no salga plana
           ctx.beginPath();
-          for (var x = 0; x <= W + 6; x += 6) {
-            var y = altura(o, x, t, H, desp);
+          for (var x = 0; x <= W; x += 5) {
+            var y = base
+                  + Math.sin(x * o.k + t * o.w + o.f) * o.a
+                  + Math.sin(x * o.k * 2.3 - t * o.w * 0.7) * (o.a * 0.28);
             if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
           }
 
-          // 1. Halo: el mismo trazo, gordo y translúcido (sale más barato que un shadowBlur)
-          ctx.strokeStyle = rgb(o.c, halo);
-          ctx.lineWidth = 7;
-          ctx.stroke();
-
-          // 2. Cresta: de su color al del vecino del arcoíris, para que el espectro fluya
-          var gl = ctx.createLinearGradient(0, 0, W, 0);
-          gl.addColorStop(0, rgb(o.c, linea));
-          gl.addColorStop(1, rgb(o.sig, linea * 0.85));
-          ctx.strokeStyle = gl;
+          // Trazo fino de la cresta
+          ctx.strokeStyle = 'rgb(' + o.c + ' / ' + linea + ')';
           ctx.lineWidth = 1.6;
           ctx.stroke();
 
-          // 3. Relleno en banda: se apaga antes de la cinta siguiente y no pinta
-          //    el resto del lienzo, que era transparente y costaba igual
-          var hondo = base + H * 0.11;
-          var clave = (oscuro ? 'o' : 'c') + '|' + Math.round(base) + '|' + Math.round(H);
-          if (o._gk !== clave) {
-            var g = ctx.createLinearGradient(0, base - o.a, 0, hondo);
-            g.addColorStop(0, rgb(o.c, alfa));
-            g.addColorStop(1, rgb(o.c, 0));
-            o._g = g; o._gk = clave;
-          }
-          ctx.lineTo(W, hondo); ctx.lineTo(0, hondo); ctx.closePath();
-          ctx.fillStyle = o._g;
+          // Relleno que se apaga hacia abajo: así siete colores no se suman en un barrizal
+          // el degradado muere antes de llegar a la cinta siguiente: nada se apelmaza
+          var g = ctx.createLinearGradient(0, base - o.a, 0, base + H * 0.11);
+          g.addColorStop(0,  'rgb(' + o.c + ' / ' + alfa + ')');
+          g.addColorStop(1,  'rgb(' + o.c + ' / 0)');
+          ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+          ctx.fillStyle = g;
           ctx.fill();
-
-          // 4. Burbujas cabalgando la cresta
-          for (var j = 0; j < o.burbujas.length; j++) {
-            var b = o.burbujas[j];
-            var bx = (b.x0 * W + t * b.v) % (W + 60) - 30;
-            var by = altura(o, bx, t, H, desp) - 6 - Math.sin(t * 1.3 + b.d) * 5;
-            var brillo = 0.55 + 0.45 * Math.sin(t * 0.9 + b.d * 2.1);
-            ctx.beginPath();
-            ctx.arc(bx, by, b.r, 0, 6.283);
-            ctx.fillStyle = rgb(o.c, (oscuro ? .62 : .48) * brillo);
-            ctx.fill();
-          }
         }
         if (!quieto) raf = requestAnimationFrame(dibujar);
       }
@@ -501,19 +438,8 @@
         if (!document.hidden) raf = requestAnimationFrame(dibujar);
       });
 
-      // El cursor levanta las ondas por donde pasa
-      if (fino && !quieto) {
-        window.addEventListener('pointermove', function (e) {
-          var r = lienzo.getBoundingClientRect();
-          ptr.x = e.clientX - r.left;
-          if (ptr.ax < -9e3) ptr.ax = ptr.x;
-        });
-        window.addEventListener('pointerleave', function () { ptr.x = -1e4; ptr.ax = -1e4; });
-      }
-
-      // Al cambiar de tema o al hacer scroll, repintar ya si están congeladas
+      // Al cambiar de tema, repintar ya si están congeladas
       boton.addEventListener('click', function () { if (quieto) dibujar(); });
-      window.addEventListener('scroll', function () { if (quieto) dibujar(); }, { passive: true });
     })();
   </script>
 
