@@ -56,7 +56,7 @@
   }
 
   /* ===================== FONDO ===================== */
-  .aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+  .aurora{position:fixed;inset:0;z-index:-3;overflow:hidden;pointer-events:none}
   .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.32;will-change:transform}
   :root.dark .blob{opacity:.30;filter:blur(110px)}
   .b1{width:34rem;height:34rem;top:-14rem;left:-10rem;background:#7AA2F7;animation:flota1 26s ease-in-out infinite alternate}
@@ -65,6 +65,29 @@
   @keyframes flota1{to{transform:translate3d(7rem,4rem,0) scale(1.12)}}
   @keyframes flota2{to{transform:translate3d(-6rem,5rem,0) scale(.92)}}
   @keyframes flota3{to{transform:translate3d(4rem,-5rem,0) scale(1.08)}}
+
+  /* ===================== FIGURAS EN MOVIMIENTO ===================== */
+  .objetos{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+  .obj{position:absolute;width:var(--s);height:var(--s);color:rgb(var(--a));opacity:.34;
+    will-change:transform;
+    animation:var(--anim,flotaA) var(--t,44s) ease-in-out infinite alternate;
+    animation-delay:var(--r,0s)}
+  :root.dark .obj{opacity:.26}
+  .obj svg{display:block;width:100%;height:100%}
+  @keyframes flotaA{from{transform:translate3d(0,0,0) rotate(0deg)}
+                    to{transform:translate3d(2.4rem,-3.6rem,0) rotate(24deg)}}
+  @keyframes flotaB{from{transform:translate3d(0,0,0) rotate(0deg)}
+                    to{transform:translate3d(-3.2rem,2.8rem,0) rotate(-20deg)}}
+  @keyframes flotaC{from{transform:translate3d(0,0,0) rotate(-8deg)}
+                    to{transform:translate3d(1.6rem,3.4rem,0) rotate(14deg)}}
+  /* en el móvil dejamos tres, más pequeñas y pegadas a los bordes */
+  @media (max-width:640px){
+    .obj{display:none}
+    .obj.movil{display:block;width:calc(var(--s) * .62);height:calc(var(--s) * .62)}
+    .obj.m1{top:7%;left:auto;right:-5%}
+    .obj.m2{top:47%;left:-6%;right:auto}
+    .obj.m3{top:82%;left:auto;right:-4%}
+  }
 
   /* Trama de puntos que da profundidad sin hacer ruido */
   .trama{position:fixed;inset:0;z-index:-1;pointer-events:none;
@@ -152,6 +175,7 @@
     *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
       transition-duration:.01ms !important}
     .card:hover,.card:focus-visible{transform:none}
+    .obj{opacity:.22}
   }
 </style>
 </head>
@@ -162,6 +186,33 @@
   <div class="aurora" aria-hidden="true">
     <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
   </div>
+  <div class="objetos" aria-hidden="true">
+    <span class="obj" style="--a:59 130 246;top:11%;left:5%;--s:86px;--t:46s;--anim:flotaA">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"><circle cx="50" cy="50" r="46"/></svg>
+    </span>
+    <span class="obj movil m1" style="--a:147 94 232;top:6%;right:9%;--s:104px;--t:58s;--r:-6s;--anim:flotaB">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="88" height="88" rx="16"/></svg>
+    </span>
+    <span class="obj" style="--a:16 163 127;top:30%;right:20%;--s:66px;--t:40s;--r:-14s;--anim:flotaC">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M50 8 94 88H6Z"/></svg>
+    </span>
+    <span class="obj movil m2" style="--a:217 145 32;top:46%;left:5%;--s:58px;--t:52s;--r:-22s;--anim:flotaB">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M50 12v76M12 50h76"/></svg>
+    </span>
+    <span class="obj" style="--a:239 68 68;top:62%;right:8%;--s:78px;--t:49s;--r:-9s;--anim:flotaA">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M50 6 89 28v44L50 94 11 72V28Z"/></svg>
+    </span>
+    <span class="obj" style="--a:59 130 246;top:78%;left:14%;--s:52px;--t:43s;--r:-30s;--anim:flotaC">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="50" cy="50" r="44"/><circle cx="50" cy="50" r="16"/></svg>
+    </span>
+    <span class="obj movil m3" style="--a:16 163 127;top:86%;right:24%;--s:70px;--t:55s;--r:-17s;--anim:flotaB">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 70c14-44 28-44 42 0s28 44 42 0"/></svg>
+    </span>
+    <span class="obj" style="--a:147 94 232;top:92%;left:42%;--s:46px;--t:38s;--r:-25s;--anim:flotaA">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 20 80 80M80 20 20 80"/></svg>
+    </span>
+  </div>
+
   <div class="trama" aria-hidden="true"></div>
 
   <!-- Cabecera -->
