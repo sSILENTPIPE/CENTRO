@@ -57,8 +57,8 @@
 
   /* ===================== FONDO ===================== */
   .aurora{position:fixed;inset:0;z-index:-3;overflow:hidden;pointer-events:none}
-  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.32;will-change:transform}
-  :root.dark .blob{opacity:.30;filter:blur(110px)}
+  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.24;will-change:transform}
+  :root.dark .blob{opacity:.22;filter:blur(110px)}
   .b1{width:34rem;height:34rem;top:-14rem;left:-10rem;background:#7AA2F7;animation:flota1 11.8s ease-in-out infinite alternate}
   .b2{width:30rem;height:30rem;top:-6rem;right:-10rem;background:#C4A5F5;animation:flota2 14.5s ease-in-out infinite alternate}
   .b3{width:32rem;height:32rem;bottom:-16rem;left:22%;background:#7ED3B2;animation:flota3 13.2s ease-in-out infinite alternate}
@@ -66,31 +66,9 @@
   @keyframes flota2{to{transform:translate3d(-6rem,5rem,0) scale(.92)}}
   @keyframes flota3{to{transform:translate3d(4rem,-5rem,0) scale(1.08)}}
 
-  /* ===================== FIGURAS EN MOVIMIENTO ===================== */
-  .objetos{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
-  .obj{position:absolute;width:var(--s);height:var(--s);color:rgb(var(--a));opacity:.34;
-    will-change:transform;
-    animation:var(--anim,flotaA) var(--t,44s) ease-in-out infinite alternate;
-    animation-delay:var(--r,0s)}
-  :root.dark .obj{opacity:.26}
-  .obj svg{display:block;width:100%;height:100%;
-    animation:gira var(--g,90s) linear infinite;animation-direction:var(--rev,normal)}
-  @keyframes gira{to{transform:rotate(360deg)}}
-  /* la deriva mueve y respira; girar y cambiar de forma es cosa del svg */
-  @keyframes flotaA{from{transform:translate3d(0,0,0) scale(1)}
-                    to{transform:translate3d(2.4rem,-3.6rem,0) scale(1.14)}}
-  @keyframes flotaB{from{transform:translate3d(0,0,0) scale(1.08)}
-                    to{transform:translate3d(-3.2rem,2.8rem,0) scale(.92)}}
-  @keyframes flotaC{from{transform:translate3d(0,0,0) scale(.94)}
-                    to{transform:translate3d(1.6rem,3.4rem,0) scale(1.1)}}
-  /* en el móvil dejamos tres, más pequeñas y pegadas a los bordes */
-  @media (max-width:640px){
-    .obj{display:none}
-    .obj.movil{display:block;width:calc(var(--s) * .62);height:calc(var(--s) * .62)}
-    .obj.m1{top:7%;left:auto;right:-5%}
-    .obj.m2{top:47%;left:-6%;right:auto}
-    .obj.m3{top:82%;left:auto;right:-4%}
-  }
+  /* ===================== ONDAS ===================== */
+  .ondas{position:fixed;left:0;right:0;bottom:0;width:100%;height:68vh;min-height:340px;
+    z-index:-2;pointer-events:none;display:block}
 
   /* Trama de puntos que da profundidad sin hacer ruido */
   .trama{position:fixed;inset:0;z-index:-1;pointer-events:none;
@@ -178,7 +156,6 @@
     *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
       transition-duration:.01ms !important}
     .card:hover,.card:focus-visible{transform:none}
-    .obj{opacity:.22}
   }
 </style>
 </head>
@@ -189,32 +166,7 @@
   <div class="aurora" aria-hidden="true">
     <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
   </div>
-  <div class="objetos" aria-hidden="true">
-    <span class="obj" style="--a:59 130 246;top:11%;left:5%;--s:92px;--t:13.5s;--r:0s;--anim:flotaA;--g:25.3s">
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M50.0 8.0L59.1 23.8L68.2 39.5L77.3 55.2L86.4 71.0L68.2 71.0L50.0 71.0L31.8 71.0L13.6 71.0L22.7 55.2L31.8 39.5L40.9 23.8Z" stroke-width="2"><animate attributeName="d" dur="10s" begin="-0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M50.0 8.0L59.1 23.8L68.2 39.5L77.3 55.2L86.4 71.0L68.2 71.0L50.0 71.0L31.8 71.0L13.6 71.0L22.7 55.2L31.8 39.5L40.9 23.8Z;M79.7 20.3L79.7 40.1L79.7 59.9L79.7 79.7L59.9 79.7L40.1 79.7L20.3 79.7L20.3 59.9L20.3 40.1L20.3 20.3L40.1 20.3L59.9 20.3Z;M71.0 13.6L81.5 31.8L92.0 50.0L81.5 68.2L71.0 86.4L50.0 86.4L29.0 86.4L18.5 68.2L8.0 50.0L18.5 31.8L29.0 13.6L50.0 13.6Z;M60.9 9.4L79.7 20.3L90.6 39.1L90.6 60.9L79.7 79.7L60.9 90.6L39.1 90.6L20.3 79.7L9.4 60.9L9.4 39.1L20.3 20.3L39.1 9.4Z;M50.0 8.0L59.1 23.8L68.2 39.5L77.3 55.2L86.4 71.0L68.2 71.0L50.0 71.0L31.8 71.0L13.6 71.0L22.7 55.2L31.8 39.5L40.9 23.8Z"/></path></svg>
-    </span>
-    <span class="obj movil m1" style="--a:147 94 232;top:6%;right:9%;--s:112px;--t:17.1s;--r:-1.8s;--anim:flotaB;--g:35.3s;--rev:reverse">
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M79.7 20.3L79.7 40.1L79.7 59.9L79.7 79.7L59.9 79.7L40.1 79.7L20.3 79.7L20.3 59.9L20.3 40.1L20.3 20.3L40.1 20.3L59.9 20.3Z" stroke-width="1.9"><animate attributeName="d" dur="12.4s" begin="-3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M60.9 9.4L79.7 20.3L90.6 39.1L90.6 60.9L79.7 79.7L60.9 90.6L39.1 90.6L20.3 79.7L9.4 60.9L9.4 39.1L20.3 20.3L39.1 9.4Z;M71.0 13.6L81.5 31.8L92.0 50.0L81.5 68.2L71.0 86.4L50.0 86.4L29.0 86.4L18.5 68.2L8.0 50.0L18.5 31.8L29.0 13.6L50.0 13.6Z;M79.7 20.3L79.7 40.1L79.7 59.9L79.7 79.7L59.9 79.7L40.1 79.7L20.3 79.7L20.3 59.9L20.3 40.1L20.3 20.3L40.1 20.3L59.9 20.3Z;M50.0 8.0L59.1 23.8L68.2 39.5L77.3 55.2L86.4 71.0L68.2 71.0L50.0 71.0L31.8 71.0L13.6 71.0L22.7 55.2L31.8 39.5L40.9 23.8Z;M60.9 9.4L79.7 20.3L90.6 39.1L90.6 60.9L79.7 79.7L60.9 90.6L39.1 90.6L20.3 79.7L9.4 60.9L9.4 39.1L20.3 20.3L39.1 9.4Z"/></path><path d="M50.0 28.4C55.3 28.4 61.6 30.5 65.9 34.1C70.2 37.7 75.8 44.8 75.7 50.0C75.6 55.2 69.6 61.7 65.3 65.3C61.1 69.0 55.2 71.9 50.0 72.1C44.8 72.2 37.1 69.8 33.9 66.1C30.7 62.4 30.7 55.3 30.8 50.0C30.9 44.7 31.2 38.0 34.4 34.4C37.6 30.8 44.7 28.5 50.0 28.4Z" stroke-width="1.4" opacity=".65"><animate attributeName="d" dur="9.1s" begin="-1.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3333;0.6667;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M50.0 28.4C55.3 28.4 61.6 30.5 65.9 34.1C70.2 37.7 75.8 44.8 75.7 50.0C75.6 55.2 69.6 61.7 65.3 65.3C61.1 69.0 55.2 71.9 50.0 72.1C44.8 72.2 37.1 69.8 33.9 66.1C30.7 62.4 30.7 55.3 30.8 50.0C30.9 44.7 31.2 38.0 34.4 34.4C37.6 30.8 44.7 28.5 50.0 28.4Z;M50.0 30.1C55.1 29.6 62.8 30.0 66.7 33.3C70.6 36.6 73.4 44.3 73.6 50.0C73.8 55.7 71.7 64.5 67.7 67.7C63.8 70.9 55.3 69.9 50.0 69.2C44.7 68.6 39.3 67.1 36.1 63.9C33.0 60.7 31.1 54.6 31.1 50.0C31.1 45.4 33.0 39.5 36.2 36.2C39.3 32.8 44.9 30.6 50.0 30.1Z;M50.0 23.9C54.9 24.6 58.5 33.1 62.5 37.5C66.5 41.8 73.9 45.7 74.1 50.0C74.2 54.3 67.4 59.0 63.4 63.4C59.4 67.8 54.3 76.4 50.0 76.3C45.7 76.1 41.7 66.9 37.4 62.6C33.2 58.2 25.3 54.9 24.7 50.0C24.0 45.1 29.1 37.7 33.3 33.3C37.5 29.0 45.1 23.2 50.0 23.9Z;M50.0 28.4C55.3 28.4 61.6 30.5 65.9 34.1C70.2 37.7 75.8 44.8 75.7 50.0C75.6 55.2 69.6 61.7 65.3 65.3C61.1 69.0 55.2 71.9 50.0 72.1C44.8 72.2 37.1 69.8 33.9 66.1C30.7 62.4 30.7 55.3 30.8 50.0C30.9 44.7 31.2 38.0 34.4 34.4C37.6 30.8 44.7 28.5 50.0 28.4Z"/></path></svg>
-    </span>
-    <span class="obj" style="--a:16 163 127;top:30%;right:20%;--s:70px;--t:11.8s;--r:-4.1s;--anim:flotaC;--g:21.8s">
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M50.0 14.2C60.1 14.7 72.5 15.2 78.8 21.2C85.1 27.2 87.8 40.3 87.9 50.0C88.0 59.7 85.8 72.5 79.5 79.5C73.1 86.5 58.8 93.0 50.0 92.0C41.2 91.0 32.0 80.4 26.6 73.4C21.3 66.4 19.2 59.2 17.8 50.0C16.3 40.8 12.5 23.9 17.9 17.9C23.3 11.9 39.9 13.6 50.0 14.2Z" stroke-width="2.3"><animate attributeName="d" dur="7.6s" begin="-2.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3333;0.6667;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M50.0 14.2C60.1 14.7 72.5 15.2 78.8 21.2C85.1 27.2 87.8 40.3 87.9 50.0C88.0 59.7 85.8 72.5 79.5 79.5C73.1 86.5 58.8 93.0 50.0 92.0C41.2 91.0 32.0 80.4 26.6 73.4C21.3 66.4 19.2 59.2 17.8 50.0C16.3 40.8 12.5 23.9 17.9 17.9C23.3 11.9 39.9 13.6 50.0 14.2Z;M50.0 14.2C59.2 15.5 67.4 20.2 73.8 26.2C80.2 32.2 88.2 42.0 88.3 50.0C88.4 58.0 80.8 68.9 74.4 74.4C68.0 79.9 58.6 82.6 50.0 83.1C41.4 83.5 30.6 82.7 22.8 77.2C15.0 71.7 4.1 59.8 3.3 50.0C2.6 40.2 10.5 24.3 18.3 18.3C26.1 12.4 40.8 12.9 50.0 14.2Z;M50.0 8.0C59.8 7.5 73.6 12.0 81.0 19.0C88.5 26.0 94.3 39.3 94.7 50.0C95.1 60.7 90.7 76.0 83.3 83.3C75.8 90.6 61.1 93.9 50.0 93.8C38.9 93.8 22.3 90.4 16.9 83.1C11.5 75.8 16.7 60.2 17.5 50.0C18.4 39.8 16.7 29.1 22.1 22.1C27.5 15.1 40.2 8.6 50.0 8.0Z;M50.0 14.2C60.1 14.7 72.5 15.2 78.8 21.2C85.1 27.2 87.8 40.3 87.9 50.0C88.0 59.7 85.8 72.5 79.5 79.5C73.1 86.5 58.8 93.0 50.0 92.0C41.2 91.0 32.0 80.4 26.6 73.4C21.3 66.4 19.2 59.2 17.8 50.0C16.3 40.8 12.5 23.9 17.9 17.9C23.3 11.9 39.9 13.6 50.0 14.2Z"/></path></svg>
-    </span>
-    <span class="obj movil m2" style="--a:217 145 32;top:46%;left:5%;--s:64px;--t:15.3s;--r:-6.5s;--anim:flotaB;--g:28.2s;--rev:reverse">
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M79.7 20.3L79.7 40.1L79.7 59.9L79.7 79.7L59.9 79.7L40.1 79.7L20.3 79.7L20.3 59.9L20.3 40.1L20.3 20.3L40.1 20.3L59.9 20.3Z" stroke-width="2.4"><animate attributeName="d" dur="10.9s" begin="-4.1s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M79.7 20.3L79.7 40.1L79.7 59.9L79.7 79.7L59.9 79.7L40.1 79.7L20.3 79.7L20.3 59.9L20.3 40.1L20.3 20.3L40.1 20.3L59.9 20.3Z;M50.0 8.0L59.1 23.8L68.2 39.5L77.3 55.2L86.4 71.0L68.2 71.0L50.0 71.0L31.8 71.0L13.6 71.0L22.7 55.2L31.8 39.5L40.9 23.8Z;M60.9 9.4L79.7 20.3L90.6 39.1L90.6 60.9L79.7 79.7L60.9 90.6L39.1 90.6L20.3 79.7L9.4 60.9L9.4 39.1L20.3 20.3L39.1 9.4Z;M71.0 13.6L81.5 31.8L92.0 50.0L81.5 68.2L71.0 86.4L50.0 86.4L29.0 86.4L18.5 68.2L8.0 50.0L18.5 31.8L29.0 13.6L50.0 13.6Z;M79.7 20.3L79.7 40.1L79.7 59.9L79.7 79.7L59.9 79.7L40.1 79.7L20.3 79.7L20.3 59.9L20.3 40.1L20.3 20.3L40.1 20.3L59.9 20.3Z"/></path></svg>
-    </span>
-    <span class="obj" style="--a:239 68 68;top:62%;right:8%;--s:84px;--t:14.4s;--r:-2.6s;--anim:flotaA;--g:31.8s">
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M71.0 13.6L81.5 31.8L92.0 50.0L81.5 68.2L71.0 86.4L50.0 86.4L29.0 86.4L18.5 68.2L8.0 50.0L18.5 31.8L29.0 13.6L50.0 13.6Z" stroke-width="2"><animate attributeName="d" dur="13.2s" begin="-5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M71.0 13.6L81.5 31.8L92.0 50.0L81.5 68.2L71.0 86.4L50.0 86.4L29.0 86.4L18.5 68.2L8.0 50.0L18.5 31.8L29.0 13.6L50.0 13.6Z;M50.0 15.4C59.8 15.0 73.4 13.8 80.4 19.6C87.5 25.3 92.6 40.3 92.2 50.0C91.8 59.7 85.1 72.1 78.0 78.0C71.0 84.0 59.9 84.9 50.0 85.5C40.1 86.0 25.9 87.5 18.4 81.6C10.9 75.7 4.5 60.0 5.1 50.0C5.6 40.0 14.1 27.3 21.6 21.6C29.1 15.8 40.2 15.7 50.0 15.4Z;M60.9 9.4L79.7 20.3L90.6 39.1L90.6 60.9L79.7 79.7L60.9 90.6L39.1 90.6L20.3 79.7L9.4 60.9L9.4 39.1L20.3 20.3L39.1 9.4Z;M50.0 6.6C60.6 6.4 76.3 10.6 82.1 17.9C87.9 25.1 84.6 39.0 84.9 50.0C85.2 61.0 89.7 78.1 83.9 83.9C78.1 89.8 60.7 85.7 50.0 85.1C39.3 84.5 25.4 86.1 19.8 80.2C14.2 74.4 16.7 60.2 16.5 50.0C16.4 39.8 13.2 26.0 18.8 18.8C24.4 11.6 39.4 6.8 50.0 6.6Z;M71.0 13.6L81.5 31.8L92.0 50.0L81.5 68.2L71.0 86.4L50.0 86.4L29.0 86.4L18.5 68.2L8.0 50.0L18.5 31.8L29.0 13.6L50.0 13.6Z"/></path></svg>
-    </span>
-    <span class="obj" style="--a:59 130 246;top:78%;left:14%;--s:58px;--t:12.6s;--r:-8.8s;--anim:flotaC;--g:20s;--rev:reverse">
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M50.0 17.0C59.4 18.2 68.0 20.0 74.5 25.5C81.0 31.0 88.1 40.7 89.2 50.0C90.3 59.3 87.7 75.3 81.1 81.1C74.6 87.0 59.3 86.2 50.0 85.1C40.7 84.0 31.6 80.3 25.5 74.5C19.4 68.7 14.6 59.4 13.4 50.0C12.2 40.6 11.9 23.5 18.0 18.0C24.1 12.5 40.6 15.8 50.0 17.0Z" stroke-width="2.2"><animate attributeName="d" dur="8.5s" begin="-1.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3333;0.6667;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M50.0 17.8C59.2 19.0 67.5 20.7 73.9 26.1C80.3 31.5 87.2 41.0 88.3 50.0C89.4 59.0 86.7 74.7 80.4 80.4C74.0 86.1 59.0 85.3 50.0 84.2C41.0 83.1 32.1 79.6 26.1 73.9C20.1 68.2 15.5 59.2 14.3 50.0C13.1 40.8 12.8 24.2 18.8 18.8C24.8 13.4 40.8 16.6 50.0 17.8Z;M50.0 16.8C58.9 17.3 68.9 19.4 75.0 25.0C81.2 30.5 85.6 40.4 86.9 50.0C88.1 59.6 89.0 76.2 82.8 82.8C76.7 89.5 60.6 90.3 50.0 89.9C39.4 89.6 24.8 87.4 19.2 80.8C13.6 74.1 16.0 59.9 16.4 50.0C16.8 40.1 16.0 27.2 21.6 21.6C27.2 16.1 41.1 16.2 50.0 16.8Z;M50.0 8.9C59.1 8.0 72.3 13.4 79.8 20.2C87.3 27.1 95.7 40.7 95.1 50.0C94.4 59.3 83.3 68.7 75.8 75.8C68.3 82.8 59.7 91.3 50.0 92.4C40.3 93.6 25.1 89.8 17.3 82.7C9.5 75.6 2.1 59.6 3.5 50.0C4.8 40.4 17.5 32.1 25.3 25.3C33.0 18.4 40.9 9.7 50.0 8.9Z;M50.0 17.8C59.2 19.0 67.5 20.7 73.9 26.1C80.3 31.5 87.2 41.0 88.3 50.0C89.4 59.0 86.7 74.7 80.4 80.4C74.0 86.1 59.0 85.3 50.0 84.2C41.0 83.1 32.1 79.6 26.1 73.9C20.1 68.2 15.5 59.2 14.3 50.0C13.1 40.8 12.8 24.2 18.8 18.8C24.8 13.4 40.8 16.6 50.0 17.8Z"/></path></svg>
-    </span>
-    <span class="obj movil m3" style="--a:16 163 127;top:86%;right:24%;--s:76px;--t:16.2s;--r:-5s;--anim:flotaB;--g:27.1s">
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M60.9 9.4L79.7 20.3L90.6 39.1L90.6 60.9L79.7 79.7L60.9 90.6L39.1 90.6L20.3 79.7L9.4 60.9L9.4 39.1L20.3 20.3L39.1 9.4Z" stroke-width="2"><animate attributeName="d" dur="11.5s" begin="-6.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M60.9 9.4L79.7 20.3L90.6 39.1L90.6 60.9L79.7 79.7L60.9 90.6L39.1 90.6L20.3 79.7L9.4 60.9L9.4 39.1L20.3 20.3L39.1 9.4Z;M79.7 20.3L79.7 40.1L79.7 59.9L79.7 79.7L59.9 79.7L40.1 79.7L20.3 79.7L20.3 59.9L20.3 40.1L20.3 20.3L40.1 20.3L59.9 20.3Z;M71.0 13.6L81.5 31.8L92.0 50.0L81.5 68.2L71.0 86.4L50.0 86.4L29.0 86.4L18.5 68.2L8.0 50.0L18.5 31.8L29.0 13.6L50.0 13.6Z;M50.0 8.0L59.1 23.8L68.2 39.5L77.3 55.2L86.4 71.0L68.2 71.0L50.0 71.0L31.8 71.0L13.6 71.0L22.7 55.2L31.8 39.5L40.9 23.8Z;M60.9 9.4L79.7 20.3L90.6 39.1L90.6 60.9L79.7 79.7L60.9 90.6L39.1 90.6L20.3 79.7L9.4 60.9L9.4 39.1L20.3 20.3L39.1 9.4Z"/></path><path d="M62.0 38.0L62.0 46.0L62.0 54.0L62.0 62.0L54.0 62.0L46.0 62.0L38.0 62.0L38.0 54.0L38.0 46.0L38.0 38.0L46.0 38.0L54.0 38.0Z" stroke-width="1.3" opacity=".6"><animate attributeName="d" dur="7.1s" begin="-0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3333;0.6667;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M62.0 38.0L62.0 46.0L62.0 54.0L62.0 62.0L54.0 62.0L46.0 62.0L38.0 62.0L38.0 54.0L38.0 46.0L38.0 38.0L46.0 38.0L54.0 38.0Z;M50.0 33.0L53.7 39.4L57.4 45.8L61.0 52.1L64.7 58.5L57.4 58.5L50.0 58.5L42.6 58.5L35.3 58.5L39.0 52.1L42.6 45.8L46.3 39.4Z;M54.4 33.6L62.0 38.0L66.4 45.6L66.4 54.4L62.0 62.0L54.4 66.4L45.6 66.4L38.0 62.0L33.6 54.4L33.6 45.6L38.0 38.0L45.6 33.6Z;M62.0 38.0L62.0 46.0L62.0 54.0L62.0 62.0L54.0 62.0L46.0 62.0L38.0 62.0L38.0 54.0L38.0 46.0L38.0 38.0L46.0 38.0L54.0 38.0Z"/></path></svg>
-    </span>
-    <span class="obj" style="--a:147 94 232;top:92%;left:42%;--s:52px;--t:11.2s;--r:-7.4s;--anim:flotaA;--g:23.5s;--rev:reverse">
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M50.0 12.9C58.5 13.1 69.0 19.2 74.6 25.4C80.2 31.6 82.5 40.5 83.8 50.0C85.0 59.5 87.8 75.4 82.1 82.1C76.5 88.8 60.3 90.6 50.0 90.2C39.7 89.8 27.0 86.4 20.3 79.7C13.7 73.0 9.6 59.3 10.2 50.0C10.7 40.7 17.1 29.9 23.7 23.7C30.3 17.5 41.5 12.6 50.0 12.9Z" stroke-width="2.3"><animate attributeName="d" dur="9.7s" begin="-3.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3333;0.6667;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M50.0 11.9C58.7 12.2 69.5 18.4 75.2 24.8C81.0 31.1 83.4 40.3 84.7 50.0C85.9 59.7 88.7 76.1 83.0 83.0C77.2 89.8 60.6 91.7 50.0 91.2C39.4 90.8 26.4 87.3 19.6 80.4C12.8 73.6 8.6 59.6 9.2 50.0C9.7 40.4 16.2 29.4 23.0 23.0C29.8 16.7 41.3 11.6 50.0 11.9Z;M50.0 7.8C57.8 7.9 66.8 20.1 72.9 27.1C79.0 34.1 86.0 42.0 86.4 50.0C86.8 58.0 81.2 67.9 75.2 75.2C69.1 82.5 59.2 92.9 50.0 93.8C40.8 94.6 27.4 87.6 19.7 80.3C12.0 73.0 2.6 59.0 3.7 50.0C4.8 41.0 18.7 33.4 26.4 26.4C34.1 19.4 42.2 7.7 50.0 7.8Z;M50.0 17.4C59.8 17.0 74.8 14.1 80.5 19.5C86.2 24.9 84.7 40.3 84.3 50.0C83.9 59.7 83.6 70.7 77.9 77.9C72.1 85.0 59.9 92.1 50.0 92.7C40.1 93.4 24.9 88.7 18.4 81.6C11.9 74.5 10.2 60.0 10.7 50.0C11.3 40.0 15.2 27.2 21.7 21.7C28.3 16.3 40.2 17.8 50.0 17.4Z;M50.0 11.9C58.7 12.2 69.5 18.4 75.2 24.8C81.0 31.1 83.4 40.3 84.7 50.0C85.9 59.7 88.7 76.1 83.0 83.0C77.2 89.8 60.6 91.7 50.0 91.2C39.4 90.8 26.4 87.3 19.6 80.4C12.8 73.6 8.6 59.6 9.2 50.0C9.7 40.4 16.2 29.4 23.0 23.0C29.8 16.7 41.3 11.6 50.0 11.9Z"/></path></svg>
-    </span>
-  </div>
+  <canvas class="ondas" id="ondas" aria-hidden="true"></canvas>
 
   <div class="trama" aria-hidden="true"></div>
 
@@ -400,13 +352,6 @@
       // El halo sigue al cursor dentro de cada tarjeta
       var fino = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
       var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      // Las animaciones CSS las apaga la hoja de estilos; el morfeo de los SVG, no
-      if (quieto) {
-        document.querySelectorAll('.objetos svg').forEach(function (g) {
-          if (g.pauseAnimations) g.pauseAnimations();
-        });
-      }
       if (fino && !quieto) {
         document.querySelectorAll('.card').forEach(function (c) {
           c.addEventListener('pointermove', function (e) {
@@ -416,6 +361,85 @@
           });
         });
       }
+
+      /* ============ ONDAS DEL FONDO ============
+         Senoides rellenas, una por color del arcoíris. Cada una con su
+         amplitud, su longitud de onda, su velocidad y su desfase, y las
+         lentas debajo, así el conjunto no se repite a ojo. */
+      var lienzo = document.getElementById('ondas');
+      var ctx = lienzo.getContext('2d');
+
+      var ONDAS = [
+        { c:'139 92 246', y:.17, a:26, k:.0052, w:-0.62, f:0.0 },  // violeta
+        { c:'59 110 224', y:.29, a:22, k:.0071, w: 0.85, f:1.1 },  // azul
+        { c:'20 168 184', y:.40, a:19, k:.0094, w:-1.10, f:2.3 },  // cian
+        { c:'34 175 110', y:.52, a:23, k:.0063, w: 1.35, f:0.6 },  // verde
+        { c:'233 176 18', y:.64, a:18, k:.0118, w:-1.55, f:3.0 },  // amarillo
+        { c:'240 124 32', y:.76, a:21, k:.0082, w: 1.05, f:1.8 },  // naranja
+        { c:'226 64  72', y:.88, a:16, k:.0135, w:-0.78, f:2.7 }   // rojo
+      ];
+
+      function ajustar() {
+        var dpr = window.devicePixelRatio || 1;
+        lienzo.width  = lienzo.clientWidth  * dpr;
+        lienzo.height = lienzo.clientHeight * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      var t0 = performance.now(), raf = 0;
+
+      function dibujar() {
+        var W = lienzo.clientWidth, H = lienzo.clientHeight;
+        var t = quieto ? 0 : (performance.now() - t0) / 1000;
+        var oscuro = raiz.classList.contains('dark');
+        var alfa  = oscuro ? .26 : .24;   // color justo debajo de la cresta
+        var linea = oscuro ? .60 : .52;   // el trazo de la cresta
+
+        ctx.clearRect(0, 0, W, H);
+
+        for (var i = 0; i < ONDAS.length; i++) {
+          var o = ONDAS[i], base = H * o.y;
+
+          // La curva: dos senos de distinta frecuencia, para que la cresta no salga plana
+          ctx.beginPath();
+          for (var x = 0; x <= W; x += 5) {
+            var y = base
+                  + Math.sin(x * o.k + t * o.w + o.f) * o.a
+                  + Math.sin(x * o.k * 2.3 - t * o.w * 0.7) * (o.a * 0.28);
+            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+
+          // Trazo fino de la cresta
+          ctx.strokeStyle = 'rgb(' + o.c + ' / ' + linea + ')';
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+
+          // Relleno que se apaga hacia abajo: así siete colores no se suman en un barrizal
+          // el degradado muere antes de llegar a la cinta siguiente: nada se apelmaza
+          var g = ctx.createLinearGradient(0, base - o.a, 0, base + H * 0.11);
+          g.addColorStop(0,  'rgb(' + o.c + ' / ' + alfa + ')');
+          g.addColorStop(1,  'rgb(' + o.c + ' / 0)');
+          ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+          ctx.fillStyle = g;
+          ctx.fill();
+        }
+        if (!quieto) raf = requestAnimationFrame(dibujar);
+      }
+
+      ajustar();
+      dibujar();
+
+      window.addEventListener('resize', function () { ajustar(); if (quieto) dibujar(); });
+
+      // Con la pestaña en segundo plano no hace falta seguir pintando
+      document.addEventListener('visibilitychange', function () {
+        if (quieto) return;
+        cancelAnimationFrame(raf);
+        if (!document.hidden) raf = requestAnimationFrame(dibujar);
+      });
+
+      // Al cambiar de tema, repintar ya si están congeladas
+      boton.addEventListener('click', function () { if (quieto) dibujar(); });
     })();
   </script>
 
