@@ -29,12 +29,19 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:20px}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
-  font-size:16.5px;line-height:1.63;-webkit-font-smoothing:antialiased}
+  font-size:16.5px;line-height:1.63;-webkit-font-smoothing:antialiased;
+  /* red de seguridad en pantallas muy estrechas: nada de balanceo lateral
+     (clip, no hidden: así no rompe el menú fijo ni la barra pegajosa) */
+  overflow-x:clip}
 
 /* ============ SIDEBAR ============ */
 .sidebar{position:fixed;top:0;left:0;width:272px;height:100vh;overflow-y:auto;
   background:var(--deep);color:#c9d4e6;padding:24px 16px 48px;z-index:40}
 .brand{padding:0 6px}
+.nav-close{display:none;position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:8px;
+  background:#22355e;border:1px solid #2c4271;color:#cfdbef;font-size:.95rem;line-height:1;cursor:pointer}
+.nav-close:hover{background:#2c4270;color:#fff}
+.nav-close:focus-visible{outline:2px solid #7fc48f;outline-offset:2px}
 .brand .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#8ba1c9}
 .brand b{display:block;font-family:var(--disp);font-weight:700;font-size:1.3rem;color:#fff;margin-top:5px;line-height:1.08}
 .brand span{display:block;font-size:.73rem;color:#7d92ba;margin-top:6px}
@@ -55,7 +62,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
 .sidebar a:hover{background:#22355e;color:#fff}
 .sidebar a.active{background:#22355e;color:#fff;border-left-color:#7fc48f}
 .sidebar a.active .n{color:#7fc48f}
-.sidebar a.done .n::after{content:"✓";color:#7fc48f}
+.sidebar a.done .n::after{content:"✓";color:#7fc48f;font-size:.8rem}
 .sidebar a.done .n{font-size:0}
 .sidebar a.hide{display:none}
 
@@ -76,13 +83,14 @@ main{max-width:800px;margin:0 auto;padding:56px 0 130px}
 .ev{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 14px;position:relative;overflow:hidden}
 .ev .pct{font-family:var(--disp);font-weight:700;font-size:1.65rem;line-height:1;color:var(--indigo)}
 .ev .lb{font-size:.79rem;color:var(--ink-soft);margin-top:5px;line-height:1.38}
-.ev .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--indigo)}
+.ev::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:3px;background:var(--line)}
+.ev .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--indigo);z-index:1}
 .ev.a .pct{color:var(--indigo)} .ev.a .bar{background:var(--indigo)}
 .ev.b .pct{color:var(--casio)} .ev.b .bar{background:var(--casio)}
 .ev.c .pct{color:var(--teal)} .ev.c .bar{background:var(--teal)}
 .ev.d .pct{color:var(--amber)} .ev.d .bar{background:var(--amber)}
 
-.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(144px,1fr));gap:7px;margin:20px 0 6px}
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:20px 0 6px}
 .legend div{font-size:.79rem;color:var(--ink-soft);padding:6px 10px;border-radius:7px;
   background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;gap:7px}
 .legend i{width:11px;height:11px;border-radius:3px;flex:none}
@@ -91,7 +99,7 @@ main{max-width:800px;margin:0 auto;padding:56px 0 130px}
 .unit{margin:64px 0 0;scroll-margin-top:18px}
 .uhead{border-top:1px solid var(--line);padding-top:20px;margin-bottom:6px}
 .ubadge{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.ubadge .num{font-family:var(--disp);font-weight:700;font-size:.82rem;background:var(--deep);color:#fff;
+.ubadge .num{font-family:var(--disp);font-weight:700;font-size:.82rem;letter-spacing:-.02em;background:var(--deep);color:#fff;
   width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex:none}
 .ubadge .blk{font-family:var(--mono);font-size:.67rem;letter-spacing:.11em;text-transform:uppercase;
   color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-ln);padding:2px 8px;border-radius:20px}
@@ -130,7 +138,7 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 .tip{border-left-color:var(--amber);background:var(--amber-bg)} .tip .bl{color:var(--amber)}
 .mcb{border-left-color:var(--mc);background:var(--mc-bg)} .mcb .bl{color:#3C6222}
 .mcb .katex{color:#1E3310}
-.blk{width:15px;height:15px;flex:none;border:1.5px solid #2E4A1B;
+.mcb .bl .blk{width:15px;height:15px;flex:none;border:1.5px solid #2E4A1B;
   background:linear-gradient(to bottom,#7FC94F 0 42%,#8B5A2B 42% 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.28)}
 .cas{border-left-color:var(--casio);background:var(--casio-bg)} .cas .bl{color:var(--casio)}
@@ -139,10 +147,17 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 
 /* ============ FORMULAS ============ */
 .katex{color:var(--ink)}
+.nowr{white-space:nowrap}
+/* la copia MathML que KaTeX deja para lectores de pantalla ensanchaba la página
+   en móviles estrechos: la reducimos a 1px sin quitarla de la accesibilidad */
+.katex-mathml{position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(1px,1px,1px,1px);clip-path:inset(50%);padding:0;border:0}
 .katex-display{margin:1em 0;overflow-x:auto;overflow-y:hidden;padding:3px 2px}
 .katex-display>.katex{font-size:1.34em}
 .formula{background:var(--amber-bg);border:1px solid var(--amber-ln);border-radius:11px;
-  padding:21px 19px 18px;margin:18px 0;text-align:center;position:relative;overflow-x:auto}
+  padding:21px 19px 18px;margin:18px 0;text-align:center;position:relative}
+/* el scroll va en la fórmula, no en la caja: así la etiqueta superior no se corta */
+.formula>.katex-display{overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
 .formula .fl{position:absolute;top:-9px;left:16px;font-family:var(--mono);font-size:.65rem;
   letter-spacing:.12em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);padding:0 7px}
 .formula .katex{font-size:1.1em}
@@ -158,7 +173,12 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 .tbl th,.tbl td{border:1px solid var(--line);padding:7px 11px;text-align:left}
 .tbl th{background:#EDF1F6;font-family:var(--disp);font-weight:600;color:var(--deep);font-size:.87rem}
 .tbl .katex{font-size:1.04em}
-.scroll-x{overflow-x:auto}
+.scroll-x{overflow-x:auto;
+  background:
+    linear-gradient(to right,var(--paper) 40%,rgba(245,247,250,0)) left center/26px 100% no-repeat local,
+    linear-gradient(to left,var(--paper) 40%,rgba(245,247,250,0)) right center/26px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%,rgba(19,31,45,.13),rgba(19,31,45,0)) left center/11px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%,rgba(19,31,45,.13),rgba(19,31,45,0)) right center/11px 100% no-repeat scroll}
 
 /* ============ QUIZ ============ */
 .quiz{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:22px 0}
@@ -195,6 +215,9 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 .btn{background:var(--indigo);color:#fff;border:none;border-radius:8px;padding:9px 18px;
   font-family:var(--disp);font-weight:600;font-size:.87rem;cursor:pointer;margin-top:13px}
 .btn:hover{background:#1F3A73}
+.btn:focus-visible,.opt:focus-visible,.acc>summary:focus-visible,.udone:focus-within,
+.fcn button:focus-visible,.menu-btn:focus-visible,.fc:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+.sidebar a:focus-visible{outline:2px solid #7fc48f;outline-offset:-2px}
 .btn.gh{background:transparent;color:var(--indigo);border:1px solid var(--line);margin-left:7px}
 .btn.gh:hover{background:#F0F4FB}
 .out{margin-top:13px;padding:13px 15px;background:#F7F9FC;border:1px solid var(--line);
@@ -230,22 +253,37 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 .acc[open]>summary::after{content:"−"}
 .acc>summary:hover{background:#F5F8FC}
 .acc .accbody{padding:2px 16px 14px;border-top:1px solid var(--line)}
-.menu-btn{display:none;position:fixed;top:13px;left:13px;z-index:60;background:var(--deep);color:#fff;
-  border:none;width:45px;height:45px;border-radius:10px;font-size:1.25rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)}
-.scrim{display:none;position:fixed;inset:0;background:rgba(9,15,28,.52);z-index:35}
+.topbar{display:none}
+.menu-btn{background:var(--deep);color:#fff;border:none;width:40px;height:40px;border-radius:10px;
+  font-size:1.15rem;line-height:1;cursor:pointer;flex:none}
+.scrim{display:none;position:fixed;inset:0;background:rgba(9,15,28,.52);z-index:45}
 .nores{font-size:.8rem;color:#8BA1C9;padding:10px 8px;display:none}
 
+@media(max-width:640px){
+  .legend{grid-template-columns:repeat(2,1fr)}
+}
 @media(max-width:940px){
-  .sidebar{transform:translateX(-100%);transition:transform .25s;width:282px}
+  html{scroll-padding-top:74px}
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:282px;z-index:50}
   body.nav-open .sidebar{transform:none}
+  .nav-close{display:block}
+  /* solo las dos primeras líneas esquivan el botón de cerrar */
+  .brand .k,.brand b{padding-right:42px}
   body.nav-open .scrim{display:block}
-  .menu-btn{display:flex;align-items:center;justify-content:center}
+  /* barra superior en el flujo: ya no se monta encima del título de cada sección */
+  .topbar{display:flex;align-items:center;gap:11px;position:sticky;top:0;z-index:30;
+    padding:9px 17px;background:rgba(245,247,250,.94);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  .topbar .tb-t{font-family:var(--disp);font-weight:700;font-size:.98rem;color:var(--deep);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .topbar .tb-s{font-family:var(--mono);font-size:.68rem;color:var(--ink-soft);margin-left:auto;flex:none}
   .wrap{margin-left:0;padding:0 17px}
-  main{padding:72px 0 110px}
+  main{padding:26px 0 110px}
+  .unit{scroll-margin-top:66px}
   .grid3,.grid4{max-width:100%}
 }
 @media print{
-  .sidebar,.menu-btn,.scrim,.quiz,.tool,.fcw,.udone,.srch{display:none!important}
+  .sidebar,.topbar,.menu-btn,.scrim,.quiz,.tool,.fcw,.udone,.srch{display:none!important}
   body{background:#fff;font-size:10.5pt}
   .wrap{margin:0;padding:0} main{max-width:none;padding:0}
   .box,.formula,.ex,.unit{break-inside:avoid}
@@ -256,10 +294,15 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 </head>
 <body>
 
-<button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Menú">☰</button>
+<header class="topbar">
+  <button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Abrir el índice">☰</button>
+  <span class="tb-t">Matemàtiques II</span>
+  <span class="tb-s">2n Batx</span>
+</header>
 <div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
 
 <nav class="sidebar" id="sidebar">
+  <button class="nav-close" onclick="document.body.classList.remove('nav-open')" aria-label="Cerrar el índice">✕</button>
   <div class="brand">
     <div class="k">IES CTEIB · 2026-27</div>
     <b>Matemàtiques II</b>
@@ -287,11 +330,11 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 
   <div class="nb" id="nb-extra">
     <div class="nh">Recursos</div>
-    <a href="#tools"><span class="n">⚙</span>Calculadoras interactivas</a>
-    <a href="#flash"><span class="n">⚡</span>Tarjetas de fórmulas</a>
-    <a href="#casio"><span class="n">🖩</span>Guía Casio fx-991</a>
+    <a href="#tools"><span class="n">C</span>Calculadoras interactivas</a>
+    <a href="#flash"><span class="n">F</span>Tarjetas de fórmulas</a>
+    <a href="#casio"><span class="n">fx</span>Guía Casio fx-991</a>
     <a href="#tablaz"><span class="n">Z</span>Tabla normal N(0,1)</a>
-    <a href="#examen"><span class="n">★</span>Estrategia de examen</a>
+    <a href="#examen"><span class="n">E</span>Estrategia de examen</a>
   </div>
 </nav>
 
@@ -453,7 +496,7 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
     <p>Con $n$ incógnitas:</p>
     <ul>
       <li>$\operatorname{rg}(A)=\operatorname{rg}(A^{*})=n \;\Rightarrow\;$ <strong>SCD</strong></li>
-      <li>$\operatorname{rg}(A)=\operatorname{rg}(A^{*})=r<n \;\Rightarrow\;$ <strong>SCI</strong>, con $n-r$ parámetros libres</li>
+      <li>$\operatorname{rg}(A)=\operatorname{rg}(A^{*})=r&lt;n \;\Rightarrow\;$ <strong>SCI</strong>, con $n-r$ parámetros libres</li>
       <li>$\operatorname{rg}(A)\neq\operatorname{rg}(A^{*}) \;\Rightarrow\;$ <strong>SI</strong></li>
     </ul>
   </div>
@@ -1108,7 +1151,7 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 <!-- ======================= HERRAMIENTAS ======================= -->
 <section class="unit" id="tools">
   <div class="uhead">
-    <div class="ubadge"><span class="num">⚙</span><span class="blk">Recursos</span></div>
+    <div class="ubadge"><span class="num">C</span><span class="blk">Recursos</span></div>
     <h2>Calculadoras interactivas</h2>
     <p class="sub">Introduce tus datos y comprueba el resultado al instante. Úsalas para verificar ejercicios, no para sustituir el procedimiento escrito.</p>
   </div>
@@ -1194,7 +1237,7 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 <!-- ======================= FLASHCARDS ======================= -->
 <section class="unit" id="flash">
   <div class="uhead">
-    <div class="ubadge"><span class="num">⚡</span><span class="blk">Recursos</span></div>
+    <div class="ubadge"><span class="num">F</span><span class="blk">Recursos</span></div>
     <h2>Tarjetas de fórmulas</h2>
     <p class="sub">Toca la tarjeta para girarla. Repasa las fórmulas clave de las 10 unidades antes de un examen.</p>
   </div>
@@ -1215,7 +1258,7 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 <!-- ======================= CASIO ======================= -->
 <section class="unit" id="casio">
   <div class="uhead">
-    <div class="ubadge"><span class="num">🖩</span><span class="blk">Recursos</span></div>
+    <div class="ubadge"><span class="num">fx</span><span class="blk">Recursos</span></div>
     <h2>Guía de la Casio CLASSWIZ fx-991</h2>
     <p class="sub">Es obligatoria en clase y en los exámenes, y hay un 10% de la nota que se juega precisamente en la prueba global de herramientas tecnológicas.</p>
   </div>
@@ -1263,7 +1306,7 @@ code{font-family:var(--mono);font-size:.85em;background:#EDF1F6;padding:1px 5px;
 <!-- ======================= EXAMEN ======================= -->
 <section class="unit" id="examen">
   <div class="uhead">
-    <div class="ubadge"><span class="num">★</span><span class="blk">Recursos</span></div>
+    <div class="ubadge"><span class="num">E</span><span class="blk">Recursos</span></div>
     <h2>Estrategia de examen</h2>
     <p class="sub">Cómo convertir lo que sabes en la nota que mereces, según los criterios de tu departamento.</p>
   </div>
@@ -1709,7 +1752,32 @@ function tex(el){
       {left:"$$",right:"$$",display:true},
       {left:"$",right:"$",display:false}
     ],throwOnError:false});
+    pegarPuntuacion(el);
   }
+}
+
+/* Una fórmula en línea es un bloque, así que el navegador puede cortar justo
+   antes de la coma que la sigue y dejarla empezando el renglón. Las pego. */
+function pegarPuntuacion(el){
+  el.querySelectorAll(".katex").forEach(function(k){
+    if(k.closest(".katex-display") || k.closest(".nowr")) return;
+    /* auto-render envuelve cada fórmula en un span sin clase: hay que subir hasta él */
+    while(k.parentElement && k.parentElement!==el && !k.nextSibling &&
+          k.parentElement.tagName==="SPAN" && !k.parentElement.className){
+      k=k.parentElement;
+    }
+    /* solo fórmulas cortas: pegar una larga podría sacarla de la pantalla */
+    if(k.getBoundingClientRect().width>140) return;
+    var sig=k.nextSibling;
+    if(!sig || sig.nodeType!==3 || !/^[,.;:)\]!?]/.test(sig.nodeValue)) return;
+    var signo=sig.nodeValue[0];
+    sig.nodeValue=sig.nodeValue.slice(1);
+    var caja=document.createElement("span");
+    caja.className="nowr";
+    k.parentNode.insertBefore(caja,k);
+    caja.appendChild(k);
+    caja.appendChild(document.createTextNode(signo));
+  });
 }
 
 /* ===================== QUIZ ENGINE ===================== */
