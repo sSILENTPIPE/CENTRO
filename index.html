@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lo mío · Ismael Aish</title>
-<meta name="author" content="Ismael Aish">
-<meta name="description" content="Las cinco cosas que me he ido montando para segundo: filosofía, català, física, mates e historia. Todo en un sitio.">
+<title>Segundo de Bachillerato</title>
+<meta name="description" content="Índice de las cinco asignaturas: filosofía, català, física, matemáticas e historia.">
 <meta name="color-scheme" content="light dark">
 
-<!-- el tema se pone ANTES de pintar, si no la pantalla pega un fogonazo blanco -->
+<!-- Aplicar el tema antes de pintar, para que no parpadee al cargar -->
 <script>
   (function () {
     try {
@@ -20,10 +19,6 @@
   })();
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
-
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
@@ -31,8 +26,7 @@
     theme: {
       extend: {
         fontFamily: {
-          sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-          boli: ['Caveat', 'ui-sans-serif', 'cursive']
+          sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif']
         }
       }
     }
@@ -44,35 +38,26 @@
   html.animar header,
   html.animar footer { transition: background-color .3s ease, color .3s ease; }
 
-  /* las notas a boli van un pelín torcidas, como si las hubiera escrito encima */
-  .nota { transform: rotate(-2deg); }
-
   @media (prefers-reduced-motion: reduce) {
     * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
-    .nota { transform: none; }
   }
 </style>
 </head>
 
-<body class="min-h-screen bg-stone-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200">
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200">
 
-  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-    <div class="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-amber-200/40 blur-3xl dark:bg-indigo-600/10"></div>
-    <div class="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl dark:bg-emerald-600/10"></div>
-  </div>
-
-  <!-- ===== arriba del todo ===== -->
-  <header class="sticky top-0 z-20 border-b border-stone-200/80 bg-stone-50/80 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/80">
+  <!-- Cabecera -->
+  <header class="sticky top-0 z-20 border-b border-slate-200 bg-slate-50/85 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/85">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
 
       <div class="leading-tight">
-        <p class="font-boli text-2xl text-slate-900 sm:text-3xl dark:text-white">Ismael Aish</p>
-        <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-500 dark:text-slate-500">2n de Batxillerat · IES CTEIB</p>
+        <h1 class="text-lg font-bold tracking-tight text-slate-900 sm:text-xl dark:text-white">Segundo de Bachillerato</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-500">IES CTEIB · Curso 2026-27</p>
       </div>
 
       <button id="boton-tema" type="button" role="switch" aria-checked="false"
               aria-label="Cambiar entre claro y oscuro"
-              class="group inline-flex h-10 w-10 items-center justify-center rounded-xl border border-stone-300 bg-white text-slate-600 transition hover:bg-stone-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:ring-offset-slate-950">
+              class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:ring-offset-slate-950">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden h-5 w-5 dark:block">
           <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
         </svg>
@@ -84,131 +69,112 @@
     </div>
   </header>
 
-  <!-- ===== el meollo ===== -->
-  <main class="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
+  <!-- Contenido -->
+  <main class="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pt-12">
 
-    <section class="mb-10 max-w-2xl sm:mb-12">
-      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
-        Hola, soy Ismael. Esto es lo mío.
-      </h1>
-      <p class="mt-3 text-base leading-relaxed text-slate-600 sm:text-lg dark:text-slate-400">
-        Me monté estas cinco cosas para mí, cada una por su lado, porque tener quince pestañas abiertas
-        me estaba matando. Al final hice esta portada para no perderlas. Entra por donde te apetezca.
-      </p>
-      <p class="nota mt-5 inline-block font-boli text-xl text-amber-700 dark:text-amber-400">
-        si algo está mal, es cosa mía · avísame
+    <section class="mb-8 max-w-2xl sm:mb-10">
+      <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        Cinco asignaturas, cinco sitios.
+      </h2>
+      <p class="mt-2 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+        Cada una va por su cuenta y se abre en su propia página. Entra en la que toque.
       </p>
     </section>
 
-    <!-- una debajo de otra en el móvil, dos en tablet, tres en el ordenador -->
+    <!-- 1 columna en móvil, 2 en tablet, 3 en pantalla grande -->
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
-      <!-- filosofía -->
+      <!-- Filosofía -->
       <a href="aletheia-filosofia.html"
-         class="group relative flex flex-col overflow-hidden rounded-2xl border border-t-4 border-stone-200 border-t-blue-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-xl hover:shadow-blue-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50 dark:border-slate-800 dark:border-t-blue-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-blue-500/10 dark:focus-visible:ring-offset-slate-950">
-        <div class="mb-4 flex items-start justify-between gap-3">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:scale-110 dark:bg-blue-500/10 dark:text-blue-400">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>
-            </svg>
-          </span>
-          <span class="nota font-boli text-lg text-slate-400 dark:text-slate-500">la que más me enganchó</span>
-        </div>
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Història de la Filosofia</h2>
+         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-blue-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-blue-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-blue-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-blue-500/10 dark:focus-visible:ring-offset-slate-950">
+        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:scale-110 dark:bg-blue-500/10 dark:text-blue-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>
+          </svg>
+        </span>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Història de la Filosofia</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          De Platón a Arendt: gente que se lió a pensar demasiado y la lió.
-          Lo dejé escrito en cristiano, como me habría gustado que me lo contaran.
+          De Platón a Arendt: las ideas de cada autor y cómo se responden
+          entre ellas. Con los textos clave comentados.
         </p>
         <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400">
-          Vamos allá
+          Entrar
           <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
         </span>
       </a>
 
-      <!-- català -->
+      <!-- Català -->
       <a href="catala.html"
-         class="group relative flex flex-col overflow-hidden rounded-2xl border border-t-4 border-stone-200 border-t-red-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-xl hover:shadow-red-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50 dark:border-slate-800 dark:border-t-red-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-red-500/10 dark:focus-visible:ring-offset-slate-950">
-        <div class="mb-4 flex items-start justify-between gap-3">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-red-50 text-red-600 transition group-hover:scale-110 dark:bg-red-500/10 dark:text-red-400">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-              <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H9a3 3 0 0 1 3 3v15a2 2 0 0 0-2-2H4.5A2.5 2.5 0 0 1 2 15.5Z"/><path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H15a3 3 0 0 0-3 3v15a2 2 0 0 1 2-2h5.5a2.5 2.5 0 0 0 2.5-2.5Z"/>
-            </svg>
-          </span>
-          <span class="nota font-boli text-lg text-slate-400 dark:text-slate-500">la que porto més verda</span>
-        </div>
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Llengua Catalana i Literatura</h2>
+         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-red-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-red-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-red-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-red-500/10 dark:focus-visible:ring-offset-slate-950">
+        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-red-50 text-red-600 transition group-hover:scale-110 dark:bg-red-500/10 dark:text-red-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+            <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H9a3 3 0 0 1 3 3v15a2 2 0 0 0-2-2H4.5A2.5 2.5 0 0 1 2 15.5Z"/><path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H15a3 3 0 0 0-3 3v15a2 2 0 0 1 2-2h5.5a2.5 2.5 0 0 0 2.5-2.5Z"/>
+          </svg>
+        </span>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Llengua Catalana i Literatura</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          Com funciona la llengua per dins i qui hi va escriure coses bones.
-          Amb exemples de veritat, no amb frases d'exercici.
+          Com funciona la llengua per dins i què s'hi ha escrit.
+          Gramàtica, comentari de text i lectures.
         </p>
         <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-red-600 dark:text-red-400">
-          Som-hi
+          Entrar
           <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
         </span>
       </a>
 
-      <!-- física -->
+      <!-- Física -->
       <a href="fisica-2-bachillerato.html"
-         class="group relative flex flex-col overflow-hidden rounded-2xl border border-t-4 border-stone-200 border-t-emerald-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-xl hover:shadow-emerald-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50 dark:border-slate-800 dark:border-t-emerald-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-emerald-500/10 dark:focus-visible:ring-offset-slate-950">
-        <div class="mb-4 flex items-start justify-between gap-3">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-600 transition group-hover:scale-110 dark:bg-emerald-500/10 dark:text-emerald-400">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-              <circle cx="12" cy="12" r="1.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"/>
-            </svg>
-          </span>
-          <span class="nota font-boli text-lg text-slate-400 dark:text-slate-500">mi favorita, sin discusión</span>
-        </div>
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Física</h2>
+         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-emerald-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-emerald-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-emerald-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-emerald-500/10 dark:focus-visible:ring-offset-slate-950">
+        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-600 transition group-hover:scale-110 dark:bg-emerald-500/10 dark:text-emerald-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+            <circle cx="12" cy="12" r="1.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"/>
+          </svg>
+        </span>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Física</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          Por qué las cosas caen, vibran, rebotan y brillan.
-          Con los números detrás, pero sin dramas.
+          Campos, ondas, óptica y física moderna: por qué las cosas caen,
+          vibran y brillan. La teoría y los problemas, paso a paso.
         </p>
         <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-          Vamos allá
+          Entrar
           <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
         </span>
       </a>
 
-      <!-- mates -->
+      <!-- Matemáticas -->
       <a href="matematicas-ii.html"
-         class="group relative flex flex-col overflow-hidden rounded-2xl border border-t-4 border-stone-200 border-t-amber-400 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-xl hover:shadow-amber-400/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50 dark:border-slate-800 dark:border-t-amber-400 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-amber-400/10 dark:focus-visible:ring-offset-slate-950">
-        <div class="mb-4 flex items-start justify-between gap-3">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-50 text-amber-600 transition group-hover:scale-110 dark:bg-amber-400/10 dark:text-amber-400">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-              <rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M8 8h8"/><path d="M8 16h8"/><path d="M12 12h4"/><path d="m7 10.5 3 3"/><path d="m10 10.5-3 3"/>
-            </svg>
-          </span>
-          <span class="nota font-boli text-lg text-slate-400 dark:text-slate-500">aquí se me fue medio verano</span>
-        </div>
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Matemáticas</h2>
+         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-amber-400 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-amber-400/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-amber-400 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-amber-400/10 dark:focus-visible:ring-offset-slate-950">
+        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-amber-50 text-amber-600 transition group-hover:scale-110 dark:bg-amber-400/10 dark:text-amber-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+            <rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M8 8h8"/><path d="M8 16h8"/><path d="M12 12h4"/><path d="m7 10.5 3 3"/><path d="m10 10.5-3 3"/>
+          </svg>
+        </span>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Matemáticas</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          Derivadas, matrices, planos y cosas que dependen del azar.
-          Desmontado pieza a pieza hasta que hace clic.
+          Análisis, álgebra, geometría y probabilidad.
+          Cada ejercicio con los pasos desarrollados, no solo el resultado.
         </p>
         <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-600 dark:text-amber-400">
-          Vamos allá
+          Entrar
           <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
         </span>
       </a>
 
-      <!-- historia -->
+      <!-- Historia -->
       <a href="historia-espana.html"
-         class="group relative flex flex-col overflow-hidden rounded-2xl border border-t-4 border-stone-200 border-t-purple-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-xl hover:shadow-purple-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50 dark:border-slate-800 dark:border-t-purple-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-purple-500/10 dark:focus-visible:ring-offset-slate-950">
-        <div class="mb-4 flex items-start justify-between gap-3">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-purple-50 text-purple-600 transition group-hover:scale-110 dark:bg-purple-500/10 dark:text-purple-400">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-              <path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/><path d="M3 10h18"/>
-            </svg>
-          </span>
-          <span class="nota font-boli text-lg text-slate-400 dark:text-slate-500">por aquí empecé todo</span>
-        </div>
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Historia de España</h2>
+         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-purple-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-purple-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-purple-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-purple-500/10 dark:focus-visible:ring-offset-slate-950">
+        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-purple-50 text-purple-600 transition group-hover:scale-110 dark:bg-purple-500/10 dark:text-purple-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+            <path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/><path d="M3 10h18"/>
+          </svg>
+        </span>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Historia de España</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          Dos siglos de golpes, guerras, pactos y constituciones.
-          Básicamente, por qué esto de aquí es como es.
+          Del siglo XIX a la democracia: golpes, guerras, pactos y constituciones.
+          Los procesos y cómo encajan unos con otros.
         </p>
         <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-purple-600 dark:text-purple-400">
-          Vamos allá
+          Entrar
           <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
         </span>
       </a>
@@ -216,14 +182,10 @@
     </div>
   </main>
 
-  <!-- ===== abajo ===== -->
-  <footer class="border-t border-stone-200 bg-white/50 dark:border-slate-800 dark:bg-slate-950/60">
-    <div class="mx-auto flex max-w-6xl flex-col items-start justify-between gap-3 px-4 py-7 text-sm text-slate-500 sm:flex-row sm:items-end sm:px-6 dark:text-slate-500">
-      <div>
-        <p class="font-boli text-2xl text-slate-700 dark:text-slate-300">Ismael Aish</p>
-        <p class="mt-1">Hecho a mano, sin plantillas y a horas raras.</p>
-      </div>
-      <p class="sm:text-right">Cinco sitios, una sola pestaña.<br>Sin cuentas, sin anuncios y sin sermones.</p>
+  <!-- Pie -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-6xl px-4 py-6 text-sm text-slate-500 sm:px-6 dark:text-slate-500">
+      Ismael Aish · 2026
     </div>
   </footer>
 
@@ -232,13 +194,13 @@
       var raiz  = document.documentElement;
       var boton = document.getElementById('boton-tema');
 
-      // las transiciones se encienden después del primer pintado
+      // Las transiciones se activan tras el primer pintado
       requestAnimationFrame(function () { raiz.classList.add('animar'); });
 
       function poner() {
         var oscuro = raiz.classList.contains('dark');
         boton.setAttribute('aria-checked', String(oscuro));
-        boton.title = oscuro ? 'Ponlo en claro' : 'Ponlo en oscuro';
+        boton.title = oscuro ? 'Cambiar a claro' : 'Cambiar a oscuro';
       }
 
       boton.addEventListener('click', function () {
@@ -247,7 +209,7 @@
         poner();
       });
 
-      // si nunca he tocado el botón, que vaya con lo que tenga puesto el móvil
+      // Sin preferencia guardada, seguir la del sistema
       try {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
           if (localStorage.getItem('tema')) return;
