@@ -19,6 +19,10 @@
   })();
 </script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
@@ -26,7 +30,9 @@
     theme: {
       extend: {
         fontFamily: {
-          sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif']
+          sans: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
+          disp: ['"Space Grotesk"', '"IBM Plex Sans"', 'ui-sans-serif', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'Menlo', 'monospace']
         }
       }
     }
@@ -34,157 +40,277 @@
 </script>
 
 <style>
-  html.animar body,
-  html.animar header,
-  html.animar footer { transition: background-color .3s ease, color .3s ease; }
+  :root{
+    --paper:#F7F8FB; --surface:#FFFFFF; --surface-2:#FFFFFFE6;
+    --ink:#0F1A2A; --ink-soft:#56657B; --line:#E4E9F0; --line-soft:#EDF1F6;
+  }
+  :root.dark{
+    --paper:#070B14; --surface:#101828; --surface-2:#101828CC;
+    --ink:#EEF2F8; --ink-soft:#94A3B8; --line:#1E293B; --line-soft:#172033;
+  }
 
-  @media (prefers-reduced-motion: reduce) {
-    * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  html{ -webkit-tap-highlight-color:transparent }
+  body{
+    background:var(--paper); color:var(--ink);
+    transition:background-color .45s ease, color .45s ease;
+  }
+
+  /* ===================== FONDO ===================== */
+  .aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.32;will-change:transform}
+  :root.dark .blob{opacity:.30;filter:blur(110px)}
+  .b1{width:34rem;height:34rem;top:-14rem;left:-10rem;background:#7AA2F7;animation:flota1 26s ease-in-out infinite alternate}
+  .b2{width:30rem;height:30rem;top:-6rem;right:-10rem;background:#C4A5F5;animation:flota2 32s ease-in-out infinite alternate}
+  .b3{width:32rem;height:32rem;bottom:-16rem;left:22%;background:#7ED3B2;animation:flota3 29s ease-in-out infinite alternate}
+  @keyframes flota1{to{transform:translate3d(7rem,4rem,0) scale(1.12)}}
+  @keyframes flota2{to{transform:translate3d(-6rem,5rem,0) scale(.92)}}
+  @keyframes flota3{to{transform:translate3d(4rem,-5rem,0) scale(1.08)}}
+
+  /* Trama de puntos que da profundidad sin hacer ruido */
+  .trama{position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background-image:radial-gradient(rgba(15,26,42,.07) 1px, transparent 1px);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(ellipse 85% 65% at 50% 0%, #000 35%, transparent 100%);
+            mask-image:radial-gradient(ellipse 85% 65% at 50% 0%, #000 35%, transparent 100%)}
+  :root.dark .trama{background-image:radial-gradient(rgba(190,210,255,.08) 1px, transparent 1px)}
+
+  /* ===================== ENTRADA ===================== */
+  @keyframes sube{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  .sube{animation:sube .75s cubic-bezier(.16,.84,.34,1) backwards;animation-delay:var(--d,0s)}
+
+  @keyframes latido{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.82)}}
+  .punto{animation:latido 2.6s ease-in-out infinite}
+
+  /* ===================== TARJETAS ===================== */
+  .card{
+    position:relative;display:flex;flex-direction:column;isolation:isolate;overflow:hidden;
+    padding:26px 24px 22px;border-radius:20px;text-decoration:none;color:inherit;
+    background:var(--surface);border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(15,26,42,.04);
+    transition:transform .5s cubic-bezier(.16,.84,.34,1), box-shadow .5s ease,
+               border-color .5s ease, background-color .45s ease;
+  }
+  .card:hover,.card:focus-visible{
+    transform:translateY(-7px);
+    border-color:rgb(var(--a)/.45);
+    box-shadow:0 26px 50px -24px rgb(var(--a)/.55), 0 3px 10px rgba(15,26,42,.05);
+  }
+  .card:focus-visible{outline:2px solid rgb(var(--a));outline-offset:3px}
+  .card:active{transform:translateY(-3px);transition-duration:.12s}
+
+  /* Halo que sigue al cursor */
+  .halo{position:absolute;inset:-1px;z-index:-1;opacity:0;transition:opacity .45s ease;
+    background:radial-gradient(340px circle at var(--mx,50%) var(--my,0%), rgb(var(--a)/.18), transparent 62%)}
+  .card:hover .halo{opacity:1}
+
+  /* Filo de acento arriba */
+  .filo{position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg, rgb(var(--a)), rgb(var(--a)/.15));
+    opacity:.55;transform:scaleX(1);transform-origin:left;
+    transition:opacity .45s ease, box-shadow .45s ease}
+  .card:hover .filo{opacity:1;box-shadow:0 0 18px rgb(var(--a)/.6)}
+
+  .ico{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;
+    color:rgb(var(--a));background:rgb(var(--a)/.11);border:1px solid rgb(var(--a)/.18);
+    transition:transform .5s cubic-bezier(.16,.84,.34,1), background-color .45s ease}
+  .card:hover .ico{transform:translateY(-2px) scale(1.07);background:rgb(var(--a)/.17)}
+  .ico svg{width:23px;height:23px}
+
+  .num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.08em;
+    color:var(--ink-soft);opacity:.6;transition:color .4s ease,opacity .4s ease}
+  .card:hover .num{color:rgb(var(--a));opacity:1}
+
+  .cta{display:inline-flex;align-items:center;gap:.45rem;margin-top:auto;padding-top:20px;
+    font-weight:600;font-size:.9rem;color:rgb(var(--a))}
+  .cta svg{width:15px;height:15px;transition:transform .45s cubic-bezier(.16,.84,.34,1)}
+  .card:hover .cta svg{transform:translateX(5px)}
+
+  /* ===================== BOTÓN DE TEMA ===================== */
+  .tema{position:relative;display:grid;place-items:center;width:42px;height:42px;border-radius:13px;
+    border:1px solid var(--line);background:var(--surface-2);color:var(--ink-soft);cursor:pointer;
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    transition:color .3s ease,border-color .3s ease,transform .3s ease,background-color .45s ease}
+  .tema:hover{color:var(--ink);transform:translateY(-2px)}
+  .tema:focus-visible{outline:2px solid #6E8EF0;outline-offset:3px}
+  .tema svg{position:absolute;width:19px;height:19px;transition:opacity .4s ease, transform .5s cubic-bezier(.16,.84,.34,1)}
+  .tema .sol{opacity:0;transform:rotate(-70deg) scale(.5)}
+  .tema .luna{opacity:1;transform:none}
+  :root.dark .tema .sol{opacity:1;transform:none}
+  :root.dark .tema .luna{opacity:0;transform:rotate(70deg) scale(.5)}
+
+  .hilo{position:relative}
+  .hilo::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(59,130,246,.55),rgba(239,68,68,.45),
+      rgba(217,145,32,.45),rgba(147,94,232,.5),rgba(16,163,127,.45),transparent)}
+
+  .degradado{background:linear-gradient(100deg,#3B6FE0,#7C5CE0 55%,#0E9C7E);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  :root.dark .degradado{background:linear-gradient(100deg,#8FB2FF,#C4A5F5 55%,#6FE0BC);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+      transition-duration:.01ms !important}
+    .card:hover,.card:focus-visible{transform:none}
   }
 </style>
 </head>
 
-<body class="min-h-screen bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200">
+<body class="min-h-screen font-sans antialiased">
+
+  <!-- Fondo -->
+  <div class="aurora" aria-hidden="true">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  </div>
+  <div class="trama" aria-hidden="true"></div>
 
   <!-- Cabecera -->
-  <header class="sticky top-0 z-20 border-b border-slate-200 bg-slate-50/85 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/85">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-
+  <header class="hilo sticky top-0 z-20 border-b" style="border-color:var(--line);background:var(--surface-2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
       <div class="leading-tight">
-        <h1 class="text-lg font-bold tracking-tight text-slate-900 sm:text-xl dark:text-white">Segundo de Bachillerato</h1>
-        <p class="text-xs text-slate-500 dark:text-slate-500">IES CTEIB · Curso 2026-27</p>
+        <p class="font-disp text-[1.02rem] font-bold tracking-tight">Segundo de Bachillerato</p>
+        <p class="font-mono text-[.68rem] tracking-wide" style="color:var(--ink-soft)">IES CTEIB · CURSO 2026-27</p>
       </div>
-
-      <button id="boton-tema" type="button" role="switch" aria-checked="false"
-              aria-label="Cambiar entre claro y oscuro"
-              class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:ring-offset-slate-950">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden h-5 w-5 dark:block">
+      <button id="boton-tema" type="button" class="tema" role="switch" aria-checked="false" aria-label="Cambiar entre claro y oscuro">
+        <svg class="sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
         </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 dark:hidden">
+        <svg class="luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
         </svg>
       </button>
-
     </div>
   </header>
 
-  <!-- Contenido -->
-  <main class="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pt-12">
+  <main class="mx-auto max-w-6xl px-5 pb-20 pt-14 sm:px-8 sm:pt-20">
 
-    <section class="mb-8 max-w-2xl sm:mb-10">
-      <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
-        Cinco asignaturas, cinco sitios.
-      </h2>
-      <p class="mt-2 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+    <!-- Entradilla -->
+    <section class="mb-12 max-w-2xl sm:mb-16">
+      <span class="sube inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[.68rem] tracking-[.12em]"
+            style="--d:.05s;border-color:var(--line);background:var(--surface-2);color:var(--ink-soft)">
+        <span class="punto h-1.5 w-1.5 rounded-full" style="background:#0E9C7E"></span>CINCO ASIGNATURAS
+      </span>
+      <h1 class="sube mt-5 font-disp text-[2.5rem] font-bold leading-[1.04] tracking-tight sm:text-[3.6rem]" style="--d:.12s">
+        Cinco asignaturas,<br><span class="degradado">cinco sitios</span>.
+      </h1>
+      <p class="sube mt-5 text-[1.05rem] leading-relaxed sm:text-lg" style="--d:.2s;color:var(--ink-soft)">
         Cada una va por su cuenta y se abre en su propia página. Entra en la que toque.
       </p>
     </section>
 
-    <!-- 1 columna en móvil, 2 en tablet, 3 en pantalla grande -->
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Tarjetas: 1 columna en móvil, 2 en tablet, 3 en pantalla grande -->
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6">
 
       <!-- Filosofía -->
-      <a href="aletheia-filosofia.html"
-         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-blue-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-blue-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-blue-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-blue-500/10 dark:focus-visible:ring-offset-slate-950">
-        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:scale-110 dark:bg-blue-500/10 dark:text-blue-400">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>
-          </svg>
-        </span>
-        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Història de la Filosofia</h3>
-        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <a href="aletheia-filosofia.html" class="card sube lg:col-span-2" style="--a:59 130 246;--d:.3s">
+        <span class="halo" aria-hidden="true"></span><span class="filo" aria-hidden="true"></span>
+        <div class="mb-5 flex items-start justify-between">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>
+            </svg>
+          </span>
+          <span class="num">01</span>
+        </div>
+        <h2 class="font-disp text-[1.16rem] font-semibold tracking-tight">Història de la Filosofia</h2>
+        <p class="mt-2 text-[.92rem] leading-relaxed" style="color:var(--ink-soft)">
           De Platón a Arendt: las ideas de cada autor y cómo se responden
           entre ellas. Con los textos clave comentados.
         </p>
-        <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400">
-          Entrar
-          <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+        <span class="cta">Entrar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </a>
 
       <!-- Català -->
-      <a href="catala.html"
-         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-red-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-red-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-red-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-red-500/10 dark:focus-visible:ring-offset-slate-950">
-        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-red-50 text-red-600 transition group-hover:scale-110 dark:bg-red-500/10 dark:text-red-400">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-            <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H9a3 3 0 0 1 3 3v15a2 2 0 0 0-2-2H4.5A2.5 2.5 0 0 1 2 15.5Z"/><path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H15a3 3 0 0 0-3 3v15a2 2 0 0 1 2-2h5.5a2.5 2.5 0 0 0 2.5-2.5Z"/>
-          </svg>
-        </span>
-        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Llengua Catalana i Literatura</h3>
-        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <a href="catala.html" class="card sube lg:col-span-2" style="--a:239 68 68;--d:.37s">
+        <span class="halo" aria-hidden="true"></span><span class="filo" aria-hidden="true"></span>
+        <div class="mb-5 flex items-start justify-between">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H9a3 3 0 0 1 3 3v15a2 2 0 0 0-2-2H4.5A2.5 2.5 0 0 1 2 15.5Z"/><path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H15a3 3 0 0 0-3 3v15a2 2 0 0 1 2-2h5.5a2.5 2.5 0 0 0 2.5-2.5Z"/>
+            </svg>
+          </span>
+          <span class="num">02</span>
+        </div>
+        <h2 class="font-disp text-[1.16rem] font-semibold tracking-tight">Llengua Catalana i Literatura</h2>
+        <p class="mt-2 text-[.92rem] leading-relaxed" style="color:var(--ink-soft)">
           Com funciona la llengua per dins i què s'hi ha escrit.
           Gramàtica, comentari de text i lectures.
         </p>
-        <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-red-600 dark:text-red-400">
-          Entrar
-          <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+        <span class="cta">Entrar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </a>
 
       <!-- Física -->
-      <a href="fisica-2-bachillerato.html"
-         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-emerald-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-emerald-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-emerald-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-emerald-500/10 dark:focus-visible:ring-offset-slate-950">
-        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-600 transition group-hover:scale-110 dark:bg-emerald-500/10 dark:text-emerald-400">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-            <circle cx="12" cy="12" r="1.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"/>
-          </svg>
-        </span>
-        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Física</h3>
-        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <a href="fisica-2-bachillerato.html" class="card sube lg:col-span-2" style="--a:16 163 127;--d:.44s">
+        <span class="halo" aria-hidden="true"></span><span class="filo" aria-hidden="true"></span>
+        <div class="mb-5 flex items-start justify-between">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="1.6"/><ellipse cx="12" cy="12" rx="10" ry="4.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"/>
+            </svg>
+          </span>
+          <span class="num">03</span>
+        </div>
+        <h2 class="font-disp text-[1.16rem] font-semibold tracking-tight">Física</h2>
+        <p class="mt-2 text-[.92rem] leading-relaxed" style="color:var(--ink-soft)">
           Campos, ondas, óptica y física moderna: por qué las cosas caen,
           vibran y brillan. La teoría y los problemas, paso a paso.
         </p>
-        <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-          Entrar
-          <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+        <span class="cta">Entrar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </a>
 
       <!-- Matemáticas -->
-      <a href="matematicas-ii.html"
-         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-amber-400 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-amber-400/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-amber-400 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-amber-400/10 dark:focus-visible:ring-offset-slate-950">
-        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-amber-50 text-amber-600 transition group-hover:scale-110 dark:bg-amber-400/10 dark:text-amber-400">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-            <rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M8 8h8"/><path d="M8 16h8"/><path d="M12 12h4"/><path d="m7 10.5 3 3"/><path d="m10 10.5-3 3"/>
-          </svg>
-        </span>
-        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Matemáticas</h3>
-        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <a href="matematicas-ii.html" class="card sube lg:col-span-2 lg:col-start-2" style="--a:217 145 32;--d:.51s">
+        <span class="halo" aria-hidden="true"></span><span class="filo" aria-hidden="true"></span>
+        <div class="mb-5 flex items-start justify-between">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8"/><path d="M8 16h8"/><path d="M12 12h4"/><path d="m7 10.5 3 3"/><path d="m10 10.5-3 3"/>
+            </svg>
+          </span>
+          <span class="num">04</span>
+        </div>
+        <h2 class="font-disp text-[1.16rem] font-semibold tracking-tight">Matemáticas</h2>
+        <p class="mt-2 text-[.92rem] leading-relaxed" style="color:var(--ink-soft)">
           Análisis, álgebra, geometría y probabilidad.
           Cada ejercicio con los pasos desarrollados, no solo el resultado.
         </p>
-        <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-600 dark:text-amber-400">
-          Entrar
-          <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+        <span class="cta">Entrar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </a>
 
       <!-- Historia -->
-      <a href="historia-espana.html"
-         class="group flex flex-col rounded-2xl border border-t-4 border-slate-200 border-t-purple-500 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-purple-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-slate-800 dark:border-t-purple-500 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:shadow-purple-500/10 dark:focus-visible:ring-offset-slate-950">
-        <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-purple-50 text-purple-600 transition group-hover:scale-110 dark:bg-purple-500/10 dark:text-purple-400">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-            <path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/><path d="M3 10h18"/>
-          </svg>
-        </span>
-        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Historia de España</h3>
-        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <a href="historia-espana.html" class="card sube sm:col-span-2 lg:col-span-2" style="--a:147 94 232;--d:.58s">
+        <span class="halo" aria-hidden="true"></span><span class="filo" aria-hidden="true"></span>
+        <div class="mb-5 flex items-start justify-between">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/><path d="M3 10h18"/>
+            </svg>
+          </span>
+          <span class="num">05</span>
+        </div>
+        <h2 class="font-disp text-[1.16rem] font-semibold tracking-tight">Historia de España</h2>
+        <p class="mt-2 text-[.92rem] leading-relaxed" style="color:var(--ink-soft)">
           Del siglo XIX a la democracia: golpes, guerras, pactos y constituciones.
           Los procesos y cómo encajan unos con otros.
         </p>
-        <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-purple-600 dark:text-purple-400">
-          Entrar
-          <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+        <span class="cta">Entrar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </a>
 
     </div>
   </main>
 
-  <!-- Pie -->
-  <footer class="border-t border-slate-200 dark:border-slate-800">
-    <div class="mx-auto max-w-6xl px-4 py-6 text-sm text-slate-500 sm:px-6 dark:text-slate-500">
+  <footer class="border-t" style="border-color:var(--line)">
+    <div class="mx-auto max-w-6xl px-5 py-6 font-mono text-[.72rem] sm:px-8" style="color:var(--ink-soft)">
       Ismael Aish · 2026
     </div>
   </footer>
@@ -193,9 +319,6 @@
     (function () {
       var raiz  = document.documentElement;
       var boton = document.getElementById('boton-tema');
-
-      // Las transiciones se activan tras el primer pintado
-      requestAnimationFrame(function () { raiz.classList.add('animar'); });
 
       function poner() {
         var oscuro = raiz.classList.contains('dark');
@@ -219,6 +342,19 @@
       } catch (e) {}
 
       poner();
+
+      // El halo sigue al cursor dentro de cada tarjeta
+      var fino = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+      var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (fino && !quieto) {
+        document.querySelectorAll('.card').forEach(function (c) {
+          c.addEventListener('pointermove', function (e) {
+            var r = c.getBoundingClientRect();
+            c.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+            c.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+          });
+        });
+      }
     })();
   </script>
 
