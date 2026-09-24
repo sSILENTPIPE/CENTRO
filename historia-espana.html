@@ -1,7 +1,7 @@
 <title>Història 10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root{
@@ -44,7 +44,7 @@
     font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
     font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
   }
-  h1,h2,h3,h4{font-family:Newsreader,Georgia,serif; font-weight:500; text-wrap:balance; margin:0; letter-spacing:-.01em; line-height:1.18}
+  h1,h2,h3,h4{font-family:var(--pz-disp); font-weight:500; text-wrap:balance; margin:0; letter-spacing:-.01em; line-height:1.18}
   p{margin:0}
   button{font:inherit; color:inherit}
   :focus-visible{outline:2px solid var(--wine); outline-offset:2px; border-radius:6px}
@@ -76,7 +76,7 @@
     backdrop-filter:blur(10px); border-bottom:1px solid var(--line-soft);
     display:flex; align-items:center; gap:12px; padding:9px clamp(12px,3vw,24px);
   }
-  .brand{font-family:Newsreader,Georgia,serif; font-size:18px; letter-spacing:-.015em; display:flex; align-items:center; gap:9px}
+  .brand{font-family:var(--pz-disp); font-size:18px; letter-spacing:-.015em; display:flex; align-items:center; gap:9px}
   .brand .seal{
     width:26px;height:26px;border-radius:50%; display:grid; place-items:center;
     border:1px solid var(--wine); color:var(--wine); font-size:11px; font-family:"IBM Plex Mono",monospace; letter-spacing:.02em;
@@ -141,7 +141,7 @@
   tbody tr:last-child td{border-bottom:0}
   .rowlabel{font-weight:500; color:var(--ink); white-space:nowrap}
   blockquote.doc{
-    font-family:Newsreader,Georgia,serif; font-size:15.5px; line-height:1.72; color:var(--ink-soft);
+    font-family:var(--pz-disp); font-size:15.5px; line-height:1.72; color:var(--ink-soft);
     border-left:2px solid var(--gold); padding:2px 0 2px 16px; margin:0;
   }
   .kbd{font-family:"IBM Plex Mono",monospace; font-size:11px; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 5px; color:var(--muted)}
@@ -183,7 +183,7 @@
   @media (prefers-reduced-motion: reduce){ *{animation:none!important; transition:none!important} }
   /* Defenses davant el preflight de Tailwind (s'injecta després d'aquest full) */
   body h1{font-size:34px} body h2{font-size:23px} body h3{font-size:17px} body h4{font-size:15px}
-  body h1, body h2, body h3, body h4{font-family:Newsreader,Georgia,serif; font-weight:500}
+  body h1, body h2, body h3, body h4{font-family:var(--pz-disp); font-weight:500}
   body ul.lead, body ul[style*="padding-left"]{list-style:disc}
   body ol.lead, body ol[style*="padding-left"]{list-style:decimal}
   body blockquote.doc{margin:0}
@@ -332,6 +332,19 @@ button, input, select, textarea{font-family:inherit}
 @media (max-width:640px){ .pz-mando{right:10px;bottom:10px} .pz-mando a span{display:none} }
 @media print{ .pz-mando,.pz-ondas,.pz-aurora,.pz-trama{display:none !important} }
 
+
+/* --- el color de la asignatura: el granate pasa a morado, que es el que
+       lleva Historia en el portal y en sus ondas --- */
+:root, :root[data-theme="light"]{
+  --wine:#6D3FC4; --wine-ink:#5A31A8; --tint-wine:rgba(109,63,196,.09);
+}
+:root[data-theme="dark"]{
+  --wine:#B99BF0; --wine-ink:#CBB6F6; --tint-wine:rgba(185,155,240,.16);
+}
+/* con el morado claro de fondo, el texto del botón tiene que ir oscuro */
+:root[data-theme="dark"] .btn-primary{color:#150C26}
+:root[data-theme="dark"] .btn-primary:hover{background:#C9B0F5;color:#150C26}
+:root[data-theme="dark"] .pill-score{color:#150C26}
 
 </style>
 <script>
@@ -1843,7 +1856,7 @@ function paintTemes(){
     <details class="acc">
       <summary>
         <span style="flex:1">
-          <span style="font-family:Newsreader,serif; font-size:17px">${esc(t.t)}</span>
+          <span style="font-family:var(--pz-disp); font-size:17px">${esc(t.t)}</span>
           <span class="lead" style="display:block; font-size:12.5px">${esc(t.sub)}</span>
         </span>
         ${S.temes.includes(t.id) ? `<span class="chip" style="color:var(--ok); border-color:var(--ok)">repassat</span>` : ""}
@@ -1927,7 +1940,7 @@ function paintCmp(){
     </div>
     <div class="card-flat" style="margin-top:18px">
       <div class="eyebrow">Frase de tancament que relaciona els dos textos</div>
-      <p style="margin-top:8px; font-family:Newsreader,serif; font-size:16.5px; line-height:1.7">${esc(frase)}</p>
+      <p style="margin-top:8px; font-family:var(--pz-disp); font-size:16.5px; line-height:1.7">${esc(frase)}</p>
       <p class="lead" style="font-size:12.5px; color:var(--muted); margin-top:10px">Recorda: no es pot avaluar positivament la A.3 si no es relacionen ambdós conceptes. Afegeix-hi una referència balear i sumes 0,25.</p>
     </div>`;
 }
@@ -2040,7 +2053,7 @@ function paintArena(){
         <span class="chip">≈ ${arenaEx.mins} min</span>
         ${arenaEx.bal ? `<span class="chip chip-gold">+${fmt(arenaEx.bal)} balear</span>` : ""}
       </div>
-      <p style="margin-top:14px; font-size:15.5px; line-height:1.7; font-family:Newsreader,serif">${esc(arenaEx.enunciat)}</p>
+      <p style="margin-top:14px; font-size:15.5px; line-height:1.7; font-family:var(--pz-disp)">${esc(arenaEx.enunciat)}</p>
       <p class="lead" style="font-size:13px; color:var(--muted); margin-top:10px">${esc(arenaEx.nota)}</p>
     </div>`;
   $("#arenaText").value = S.drafts["arena-" + arenaEx.id] || "";
