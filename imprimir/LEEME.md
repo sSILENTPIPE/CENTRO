@@ -3,13 +3,18 @@
 Cinco cuadernos con **todo** el contenido de las webs, maquetados para papel
 y con los estilos de cada asignatura.
 
-| Asignatura | PDF | Páginas |
-|---|---|---|
-| Història de la Filosofia | `Filosofia-temario.pdf` | 46 |
-| Llengua Catalana i Literatura II | `Catala-temari.pdf` | 34 |
-| Física | `Fisica-temario.pdf` | 51 |
-| Matemàtiques II | `Matematicas-II-temario.pdf` | 50 |
-| Història d'Espanya | `Historia-temario.pdf` | 61 |
+| Asignatura | PDF | Páginas | Idioma |
+|---|---|---|---|
+| Historia de la Filosofía | `Filosofia-temario.pdf` | 46 | castellano |
+| Llengua Catalana i Literatura II | `Catala-temari.pdf` | 34 | catalán |
+| Física | `Fisica-temario.pdf` | 51 | castellano |
+| Matemáticas II | `Matematicas-II-temario.pdf` | 50 | castellano |
+| Historia de España | `Historia-temario.pdf` | 66 | castellano |
+
+Todo va en castellano menos el cuaderno de Català, que se queda en catalán
+porque es la lengua de la asignatura. En el de Filosofía, el diccionario sigue
+dando la equivalencia catalana de cada término, que es como estaba pensado
+para poder responder el examen en cualquiera de las dos lenguas.
 
 Los `temario-*.html` son la versión editable de cada cuaderno: se abren en el
 navegador y con Ctrl+P (o Cmd+P) salen igual que el PDF. Sirven para retocar
