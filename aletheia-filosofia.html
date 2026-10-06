@@ -2047,7 +2047,7 @@ VIEWS.home = function(){
   const term = GLOSS[Math.floor(Date.now() / 86400000) % GLOSS.length];
   const last = AUTH[S.author];
   const paths = [
-    ['panico','var(--panic)','Tengo una noche','Noche de pánico','Tres ideas por autor, conceptos clave y esquemas. Nada más.'],
+    ['panico','var(--panic)','Tengo una noche','Tres ideas por autor, conceptos clave y esquemas. Nada más.'],
     ['desarrollo','var(--dev)','Tengo semanas','Desarrollo de tema','Teoría completa, influencias entre autores y comparativas para la pregunta 3.'],
     ['comentario','var(--com)','Quiero practicar','Comentario de texto','Seis pasos guiados con la rúbrica oficial: subrayado, contexto, tema, tesis, ideas y relación.']
   ];
@@ -2057,8 +2057,8 @@ VIEWS.home = function(){
   else countdown = `<div class="mt-4 flex items-baseline gap-3"><span class="serif" style="font-size:54px;font-weight:900;line-height:1;letter-spacing:-.02em">${days}</span><span class="muted">${days === 1 ? 'día' : 'días'} hasta el examen</span></div>`;
   return `
   <section style="padding-top:8px">
-    <h1 class="hero-title">Todo lo que entra en el examen, ordenado según el tiempo que te queda.</h1>
-    <p class="lead mt-5">Apuntes, esquemas, comentario de texto y práctica con la rúbrica de la PAU de la UIB. Elige cómo quieres estudiar hoy.</p>
+    <h1 class="hero-title">HISTORIA DE LA FILOSOFIA</h1>
+    <p class="lead mt-5">Apuntes, esquemas, comentario de texto y práctica con la rúbrica de la PAU.</p>
     <div class="grid md:grid-cols-3 gap-3 mt-8">
       ${paths.map(p => `<button class="path" type="button" data-act="startMode" data-m="${p[0]}" style="--c:${p[1]}"><span class="path-when">${p[2]}</span><span class="path-title">${p[3]}</span><span class="path-desc">${p[4]}</span></button>`).join('')}
     </div>
