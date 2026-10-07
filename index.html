@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Isma te padrea</title>
-<meta name="description" content="Índice de las seis asignaturas: filosofía, català, física, matemáticas, historia y lengua castellana.">
+<meta name="description" content="Índice de las siete asignaturas: filosofía, català, física, matemáticas, historia, lengua castellana y tecnología.">
 <meta name="color-scheme" content="light dark">
 
 <!-- Aplicar el tema antes de pintar, para que no parpadee al cargar -->
@@ -145,6 +145,9 @@
   :root.dark .degradado{background:linear-gradient(100deg,#8FB2FF,#C4A5F5 55%,#6FE0BC);
     -webkit-background-clip:text;background-clip:text;color:transparent}
 
+  /* la séptima tarjeta queda sola en su fila: a lo ancho en tablet, centrada en escritorio */
+  @media (min-width:1024px){ .lg\:col-start-3{grid-column-start:3} }
+
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
       transition-duration:.01ms !important}
@@ -185,10 +188,10 @@
     <section class="mb-12 max-w-2xl sm:mb-16">
       <span class="sube inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[.68rem] tracking-[.12em]"
             style="--d:.05s;border-color:var(--line);background:var(--surface-2);color:var(--ink-soft)">
-        <span class="punto h-1.5 w-1.5 rounded-full" style="background:#0E9C7E"></span>SEIS ASIGNATURAS
+        <span class="punto h-1.5 w-1.5 rounded-full" style="background:#0E9C7E"></span>SIETE ASIGNATURAS
       </span>
       <h1 class="sube mt-5 font-disp text-[2.5rem] font-bold leading-[1.04] tracking-tight sm:text-[3.6rem]" style="--d:.12s">
-        Seis asignaturas,<br><span class="degradado">seis sitios</span>.
+        Siete asignaturas,<br><span class="degradado">siete sitios</span>.
       </h1>
       <p class="sube mt-5 text-[1.05rem] leading-relaxed sm:text-lg" style="--d:.2s;color:var(--ink-soft)">
         Cada una va por su cuenta y se abre en su propia página. Entra en la que toque.
@@ -317,6 +320,27 @@
         <p class="mt-2 text-[.92rem] leading-relaxed" style="color:var(--ink-soft)">
           Textos periodísticos, oraciones compuestas y las obras de lectura.
           Con simulador de la PAU completo y cronometrado.
+        </p>
+        <span class="cta">Entrar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+      <!-- Tecnología -->
+      <a href="tecnologia-ingenieria.html" class="card sube sm:col-span-2 lg:col-span-2 lg:col-start-3" style="--a:79 70 229;--d:.72s">
+        <span class="halo" aria-hidden="true"></span><span class="filo" aria-hidden="true"></span>
+        <div class="mb-5 flex items-start justify-between">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/>
+            </svg>
+          </span>
+          <span class="num">07</span>
+        </div>
+        <h2 class="font-disp text-[1.16rem] font-semibold tracking-tight">Tecnología e Ingeniería II</h2>
+        <p class="mt-2 text-[.92rem] leading-relaxed" style="color:var(--ink-soft)">
+          Mecánica, electricidad, materiales y control. Simulador de 90 minutos
+          en modo Zen, formulario de 50 fórmulas y las trampas de corrección.
         </p>
         <span class="cta">Entrar
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
