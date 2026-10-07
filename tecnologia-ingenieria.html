@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tecnología PAU 27</title>
+<meta name="description" content="Plataforma de estudio de Tecnología e Ingeniería II para la PAU: bloques y pesos, simulador de examen de 90 minutos (modo Zen), formulario de 50 fórmulas y trampas de corrección.">
+<meta name="color-scheme" content="light dark">
+
+<!-- Space Grotesk e IBM Plex llegan con el estilo del portal. Sin red, se usan las del sistema. -->
+
+<style>
+  /* =====================================================================
+     PALETA «ÍNDIGO DE CONCENTRACIÓN»
+     Fondos y tinta neutros del portal para no cansar la vista; un único
+     acento índigo, tranquilo, para todo lo que se puede tocar; y el rojo
+     y el ámbar reservados para las trampas de corrección, así destacan
+     de verdad cuando aparecen.
+     ===================================================================== */
+  :root{
+    --paper:#F6F7FA; --surface:#FFFFFF; --surface-2:#F0F3F7;
+    --ink:#0F1A2A; --ink-soft:#46536A; --muted:#738199;
+    --line:#E1E7EF; --line-soft:#ECF0F5;
+    --acc:#4F46E5; --acc-ink:#4338CA; --acc-soft:rgba(79,70,229,.09); --acc-line:rgba(79,70,229,.28); --acc-on:#FFFFFF;
+    --ok:#15803D; --ok-soft:rgba(21,128,61,.10);
+    --warn:#B45309; --warn-soft:rgba(180,83,9,.10);
+    --bad:#B91C1C; --bad-soft:rgba(185,28,28,.09);
+    --cA:#0F766E; --cB:#A16207; --cC:#4F46E5; --cD:#0369A1; --cF:#7C3AED;
+    --shadow:0 1px 2px rgba(15,26,42,.05), 0 12px 32px -20px rgba(15,26,42,.35);
+    --sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    --disp:"Space Grotesk","IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#080D16; --surface:#111925; --surface-2:#172131;
+      --ink:#E9EEF6; --ink-soft:#AEBACB; --muted:#7D8BA1;
+      --line:#223047; --line-soft:#1A2536;
+      --acc:#818CF8; --acc-ink:#A5B4FC; --acc-soft:rgba(129,140,248,.12); --acc-line:rgba(129,140,248,.34); --acc-on:#0B0D2B;
+      --ok:#4ADE80; --ok-soft:rgba(74,222,128,.11);
+      --warn:#FBBF24; --warn-soft:rgba(251,191,36,.11);
+      --bad:#F87171; --bad-soft:rgba(248,113,113,.11);
+      --cA:#2DD4BF; --cB:#FACC15; --cC:#818CF8; --cD:#38BDF8; --cF:#C4B5FD;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 14px 34px -20px rgba(0,0,0,.7);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#080D16; --surface:#111925; --surface-2:#172131;
+    --ink:#E9EEF6; --ink-soft:#AEBACB; --muted:#7D8BA1;
+    --line:#223047; --line-soft:#1A2536;
+    --acc:#818CF8; --acc-ink:#A5B4FC; --acc-soft:rgba(129,140,248,.12); --acc-line:rgba(129,140,248,.34); --acc-on:#0B0D2B;
+    --ok:#4ADE80; --ok-soft:rgba(74,222,128,.11);
+    --warn:#FBBF24; --warn-soft:rgba(251,191,36,.11);
+    --bad:#F87171; --bad-soft:rgba(248,113,113,.11);
+    --cA:#2DD4BF; --cB:#FACC15; --cC:#818CF8; --cD:#38BDF8; --cF:#C4B5FD;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 14px 34px -20px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:110px}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;transition:background-color .35s ease,color .35s ease;overflow-x:hidden}
+  h1,h2,h3,h4,p,ul,ol,figure,blockquote{margin:0}
+  ul,ol{padding-left:1.25rem}
+  li+li{margin-top:.25rem}
+  a{color:var(--acc-ink)}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+  ::selection{background:var(--acc-line)}
+  [hidden]{display:none !important}
+  :focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:6px}
+  svg.i{width:18px;height:18px;flex:none}
+
+  /* ============ armazón: barra lateral + barra superior, como Català, Història y Castellano ============ */
+  .shell{display:flex;min-height:100vh}
+  .sidebar{width:264px;flex:0 0 264px;background:var(--surface);border-right:1px solid var(--line);
+    position:sticky;top:0;height:100vh;height:100dvh;overflow-y:auto;padding:22px 16px 28px;display:flex;flex-direction:column}
+  .col{flex:1 1 auto;min-width:0;display:flex;flex-direction:column}
+  @media (max-width:1023px){
+    .sidebar{position:fixed;z-index:60;left:0;top:0;transform:translateX(-100%);transition:transform .24s ease;
+      box-shadow:var(--shadow);padding-top:calc(18px + env(safe-area-inset-top,0px))}
+    body.nav-open .sidebar{transform:translateX(0)}
+    .scrim{position:fixed;inset:0;background:rgba(8,12,20,.45);z-index:55;opacity:0;pointer-events:none;transition:opacity .2s}
+    body.nav-open .scrim{opacity:1;pointer-events:auto}
+  }
+  @media (min-width:1024px){ .scrim,.burger{display:none !important} }
+  .marca{display:flex;align-items:center;gap:10px;min-width:0;padding:0 8px 20px;text-decoration:none;color:inherit}
+  .marca-ico{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;color:var(--acc-on);background:var(--acc)}
+  .marca-ico svg{width:17px;height:17px}
+  .marca b{display:block;font-family:var(--disp);font-size:1.06rem;letter-spacing:-.015em;line-height:1.2}
+  .marca small{display:block;font-size:.75rem;color:var(--muted);line-height:1.35;margin-top:2px}
+  .navgroup{margin-bottom:18px}
+  .navlabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);padding:0 10px 7px;font-weight:600}
+  .nav a{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:8px;text-decoration:none;
+    color:var(--ink-soft);font-size:14px;line-height:1.3;transition:background .14s,color .14s}
+  .nav a+a{margin-top:2px}
+  .nav a:hover{background:var(--surface-2);color:var(--ink)}
+  .nav a[aria-current="page"]{background:var(--acc-soft);color:var(--acc-ink);font-weight:500}
+  .nav .ic{flex:none;width:16px;height:16px;color:var(--muted)}
+  .nav a[aria-current="page"] .ic{color:var(--acc)}
+  .nav .pts{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+  .nav a[aria-current="page"] .pts{border-color:var(--acc-line);color:var(--acc-ink)}
+  .lado-card{background:var(--surface-2);border-radius:12px;padding:16px;margin-top:2px}
+  .lado-card .navlabel{padding:0 0 8px}
+  .lado-card .num{font-family:var(--mono);font-size:26px;letter-spacing:-.02em;line-height:1.1}
+  .lado-pie{margin-top:auto;padding:18px 8px 0;font-size:12px;line-height:1.5;color:var(--muted)}
+  .cabeza{position:sticky;top:0;z-index:40}
+  .topbar{display:flex;align-items:center;gap:12px;min-height:52px;
+    padding:9px clamp(12px,3vw,24px);border-bottom:1px solid var(--line-soft);
+    background:color-mix(in srgb,var(--paper) 88%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  .burger{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:9px;border:1px solid transparent;
+    background:transparent;color:var(--ink-soft)}
+  .burger:hover{background:var(--surface-2)}
+  .burger svg{width:19px;height:19px}
+  .crumb{font-family:var(--disp);font-size:15px;font-weight:600;letter-spacing:-.01em;min-width:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .topbar .reloj{margin-left:auto}
+
+  /* barra de trampas: siempre a la vista, debajo de la barra superior */
+  .trampa-bar{display:flex;align-items:center;gap:10px;padding:7px clamp(12px,3vw,24px);font-size:.86rem;line-height:1.4;
+    border-bottom:1px solid var(--warn);background:color-mix(in srgb,var(--surface) 82%,var(--warn) 18%);color:var(--ink)}
+  .trampa-bar.bad{border-bottom-color:var(--bad);background:color-mix(in srgb,var(--surface) 84%,var(--bad) 16%)}
+  .trampa-bar .tb-ico{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:7px;color:#fff;background:var(--warn)}
+  .trampa-bar.bad .tb-ico{background:var(--bad)}
+  :root[data-theme="dark"] .trampa-bar .tb-ico{color:#1A1203}
+  .trampa-bar .tb-ico svg{width:14px;height:14px}
+  .trampa-bar .tb-txt{flex:1;min-width:0;transition:opacity .3s ease}
+  .trampa-bar .tb-txt b{font-weight:600}
+  .trampa-bar button{flex:none;border:0;background:transparent;color:var(--ink-soft);padding:4px 6px;border-radius:7px;font-size:.78rem;font-family:var(--mono)}
+  .trampa-bar button:hover{background:var(--surface);color:var(--ink)}
+
+  /* reloj del simulador, fijo arriba cuando hay examen */
+  .reloj{display:none;align-items:center;gap:8px;font-family:var(--mono);font-weight:500;font-size:.95rem;cursor:pointer;
+    padding:0 12px;height:32px;border-radius:999px;border:1px solid var(--acc-line);background:var(--acc-soft);color:var(--acc-ink)}
+  .reloj.on{display:inline-flex}
+  .reloj.aviso{border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+  .reloj.fin{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+
+  /* ============ estructura ============ */
+  main{width:100%;max-width:1060px;margin:0 auto;padding:30px clamp(16px,4vw,52px) 90px;flex:1 0 auto}
+  .vista{animation:entra .4s cubic-bezier(.16,.84,.34,1)}
+  @keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .cab{margin-bottom:22px;max-width:780px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted)}
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c,var(--acc))}
+  h1.tit{font-family:var(--disp);font-size:clamp(1.9rem,4.6vw,2.9rem);line-height:1.08;letter-spacing:-.025em;margin-top:10px}
+  h2.sub{font-family:var(--disp);font-size:1.35rem;letter-spacing:-.015em;line-height:1.25}
+  h3{font-family:var(--disp);font-size:1.08rem;letter-spacing:-.01em;line-height:1.3}
+  .lead{color:var(--ink-soft);font-size:1.04rem;margin-top:10px}
+  .soft{color:var(--ink-soft)} .muted{color:var(--muted)} .mono{font-family:var(--mono)}
+  .small{font-size:.86rem} .tiny{font-size:.76rem}
+  .bloque{margin-top:36px}
+  .bloque>.sub{margin-bottom:6px}
+  .bloque>.soft{margin-bottom:16px;max-width:780px}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr))}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+  .fila{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .entre{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  .pila>*+*{margin-top:12px}
+
+  /* ============ piezas ============ */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);min-width:0}
+  .card.plano{box-shadow:none}
+  .card h3+p,.card h3+ul{margin-top:6px}
+  .tag{display:inline-flex;max-width:100%;align-items:center;gap:5px;font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;
+    padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);background:var(--surface-2);white-space:nowrap}
+  .tag.acc{border-color:var(--acc-line);background:var(--acc-soft);color:var(--acc-ink)}
+  .tag.ok{border-color:transparent;background:var(--ok-soft);color:var(--ok)}
+  .tag.warn{border-color:transparent;background:var(--warn-soft);color:var(--warn)}
+  .tag.bad{border-color:transparent;background:var(--bad-soft);color:var(--bad)}
+  .tag.blq{border-color:color-mix(in srgb,var(--c) 40%,transparent);background:color-mix(in srgb,var(--c) 11%,transparent);color:var(--c)}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 15px;border-radius:12px;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:500;font-size:.92rem;text-decoration:none;
+    transition:border-color .2s ease,background-color .2s ease,transform .15s ease}
+  .btn:hover{border-color:var(--acc-line)}
+  .btn:active{transform:translateY(1px)}
+  .btn.pri{background:var(--acc);border-color:var(--acc);color:var(--acc-on)}
+  .btn.pri:hover{filter:brightness(1.07)}
+  .btn.peligro{color:var(--bad)}
+  .btn.peligro:hover{border-color:var(--bad)}
+  .btn.peq{min-height:32px;padding:4px 11px;font-size:.84rem;border-radius:10px}
+  .btn.grande{min-height:52px;padding:12px 22px;font-size:1.02rem;border-radius:14px;font-family:var(--disp);font-weight:600}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .btn svg{width:17px;height:17px}
+  .icobtn{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--muted)}
+  .icobtn:hover{background:var(--surface-2);color:var(--ink);border-color:var(--line)}
+  .icobtn.del:hover{color:var(--bad)}
+  .icobtn svg{width:16px;height:16px}
+  .icobtn[disabled]{opacity:.35;cursor:default}
+  .seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;border-radius:13px;background:var(--surface-2);border:1px solid var(--line)}
+  .seg button{border:0;background:transparent;padding:6px 12px;border-radius:9px;font-size:.88rem;color:var(--ink-soft);font-weight:500}
+  .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  select,input[type=text],input[type=number]{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+    font-size:.96rem;line-height:1.4;transition:border-color .2s ease}
+  select{width:auto;max-width:100%;padding:9px 10px}
+  select:focus,input:focus{outline:none;border-color:var(--acc)}
+  label.lab{display:block;font-weight:600;font-size:.88rem;margin-bottom:6px}
+
+  .nota{border-left:3px solid var(--acc);background:var(--acc-soft);padding:10px 14px;border-radius:0 10px 10px 0;font-size:.92rem}
+  .nota.warn{border-color:var(--warn);background:var(--warn-soft)}
+  .nota.ok{border-color:var(--ok);background:var(--ok-soft)}
+  .nota.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .nota b.t{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+  .nota.bad b.t{color:var(--bad)} .nota.warn b.t{color:var(--warn)} .nota.ok b.t{color:var(--ok)}
+  .tabla{width:100%;border-collapse:collapse;font-size:.9rem}
+  .tabla th,.tabla td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  .tabla th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .barra{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line-soft)}
+  .barra>i{display:block;height:100%;background:var(--acc);border-radius:inherit;transition:width .4s ease,background-color .3s ease}
+  .neg{text-decoration:overline;text-decoration-thickness:1.5px}
+  .eq{font-family:var(--mono);font-size:.9rem}
+  .vacio{padding:26px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+
+  /* ============ panel ============ */
+  .hero{display:grid;gap:18px;grid-template-columns:1fr}
+  @media (min-width:900px){ .hero{grid-template-columns:1.3fr .7fr;align-items:end} }
+  .cuentaatras{display:flex;gap:10px;flex-wrap:wrap}
+  .cuentaatras div{flex:1;min-width:70px;text-align:center;padding:12px 8px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+  .cuentaatras b{display:block;font-family:var(--disp);font-size:1.8rem;line-height:1.1}
+  .cuentaatras span{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .dato{display:flex;gap:12px;align-items:flex-start}
+  .dato .di{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;color:var(--acc);background:var(--acc-soft);border:1px solid var(--acc-line)}
+  .dato .di svg{width:20px;height:20px}
+  .dato b.dt{display:block;font-family:var(--disp);font-size:1.25rem;line-height:1.15}
+  .dato span{font-size:.86rem;color:var(--ink-soft)}
+
+  .bcard{position:relative;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--c);
+    border-radius:18px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;
+    transition:transform .3s cubic-bezier(.16,.84,.34,1),border-color .3s ease,box-shadow .3s ease}
+  .bcard:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--c) 45%,var(--line));border-top-color:var(--c);
+    box-shadow:0 22px 44px -26px color-mix(in srgb,var(--c) 70%,transparent)}
+  .bcard .bc-cab{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .bcard .bc-ico{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;color:var(--c);
+    background:color-mix(in srgb,var(--c) 12%,transparent);border:1px solid color-mix(in srgb,var(--c) 25%,transparent)}
+  .bcard .bc-ico svg{width:21px;height:21px}
+  .bcard .letra{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;color:var(--muted)}
+  .bcard h3{font-size:1.05rem}
+  .bcard p{font-size:.88rem;color:var(--ink-soft)}
+  .bcard .mas{margin-top:auto;font-size:.84rem;font-weight:600;color:var(--c);display:inline-flex;align-items:center;gap:6px}
+  .bcard .mas svg{width:14px;height:14px;transition:transform .3s ease}
+  .bcard:hover .mas svg{transform:translateX(4px)}
+  .rango{position:relative;height:10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line-soft)}
+  .rango i{position:absolute;top:-1px;bottom:-1px;border-radius:999px;background:var(--c)}
+  .rango-eje{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-top:3px}
+  .peso{font-family:var(--disp);font-weight:600;font-size:1.1rem}
+  .peso small{font-family:var(--sans);font-weight:400;font-size:.78rem;color:var(--muted)}
+
+  dialog.dlg{border:1px solid var(--line);border-radius:20px;padding:0;max-width:min(680px,calc(100% - 24px));width:100%;
+    background:var(--surface);color:var(--ink);box-shadow:0 30px 80px -30px rgba(0,0,0,.55)}
+  dialog.dlg::backdrop{background:rgba(8,12,20,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+  dialog.dlg[open]{animation:entra .3s cubic-bezier(.16,.84,.34,1)}
+  .dlg-cab{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:20px 20px 14px;border-bottom:1px solid var(--line-soft);border-top:4px solid var(--c);border-radius:20px 20px 0 0}
+  .dlg-in{padding:16px 20px 22px;max-height:70vh;overflow-y:auto}
+  .dlg-in>*+*{margin-top:14px}
+  .dlg-in h4{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .dlg-in li::marker{color:var(--c)}
+  .fchips{display:flex;flex-wrap:wrap;gap:6px}
+  .fchip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.78rem;padding:4px 9px;border-radius:9px;background:var(--surface-2);border:1px solid var(--line)}
+
+  /* ============ simulador ============ */
+  .sim-cab{display:grid;gap:16px;grid-template-columns:1fr}
+  @media (min-width:860px){ .sim-cab{grid-template-columns:1fr auto;align-items:center} }
+  .crono{display:flex;align-items:center;gap:16px;padding:16px 18px;border-radius:18px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+  .crono .t{font-family:var(--mono);font-size:clamp(2.2rem,6vw,3rem);font-weight:500;letter-spacing:-.03em;line-height:1}
+  .crono.aviso .t{color:var(--warn)} .crono.fin .t{color:var(--bad)}
+  .anillo{flex:none;width:58px;height:58px}
+  .anillo circle{fill:none;stroke-width:6}
+  .anillo .fondo{stroke:var(--surface-2)}
+  .anillo .arco{stroke:var(--acc);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .5s linear,stroke .3s}
+  .crono.aviso .anillo .arco{stroke:var(--warn)} .crono.fin .anillo .arco{stroke:var(--bad)}
+  .plan{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:10px}
+  .plan div{font-family:var(--mono);font-size:.66rem;text-align:center;padding:6px 2px;border-radius:8px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line-soft)}
+  .plan div.on{background:var(--acc-soft);color:var(--acc-ink);border-color:var(--acc-line)}
+
+  .act{margin-top:16px;border-left:4px solid var(--c)}
+  .act-cab{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .act-cab h3{font-size:1.12rem}
+  .act-num{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+  .act .intro{font-size:.98rem;line-height:1.65}
+  .aps{list-style:none;padding:0;margin-top:12px;display:grid;gap:10px;counter-reset:ap}
+  .aps>li{counter-increment:ap;border:1px solid var(--line-soft);background:var(--surface-2);border-radius:12px;padding:10px 12px}
+  .aps>li+li{margin-top:0}
+  .ap-t{display:flex;gap:10px;align-items:flex-start}
+  .ap-t::before{content:counter(ap,lower-alpha) ")";flex:none;font-family:var(--mono);font-weight:500;color:var(--c);min-width:20px}
+  .ap-t .txt{flex:1;min-width:0}
+  .pts{flex:none;font-family:var(--mono);font-size:.72rem;padding:2px 8px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink-soft)}
+  .ap-aeg{border-style:dashed !important}
+  .sol{margin-top:10px;border:1px dashed var(--acc-line);background:var(--surface);border-radius:10px;padding:10px 12px;font-size:.92rem;line-height:1.7}
+  .sol b.t{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--acc-ink);margin-bottom:4px}
+  .calif{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .calif button{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:5px 10px;font-size:.8rem;font-weight:500;color:var(--ink-soft)}
+  .calif button:hover{border-color:var(--acc-line)}
+  .calif button[aria-pressed="true"][data-v="ok"]{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .calif button[aria-pressed="true"][data-v="calc"]{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+  .calif button[aria-pressed="true"][data-v="conc"],.calif button[aria-pressed="true"][data-v="blank"]{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+  .uni{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--warn-soft);font-size:.88rem}
+  .uni .paso{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+  .uni .paso button{border:0;background:transparent;width:32px;height:30px;font-weight:600}
+  .uni .paso span{min-width:26px;text-align:center;font-family:var(--mono)}
+  .act-nota{margin-left:auto;font-family:var(--mono);font-weight:500}
+  .opciones{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+  .opciones label{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer;font-weight:500;font-size:.9rem}
+  .opciones input{accent-color:var(--acc)}
+  .opcion+.opcion{margin-top:14px}
+  .opcion-t{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+  .diag{margin-top:12px;padding:10px;border-radius:12px;background:var(--surface);border:1px solid var(--line-soft);color:var(--ink)}
+  .diag svg{display:block;width:100%;height:auto;max-width:640px;margin:0 auto}
+  .nota-final{font-family:var(--disp);font-size:clamp(3rem,10vw,5rem);line-height:1;letter-spacing:-.03em}
+  .kmap{border-collapse:collapse;font-family:var(--mono);font-size:.85rem;margin:6px 0}
+  .kmap th{font-weight:500;color:var(--muted);padding:4px 8px;font-size:.74rem}
+  .kmap td{width:46px;height:40px;text-align:center;border:1px solid var(--line);background:var(--surface);position:relative;vertical-align:middle}
+  .kmap td.uno{font-weight:600}
+  .kmap td .dots{position:absolute;left:3px;right:3px;bottom:3px;display:flex;justify-content:center;gap:2px}
+  .kmap td .dots i{width:7px;height:7px;border-radius:50%}
+  .grupo{display:inline-flex;align-items:center;gap:6px;margin-right:12px;font-family:var(--mono);font-size:.84rem}
+  .grupo i{width:10px;height:10px;border-radius:50%}
+  .tv{font-family:var(--mono);font-size:.8rem;border-collapse:collapse}
+  .tv th,.tv td{padding:2px 8px;text-align:center;border-bottom:1px solid var(--line-soft)}
+  .tv th{color:var(--muted);font-weight:500}
+  .tv td.f1{font-weight:600;color:var(--acc-ink)}
+
+  /* modo Zen: fuera todo lo que no sea el examen */
+  .zen-bar{display:none}
+  body.zen .sidebar, body.zen .cabeza, body.zen footer, body.zen .pz-mando, body.zen .pz-ondas,
+  body.zen .pz-aurora, body.zen .pz-trama, body.zen .scrim, body.zen .no-zen{display:none !important}
+  body.zen .zen-bar{display:flex;position:sticky;top:0;z-index:70;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:10px clamp(12px,3vw,28px);background:color-mix(in srgb,var(--paper) 92%,transparent);border-bottom:1px solid var(--line);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  body.zen main{max-width:820px}
+  body.zen .act .intro{font-size:1.04rem}
+  .zen-bar .zt{font-family:var(--mono);font-size:1.5rem;font-weight:500;letter-spacing:-.02em}
+  .zen-bar .zt.aviso{color:var(--warn)} .zen-bar .zt.fin{color:var(--bad)}
+  .zen-bar .zl{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .zen-bar .zr{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .zen-bar .zrec{flex-basis:100%;font-size:.8rem;color:var(--warn);display:flex;gap:6px;align-items:center}
+
+  /* ============ formulario ============ */
+  .contador{display:flex;align-items:baseline;gap:6px;font-family:var(--disp)}
+  .contador b{font-size:clamp(2.6rem,8vw,3.6rem);line-height:1;letter-spacing:-.03em}
+  .contador span{font-size:1.2rem;color:var(--muted)}
+  .contador.warn b{color:var(--warn)} .contador.bad b{color:var(--bad)}
+  .fform{display:grid;gap:10px;grid-template-columns:1fr}
+  @media (min-width:760px){ .fform{grid-template-columns:1fr 1.4fr auto auto;align-items:end} }
+  .syms{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+  .syms button{min-width:32px;height:30px;border:1px solid var(--line);background:var(--surface-2);border-radius:8px;font-family:var(--mono);font-size:.86rem;color:var(--ink-soft)}
+  .syms button:hover{border-color:var(--acc-line);color:var(--ink)}
+  .flista{list-style:none;padding:0;margin:0;counter-reset:f}
+  .fitem{counter-increment:f;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;padding:10px 6px 10px 12px;border-bottom:1px solid var(--line-soft)}
+  .fitem+.fitem{margin-top:0}
+  .fitem::before{content:counter(f,decimal-leading-zero);font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+  .fitem .fn{font-size:.84rem;color:var(--ink-soft);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .fitem .fe{font-family:var(--mono);font-size:.96rem;word-break:break-word}
+  .fitem .facc{display:flex;gap:2px}
+  .lib{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;border:1px solid var(--line-soft);background:var(--surface)}
+  .lib+.lib{margin-top:6px}
+  .lib .le{flex:1;min-width:0}
+  .lib .le b{display:block;font-weight:500;font-size:.84rem;color:var(--ink-soft)}
+  .lib .le code{font-family:var(--mono);font-size:.86rem;word-break:break-word}
+  .lib.tiene{opacity:.6}
+
+  /* ============ trampas ============ */
+  .alerta{position:relative;display:flex;gap:16px;align-items:flex-start;padding:20px;border-radius:18px;border:1px solid;overflow:hidden}
+  .alerta.bad{border-color:color-mix(in srgb,var(--bad) 45%,transparent);background:var(--bad-soft)}
+  .alerta.warn{border-color:color-mix(in srgb,var(--warn) 45%,transparent);background:var(--warn-soft)}
+  .alerta .ai{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:14px;color:#fff}
+  .alerta.bad .ai{background:var(--bad)} .alerta.warn .ai{background:var(--warn)}
+  :root[data-theme="dark"] .alerta .ai{color:#1A1203}
+  .alerta .ai svg{width:24px;height:24px}
+  .alerta .cifra{font-family:var(--disp);font-size:1.9rem;font-weight:700;line-height:1;letter-spacing:-.02em}
+  .alerta.bad .cifra{color:var(--bad)} .alerta.warn .cifra{color:var(--warn)}
+  .alerta h3{margin-top:6px}
+  .alerta p{margin-top:6px;font-size:.92rem;color:var(--ink-soft)}
+  @keyframes pulso{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--bad) 40%,transparent)}50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--bad) 0%,transparent)}}
+  .alerta.bad .ai{animation:pulso 2.4s ease-in-out infinite}
+  .quiz .q{font-size:.96rem}
+  .quiz .opcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .quiz .opcs button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 11px;font-size:.84rem;font-weight:500}
+  .quiz .opcs button:hover{border-color:var(--acc-line)}
+  .quiz .opcs button.bien{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+  .quiz .opcs button.mal{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+  .quiz .exp{margin-top:10px}
+  .resul{font-family:var(--disp);font-size:2rem;font-weight:700;line-height:1}
+
+  /* ============ paleta ============ */
+  .sw{display:flex;gap:12px;align-items:center;padding:10px;border-radius:14px;border:1px solid var(--line);background:var(--surface)}
+  .sw .mu{flex:none;width:52px;height:52px;border-radius:12px;border:1px solid rgba(0,0,0,.08);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+  .sw .mu i{display:block}
+  .sw b{display:block;font-size:.92rem}
+  .sw code{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+  .sw p{font-size:.8rem;color:var(--ink-soft);line-height:1.4;margin-top:2px}
+
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;z-index:95;
+    background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:.9rem;transition:opacity .25s ease,transform .25s ease;max-width:calc(100% - 32px)}
+  .toast.on{opacity:1;transform:translateX(-50%)}
+
+  footer{border-top:1px solid var(--line);padding:22px 16px;text-align:center;font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+
+  @media (max-width:560px){
+    .card,.bcard{padding:15px;border-radius:16px}
+    .trampa-bar{font-size:.8rem}
+    .alerta{flex-direction:column;gap:10px}
+    .kmap td{width:38px;height:36px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+  }
+  @media print{
+    .sidebar,.cabeza,.scrim,footer,.no-print,.zen-bar{display:none !important}
+    body{background:#fff;color:#000}
+    main{padding:0;max-width:none}
+    .card,.act{box-shadow:none;break-inside:avoid}
+    .fitem{break-inside:avoid}
+  }
+</style>
+<!-- ===== estilo del portal: inicio ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ---------- fichas de color, iguales en las seis páginas ---------- */
+:root, :root[data-theme="light"]{
+  --pz-paper:#F7F8FB; --pz-surface:#FFFFFF; --pz-surface-2:#F1F4F9; --pz-surface-3:#E7ECF3;
+  --pz-ink:#0F1A2A; --pz-ink-2:#35435A; --pz-muted:#5C6A7E;
+  --pz-line:#E4E9F0; --pz-line-2:#D3DAE5;
+  --pz-acc:79 70 229;
+  --pz-sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --pz-disp:"Space Grotesk","IBM Plex Sans",ui-sans-serif,sans-serif;
+  --pz-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --pz-paper:#070B14; --pz-surface:#101828; --pz-surface-2:#172033; --pz-surface-3:#1F2A3D;
+  --pz-ink:#EEF2F8; --pz-ink-2:#C6D0DE; --pz-muted:#94A3B8;
+  --pz-line:#1E293B; --pz-line-2:#2C3A50;
+  color-scheme:dark;
+}
+
+/* ---------- los tokens propios de la página pasan a los de arriba ---------- */
+:root, :root[data-theme="light"], :root[data-theme="dark"]{
+    --paper:var(--pz-paper);
+    --surface:var(--pz-surface);
+    --surface-2:var(--pz-surface-2);
+    --ink:var(--pz-ink);
+    --ink-soft:var(--pz-ink-2);
+    --muted:var(--pz-muted);
+    --line:var(--pz-line);
+    --line-soft:var(--pz-line-2);
+}
+
+/* ---------- el fondo lo pinta <html> ----------
+   Si el fondo lo pinta <body>, tapa a los hijos con z-index negativo (las capas
+   del fondo), porque el fondo del body se dibuja después de esos hijos. */
+html{background:var(--pz-paper) !important}
+body{background:transparent !important}
+
+/* ---------- tipografía ---------- */
+body{font-family:var(--pz-sans) !important}
+h1,h2,h3,h4,.brand{font-family:var(--pz-disp) !important; letter-spacing:-.015em}
+button, input, select, textarea{font-family:inherit}
+
+/* ---------- fondo: halos fijos, trama de puntos y ondas ---------- */
+.pz-aurora{position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(46rem 34rem at 6% -8%,  rgb(var(--pz-acc)/.22), rgb(var(--pz-acc)/0) 70%),
+    radial-gradient(40rem 30rem at 97% -6%, rgb(var(--pz-acc)/.16), rgb(var(--pz-acc)/0) 70%)}
+:root[data-theme="dark"] .pz-aurora{
+  background:
+    radial-gradient(46rem 34rem at 6% -8%,  rgb(var(--pz-acc)/.20), rgb(var(--pz-acc)/0) 70%),
+    radial-gradient(40rem 30rem at 97% -6%, rgb(var(--pz-acc)/.14), rgb(var(--pz-acc)/0) 70%)}
+.pz-trama{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:radial-gradient(rgba(15,26,42,.06) 1px, transparent 1px);background-size:26px 26px;
+  -webkit-mask-image:radial-gradient(ellipse 85% 60% at 50% 0%, #000 35%, transparent 100%);
+          mask-image:radial-gradient(ellipse 85% 60% at 50% 0%, #000 35%, transparent 100%)}
+:root[data-theme="dark"] .pz-trama{background-image:radial-gradient(rgba(190,210,255,.07) 1px, transparent 1px)}
+.pz-ondas{position:fixed;left:0;right:0;bottom:0;width:100%;height:46vh;min-height:260px;
+  z-index:-1;pointer-events:none;display:block;opacity:.6}
+:root[data-theme="dark"] .pz-ondas{opacity:.75}
+
+/* ---------- pastilla de controles ---------- */
+.pz-mando{position:fixed;right:16px;bottom:16px;z-index:90;display:flex;align-items:center;gap:6px;
+  padding:6px;border-radius:14px;border:1px solid var(--pz-line);background:rgb(var(--pz-fondo-mando,255 255 255)/.86);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  box-shadow:0 10px 30px -14px rgba(15,26,42,.45)}
+:root[data-theme="dark"] .pz-mando{--pz-fondo-mando:16 24 40}
+.pz-mando a, .pz-mando button{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;
+  padding:0 11px;border:0;border-radius:10px;background:transparent;color:var(--pz-ink-2);cursor:pointer;
+  font-family:var(--pz-sans);font-size:.83rem;font-weight:600;text-decoration:none;
+  transition:background-color .25s ease,color .25s ease}
+.pz-mando a:hover, .pz-mando button:hover{background:rgb(var(--pz-acc)/.12);color:rgb(var(--pz-acc))}
+.pz-mando a:focus-visible, .pz-mando button:focus-visible{outline:2px solid rgb(var(--pz-acc));outline-offset:2px}
+.pz-mando button{width:36px;padding:0}
+.pz-mando svg{width:17px;height:17px}
+.pz-mando .pz-sol{display:none}
+:root[data-theme="dark"] .pz-mando .pz-sol{display:block}
+:root[data-theme="dark"] .pz-mando .pz-luna{display:none}
+@media (max-width:640px){ .pz-mando{right:10px;bottom:10px} .pz-mando a span{display:none} }
+@media print{ .pz-mando,.pz-ondas,.pz-aurora,.pz-trama{display:none !important} }
+
+
+</style>
+<script>
+(function () {
+  var raiz = document.documentElement;
+
+  function aplicar(oscuro) {
+    raiz.setAttribute('data-theme', oscuro ? 'dark' : 'light');
+    raiz.classList.toggle('dark', oscuro);
+  }
+  function guardado() { try { return localStorage.getItem('tema'); } catch (e) { return null; } }
+  function guardar(v) { try { localStorage.setItem('tema', v ? 'oscuro' : 'claro'); } catch (e) {} }
+
+  var g = guardado();
+  var quiero = g ? g === 'oscuro' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var asentado = false;                 // hasta que la página termina de arrancar
+  aplicar(quiero);
+
+  /* Tres de estas páginas traen su propio interruptor de tema y fijan el suyo al
+     arrancar. Mientras la página se monta devolvemos el tema del portal; una vez
+     asentada, cualquier cambio ya es cosa de quien lee, así que lo anotamos. */
+  new MutationObserver(function () {
+    var valor = raiz.getAttribute('data-theme');
+    /* El interruptor de Català cicla claro -> oscuro -> tema del sistema. Ese
+       tercer paso aquí no pinta nada, así que lo tratamos como un cambio más:
+       el sitio entero funciona con dos temas y uno solo guardado. */
+    if (valor === '' || valor === null) {
+      if (asentado) { quiero = !quiero; guardar(quiero); }
+      aplicar(quiero);
+      return;
+    }
+    var ahora = valor === 'dark';
+    if (ahora === quiero) { raiz.classList.toggle('dark', ahora); return; }
+    if (!asentado) { aplicar(quiero); return; }
+    quiero = ahora;
+    raiz.classList.toggle('dark', ahora);
+    guardar(ahora);
+  }).observe(raiz, { attributes: true, attributeFilter: ['data-theme'] });
+
+  document.addEventListener('DOMContentLoaded', function () { aplicar(quiero); });
+  window.addEventListener('load', function () {
+    aplicar(quiero);
+    setTimeout(function () { asentado = true; }, 150);
+  });
+
+  // Sin preferencia guardada seguimos al sistema
+  try {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+      if (!guardado()) { quiero = e.matches; aplicar(quiero); }
+    });
+  } catch (e) {}
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- fondo ---
+    var capas = document.createElement('div');
+    capas.innerHTML = '<div class="pz-aurora" aria-hidden="true"></div>' +
+                      '<div class="pz-trama" aria-hidden="true"></div>' +
+                      '<canvas class="pz-ondas" aria-hidden="true"></canvas>';
+    while (capas.firstChild) document.body.appendChild(capas.firstChild);
+
+    // --- pastilla de controles ---
+    var mando = document.createElement('div');
+    mando.className = 'pz-mando';
+    mando.innerHTML =
+      '<a href="index.html" title="Volver al portal">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>' +
+        '<span>Portal</span></a>' +
+      '<button type="button" id="pzTema" aria-label="Cambiar entre claro y oscuro">' +
+        '<svg class="pz-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>' +
+        '<svg class="pz-luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>' +
+      '</button>';
+    document.body.appendChild(mando);
+    mando.querySelector('#pzTema').addEventListener('click', function () {
+      quiero = raiz.getAttribute('data-theme') !== 'dark';
+      aplicar(quiero);
+      guardar(quiero);
+      if (quieto) pintar();
+    });
+
+    // --- ondas ---
+    var lienzo = document.querySelector('.pz-ondas'), ctx = lienzo.getContext('2d');
+    var ONDAS = [
+        { c:[ 49, 46,129], y:0.22, a:24, k:0.0055, w:-0.62, f:0.0, par:.08 },
+        { c:[ 67, 56,202], y:0.38, a:21, k:0.0074, w: 0.85, f:1.1, par:.06 },
+        { c:[ 79, 70,229], y:0.54, a:19, k:0.0096, w:-1.10, f:2.3, par:.05 },
+        { c:[129,140,248], y:0.70, a:22, k:0.0065, w: 1.35, f:0.6, par:.04 },
+        { c:[ 56,120,220], y:0.86, a:17, k:0.0120, w:-0.80, f:3.0, par:.03 }
+    ];
+    ONDAS.forEach(function (o, i) {
+      o.sig = ONDAS[(i + 1) % ONDAS.length].c;
+      o.burbujas = [];
+      for (var j = 0; j < 4; j++) o.burbujas.push({
+        x0: (j * 227 + i * 91) % 1000 / 1000, v: 9 + ((i * 3 + j * 7) % 11),
+        r: 1.3 + ((i + j) % 4) * 0.6, d: j * 1.7 + i * 0.9 });
+    });
+    var rgba = function (c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; };
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+
+    function ajustar() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      lienzo.width = lienzo.clientWidth * dpr; lienzo.height = lienzo.clientHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    var t0 = performance.now(), raf = 0;
+
+    function altura(o, x, t, H, desp) {
+      var amp = o.a * (1 + 0.22 * Math.sin(t * 0.37 + o.f));
+      return H * o.y - desp * o.par
+           + Math.sin(x * o.k + t * o.w + o.f) * amp
+           + Math.sin(x * o.k * 2.3 - t * o.w * 0.7 + o.f) * amp * 0.28
+           + Math.sin(x * o.k * 3.7 + t * o.w * 1.3) * amp * 0.12;
+    }
+    function pintar() {
+      var W = lienzo.clientWidth, H = lienzo.clientHeight;
+      var t = quieto ? 0 : (performance.now() - t0) / 1000;
+      var os = raiz.getAttribute('data-theme') === 'dark';
+      var alfa = os ? .24 : .20, linea = os ? .62 : .46, halo = os ? .14 : .09;
+      var desp = Math.min(window.scrollY || 0, 400);
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < ONDAS.length; i++) {
+        var o = ONDAS[i], base = H * o.y - desp * o.par;
+        ctx.beginPath();
+        for (var x = 0; x <= W + 6; x += 6) {
+          var y = altura(o, x, t, H, desp);
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = rgba(o.c, halo); ctx.lineWidth = 7; ctx.stroke();
+        var gl = ctx.createLinearGradient(0, 0, W, 0);
+        gl.addColorStop(0, rgba(o.c, linea)); gl.addColorStop(1, rgba(o.sig, linea * .85));
+        ctx.strokeStyle = gl; ctx.lineWidth = 1.5; ctx.stroke();
+        var hondo = base + H * 0.12, clave = (os ? 'o' : 'c') + Math.round(base) + '|' + Math.round(H);
+        if (o._gk !== clave) {
+          var g2 = ctx.createLinearGradient(0, base - o.a, 0, hondo);
+          g2.addColorStop(0, rgba(o.c, alfa)); g2.addColorStop(1, rgba(o.c, 0));
+          o._g = g2; o._gk = clave;
+        }
+        ctx.lineTo(W, hondo); ctx.lineTo(0, hondo); ctx.closePath();
+        ctx.fillStyle = o._g; ctx.fill();
+        for (var j = 0; j < o.burbujas.length; j++) {
+          var b = o.burbujas[j];
+          var bx = (b.x0 * W + t * b.v) % (W + 60) - 30;
+          var by = altura(o, bx, t, H, desp) - 6 - Math.sin(t * 1.3 + b.d) * 5;
+          ctx.beginPath(); ctx.arc(bx, by, b.r, 0, 6.283);
+          ctx.fillStyle = rgba(o.c, (os ? .55 : .40) * (0.55 + 0.45 * Math.sin(t * 0.9 + b.d * 2.1)));
+          ctx.fill();
+        }
+      }
+      if (!quieto) raf = requestAnimationFrame(pintar);
+    }
+    ajustar(); pintar();
+    window.addEventListener('resize', function () { ajustar(); if (quieto) pintar(); });
+    window.addEventListener('scroll', function () { if (quieto) pintar(); }, { passive: true });
+    document.addEventListener('visibilitychange', function () {
+      if (quieto) return;
+      cancelAnimationFrame(raf);
+      if (!document.hidden) raf = requestAnimationFrame(pintar);
+    });
+  });
+})();
+</script>
+<!-- ===== estilo del portal: fin ===== -->
+</head>
+<body>
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+    <a class="marca" href="#inicio">
+      <span class="marca-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      </span>
+      <span style="min-width:0"><b>Tecnología 10</b><small>Tecnología e Ingeniería II</small></span>
+    </a>
+
+    <nav class="nav" aria-label="Secciones">
+      <div class="navgroup">
+        <div class="navlabel">Inicio</div>
+        <a href="#inicio" data-nav="inicio"><svg class="ic" data-i="panel"></svg>Panel y bloques</a>
+      </div>
+      <div class="navgroup">
+        <div class="navlabel">Ponte a prueba</div>
+        <a href="#simulador" data-nav="simulador"><svg class="ic" data-i="reloj"></svg>Simulador · Modo Zen<span class="pts">90'</span></a>
+      </div>
+      <div class="navgroup">
+        <div class="navlabel">Herramientas</div>
+        <a href="#formulario" data-nav="formulario"><svg class="ic" data-i="sigma"></svg>Mi formulario<span class="pts" id="nav-form">0/50</span></a>
+        <a href="#trampas" data-nav="trampas"><svg class="ic" data-i="alerta"></svg>Trampas PAU</a>
+      </div>
+      <div class="navgroup">
+        <div class="navlabel">Sobre la página</div>
+        <a href="#paleta" data-nav="paleta"><svg class="ic" data-i="paleta"></svg>Paleta de colores</a>
+      </div>
+    </nav>
+
+    <div class="lado-card">
+      <div class="navlabel">Simulacro de examen</div>
+      <div class="num" id="lado-reloj">90:00</div>
+      <button class="btn pri peq" type="button" data-act="ir-sim" style="margin-top:10px">Ir al simulador</button>
+      <p class="tiny muted" style="margin-top:10px">Cuatro actividades, 10 puntos, con los bloques C y D como protagonistas.</p>
+    </div>
+
+    <p class="lado-pie">Contenidos y criterios de corrección según las directrices de la PAU para Tecnología e Ingeniería II.</p>
+  </aside>
+
+  <div class="col">
+    <div class="cabeza">
+      <header class="topbar">
+        <button class="burger" id="burger" type="button" aria-label="Abrir el menú" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <span class="crumb" id="crumb">Panel y bloques</span>
+        <span class="reloj" id="reloj" role="timer" aria-live="off" title="Ir al examen" data-act="ir-sim">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+          <span id="reloj-t">90:00</span>
+        </span>
+      </header>
+      <div class="trampa-bar" id="tbar" role="status" aria-live="polite">
+        <span class="tb-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+        <span class="tb-txt" id="tbar-t"></span>
+        <button type="button" data-act="tip-sig" aria-label="Siguiente aviso">siguiente ›</button>
+      </div>
+    </div>
+
+    <div class="zen-bar" id="zenbar">
+      <span class="zl">Modo Zen</span>
+      <span class="zt" id="zen-t">90:00</span>
+      <span class="zr">
+        <button class="btn peq" type="button" id="zen-pausa" data-act="ex-pausa">Pausa</button>
+        <button class="btn peq" type="button" data-act="zen-off">Salir del modo Zen <span class="mono tiny muted">Esc</span></button>
+      </span>
+      <span class="zrec" id="zen-rec"></span>
+    </div>
+
+    <main id="app" tabindex="-1"></main>
+
+    <footer>Ismael Aish · 2026 · Hecho a partir de las directrices de la PAU de Tecnología e Ingeniería II</footer>
+  </div>
+</div>
+
+<dialog class="dlg" id="dlg" aria-labelledby="dlg-tit"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+   UTILIDADES
+   ===================================================================== */
+const $ = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const store = {
+  k: 'tecno:',
+  get(key, def) { try { const v = localStorage.getItem(this.k + key); return v == null ? def : JSON.parse(v); } catch (e) { return def; } },
+  set(key, v)   { try { localStorage.setItem(this.k + key, JSON.stringify(v)); } catch (e) {} },
+  del(key)      { try { localStorage.removeItem(this.k + key); } catch (e) {} }
+};
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const rint = (a, b, paso = 1) => a + paso * Math.floor(Math.random() * (Math.floor((b - a) / paso) + 1));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+// número a la española: coma decimal y como mucho d decimales
+const nf = (x, d = 2) => Number(x).toLocaleString('es-ES', {maximumFractionDigits: d, minimumFractionDigits: 0}).replace('-', '−');
+const nf2 = x => Number(x).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+const PI = Math.PI;
+const app = $('#app');
+
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), 2800);
+}
+
+/* ---------- iconos (SVG en línea, sin depender de la red) ---------- */
+const IC = {
+  panel:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  reloj:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
+  sigma:'<path d="M18 7V4H6l6 8-6 8h12v-3"/>',
+  alerta:'<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4M12 17h.01"/>',
+  paleta:'<circle cx="13.5" cy="6.5" r="1.3"/><circle cx="17.5" cy="10.5" r="1.3"/><circle cx="8.5" cy="7.5" r="1.3"/><circle cx="6.5" cy="12.5" r="1.3"/><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.3A5.7 5.7 0 0 0 22 9.7C22 5.4 17.5 2 12 2Z"/>',
+  idea:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/>',
+  cubo:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/>',
+  llave:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/>',
+  rayo:'<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/>',
+  lazo:'<path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/>',
+  play:'<path d="M7 4.5v15l12-7.5Z"/>',
+  pausa:'<path d="M8 5v14M16 5v14"/>',
+  dado:'<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.2"/><circle cx="15.5" cy="15.5" r="1.2"/><circle cx="15.5" cy="8.5" r="1.2"/><circle cx="8.5" cy="15.5" r="1.2"/>',
+  zen:'<circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  mas:'<path d="M12 5v14M5 12h14"/>',
+  papelera:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
+  arriba:'<path d="m18 15-6-6-6 6"/>',
+  abajo:'<path d="m6 9 6 6 6-6"/>',
+  flecha:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  cerrar:'<path d="M18 6 6 18M6 6l12 12"/>',
+  impr:'<path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  copiar:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  calc:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 19h.01M12 19h.01M16 19h.01"/>',
+  hoja:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>',
+  lista:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  regla:'<path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2M11.5 9.5l2-2M8.5 6.5l2-2M17.5 15.5l2-2"/>',
+  ojo:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+  ok:'<circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/>'
+};
+const ico = (n, cls = 'i', sw = 2) => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n] || ''}</svg>`;
+// los iconos de la barra lateral se dibujan aquí para no repetir trazados en el HTML
+$$('svg[data-i]').forEach(s => { s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor');
+  s.setAttribute('stroke-width', '2'); s.setAttribute('stroke-linecap', 'round'); s.setAttribute('stroke-linejoin', 'round'); s.setAttribute('aria-hidden', 'true'); s.innerHTML = IC[s.dataset.i]; });
+
+/* =====================================================================
+   BLOQUES DE CONTENIDO Y PESOS
+   ===================================================================== */
+const BLOQUES = [
+  { id:'AEG', letra:'A + E + G', c:'var(--cA)', ico:'idea', min:0, max:1,
+    nombre:'Proyectos I+D, sistemas informáticos emergentes y tecnología sostenible',
+    corto:'Proyectos, informática emergente y sostenibilidad',
+    breve:'Teoría corta: fases de un proyecto, IA, IoT, ciclo de vida, economía circular.',
+    temas:[
+      '<b>A · Proyectos de I+D+i:</b> fases (idea, investigación, diseño, prototipo, ensayos, fabricación, comercialización), planificación con diagramas de Gantt y PERT, normalización (UNE, ISO) y propiedad industrial (patentes y modelos de utilidad).',
+      '<b>E · Sistemas informáticos emergentes:</b> inteligencia artificial y aprendizaje automático, big data, Internet de las cosas (IoT), computación en la nube, ciberseguridad, gemelo digital e industria 4.0.',
+      '<b>G · Tecnología sostenible:</b> análisis de ciclo de vida (extracción, fabricación, distribución, uso y fin de vida), economía circular, eficiencia energética, huella de carbono, energías renovables y ODS.'
+    ],
+    formulas:['g1','g2'],
+    cae:'Preguntas cortas de teoría, muchas veces como un apartado dentro de otra actividad. Se responden con una definición precisa y un ejemplo concreto.',
+    trampa:'Contestar con generalidades. Una definición sin ejemplo, o un ejemplo sin explicar, suele quedarse corta: di qué es, para qué sirve y un caso real.' },
+  { id:'B', letra:'Bloque B', c:'var(--cB)', ico:'cubo', min:1, max:2.5,
+    nombre:'Materiales y fabricación', corto:'Materiales y fabricación',
+    breve:'Ensayos de tracción, dureza y resiliencia, propiedades y técnicas de conformación.',
+    temas:[
+      'Propiedades mecánicas: elasticidad, plasticidad, dureza, tenacidad, fragilidad, resiliencia y fatiga.',
+      '<b>Ensayo de tracción:</b> diagrama tensión-deformación, zona elástica (ley de Hooke) y plástica, límite elástico, resistencia a la tracción y alargamiento.',
+      '<b>Ensayos de dureza</b> (Brinell, Vickers, Rockwell) y de <b>resiliencia</b> (péndulo de Charpy).',
+      'Aleaciones férricas y no férricas; tratamientos térmicos: temple, revenido, recocido y normalizado.',
+      '<b>Conformación:</b> moldeo, deformación (forja, laminación, extrusión, estampación), mecanizado, uniones y fabricación aditiva.'
+    ],
+    formulas:['b1','b2','b3','b4','b5','b6','b7','b8'],
+    cae:'Un problema numérico de un ensayo (tracción, Brinell o Charpy) acompañado de alguna pregunta teórica sobre propiedades o procesos de fabricación.',
+    trampa:'1 MPa = 1 N/mm²: si trabajas en newtons y milímetros, la tensión sale directamente en MPa. En Brinell la carga va en kgf y el diámetro en mm.' },
+  { id:'C', letra:'Bloque C', c:'var(--cC)', ico:'llave', min:2.5, max:5,
+    nombre:'Sistemas mecánicos', corto:'Sistemas mecánicos',
+    breve:'Estructuras, máquinas térmicas y circuitos neumáticos e hidráulicos.',
+    temas:[
+      '<b>Estructuras:</b> tipos de esfuerzo (tracción, compresión, flexión, torsión, cortadura), equilibrio (ΣF = 0, ΣM = 0), reacciones en vigas, momento flector, tensión y deformación. <i>No entra</i> el cálculo de esfuerzos en barras por nudos, Ritter ni Cremona.',
+      '<b>Máquinas térmicas:</b> motores de combustión (ciclos Otto y Diésel, cilindrada, relación de compresión, par, potencia y rendimiento), máquinas frigoríficas y bomba de calor (COP), ciclo de Carnot.',
+      '<b>Neumática e hidráulica:</b> producción y tratamiento del aire, cilindros de simple y doble efecto, válvulas (vías, posiciones y accionamientos), circuitos; principio de Pascal, caudal, continuidad y potencia hidráulica.'
+    ],
+    formulas:['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11','c12','c13','c14','c15','c16','c17'],
+    cae:'Problemas numéricos con varios apartados (un motor, una bomba de calor, un cilindro, una viga) y, a veces, interpretar o completar un circuito neumático.',
+    trampa:'Temperaturas siempre en kelvin; presión absoluta (p + p<sub>atm</sub>) para el consumo de aire; en el retroceso del cilindro hay que restar la sección del vástago.' },
+  { id:'D', letra:'Bloque D', c:'var(--cD)', ico:'rayo', min:2.5, max:5,
+    nombre:'Sistemas eléctricos y electrónicos', corto:'Sistemas eléctricos y electrónicos',
+    breve:'Corriente alterna, potencias y factor de potencia; electrónica digital y Karnaugh.',
+    temas:[
+      '<b>Corriente alterna:</b> valores instantáneo, máximo y eficaz; circuitos R, L, C, RL, RC y RLC serie; impedancia y desfase; triángulo de potencias, factor de potencia y su corrección; resonancia.',
+      '<b>Electrónica digital:</b> sistemas de numeración, álgebra de Boole, puertas lógicas, tablas de verdad, simplificación por <b>Karnaugh</b> e implementación con puertas NAND o NOR; circuitos combinacionales.'
+    ],
+    formulas:['d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d13'],
+    cae:'Un circuito de alterna (impedancia, intensidad, potencias, condensador de compensación) o un problema lógico: del enunciado a la tabla de verdad, a Karnaugh y al circuito con puertas.',
+    trampa:'Trabaja con valores eficaces; pasa µF y mH al SI antes de calcular. En Karnaugh, grupos de 1, 2, 4 u 8 casillas, y los bordes del mapa son adyacentes.' },
+  { id:'F', letra:'Bloque F', c:'var(--cF)', ico:'lazo', min:1, max:2.5,
+    nombre:'Sistemas automáticos', corto:'Sistemas automáticos',
+    breve:'Lazo abierto y cerrado, función de transferencia y álgebra de bloques.',
+    temas:[
+      'Sistemas de control en <b>lazo abierto</b> y en <b>lazo cerrado</b>; elementos: captador, comparador, regulador, actuador y planta.',
+      '<b>Función de transferencia</b>: cociente entre la salida y la entrada en Laplace, con condiciones iniciales nulas.',
+      '<b>Álgebra de bloques:</b> serie, paralelo, realimentación y traslado de puntos de suma y de bifurcación.',
+      'Respuesta ante un escalón y error en régimen permanente (teorema del valor final).'
+    ],
+    formulas:['f1','f2','f3','f4','f5'],
+    cae:'Reducir un diagrama de bloques a una sola función de transferencia y razonar sobre el sistema: tipo de lazo, elementos y valor final de la salida.',
+    trampa:'Con realimentación negativa el denominador es 1 + G·H (no 1 − G·H). Reduce siempre primero los lazos internos.' }
+];
+const BL = Object.fromEntries(BLOQUES.map(b => [b.id, b]));
+
+/* ---------- biblioteca de fórmulas sugeridas ---------- */
+const LIB = [
+  {id:'b1', b:'B', n:'Tensión normal', e:'σ = F / S₀'},
+  {id:'b2', b:'B', n:'Deformación unitaria', e:'ε = ΔL / L₀'},
+  {id:'b3', b:'B', n:'Ley de Hooke', e:'σ = E · ε'},
+  {id:'b4', b:'B', n:'Alargamiento a rotura', e:'A(%) = (L_f − L₀) / L₀ · 100'},
+  {id:'b5', b:'B', n:'Dureza Brinell', e:'HB = 2F / [πD (D − √(D² − d²))]'},
+  {id:'b6', b:'B', n:'Dureza Vickers', e:'HV = 1,854 · F / d²'},
+  {id:'b7', b:'B', n:'Resiliencia (Charpy)', e:'ρ = m·g·(h₀ − h₁) / S'},
+  {id:'b8', b:'B', n:'Coeficiente de seguridad', e:'n = σ_e / σ_trabajo'},
+  {id:'c1', b:'C', n:'Cilindrada total', e:'V_T = n · (π D² / 4) · L'},
+  {id:'c2', b:'C', n:'Relación de compresión', e:'r = (V_u + V_c) / V_c'},
+  {id:'c3', b:'C', n:'Potencia y par', e:'P = M · ω'},
+  {id:'c4', b:'C', n:'Velocidad angular', e:'ω = 2π · n / 60'},
+  {id:'c5', b:'C', n:'Rendimiento Otto teórico', e:'η = 1 − 1 / r^(γ−1)'},
+  {id:'c6', b:'C', n:'Rendimiento de Carnot', e:'η = 1 − T₂ / T₁'},
+  {id:'c7', b:'C', n:'COP frigorífico', e:'COP_f = Q₂ / W   (ideal: T₂ / (T₁ − T₂))'},
+  {id:'c8', b:'C', n:'COP bomba de calor', e:'COP_bc = Q₁ / W   (ideal: T₁ / (T₁ − T₂))'},
+  {id:'c9', b:'C', n:'Balance de energía', e:'Q₁ = Q₂ + W'},
+  {id:'c10', b:'C', n:'Fuerza de avance', e:'F_a = p · (π D² / 4) · η'},
+  {id:'c11', b:'C', n:'Fuerza de retroceso', e:'F_r = p · π (D² − d²) / 4 · η'},
+  {id:'c12', b:'C', n:'Consumo de aire', e:'Q = V_ciclo · n · (p + p_atm) / p_atm'},
+  {id:'c13', b:'C', n:'Principio de Pascal', e:'F₁ / S₁ = F₂ / S₂'},
+  {id:'c14', b:'C', n:'Caudal (continuidad)', e:'Q = S · v'},
+  {id:'c15', b:'C', n:'Potencia hidráulica', e:'P = p · Q'},
+  {id:'c16', b:'C', n:'Equilibrio estático', e:'ΣF = 0 ;  ΣM = 0'},
+  {id:'c17', b:'C', n:'Tensión de flexión', e:'σ = M_f / W'},
+  {id:'c18', b:'C', n:'Calor de combustión', e:'Q = m · P_c'},
+  {id:'d1', b:'D', n:'Valor eficaz', e:'V_ef = V_máx / √2'},
+  {id:'d2', b:'D', n:'Reactancia inductiva', e:'X_L = 2π f L'},
+  {id:'d3', b:'D', n:'Reactancia capacitiva', e:'X_C = 1 / (2π f C)'},
+  {id:'d4', b:'D', n:'Impedancia RLC serie', e:'Z = √(R² + (X_L − X_C)²)'},
+  {id:'d5', b:'D', n:'Ley de Ohm en alterna', e:'I = V / Z'},
+  {id:'d6', b:'D', n:'Desfase', e:'tg φ = (X_L − X_C) / R ;  cos φ = R / Z'},
+  {id:'d7', b:'D', n:'Potencia activa', e:'P = V · I · cos φ = I² · R'},
+  {id:'d8', b:'D', n:'Potencia reactiva', e:'Q = V · I · sen φ'},
+  {id:'d9', b:'D', n:'Potencia aparente', e:'S = V · I = √(P² + Q²)'},
+  {id:'d10', b:'D', n:'Frecuencia de resonancia', e:'f₀ = 1 / (2π √(L·C))'},
+  {id:'d11', b:'D', n:'Condensador de compensación', e:'C = P (tg φ₁ − tg φ₂) / (ω V²)'},
+  {id:'d12', b:'D', n:'Potencia trifásica', e:'P = √3 · V_L · I_L · cos φ'},
+  {id:'d13', b:'D', n:'Leyes de De Morgan', e:"(a·b)' = a' + b' ;  (a + b)' = a' · b'"},
+  {id:'f1', b:'F', n:'Bloques en serie', e:'G = G₁ · G₂'},
+  {id:'f2', b:'F', n:'Bloques en paralelo', e:'G = G₁ ± G₂'},
+  {id:'f3', b:'F', n:'Lazo cerrado (realimentación negativa)', e:'M = G / (1 + G·H)'},
+  {id:'f4', b:'F', n:'Teorema del valor final', e:'y(∞) = lím s→0  s · Y(s)'},
+  {id:'f5', b:'F', n:'Error ante escalón (realim. unitaria)', e:'e_ss = 1 / (1 + K_p) ;  K_p = lím s→0 G(s)'},
+  {id:'g1', b:'AEG', n:'Rendimiento global', e:'η_T = η₁ · η₂ · η₃ …'},
+  {id:'g2', b:'AEG', n:'Energía consumida', e:'E = P · t'}
+];
+const LIBI = Object.fromEntries(LIB.map(f => [f.id, f]));
+
+/* ---------- avisos de corrección que rotan en la barra ---------- */
+const TIPS = [
+  {n:'bad',  t:'<b>Error de concepto = 0.</b> Si aplicas la ley equivocada, el apartado no puntúa aunque las cuentas estén perfectas.'},
+  {n:'warn', t:'<b>¡Cuidado con las unidades!</b> Cada unidad que falta o está mal resta 0,25 puntos, hasta 1 punto por actividad.'},
+  {n:'warn', t:'<b>¡Revisa los despejes!</b> Un error de cálculo o de despeje con el concepto bien deja el apartado en la mitad.'},
+  {n:'bad',  t:'<b>Temperaturas en kelvin.</b> Carnot y los COP con grados Celsius son un error de concepto.'},
+  {n:'warn', t:'<b>Escribe la fórmula antes de sustituir.</b> Así el corrector ve que el concepto es correcto aunque falles una cuenta.'},
+  {n:'bad',  t:'<b>Realimentación negativa:</b> M = G / (1 + G·H). El signo del denominador no se negocia.'},
+  {n:'warn', t:'<b>µF, mH, kW, bar, L/min:</b> pásalo todo al SI antes de operar y vuelve a la unidad pedida al final.'},
+  {n:'warn', t:'<b>Calculadora no programable</b> y <b>formulario de 50 fórmulas como máximo</b>, que se entrega con el examen.'},
+  {n:'warn', t:'<b>90 minutos, 4 actividades:</b> unos 20 minutos por actividad y 10 para repasar unidades y despejes.'},
+  {n:'bad',  t:'<b>Bloque C:</b> el cálculo de esfuerzos en barras por nudos, Ritter o Cremona no entra. No pierdas tiempo ahí.'}
+];
+
+/* =====================================================================
+   ESTADO GUARDADO
+   ===================================================================== */
+const P = Object.assign({examenes: []}, store.get('progreso', {}));
+const guardarP = () => store.set('progreso', P);
+let FORM = store.get('form', []);
+const guardarForm = () => { store.set('form', FORM); pintarContadorNav(); };
+const LIMITE = 50;
+let EX = store.get('examen', null);
+const guardarEx = () => store.set('examen', EX);
+const DURACION = 90 * 60 * 1000;
+
+/* =====================================================================
+   SIMPLIFICACIÓN LÓGICA (Quine-McCluskey, hasta 4 variables)
+   ===================================================================== */
+const bits = x => { let c = 0; while (x) { c += x & 1; x >>= 1; } return c; };
+function qm(nv, unos, indif = []) {
+  if (!unos.length) return [];
+  const clave = t => t.v + ':' + t.m;
+  let cur = [...new Set([...unos, ...indif])].map(v => ({v, m: 0}));
+  const primos = new Map();
+  while (cur.length) {
+    const usado = new Set(), sig = new Map();
+    for (let i = 0; i < cur.length; i++) for (let j = i + 1; j < cur.length; j++) {
+      const a = cur[i], b = cur[j];
+      if (a.m !== b.m) continue;
+      const d = a.v ^ b.v;
+      if (d && !(d & (d - 1))) { const t = {v: a.v & ~d, m: a.m | d}; sig.set(clave(t), t); usado.add(i); usado.add(j); }
+    }
+    cur.forEach((t, i) => { if (!usado.has(i)) primos.set(clave(t), t); });
+    cur = [...sig.values()];
+  }
+  const cubre = (t, x) => (x & ~t.m) === (t.v & ~t.m);
+  const PR = [...primos.values()].filter(t => unos.some(u => cubre(t, u)));
+  // primero los esenciales
+  const elegidos = [];
+  unos.forEach(u => { const c = PR.filter(t => cubre(t, u)); if (c.length === 1 && !elegidos.includes(c[0])) elegidos.push(c[0]); });
+  const resto = unos.filter(u => !elegidos.some(t => cubre(t, u)));
+  const cand = PR.filter(t => !elegidos.includes(t));
+  let mejor = [];
+  if (resto.length) {
+    const lit = s => s.reduce((n, t) => n + nv - bits(t.m), 0);
+    for (let k = 1; k <= cand.length && !mejor.length; k++) {
+      const comb = (ini, sel) => {
+        if (sel.length === k) {
+          if (resto.every(u => sel.some(t => cubre(t, u))) && (!mejor.length || lit(sel) < lit(mejor))) mejor = sel.slice();
+          return;
+        }
+        for (let i = ini; i < cand.length; i++) { sel.push(cand[i]); comb(i + 1, sel); sel.pop(); }
+      };
+      comb(0, []);
+    }
+  }
+  return [...elegidos, ...mejor].sort((a, b) => bits(b.m) - bits(a.m) || a.v - b.v);
+}
+const cubreT = (t, x) => (x & ~t.m) === (t.v & ~t.m);
+function termoHTML(t, nv, vars) {
+  const out = [];
+  for (let i = 0; i < nv; i++) {
+    const b = 1 << (nv - 1 - i);
+    if (t.m & b) continue;
+    out.push(t.v & b ? vars[i] : `<span class="neg">${vars[i]}</span>`);
+  }
+  return out.length ? out.join('·') : '1';
+}
+function exprHTML(terms, nv, vars) {
+  if (!terms.length) return '0';
+  return terms.map(t => termoHTML(t, nv, vars)).join(' + ');
+}
+const COLG = ['#4F46E5', '#DB2777', '#0891B2', '#D97706', '#16A34A', '#9333EA'];
+const GRAY = [0, 1, 3, 2];
+function kmapHTML(nv, unos, indif, terms, vars) {
+  const filas = nv === 4 ? GRAY : [0, 1], cols = GRAY;
+  const rl = nv === 4 ? vars[0] + vars[1] : vars[0], cl = nv === 4 ? vars[2] + vars[3] : vars[1] + vars[2];
+  const bin = (x, n) => x.toString(2).padStart(n, '0');
+  let h = `<div class="scroll-x"><table class="kmap"><tr><th>${rl} \\ ${cl}</th>${cols.map(c => `<th>${bin(c, 2)}</th>`).join('')}</tr>`;
+  filas.forEach(r => {
+    h += `<tr><th>${bin(r, nv === 4 ? 2 : 1)}</th>`;
+    cols.forEach(c => {
+      const idx = (r << 2) | c, u = unos.includes(idx), x = indif.includes(idx);
+      const dots = u || x ? terms.map((t, g) => cubreT(t, idx) ? `<i style="background:${COLG[g % COLG.length]}"></i>` : '').join('') : '';
+      h += `<td class="${u ? 'uno' : ''}">${u ? '1' : x ? 'X' : '<span class="muted">0</span>'}<span class="dots">${dots}</span></td>`;
+    });
+    h += '</tr>';
+  });
+  h += '</table></div><div style="margin-top:6px">' + terms.map((t, g) => `<span class="grupo"><i style="background:${COLG[g % COLG.length]}"></i>${termoHTML(t, nv, vars)}</span>`).join('') + '</div>';
+  return h;
+}
+function tablaVerdad(nv, vars, salidas) {
+  // salidas: [{n, unos, indif}]
+  let h = `<div class="scroll-x"><table class="tv"><tr>${vars.map(v => `<th>${v}</th>`).join('')}${salidas.map(s => `<th>${s.n}</th>`).join('')}</tr>`;
+  for (let x = 0; x < (1 << nv); x++) {
+    h += '<tr>' + vars.map((_, i) => `<td>${(x >> (nv - 1 - i)) & 1}</td>`).join('') +
+      salidas.map(s => { const u = s.unos.includes(x), d = (s.indif || []).includes(x); return `<td class="${u ? 'f1' : ''}">${u ? 1 : d ? 'X' : 0}</td>`; }).join('') + '</tr>';
+  }
+  return h + '</table></div>';
+}
+function nandTexto(terms, nv, vars) {
+  if (terms.length <= 1) return 'Con un solo término basta una puerta NAND seguida de otra NAND usada como inversor (entradas unidas), o una AND directamente.';
+  const lst = terms.map(t => '<span class="neg">' + termoHTML(t, nv, vars) + '</span>').join(' · ');
+  return `Se niega dos veces y se aplica De Morgan: F = <span class="neg">${lst}</span>. Cada producto se hace con una NAND, la suma final con otra NAND, y las variables negadas se obtienen con NAND usadas como inversores (entradas unidas).`;
+}
+
+/* =====================================================================
+   DIAGRAMAS DE BLOQUES (SVG)
+   ===================================================================== */
+let svgN = 0;
+function svgBase(w, h, cuerpo) {
+  const id = 'fl' + (++svgN);
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Diagrama de bloques" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="14" fill="none" stroke="currentColor" stroke-width="1.6">
+  <defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="currentColor" stroke="none"/></marker></defs>
+  ${cuerpo.replace(/MK/g, `marker-end="url(#${id})"`)}</svg>`;
+}
+const tx = (x, y, t, a = 'middle', sz = 14) => `<text x="${x}" y="${y}" text-anchor="${a}" font-size="${sz}" fill="currentColor" stroke="none">${t}</text>`;
+const caja = (x, y, w, h, num, den) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>` +
+  (den ? tx(x + w / 2, y + h / 2 - 6, num) + `<line x1="${x + 12}" y1="${y + h / 2}" x2="${x + w - 12}" y2="${y + h / 2}"/>` + tx(x + w / 2, y + h / 2 + 17, den)
+       : tx(x + w / 2, y + h / 2 + 5, num));
+const suma = (cx, cy) => `<circle cx="${cx}" cy="${cy}" r="13"/><line x1="${cx - 9}" y1="${cy - 9}" x2="${cx + 9}" y2="${cy + 9}"/><line x1="${cx + 9}" y1="${cy - 9}" x2="${cx - 9}" y2="${cy + 9}"/>`;
+function diagLazo(g1, g2n, g2d, h) {
+  return svgBase(580, 160,
+    tx(4, 55, 'R(s)', 'start') + `<line x1="44" y1="60" x2="77" y2="60" MK/>` + suma(92, 60) + tx(70, 48, '+', 'middle', 13) + tx(104, 94, '−', 'middle', 16) +
+    `<line x1="105" y1="60" x2="148" y2="60" MK/>` + caja(150, 36, 80, 48, g1) +
+    `<line x1="230" y1="60" x2="278" y2="60" MK/>` + caja(280, 26, 120, 68, g2n, g2d) +
+    `<line x1="400" y1="60" x2="510" y2="60" MK/>` + tx(516, 65, 'Y(s)', 'start') +
+    `<circle cx="460" cy="60" r="3" fill="currentColor"/><polyline points="460,60 460,128 332,128" MK/>` + caja(250, 106, 80, 44, h) +
+    `<polyline points="250,128 92,128 92,75" MK/>`);
+}
+function diagDoble(g1, h1, g2n, g2d) {
+  return svgBase(660, 200,
+    tx(4, 55, 'R(s)', 'start') + `<line x1="44" y1="60" x2="67" y2="60" MK/>` + suma(82, 60) + tx(60, 48, '+', 'middle', 13) + tx(94, 94, '−', 'middle', 16) +
+    `<line x1="95" y1="60" x2="152" y2="60" MK/>` + suma(167, 60) + tx(145, 48, '+', 'middle', 13) + tx(179, 94, '−', 'middle', 16) +
+    `<line x1="180" y1="60" x2="218" y2="60" MK/>` + caja(220, 36, 80, 48, g1) +
+    `<line x1="300" y1="60" x2="388" y2="60" MK/>` + caja(390, 26, 110, 68, g2n, g2d) +
+    `<line x1="500" y1="60" x2="600" y2="60" MK/>` + tx(606, 65, 'Y(s)', 'start') +
+    `<circle cx="345" cy="60" r="3" fill="currentColor"/><polyline points="345,60 345,124 302,124" MK/>` + caja(220, 102, 80, 44, h1) +
+    `<polyline points="220,124 167,124 167,75" MK/>` +
+    `<circle cx="560" cy="60" r="3" fill="currentColor"/><polyline points="560,60 560,180 82,180 82,75" MK/>`);
+}
+
+/* =====================================================================
+   BANCO DE ACTIVIDADES
+   Cada generador devuelve un enunciado con números distintos cada vez y
+   su solución paso a paso, siempre con unidades.
+   ===================================================================== */
+const S = s => `<span class="eq">${s}</span>`;
+const GEN = {
+/* ---------------------------- BLOQUE C ---------------------------- */
+motor() {
+  const n = pick([3, 4]), D = pick([72, 75, 78, 80, 82, 86]), L = pick([78, 80, 84, 86, 88, 90]),
+        r = pick([9, 9.5, 10, 10.5, 11]), M = rint(110, 220, 10), N = rint(3000, 5000, 250);
+  const Vu = PI * (D / 10) ** 2 / 4 * (L / 10), Vt = n * Vu, Vc = Vu / (r - 1), w = 2 * PI * N / 60, Pw = M * w, eta = 1 - Math.pow(r, -0.4);
+  return { bloque:'C', titulo:'Motor de combustión interna (ciclo Otto)',
+    intro:`Un motor de gasolina de cuatro tiempos tiene ${n} cilindros de ${D} mm de diámetro y ${L} mm de carrera. Su relación de compresión es ${nf(r, 1)}:1 y, a ${N} min⁻¹, entrega un par de ${M} N·m.`,
+    aps:[
+      {t:'Calcula la cilindrada unitaria y la cilindrada total, en cm³.',
+       sol:`${S('V<sub>u</sub> = (π·D²/4)·L')} = (π·${nf(D / 10, 1)}²/4)·${nf(L / 10, 1)} = <b>${nf(Vu, 1)} cm³</b><br>${S('V<sub>T</sub> = n·V<sub>u</sub>')} = ${n}·${nf(Vu, 1)} = <b>${nf(Vt, 0)} cm³</b>`},
+      {t:'Calcula el volumen de la cámara de combustión de cada cilindro.',
+       sol:`${S('r = (V<sub>u</sub> + V<sub>c</sub>)/V<sub>c</sub>')} → ${S('V<sub>c</sub> = V<sub>u</sub>/(r − 1)')} = ${nf(Vu, 1)}/${nf(r - 1, 1)} = <b>${nf(Vc, 1)} cm³</b>`},
+      {t:`Calcula la potencia que entrega a ${N} min⁻¹, en kW y en CV.`,
+       sol:`${S('ω = 2π·n/60')} = 2π·${N}/60 = ${nf(w, 1)} rad/s<br>${S('P = M·ω')} = ${M}·${nf(w, 1)} = ${nf(Pw, 0)} W = <b>${nf(Pw / 1000, 1)} kW</b> = <b>${nf(Pw / 735.5, 1)} CV</b> (1 CV = 735,5 W)`},
+      {t:'Calcula el rendimiento del ciclo Otto teórico (γ = 1,4).',
+       sol:`${S('η = 1 − 1/r<sup>γ−1</sup>')} = 1 − 1/${nf(r, 1)}<sup>0,4</sup> = <b>${nf(eta * 100, 1)} %</b>`}],
+    trampa:'La cámara de combustión se calcula con la cilindrada unitaria, no con la total. Y las min⁻¹ se pasan a rad/s antes de multiplicar por el par.' };
+},
+bomba() {
+  const Tf = rint(-5, 10), Tc = pick([35, 40, 45, 50, 55]), Qc = rint(6, 15), fr = pick([0.4, 0.5, 0.6]), h = pick([6, 8, 10]);
+  const TfK = Tf + 273, TcK = Tc + 273, COPi = TcK / (TcK - TfK), COPr = fr * COPi, W = Qc / COPr, Qf = Qc - W, E = W * h;
+  return { bloque:'C', titulo:'Bomba de calor',
+    intro:`Una bomba de calor calienta una vivienda tomando calor del aire exterior, a ${nf(Tf)} °C, y cediéndolo al agua de la calefacción, a ${Tc} °C. Debe aportar ${Qc} kW de calor y su eficiencia real es el ${fr * 100} % de la de una máquina de Carnot que trabajase entre esas temperaturas.`,
+    aps:[
+      {t:'Calcula la eficiencia (COP) de la bomba de calor ideal de Carnot.',
+       sol:`T<sub>1</sub> = ${Tc} + 273 = ${TcK} K; T<sub>2</sub> = ${nf(Tf)} + 273 = ${TfK} K<br>${S('COP<sub>ideal</sub> = T<sub>1</sub>/(T<sub>1</sub> − T<sub>2</sub>)')} = ${TcK}/(${TcK} − ${TfK}) = <b>${nf(COPi, 2)}</b> (adimensional)`},
+      {t:'Calcula la potencia eléctrica que consume.',
+       sol:`COP<sub>real</sub> = ${fr}·${nf(COPi, 2)} = ${nf(COPr, 2)}<br>${S('W = Q<sub>1</sub>/COP')} = ${Qc}/${nf(COPr, 2)} = <b>${nf(W, 2)} kW</b>`},
+      {t:'Calcula el calor que extrae del aire exterior.',
+       sol:`${S('Q<sub>1</sub> = Q<sub>2</sub> + W')} → Q<sub>2</sub> = ${Qc} − ${nf(W, 2)} = <b>${nf(Qf, 2)} kW</b>`},
+      {t:`Calcula la energía eléctrica consumida en un día en que funciona ${h} horas, en kWh y en MJ.`,
+       sol:`${S('E = W·t')} = ${nf(W, 2)} kW · ${h} h = <b>${nf(E, 1)} kWh</b> = ${nf(E, 1)}·3,6 = <b>${nf(E * 3.6, 1)} MJ</b>`}],
+    trampa:'Las temperaturas, en kelvin. Y el COP de una bomba de calor usa el calor cedido al foco caliente (Q₁); el del frigorífico, el calor extraído del foco frío (Q₂).' };
+},
+neumatica() {
+  const D = pick([32, 40, 50, 63, 80]), d = {32:12, 40:16, 50:20, 63:20, 80:25}[D], p = pick([5, 6, 7, 8]),
+        L = pick([100, 150, 200, 250, 300]), n = pick([5, 8, 10, 12, 15]), eta = pick([0.85, 0.9]);
+  const S1 = PI * D * D / 4, S2 = PI * (D * D - d * d) / 4, Fa = 0.1 * p * S1 * eta, Fr = 0.1 * p * S2 * eta;
+  const Vc = (S1 + S2) * L / 1e6, Q = Vc * n * (p + 1);
+  return { bloque:'C', titulo:'Cilindro neumático de doble efecto',
+    intro:`Un cilindro neumático de doble efecto tiene un émbolo de ${D} mm de diámetro, un vástago de ${d} mm y una carrera de ${L} mm. Trabaja a una presión de ${p} bar (manométrica), realiza ${n} ciclos por minuto y su rendimiento es del ${nf(eta * 100)} %. Toma p<sub>atm</sub> = 1 bar.`,
+    aps:[
+      {t:'Calcula la fuerza real de avance.',
+       sol:`p = ${p} bar = ${nf(p / 10, 1)} MPa = ${nf(p / 10, 1)} N/mm²<br>${S('S = π·D²/4')} = π·${D}²/4 = ${nf(S1, 1)} mm²<br>${S('F<sub>a</sub> = p·S·η')} = ${nf(p / 10, 1)}·${nf(S1, 1)}·${eta} = <b>${nf(Fa, 0)} N</b>`},
+      {t:'Calcula la fuerza real de retroceso.',
+       sol:`${S("S' = π·(D² − d²)/4")} = π·(${D}² − ${d}²)/4 = ${nf(S2, 1)} mm²<br>${S("F<sub>r</sub> = p·S'·η")} = ${nf(p / 10, 1)}·${nf(S2, 1)}·${eta} = <b>${nf(Fr, 0)} N</b>`},
+      {t:'Calcula el consumo de aire en condiciones atmosféricas, en L/min.',
+       sol:`Volumen por ciclo (avance + retroceso): (S + S')·L = (${nf(S1, 1)} + ${nf(S2, 1)})·${L} = ${nf(Vc * 1e6, 0)} mm³ = ${nf(Vc, 3)} L<br>${S('Q = V<sub>ciclo</sub>·n·(p + p<sub>atm</sub>)/p<sub>atm</sub>')} = ${nf(Vc, 3)}·${n}·(${p} + 1)/1 = <b>${nf(Q, 1)} L/min</b>`}],
+    trampa:'En el retroceso el vástago ocupa parte del émbolo: se resta su sección. Y el consumo de aire se calcula con la presión absoluta (p + p_atm).' };
+},
+hidraulica() {
+  const D = pick([50, 63, 80, 100]), p = pick([80, 100, 120, 150, 160]), Q = pick([10, 12, 15, 20, 25]), L = pick([300, 400, 500]), eta = pick([0.8, 0.85, 0.9]);
+  const Sm = PI * (D / 1000) ** 2 / 4, F = p * 1e5 * Sm, v = (Q / 60000) / Sm, t = (L / 1000) / v, Ph = p * 1e5 * Q / 60000, Pm = Ph / eta;
+  return { bloque:'C', titulo:'Cilindro hidráulico',
+    intro:`Una prensa usa un cilindro hidráulico de ${D} mm de diámetro y ${L} mm de carrera. La bomba trabaja a ${p} bar con un caudal de ${Q} L/min y su rendimiento es del ${nf(eta * 100)} %.`,
+    aps:[
+      {t:'Calcula la fuerza que ejerce el cilindro en el avance.',
+       sol:`S = π·(${nf(D / 1000, 3)})²/4 = ${nf(Sm * 1e4, 2)}·10⁻⁴ m²; p = ${p}·10⁵ Pa<br>${S('F = p·S')} = ${p}·10⁵·${nf(Sm * 1e4, 2)}·10⁻⁴ = ${nf(F, 0)} N = <b>${nf(F / 1000, 1)} kN</b>`},
+      {t:'Calcula la velocidad de avance y el tiempo que tarda en recorrer la carrera.',
+       sol:`Q = ${Q} L/min = ${Q}/60 000 = ${nf(Q / 60000 * 1e4, 3)}·10⁻⁴ m³/s<br>${S('v = Q/S')} = <b>${nf(v, 3)} m/s</b><br>${S('t = L/v')} = ${nf(L / 1000, 1)}/${nf(v, 3)} = <b>${nf(t, 1)} s</b>`},
+      {t:'Calcula la potencia hidráulica y la potencia que debe tener el motor que mueve la bomba.',
+       sol:`${S('P<sub>h</sub> = p·Q')} = ${p}·10⁵ · ${nf(Q / 60000 * 1e4, 3)}·10⁻⁴ = <b>${nf(Ph, 0)} W</b><br>${S('P<sub>motor</sub> = P<sub>h</sub>/η')} = ${nf(Ph, 0)}/${eta} = <b>${nf(Pm, 0)} W</b>`}],
+    trampa:'1 bar = 10⁵ Pa y 1 L/min = 1/60 000 m³/s. Mezclar bar con m² o L/min con m/s da resultados mil veces desviados.' };
+},
+viga() {
+  const L = pick([4, 5, 6, 8]), F = rint(10, 40, 2), a = rint(1, L - 1), q = pick([0, 2, 3, 5]), W = pick([200, 300, 400, 500]);
+  const RB = (F * a + q * L * L / 2) / L, RA = F + q * L - RB, Ma = RA * a - q * a * a / 2, sig = Ma * 1e6 / (W * 1e3);
+  const conq = q > 0;
+  return { bloque:'C', titulo:'Viga biapoyada',
+    intro:`Una viga horizontal de ${L} m está apoyada en sus extremos A (izquierda) y B (derecha). Soporta una carga puntual de ${F} kN situada a ${a} m de A${conq ? ` y una carga uniformemente repartida de ${q} kN/m en toda su longitud` : ' (desprecia su peso)'}. El perfil tiene un módulo resistente W = ${W} cm³.`,
+    aps:[
+      {t:'Calcula las reacciones en los apoyos A y B.',
+       sol:`${S('ΣM<sub>A</sub> = 0')}: R<sub>B</sub>·${L} = ${F}·${a}${conq ? ` + (${q}·${L})·${nf(L / 2, 1)}` : ''} → <b>R<sub>B</sub> = ${nf(RB, 2)} kN</b><br>${S('ΣF<sub>y</sub> = 0')}: R<sub>A</sub> = ${F}${conq ? ` + ${q}·${L}` : ''} − ${nf(RB, 2)} → <b>R<sub>A</sub> = ${nf(RA, 2)} kN</b>`},
+      {t:'Calcula el momento flector en el punto donde actúa la carga puntual.',
+       sol:`${S(conq ? 'M = R<sub>A</sub>·a − q·a²/2' : 'M = R<sub>A</sub>·a')} = ${nf(RA, 2)}·${a}${conq ? ` − ${q}·${a}²/2` : ''} = <b>${nf(Ma, 2)} kN·m</b>`},
+      {t:'Calcula la tensión máxima de flexión en esa sección y di si el perfil aguanta con σ<sub>adm</sub> = 160 MPa.',
+       sol:`M = ${nf(Ma, 2)} kN·m = ${nf(Ma * 1e6, 0)} N·mm; W = ${W} cm³ = ${W * 1000} mm³<br>${S('σ = M/W')} = <b>${nf(sig, 1)} MPa</b> → ${sig <= 160 ? '<b>sí aguanta</b>, porque es menor que 160 MPa' : '<b>no aguanta</b>, porque supera los 160 MPa'}`}],
+    trampa:'Toma momentos respecto a un apoyo para que desaparezca una incógnita. Y ojo con kN·m frente a N·mm: el factor es 10⁶.' };
+},
+
+/* ---------------------------- BLOQUE D ---------------------------- */
+rlc() {
+  const R = pick([20, 30, 40, 50, 60]), Lm = pick([50, 80, 100, 120, 150, 200]), Cu = pick([47, 68, 100, 150, 220]), V = 230, f = 50;
+  const XL = 2 * PI * f * Lm / 1000, XC = 1 / (2 * PI * f * Cu * 1e-6), X = XL - XC, Z = Math.hypot(R, X), I = V / Z,
+        phi = Math.atan2(X, R) * 180 / PI, cos = R / Z, Pp = I * I * R, Q = I * I * X, Sp = V * I, f0 = 1 / (2 * PI * Math.sqrt(Lm / 1000 * Cu * 1e-6));
+  return { bloque:'D', titulo:'Circuito RLC serie en alterna',
+    intro:`Un circuito serie formado por una resistencia de ${R} Ω, una bobina de ${Lm} mH y un condensador de ${Cu} µF se conecta a la red de ${V} V y ${f} Hz.`,
+    aps:[
+      {t:'Calcula las reactancias y la impedancia del circuito.',
+       sol:`${S('X<sub>L</sub> = 2π·f·L')} = 2π·50·${nf(Lm / 1000, 3)} = <b>${nf(XL, 2)} Ω</b><br>${S('X<sub>C</sub> = 1/(2π·f·C)')} = 1/(2π·50·${Cu}·10⁻⁶) = <b>${nf(XC, 2)} Ω</b><br>${S('Z = √(R² + (X<sub>L</sub> − X<sub>C</sub>)²)')} = √(${R}² + (${nf(X, 2)})²) = <b>${nf(Z, 2)} Ω</b>`},
+      {t:'Calcula la intensidad y el desfase. ¿El circuito es inductivo o capacitivo?',
+       sol:`${S('I = V/Z')} = ${V}/${nf(Z, 2)} = <b>${nf(I, 2)} A</b><br>${S('φ = arctg((X<sub>L</sub> − X<sub>C</sub>)/R)')} = <b>${nf(phi, 1)}°</b> → ${X > 0 ? '<b>inductivo</b>: la intensidad va retrasada respecto a la tensión' : '<b>capacitivo</b>: la intensidad va adelantada respecto a la tensión'}`},
+      {t:'Calcula las potencias activa, reactiva y aparente, y el factor de potencia.',
+       sol:`${S('P = I²·R')} = ${nf(I, 2)}²·${R} = <b>${nf(Pp, 1)} W</b><br>${S('Q = I²·(X<sub>L</sub> − X<sub>C</sub>)')} = <b>${nf(Q, 1)} var</b>${X < 0 ? ' (el signo negativo indica carácter capacitivo)' : ''}<br>${S('S = V·I')} = <b>${nf(Sp, 1)} VA</b>; ${S('cos φ = R/Z')} = <b>${nf(cos, 3)}</b>`},
+      {t:'Calcula la frecuencia de resonancia del circuito.',
+       sol:`${S('f<sub>0</sub> = 1/(2π·√(L·C))')} = 1/(2π·√(${nf(Lm / 1000, 3)}·${Cu}·10⁻⁶)) = <b>${nf(f0, 1)} Hz</b>`}],
+    trampa:'Las reactancias usan ω = 2πf. Pasa mH y µF al SI (H y F) antes de operar, y da la potencia reactiva en var y la aparente en VA, no en W.' };
+},
+factor() {
+  const Pk = pick([3, 4.5, 5, 6, 8, 10]), c1 = pick([0.6, 0.65, 0.7, 0.75, 0.8]), c2 = 0.95, V = 230, w = 2 * PI * 50;
+  const t1 = Math.tan(Math.acos(c1)), t2 = Math.tan(Math.acos(c2)), P = Pk * 1000;
+  const S1 = P / c1, Q1 = P * t1, I1 = S1 / V, Qc = P * (t1 - t2), C = Qc / (w * V * V), I2 = P / (V * c2);
+  return { bloque:'D', titulo:'Corrección del factor de potencia',
+    intro:`Un taller consume ${nf(Pk, 1)} kW de una línea monofásica de ${V} V y 50 Hz, con un factor de potencia de ${nf(c1, 2)} inductivo. Se quiere mejorar hasta 0,95 conectando un condensador en paralelo.`,
+    aps:[
+      {t:'Calcula la potencia aparente, la potencia reactiva y la intensidad antes de corregir.',
+       sol:`${S('S<sub>1</sub> = P/cos φ<sub>1</sub>')} = ${nf(P, 0)}/${nf(c1, 2)} = <b>${nf(S1, 0)} VA</b><br>φ<sub>1</sub> = arccos ${nf(c1, 2)} = ${nf(Math.acos(c1) * 180 / PI, 2)}°; ${S('Q<sub>1</sub> = P·tg φ<sub>1</sub>')} = <b>${nf(Q1, 0)} var</b><br>${S('I<sub>1</sub> = S<sub>1</sub>/V')} = <b>${nf(I1, 2)} A</b>`},
+      {t:'Calcula la capacidad del condensador necesario.',
+       sol:`${S('Q<sub>C</sub> = P·(tg φ<sub>1</sub> − tg φ<sub>2</sub>)')} = ${nf(P, 0)}·(${nf(t1, 3)} − ${nf(t2, 3)}) = ${nf(Qc, 0)} var<br>${S('C = Q<sub>C</sub>/(ω·V²)')} = ${nf(Qc, 0)}/(${nf(w, 2)}·${V}²) = <b>${nf(C * 1e6, 1)} µF</b>`},
+      {t:'Calcula la nueva intensidad y explica la ventaja de la corrección.',
+       sol:`${S('I<sub>2</sub> = P/(V·cos φ<sub>2</sub>)')} = ${nf(P, 0)}/(${V}·0,95) = <b>${nf(I2, 2)} A</b><br>La potencia activa es la misma, pero la línea transporta ${nf(I1 - I2, 2)} A menos: menos pérdidas por efecto Joule, cables más finos y no se paga recargo por energía reactiva.`}],
+    trampa:'El condensador no cambia la potencia activa. Y en la fórmula de C, V es la tensión eficaz y ω = 2πf, no f.' };
+},
+karnaugh() {
+  let nv, unos, indif, terms, tries = 0;
+  do {
+    nv = Math.random() < 0.7 ? 4 : 3;
+    const tot = 1 << nv, todos = shuffle([...Array(tot).keys()]);
+    const k = nv === 4 ? rint(5, 9) : rint(3, 5);
+    unos = todos.slice(0, k).sort((a, b) => a - b);
+    indif = nv === 4 && Math.random() < 0.4 ? todos.slice(k, k + rint(1, 2)).sort((a, b) => a - b) : [];
+    terms = qm(nv, unos, indif);
+  } while ((terms.length < 2 || terms.length > 4) && ++tries < 40);
+  const vars = ['a', 'b', 'c', 'd'].slice(0, nv);
+  const fx = `F(${vars.join(',')}) = Σm(${unos.join(', ')})${indif.length ? ` + Σd(${indif.join(', ')})` : ''}`;
+  return { bloque:'D', titulo:'Simplificación por Karnaugh',
+    intro:`Una función lógica de ${nv} variables viene dada por sus mintérminos${indif.length ? ' (los términos d son combinaciones indiferentes, que no se dan nunca)' : ''}:<br><span class="eq">${fx}</span>`,
+    aps:[
+      {t:'Escribe su tabla de verdad.', sol: tablaVerdad(nv, vars, [{n:'F', unos, indif}])},
+      {t:'Simplifícala por el método de Karnaugh.', sol: kmapHTML(nv, unos, indif, terms, vars) + `<p style="margin-top:6px">F = <b class="eq">${exprHTML(terms, nv, vars)}</b></p>`},
+      {t:'Implementa la función simplificada usando solo puertas NAND.', sol: nandTexto(terms, nv, vars)}],
+    trampa:'Los grupos tienen 1, 2, 4 u 8 casillas, cuanto más grandes mejor, y las filas y columnas de los extremos son adyacentes. Las X pueden usarse como 1 si ayudan a agrandar un grupo.' };
+},
+logica() {
+  const banco = [
+    { titulo:'Votación por mayoría', vars:['a','b','c'],
+      intro:'Tres miembros de un jurado (a, b, c) votan pulsando un botón (1 = sí). La propuesta se aprueba (F = 1) cuando votan a favor al menos dos de ellos.',
+      salidas:[{n:'F', f: x => bits(x) >= 2}] },
+    { titulo:'Comité con voto de calidad', vars:['a','b','c','d'],
+      intro:'Un comité de cuatro miembros vota una propuesta (1 = sí). Se aprueba (F = 1) por mayoría; si hay empate a dos, decide el voto del presidente, que es <i>a</i>.',
+      salidas:[{n:'F', f: x => bits(x) >= 3 || (bits(x) === 2 && (x & 8))}] },
+    { titulo:'Alarma de un coche', vars:['l','p','m','c'],
+      intro:'La alarma de un coche (F = 1) depende de cuatro sensores: llave puesta (l), puerta abierta (p), motor en marcha (m) y cinturón abrochado (c). Suena si una puerta se abre con la llave quitada, o si el motor está en marcha con el cinturón sin abrochar.',
+      salidas:[{n:'F', f: x => (!(x & 8) && (x & 4)) || ((x & 2) && !(x & 1))}] },
+    { titulo:'Depósito con dos bombas', vars:['a','b','c'],
+      intro:'Un depósito tiene tres sensores de nivel: a (bajo), b (medio) y c (alto), que valen 1 cuando el agua los cubre. La bomba B1 funciona mientras el agua no llegue al sensor medio; la bomba B2 solo cuando el agua está por debajo del sensor bajo. Las combinaciones imposibles (un sensor alto cubierto con uno inferior seco) son indiferentes.',
+      salidas:[{n:'B1', f: x => !(x & 2)}, {n:'B2', f: x => !(x & 4)}],
+      valido: x => !((x & 1) && !(x & 2)) && !((x & 2) && !(x & 4)) }
+  ];
+  const e = pick(banco), nv = e.vars.length, tot = 1 << nv;
+  const sal = e.salidas.map(s => {
+    const unos = [], indif = [];
+    for (let x = 0; x < tot; x++) { if (e.valido && !e.valido(x)) indif.push(x); else if (s.f(x)) unos.push(x); }
+    return {n: s.n, unos, indif, terms: qm(nv, unos, indif)};
+  });
+  return { bloque:'D', titulo:'Circuito lógico: ' + e.titulo.toLowerCase(),
+    intro: e.intro + (nv === 4 ? ` Toma <i>${e.vars[0]}</i> como la variable de más peso.` : ''),
+    aps:[
+      {t:`Escribe la tabla de verdad${sal.length > 1 ? ' de las dos salidas' : ''}.`, sol: tablaVerdad(nv, e.vars, sal)},
+      {t:`Obtén la función simplificada${sal.length > 1 ? ' de cada salida' : ''} por Karnaugh.`,
+       sol: sal.map(s => `<p><b>${s.n}</b></p>` + kmapHTML(nv, s.unos, s.indif, s.terms, e.vars) + `<p style="margin:6px 0 10px">${s.n} = <b class="eq">${exprHTML(s.terms, nv, e.vars)}</b></p>`).join('')},
+      {t:'Dibuja el circuito con puertas lógicas (vale con describir las puertas que usas).',
+       sol: sal.map(s => `<p><b>${s.n}:</b> ${s.terms.length > 1 ? `una puerta AND por cada término (${s.terms.map(t => termoHTML(t, nv, e.vars)).join(', ')}), inversores para las variables negadas y una OR final de ${s.terms.length} entradas. ` : `con un solo término (${termoHTML(s.terms[0] || {v:0, m:0}, nv, e.vars)}) basta ${s.terms[0] && bits(s.terms[0].m) === nv - 1 ? 'un cable o un inversor' : 'una AND'}. `}${nandTexto(s.terms, nv, e.vars)}</p>`).join('')}],
+    trampa:'Antes de la tabla, define qué significa 1 en cada variable. Las combinaciones imposibles se marcan como X: no son 0, y bien usadas simplifican mucho.' };
+},
+
+/* ---------------------------- BLOQUE B ---------------------------- */
+traccion() {
+  const d0 = pick([8, 10, 12]), L0 = pick([50, 80, 100]), E = pick([200, 205, 210]);
+  const S0 = PI * d0 * d0 / 4, se = rint(260, 480, 10), Fe = Math.round(se * S0 / 100) / 10, Fm = Math.round(Fe * (1.2 + Math.random() * 0.3) * 10) / 10;
+  const A = rint(15, 30), Lf = Math.round(L0 * (1 + A / 100) * 10) / 10;
+  const F1 = Math.round(Fe * 5) / 10, dL1 = Math.round(F1 * 1000 / S0 / (E * 1000) * L0 * 1000) / 1000;
+  const sE = Fe * 1000 / S0, sR = Fm * 1000 / S0, Ar = (Lf - L0) / L0 * 100, Ecalc = (F1 * 1000 / S0) / (dL1 / L0), Fadm = sE / 2 * S0;
+  return { bloque:'B', titulo:'Ensayo de tracción',
+    intro:`En un ensayo de tracción, una probeta de acero de ${d0} mm de diámetro y ${L0} mm de longitud entre marcas da estos datos: el límite elástico se alcanza con ${nf(Fe, 1)} kN, la carga máxima es de ${nf(Fm, 1)} kN y, tras la rotura, la longitud entre marcas es de ${nf(Lf, 1)} mm. Con una carga de ${nf(F1, 1)} kN, la probeta se alarga ${nf(dL1, 3)} mm.`,
+    aps:[
+      {t:'Calcula el límite elástico y la resistencia a la tracción, en MPa.',
+       sol:`${S('S<sub>0</sub> = π·d<sub>0</sub>²/4')} = π·${d0}²/4 = ${nf(S0, 2)} mm²<br>${S('σ<sub>e</sub> = F<sub>e</sub>/S<sub>0</sub>')} = ${nf(Fe * 1000, 0)}/${nf(S0, 2)} = <b>${nf(sE, 1)} MPa</b><br>${S('σ<sub>R</sub> = F<sub>máx</sub>/S<sub>0</sub>')} = ${nf(Fm * 1000, 0)}/${nf(S0, 2)} = <b>${nf(sR, 1)} MPa</b>`},
+      {t:'Calcula el alargamiento porcentual tras la rotura.',
+       sol:`${S('A = (L<sub>f</sub> − L<sub>0</sub>)/L<sub>0</sub>·100')} = (${nf(Lf, 1)} − ${L0})/${L0}·100 = <b>${nf(Ar, 1)} %</b>`},
+      {t:'Calcula el módulo de elasticidad del material.',
+       sol:`σ = ${nf(F1 * 1000, 0)}/${nf(S0, 2)} = ${nf(F1 * 1000 / S0, 1)} MPa; ε = ${nf(dL1, 3)}/${L0} = ${nf(dL1 / L0 * 1000, 3)}·10⁻³<br>${S('E = σ/ε')} = <b>${nf(Ecalc / 1000, 0)} GPa</b> (${nf(Ecalc, 0)} MPa)`},
+      {t:'Calcula la carga máxima que puede soportar sin deformarse permanentemente con un coeficiente de seguridad de 2.',
+       sol:`${S('σ<sub>adm</sub> = σ<sub>e</sub>/n')} = ${nf(sE, 1)}/2 = ${nf(sE / 2, 1)} MPa<br>${S('F = σ<sub>adm</sub>·S<sub>0</sub>')} = ${nf(sE / 2, 1)}·${nf(S0, 2)} = <b>${nf(Fadm, 0)} N</b> = ${nf(Fadm / 1000, 2)} kN`}],
+    trampa:'Las tensiones del ensayo se calculan siempre con la sección inicial S₀. Y el alargamiento se divide entre la longitud inicial, no la final.' };
+},
+dureza() {
+  const d = Math.round((3.2 + Math.random() * 1.8) * 20) / 20, D = 10, F = 3000;
+  const HB = 2 * F / (PI * D * (D - Math.sqrt(D * D - d * d)));
+  const m = pick([20, 22, 25]), h0 = pick([0.9, 1, 1.2]), h1 = Math.round((0.2 + Math.random() * 0.4) * 20) / 20;
+  const Eabs = m * 9.8 * (h0 - h1), rho = Eabs / 0.8;
+  return { bloque:'B', titulo:'Ensayos de dureza Brinell y de resiliencia',
+    intro:`En un ensayo Brinell con una bola de ${D} mm y una carga de ${F} kgf durante 15 s, la huella tiene un diámetro de ${nf(d, 2)} mm. Después, una probeta del mismo material con una sección de 80 mm² bajo la entalla se rompe en un péndulo de Charpy de ${m} kg que cae desde ${nf(h0, 1)} m y sube hasta ${nf(h1, 2)} m.`,
+    aps:[
+      {t:'Calcula la dureza Brinell y escríbela en notación normalizada.',
+       sol:`${S('HB = 2F/[πD(D − √(D² − d²))]')} = 2·${F}/[π·${D}·(${D} − √(${D}² − ${nf(d, 2)}²))] = <b>${nf(HB, 0)} HB</b><br>Notación: <b>${nf(HB, 0)} HB 10/3000/15</b>`},
+      {t:'Calcula la energía absorbida en la rotura de la probeta de Charpy.',
+       sol:`${S('E = m·g·(h<sub>0</sub> − h<sub>1</sub>)')} = ${m}·9,8·(${nf(h0, 1)} − ${nf(h1, 2)}) = <b>${nf(Eabs, 1)} J</b>`},
+      {t:'Calcula la resiliencia en J/cm² y explica qué indica un valor alto.',
+       sol:`S = 80 mm² = 0,8 cm²; ${S('ρ = E/S')} = ${nf(Eabs, 1)}/0,8 = <b>${nf(rho, 1)} J/cm²</b><br>Una resiliencia alta indica un material <b>tenaz</b>: absorbe mucha energía antes de romperse ante un golpe; una baja indica fragilidad.`}],
+    trampa:'En Brinell, la carga va en kgf y el resultado se da sin unidades pero con su notación (bola/carga/tiempo). En Charpy, la sección es la que queda bajo la entalla.' };
+},
+tensor() {
+  const d = pick([10, 12, 14, 16, 20]), Lm = pick([2, 3, 4, 5]), E = 210, se = pick([235, 275, 355]);
+  const S0 = PI * d * d / 4; let F = rint(10, 50);
+  while (F * 1000 / S0 > se * 0.8) F -= 2;
+  const sig = F * 1000 / S0, eps = sig / (E * 1000), dL = eps * Lm * 1000, n = se / sig, dmin = Math.sqrt(4 * F * 1000 * 2.5 / (PI * se));
+  return { bloque:'B', titulo:'Tirante de acero',
+    intro:`Un tirante de acero de ${d} mm de diámetro y ${Lm} m de longitud sujeta una carga de ${F} kN. El acero tiene un módulo de elasticidad de ${E} GPa y un límite elástico de ${se} MPa.`,
+    aps:[
+      {t:'Calcula la tensión a la que trabaja el tirante.',
+       sol:`${S('S = π·d²/4')} = π·${d}²/4 = ${nf(S0, 2)} mm²<br>${S('σ = F/S')} = ${nf(F * 1000, 0)}/${nf(S0, 2)} = <b>${nf(sig, 1)} MPa</b>`},
+      {t:'Calcula el alargamiento unitario y el alargamiento total.',
+       sol:`${S('ε = σ/E')} = ${nf(sig, 1)}/${E * 1000} = <b>${nf(eps * 1000, 3)}·10⁻³</b> (adimensional)<br>${S('ΔL = ε·L<sub>0</sub>')} = ${nf(eps * 1000, 3)}·10⁻³·${Lm * 1000} = <b>${nf(dL, 2)} mm</b>`},
+      {t:'Calcula el coeficiente de seguridad y el diámetro mínimo si se exigiera un coeficiente de 2,5.',
+       sol:`${S('n = σ<sub>e</sub>/σ')} = ${se}/${nf(sig, 1)} = <b>${nf(n, 2)}</b><br>Con n = 2,5: σ<sub>adm</sub> = ${se}/2,5 = ${nf(se / 2.5, 1)} MPa → S = F/σ<sub>adm</sub> → ${S('d = √(4·F·n/(π·σ<sub>e</sub>))')} = <b>${nf(dmin, 2)} mm</b>`}],
+    trampa:'El módulo de elasticidad viene en GPa: pásalo a MPa (×1000) si trabajas con N y mm. El alargamiento unitario no tiene unidades, pero el total sí.' };
+},
+
+/* ---------------------------- BLOQUE F ---------------------------- */
+lazo() {
+  const K1 = pick([2, 4, 5, 10]), K2 = pick([1, 2, 3, 5]), a = pick([1, 2, 4, 5]), h = pick([1, 0.5, 0.2]);
+  const K = K1 * K2, den = a + K * h, yss = K / den, ess = a / den;
+  return { bloque:'F', titulo:'Sistema de control en lazo cerrado',
+    intro:`El diagrama representa un sistema de control con un regulador proporcional de ganancia ${K1}, una planta ${K2}/(s + ${a}) y un captador de ganancia ${nf(h)} en la realimentación.`,
+    diag: diagLazo(String(K1), String(K2), 's + ' + a, nf(h)),
+    aps:[
+      {t:'Obtén la función de transferencia en lazo cerrado Y(s)/R(s).',
+       sol:`Serie: ${S('G = G<sub>1</sub>·G<sub>2</sub>')} = ${K}/(s + ${a})<br>${S('M = G/(1 + G·H)')} = [${K}/(s + ${a})] / [1 + ${nf(K * h)}/(s + ${a})] = <b class="eq">${K}/(s + ${nf(den)})</b>`},
+      {t:'Escribe la función de transferencia en lazo abierto y explica la diferencia entre ambos tipos de control.',
+       sol:`${S('G·H')} = <b class="eq">${nf(K * h)}/(s + ${a})</b><br>En lazo abierto la salida no influye en la acción de control; en lazo cerrado el captador mide la salida y el comparador la resta de la referencia, de modo que el sistema corrige perturbaciones.`},
+      {t:'Calcula el valor de la salida en régimen permanente ante una entrada escalón unitario.',
+       sol:`R(s) = 1/s → ${S('y(∞) = lím<sub>s→0</sub> s·M(s)·(1/s)')} = ${K}/${nf(den)} = <b>${nf(yss, 3)}</b>`},
+      {t:'Calcula la señal de error a la salida del comparador en régimen permanente.',
+       sol:`${S('e(∞) = 1 − H·y(∞)')} = 1 − ${nf(h)}·${nf(yss, 3)} = <b>${nf(ess, 3)}</b> (= ${a}/${nf(den)})`}],
+    trampa:'Realimentación negativa: 1 + G·H en el denominador. Para el valor final, multiplica por s la salida Y(s) = M(s)·R(s), no la función de transferencia sola.' };
+},
+bloques2() {
+  const K = pick([2, 3, 4, 5]), h = pick([0.5, 1, 0.25]), b = pick([2, 4, 5, 10]), a = pick([1, 2, 3]);
+  const Kp = K / (1 + K * h), num = Kp * b, den = a + num;
+  return { bloque:'F', titulo:'Reducción de un diagrama de bloques',
+    intro:`El sistema tiene un lazo interno, con G<sub>1</sub> = ${K} y H<sub>1</sub> = ${nf(h)}, en serie con G<sub>2</sub> = ${b}/(s + ${a}), y un lazo externo de realimentación unitaria.`,
+    diag: diagDoble('G1', 'H1', 'G2', ''),
+    aps:[
+      {t:'Reduce el diagrama simbólicamente hasta una sola función de transferencia.',
+       sol:`Lazo interno: ${S('G<sub>1</sub>/(1 + G<sub>1</sub>H<sub>1</sub>)')}<br>En serie con G<sub>2</sub>: ${S('G<sub>1</sub>G<sub>2</sub>/(1 + G<sub>1</sub>H<sub>1</sub>)')}<br>Lazo externo unitario: <b class="eq">M = G<sub>1</sub>G<sub>2</sub> / (1 + G<sub>1</sub>H<sub>1</sub> + G<sub>1</sub>G<sub>2</sub>)</b>`},
+      {t:'Sustituye los valores y simplifica M(s).',
+       sol:`Lazo interno: ${K}/(1 + ${K}·${nf(h)}) = ${nf(Kp, 3)}<br>${S('M(s)')} = ${nf(Kp, 3)}·${b}/(s + ${a} + ${nf(num, 3)}) = <b class="eq">${nf(num, 3)}/(s + ${nf(den, 3)})</b>`},
+      {t:'En un horno eléctrico con control de temperatura, identifica el captador, el comparador, el regulador y el actuador, y di si es de lazo abierto o cerrado.',
+       sol:'Captador: el termopar o sonda que mide la temperatura. Comparador: compara la temperatura medida con la de consigna. Regulador: el controlador que decide cuánta potencia dar. Actuador: el relé o contactor que alimenta las resistencias. Es de <b>lazo cerrado</b>, porque la temperatura medida se realimenta y corrige la acción.'}],
+    trampa:'Reduce primero el lazo interno y luego el externo. Si traslada un punto de suma o de bifurcación, compensa con el bloque que corresponda.' };
+}
+};
+const AEG = [
+  {t:'Explica las fases de un proyecto de I+D+i y pon un ejemplo.', sol:'Idea o detección de una necesidad, investigación (estado del arte, patentes), diseño y cálculo, prototipo, ensayos y mejora, fabricación y comercialización. Ejemplo: una empresa que desarrolla una batería más ligera para patinetes pasa por un prototipo que se ensaya antes de producirlo en serie.'},
+  {t:'¿Qué es el análisis de ciclo de vida de un producto? Nombra sus etapas.', sol:'Es una metodología que cuantifica el impacto ambiental de un producto desde la extracción de materias primas hasta su fin de vida: extracción, fabricación, distribución, uso y fin de vida (reutilización, reciclaje o vertedero). Sirve para comparar alternativas y rediseñar.'},
+  {t:'Diferencia entre economía lineal y economía circular, con un ejemplo.', sol:'La lineal sigue «extraer, fabricar, usar y tirar». La circular mantiene los materiales en uso: diseño para reparar, reutilizar y reciclar. Ejemplo: un fabricante de móviles que recoge los terminales viejos para recuperar metales.'},
+  {t:'¿Qué es el Internet de las cosas (IoT)? Pon un ejemplo industrial.', sol:'Es la conexión a Internet de objetos con sensores y actuadores que envían datos y reciben órdenes. Ejemplo: sensores de vibración en motores de una fábrica que avisan antes de una avería (mantenimiento predictivo).'},
+  {t:'¿Para qué sirve un diagrama de Gantt en un proyecto?', sol:'Representa las tareas en barras sobre una escala de tiempo, con su duración, solapamientos y dependencias. Permite planificar, repartir recursos y ver el avance real frente al previsto.'},
+  {t:'¿Qué es la huella de carbono y cómo puede reducirla una empresa?', sol:'Es la cantidad de gases de efecto invernadero, en CO₂ equivalente, emitida directa o indirectamente por una actividad o producto. Se reduce con eficiencia energética, energías renovables, logística optimizada y materiales reciclados.'},
+  {t:'¿Qué es una patente y qué protege?', sol:'Es un título que da a su titular el derecho exclusivo a explotar una invención nueva, con actividad inventiva y aplicación industrial, durante 20 años desde la solicitud. A cambio, la invención se hace pública.'},
+  {t:'Explica qué es la inteligencia artificial y cita una aplicación en ingeniería.', sol:'Son sistemas que realizan tareas que requieren inteligencia humana (reconocer patrones, decidir, predecir), a menudo aprendiendo de datos (aprendizaje automático). Aplicación: visión artificial que detecta piezas defectuosas en una línea de producción.'}
+];
+const GC = ['motor', 'bomba', 'neumatica', 'hidraulica', 'viga'], GD = ['rlc', 'factor', 'karnaugh', 'logica'], GB = ['traccion', 'dureza', 'tensor'], GF = ['lazo', 'bloques2'];
+const REPARTO = {
+  2.5: {2:[1.25, 1.25], 3:[0.75, 0.75, 1], 4:[0.5, 0.5, 0.75, 0.75]},
+  2:   {2:[1, 1], 3:[0.5, 0.75, 0.75], 4:[0.5, 0.5, 0.5, 0.5]}
+};
+function puntuar(act, total) { const r = REPARTO[total][act.aps.length]; act.aps.forEach((ap, i) => ap.pts = r[i]); act.pts = total; return act; }
+
+function nuevoExamen() {
+  // 1: C · 2: D · 3: C o D (otro tipo) · 4: elegir entre B y F. A veces, un apartado de A+E+G en la 3.
+  const c = pick(GC), d = pick(GD);
+  const g3 = pick([...GC.filter(x => x !== c), ...GD.filter(x => x !== d)]);
+  const a1 = puntuar(GEN[c](), 2.5), a2 = puntuar(GEN[d](), 2.5);
+  let a3 = GEN[g3]();
+  if (Math.random() < 0.6) {
+    a3 = puntuar(a3, 2);
+    const q = pick(AEG);
+    a3.aps.push({t: q.t, sol: q.sol, pts: 0.5, aeg: true});
+    a3.pts = 2.5;
+  } else a3 = puntuar(a3, 2.5);
+  const oA = puntuar(GEN[pick(GB)](), 2.5), oB = puntuar(GEN[pick(GF)](), 2.5);
+  a1.k = 'a1'; a2.k = 'a2'; a3.k = 'a3'; oA.k = 'a4A'; oB.k = 'a4B';
+  const ord = shuffle([a1, a2, a3]); // las tres primeras en orden aleatorio
+  return { estado:'listo', resta: DURACION, fin: 0, avisos: [], acts: ord, op: [oA, oB], elegido: null, cal: {}, uni: {}, creado: Date.now() };
+}
+
+/* =====================================================================
+   RELOJ
+   ===================================================================== */
+const restante = () => !EX ? DURACION : EX.estado === 'curso' ? Math.max(0, EX.fin - Date.now()) : EX.resta;
+let tic = 0;
+function arrancarReloj() { clearInterval(tic); tic = setInterval(pintarReloj, 250); pintarReloj(); }
+function pintarReloj() {
+  const ms = restante(), txt = mmss(ms), activo = EX && (EX.estado === 'curso' || EX.estado === 'pausa');
+  const cls = ms <= 5 * 60000 ? 'fin' : ms <= 15 * 60000 ? 'aviso' : '';
+  const r = $('#reloj');
+  r.classList.toggle('on', !!activo); r.classList.toggle('aviso', cls === 'aviso'); r.classList.toggle('fin', cls === 'fin');
+  $('#reloj-t').textContent = txt + (EX && EX.estado === 'pausa' ? ' ⏸' : '');
+  $('#lado-reloj').textContent = txt;
+  const zt = $('#zen-t'); zt.textContent = txt; zt.className = 'zt ' + cls;
+  $('#zen-pausa').textContent = EX && EX.estado === 'pausa' ? 'Reanudar' : 'Pausa';
+  $('#zen-pausa').dataset.act = EX && EX.estado === 'pausa' ? 'ex-reanudar' : 'ex-pausa';
+  const c = $('#crono');
+  if (c) {
+    c.classList.toggle('aviso', cls === 'aviso'); c.classList.toggle('fin', cls === 'fin');
+    $('.t', c).textContent = txt;
+    const arco = $('.arco', c), L = 2 * PI * 25;
+    arco.style.strokeDasharray = L; arco.style.strokeDashoffset = L * (1 - ms / DURACION);
+    const tramo = Math.min(4, Math.floor((DURACION - ms) / (20 * 60000)));
+    $$('.plan div', c.parentNode).forEach((p, i) => p.classList.toggle('on', EX && EX.estado !== 'listo' && i === tramo));
+  }
+  if (!EX || EX.estado !== 'curso') return;
+  [[30, 'Quedan 30 minutos. Deberías ir por la tercera actividad.'], [15, 'Quedan 15 minutos. Cierra lo que tengas y reserva tiempo para repasar.'],
+   [5, 'Quedan 5 minutos: repasa unidades y despejes, que es donde se escapan los puntos.']].forEach(([m, msg]) => {
+    if (ms <= m * 60000 && !EX.avisos.includes(m)) { EX.avisos.push(m); guardarEx(); toast(msg); }
+  });
+  if (ms <= 0) {
+    EX.estado = 'corregir'; EX.resta = 0; guardarEx(); clearInterval(tic);
+    toast('¡Tiempo! Deja el bolígrafo y pasa a corregir con los criterios de la PAU.');
+    if (location.hash.startsWith('#simulador')) vSimulador(); else pintarReloj();
+  }
+}
+
+/* =====================================================================
+   NAVEGACIÓN
+   ===================================================================== */
+const abrirMenu = (si) => { document.body.classList.toggle('nav-open', si); $('#burger').setAttribute('aria-expanded', si); };
+$('#burger').addEventListener('click', () => abrirMenu(!document.body.classList.contains('nav-open')));
+$('#scrim').addEventListener('click', () => abrirMenu(false));
+
+function zen(si) {
+  document.body.classList.toggle('zen', si);
+  if (si) { try { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} }
+  else if (document.fullscreenElement) { try { document.exitFullscreen(); } catch (e) {} }
+}
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && document.body.classList.contains('zen')) document.body.classList.remove('zen'); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (document.body.classList.contains('nav-open')) abrirMenu(false);
+  if (document.body.classList.contains('zen')) zen(false);
+});
+
+const MIGAS = {inicio:'Panel y bloques', simulador:'Simulador · Modo Zen', formulario:'Mi formulario (Top 50)', trampas:'Trampas PAU', paleta:'Paleta de colores'};
+function ruta() {
+  const v = (location.hash || '#inicio').slice(1).split('/')[0];
+  const vista = VISTAS[v] ? v : 'inicio';
+  if (vista !== 'simulador' && document.body.classList.contains('zen')) zen(false);
+  $$('.nav a').forEach(a => a.dataset.nav === vista ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  $('#crumb').textContent = MIGAS[vista];
+  abrirMenu(false);
+  VISTAS[vista]();
+  const n = app.firstElementChild; if (n) n.classList.add('vista');
+  window.scrollTo(0, 0);
+  document.title = (vista !== 'inicio' ? MIGAS[vista] + ' · ' : '') + 'Tecnología PAU 27';
+}
+
+/* ---------- barra de trampas que rota ---------- */
+let tipI = Math.floor(Math.random() * TIPS.length), tipT = 0;
+function pintarTip() {
+  const t = TIPS[tipI % TIPS.length], bar = $('#tbar'), txt = $('#tbar-t');
+  txt.style.opacity = 0;
+  setTimeout(() => { txt.innerHTML = t.t; bar.classList.toggle('bad', t.n === 'bad'); txt.style.opacity = 1;
+    $('#zen-rec').innerHTML = ico('alerta') + ' Unidades en todos los resultados y fórmula antes de sustituir.'; }, 180);
+}
+function rotarTips() { clearInterval(tipT); tipT = setInterval(() => { tipI++; pintarTip(); }, 9000); }
+$('#tbar').addEventListener('mouseenter', () => clearInterval(tipT));
+$('#tbar').addEventListener('mouseleave', rotarTips);
+
+function pintarContadorNav() { const el = $('#nav-form'); if (el) el.textContent = FORM.length + '/' + LIMITE; }
+
+/* =====================================================================
+   VISTA · PANEL
+   ===================================================================== */
+function rangoHTML(b) {
+  return `<div><div class="entre"><span class="peso">${nf(b.min)}–${nf(b.max)} <small>puntos</small></span></div>
+    <div class="rango" style="margin-top:8px" role="img" aria-label="Entre ${nf(b.min)} y ${nf(b.max)} puntos de 10"><i style="left:${b.min / 5 * 100}%;width:${(b.max - b.min) / 5 * 100}%"></i></div>
+    <div class="rango-eje" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div>`;
+}
+function vInicio() {
+  const ex = P.examenes, mejor = ex.length ? Math.max(...ex.map(e => e.nota)) : null, ult = ex.length ? ex[ex.length - 1].nota : null;
+  app.innerHTML = `<div>
+  <section class="hero">
+    <div>
+      <span class="eyebrow">PAU · Tecnología e Ingeniería II</span>
+      <h1 class="tit">Del temario al 10, sin perder puntos tontos.</h1>
+      <p class="lead">Mira qué pesa cada bloque, haz simulacros cronometrados de 90 minutos en modo Zen, construye tu formulario de 50 fórmulas y entrena el ojo para las trampas de corrección: unidades, despejes y errores de concepto.</p>
+      <div class="fila" style="margin-top:18px">
+        <a class="btn pri grande" href="#simulador">${ico('zen')} Empezar un simulacro</a>
+        <a class="btn grande" href="#formulario">${ico('sigma')} Mi formulario</a>
+      </div>
+    </div>
+    <div class="card">
+      <p class="small soft">Faltan para la PAU (fase ordinaria, 1 de junio de 2027)</p>
+      <div class="cuentaatras" id="cuenta" style="margin-top:10px"></div>
+      <div class="grid" style="margin-top:14px;gap:10px;grid-template-columns:1fr 1fr">
+        <div><b class="mono" style="font-size:1.4rem">${ex.length}</b><div class="tiny muted">simulacros hechos</div></div>
+        <div><b class="mono" style="font-size:1.4rem">${mejor == null ? '–' : nf2(mejor)}</b><div class="tiny muted">mejor nota${ult != null ? ` · última ${nf2(ult)}` : ''}</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <h2 class="sub">El examen en cuatro datos</h2>
+    <p class="soft">Lo que tienes que saber antes de entrar.</p>
+    <div class="grid g4">
+      <div class="card plano dato"><span class="di">${ico('reloj')}</span><div><b class="dt">90 minutos</b><span>Una sola sesión, sin descanso.</span></div></div>
+      <div class="card plano dato"><span class="di">${ico('lista')}</span><div><b class="dt">4 actividades</b><span>Algunas con apartados opcionales para elegir.</span></div></div>
+      <div class="card plano dato"><span class="di">${ico('calc')}</span><div><b class="dt">Calculadora</b><span>Científica y <b>no programable</b>.</span></div></div>
+      <div class="card plano dato"><span class="di">${ico('hoja')}</span><div><b class="dt">50 fórmulas</b><span>Formulario propio que se entrega con el examen.</span></div></div>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="entre"><h2 class="sub">Bloques y peso en el examen</h2><span class="tag acc">C y D: hasta 5 puntos cada uno</span></div>
+    <p class="soft">La barra marca el mínimo y el máximo de puntos que puede valer cada bloque sobre 10. Toca una tarjeta para ver qué hay que estudiar.</p>
+    <div class="grid g3">
+      ${BLOQUES.map(b => `<button type="button" class="bcard" style="--c:${b.c}" data-act="bloque" data-id="${b.id}" aria-haspopup="dialog">
+        <div class="bc-cab"><span class="bc-ico">${ico(b.ico)}</span><span class="letra">${b.letra}</span></div>
+        <h3>${b.corto}</h3>
+        <p>${b.breve}</p>
+        ${rangoHTML(b)}
+        <span class="mas">Qué hay que estudiar ${ico('flecha')}</span>
+      </button>`).join('')}
+    </div>
+  </section>
+
+  <section class="bloque">
+    <h2 class="sub">Cómo te van a corregir</h2>
+    <p class="soft">Tres reglas que deciden más puntos que cualquier tema. Las tienes desarrolladas en <a href="#trampas">Trampas PAU</a>.</p>
+    <div class="grid g3">
+      <div class="nota bad"><b class="t">Error de concepto</b>Invalida la pregunta: <b>0 puntos</b>, aunque las cuentas estén bien.</div>
+      <div class="nota warn"><b class="t">Unidades</b>Cada error u omisión resta <b>0,25</b>, hasta <b>1 punto</b> por actividad.</div>
+      <div class="nota warn"><b class="t">Cálculo o despeje</b>Con el concepto bien, el apartado se queda en <b>la mitad</b>.</div>
+    </div>
+  </section>
+  </div>`;
+  cuentaAtras();
+}
+function cuentaAtras() {
+  const el = $('#cuenta'); if (!el) return;
+  const dest = new Date(2027, 5, 1, 9, 0, 0).getTime();
+  const pinta = () => {
+    let s = Math.max(0, Math.floor((dest - Date.now()) / 1000));
+    const d = Math.floor(s / 86400); s %= 86400; const h = Math.floor(s / 3600); s %= 3600; const m = Math.floor(s / 60);
+    el.innerHTML = [[d, 'días'], [h, 'horas'], [m, 'min']].map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join('');
+  };
+  pinta(); const t = setInterval(() => { if (!document.body.contains(el)) clearInterval(t); else pinta(); }, 30000);
+}
+function abrirBloque(id) {
+  const b = BL[id], dlg = $('#dlg');
+  const fs = b.formulas.map(f => LIBI[f]).filter(Boolean);
+  dlg.style.setProperty('--c', b.c);
+  dlg.innerHTML = `<div class="dlg-cab">
+      <div><span class="eyebrow" style="--c:${b.c}">${b.letra} · ${nf(b.min)}–${nf(b.max)} puntos</span><h2 class="sub" id="dlg-tit" style="margin-top:6px">${b.nombre}</h2></div>
+      <button class="icobtn" type="button" data-act="dlg-cerrar" aria-label="Cerrar">${ico('cerrar')}</button>
+    </div>
+    <div class="dlg-in">
+      <div><h4>Qué tienes que dominar</h4><ul style="margin-top:6px">${b.temas.map(t => `<li>${t}</li>`).join('')}</ul></div>
+      ${fs.length ? `<div><div class="entre"><h4>Fórmulas clave</h4><button class="btn peq" type="button" data-act="form-add-bloque" data-id="${b.id}">${ico('mas')} Añadirlas a mi formulario</button></div>
+        <div class="fchips" style="margin-top:8px">${fs.map(f => `<span class="fchip" title="${esc(f.n)}">${esc(f.e)}</span>`).join('')}</div></div>` : ''}
+      <div><h4>Así suele caer</h4><p style="margin-top:4px">${b.cae}</p></div>
+      <div class="nota bad"><b class="t">Trampa típica</b>${b.trampa}</div>
+      <div class="fila"><a class="btn pri" href="#simulador" data-act="dlg-cerrar">${ico('zen')} Practicar en el simulador</a></div>
+    </div>`;
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+}
+$('#dlg').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+
+/* =====================================================================
+   VISTA · SIMULADOR (MODO ZEN)
+   ===================================================================== */
+const CAL = [['ok', 'Bien'], ['calc', 'Error de cálculo · ½'], ['conc', 'Error de concepto · 0'], ['blank', 'En blanco · 0']];
+const FACT = {ok: 1, calc: 0.5, conc: 0, blank: 0};
+function notaAct(a) {
+  const base = a.aps.reduce((s, ap, j) => s + ap.pts * (FACT[EX.cal[a.k + '-' + j]] || 0), 0);
+  const u = Math.min(1, 0.25 * (EX.uni[a.k] || 0));
+  return Math.max(0, base - u);
+}
+const actsCorregibles = () => [...EX.acts, ...(EX.elegido ? [EX.op[EX.elegido === 'A' ? 0 : 1]] : [])];
+const notaTotal = () => actsCorregibles().reduce((s, a) => s + notaAct(a), 0);
+
+function actHTML(a, num, corrigiendo, etiqueta) {
+  const b = BL[a.bloque];
+  return `<article class="card act" style="--c:${b.c}">
+    <div class="act-cab">
+      <div><div class="act-num">${etiqueta || 'Actividad ' + num} · ${b.letra}${a.aps.some(x => x.aeg) ? ' + A/E/G' : ''}</div><h3>${a.titulo}</h3></div>
+      <span class="pts">${nf2(a.pts)} p</span>
+    </div>
+    <p class="intro">${a.intro}</p>
+    ${a.diag ? `<div class="diag">${a.diag}</div>` : ''}
+    <ol class="aps">${a.aps.map((ap, j) => `<li class="${ap.aeg ? 'ap-aeg' : ''}">
+      <div class="ap-t"><span class="txt">${ap.aeg ? '<span class="tag blq" style="--c:var(--cA)">A + E + G</span> ' : ''}${ap.t}</span><span class="pts">${nf2(ap.pts)}</span></div>
+      ${corrigiendo ? `<div class="sol"><b class="t">Solución</b>${ap.sol}</div>
+        <div class="calif" role="group" aria-label="Corrección del apartado">${CAL.map(([v, l]) => `<button type="button" data-act="cal" data-k="${a.k}-${j}" data-v="${v}" aria-pressed="${EX.cal[a.k + '-' + j] === v}">${l}</button>`).join('')}</div>` : ''}
+    </li>`).join('')}</ol>
+    ${corrigiendo ? `<div class="nota warn" style="margin-top:12px"><b class="t">Ojo aquí</b>${a.trampa}</div>
+      <div class="uni"><span>Errores u omisiones de <b>unidades</b> en esta actividad</span>
+        <span class="paso"><button type="button" data-act="uni" data-k="${a.k}" data-d="-1" aria-label="Uno menos">−</button><span>${EX.uni[a.k] || 0}</span><button type="button" data-act="uni" data-k="${a.k}" data-d="1" aria-label="Uno más">+</button></span>
+        <span class="tiny muted">−0,25 cada uno, máximo −1</span>
+        <span class="act-nota">${nf2(notaAct(a))} / ${nf2(a.pts)}</span></div>` : ''}
+  </article>`;
+}
+
+function vSimulador() {
+  if (!EX) {
+    app.innerHTML = `<div>
+      <div class="cab"><span class="eyebrow">Simulador · Modo Zen</span><h1 class="tit">Un examen de verdad, con reloj de verdad.</h1>
+      <p class="lead">Cada simulacro genera cuatro actividades nuevas con números distintos: una del bloque C, una del D, otra de C o D y una cuarta en la que eliges entre materiales (B) o sistemas automáticos (F). A veces la tercera trae un apartado de teoría de A, E o G.</p></div>
+      <div class="grid g2">
+        <div class="card"><h3>Cómo funciona</h3><ol style="margin-top:8px" class="soft">
+          <li>Genera el examen y léelo con calma: el reloj aún no corre.</li>
+          <li>Pulsa empezar y, si quieres, entra en <b>modo Zen</b>: pantalla completa, sin menús, solo el examen y el tiempo.</li>
+          <li>Resuelve en papel, con tu calculadora y tu formulario, como el día de la prueba.</li>
+          <li>Al acabar, corrige cada apartado con las soluciones y los criterios oficiales: concepto, cálculo y unidades.</li></ol></div>
+        <div class="card"><h3>Plan de tiempo</h3><p class="soft small" style="margin-top:6px">Unos 20 minutos por actividad y 10 para repasar. El reloj te avisa a los 30, 15 y 5 minutos.</p>
+          <div class="plan"><div>Act. 1</div><div>Act. 2</div><div>Act. 3</div><div>Act. 4</div><div>Repaso</div></div>
+          <button class="btn pri grande" type="button" data-act="ex-nuevo" style="margin-top:16px;width:100%">${ico('dado')} Generar examen</button></div>
+      </div>
+      ${historialHTML()}
+    </div>`;
+    return;
+  }
+  const corr = EX.estado === 'corregir' || EX.estado === 'hecho';
+  const enCurso = EX.estado === 'curso' || EX.estado === 'pausa';
+  const L = 2 * PI * 25;
+  let botones = '';
+  if (EX.estado === 'listo') botones = `<button class="btn pri" type="button" data-act="ex-empezar">${ico('play')} Empezar (90:00)</button><button class="btn" type="button" data-act="ex-empezar-zen">${ico('zen')} Empezar en modo Zen</button><button class="btn" type="button" data-act="ex-otro">${ico('dado')} Otro examen</button>`;
+  else if (enCurso) botones = `${EX.estado === 'curso' ? `<button class="btn" type="button" data-act="ex-pausa">${ico('pausa')} Pausa</button>` : `<button class="btn pri" type="button" data-act="ex-reanudar">${ico('play')} Reanudar</button>`}
+    <button class="btn" type="button" data-act="zen-on">${ico('zen')} Modo Zen</button><button class="btn" type="button" data-act="ex-terminar">${ico('check')} Entregar y corregir</button>`;
+  else botones = `<button class="btn pri" type="button" data-act="ex-otro">${ico('dado')} Nuevo examen</button>`;
+
+  const op = EX.op;
+  const cuarta = corr && EX.elegido
+    ? actHTML(op[EX.elegido === 'A' ? 0 : 1], 4, true, 'Actividad 4 · opción ' + EX.elegido)
+    : `<section style="margin-top:22px"><h3>Actividad 4 · elige UNA opción</h3>
+        <div class="opciones" role="radiogroup" aria-label="Opción de la actividad 4">
+          ${['A', 'B'].map((o, i) => `<label><input type="radio" name="op4" value="${o}" data-act="op4" ${EX.elegido === o ? 'checked' : ''}> Opción ${o} · ${BL[op[i].bloque].corto}</label>`).join('')}
+        </div>
+        ${corr ? '<p class="nota warn" style="margin-top:8px">Marca qué opción has hecho para poder corregirla.</p>' : ''}
+        ${op.map((a, i) => `<div class="opcion">${actHTML(a, 4, false, 'Actividad 4 · opción ' + 'AB'[i])}</div>`).join('')}</section>`;
+
+  app.innerHTML = `<div>
+    <div class="sim-cab">
+      <div class="cab" style="margin:0"><span class="eyebrow">Simulador · ${corr ? 'Corrección' : enCurso ? 'Examen en curso' : 'Examen preparado'}</span>
+        <h1 class="tit" style="font-size:clamp(1.6rem,3.6vw,2.2rem)">${corr ? 'Corrige con los criterios de la PAU' : 'Tecnología e Ingeniería II · 4 actividades'}</h1>
+        <p class="lead small">${corr ? 'Marca cada apartado y cuenta los errores de unidades. La nota se calcula sola.' : 'Responde en papel. Calculadora no programable y tu formulario de 50 fórmulas.'}</p></div>
+      <div>
+        <div class="crono" id="crono"><svg class="anillo" viewBox="0 0 58 58" aria-hidden="true"><circle class="fondo" cx="29" cy="29" r="25"/><circle class="arco" cx="29" cy="29" r="25" style="stroke-dasharray:${L};stroke-dashoffset:0"/></svg>
+          <div><div class="t">90:00</div><div class="tiny muted">${EX.estado === 'pausa' ? 'en pausa' : enCurso ? 'tiempo restante' : corr ? 'tiempo final' : 'listo para empezar'}</div></div></div>
+        <div class="plan"><div>Act. 1</div><div>Act. 2</div><div>Act. 3</div><div>Act. 4</div><div>Repaso</div></div>
+      </div>
+    </div>
+    <div class="fila no-zen" style="margin-top:14px">${botones}</div>
+    ${corr ? `<div class="card" style="margin-top:18px"><div class="entre"><div><p class="small soft">Nota del simulacro</p><div class="nota-final" id="nota-final">${nf2(notaTotal())}</div></div>
+      <div class="fila">${EX.estado === 'corregir' ? `<button class="btn pri" type="button" data-act="ex-guardar">${ico('check')} Guardar nota</button>` : '<span class="tag ok">Nota guardada</span>'}<button class="btn" type="button" data-act="ex-otro">${ico('dado')} Nuevo examen</button></div></div>
+      <div class="scroll-x" style="margin-top:10px"><table class="tabla" id="desglose"></table></div></div>` : ''}
+    ${EX.acts.map((a, i) => actHTML(a, i + 1, corr)).join('')}
+    ${cuarta}
+    ${!corr ? '' : '<p class="tiny muted" style="margin-top:16px">Las soluciones redondean los pasos intermedios; si tu resultado difiere en la última cifra por redondeo, cuenta como bien.</p>'}
+  </div>`;
+  pintarDesglose();
+  pintarReloj();
+}
+function pintarDesglose() {
+  const t = $('#desglose'); if (!t) return;
+  const filas = actsCorregibles().map((a, i) => {
+    const sin = a.aps.some((_, j) => !EX.cal[a.k + '-' + j]);
+    return `<tr><td>${a.k === 'a4A' || a.k === 'a4B' ? 'Actividad 4' : 'Actividad ' + (i + 1)} · ${BL[a.bloque].letra}</td><td>${a.titulo}</td><td class="mono">${EX.uni[a.k] ? '−' + nf2(Math.min(1, 0.25 * EX.uni[a.k])) + ' u.' : ''}</td><td class="mono">${nf2(notaAct(a))} / ${nf2(a.pts)}${sin ? ' <span class="tag warn">sin marcar</span>' : ''}</td></tr>`;
+  }).join('');
+  t.innerHTML = `<tr><th>Actividad</th><th>Tema</th><th>Unidades</th><th>Nota</th></tr>${filas}`;
+  const nfin = $('#nota-final'); if (nfin) nfin.textContent = nf2(notaTotal());
+}
+function historialHTML() {
+  const ex = P.examenes; if (!ex.length) return '';
+  return `<section class="bloque"><h2 class="sub">Tus simulacros</h2><div class="card plano" style="margin-top:10px"><div class="scroll-x"><table class="tabla">
+    <tr><th>Fecha</th><th>Nota</th><th></th></tr>
+    ${ex.slice().reverse().slice(0, 10).map(e => `<tr><td>${new Date(e.fecha).toLocaleDateString('es-ES', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})}</td><td class="mono"><b>${nf2(e.nota)}</b></td><td style="width:45%"><div class="barra"><i style="width:${e.nota * 10}%;background:${e.nota >= 5 ? 'var(--ok)' : 'var(--bad)'}"></i></div></td></tr>`).join('')}
+  </table></div></div></section>`;
+}
+
+/* =====================================================================
+   VISTA · MI FORMULARIO (TOP 50)
+   ===================================================================== */
+let filtroF = 'todas';
+const SYMS = ['π', '√', '²', '³', '·', '÷', '±', '≈', 'Δ', 'ω', 'φ', 'η', 'σ', 'ε', 'ρ', 'µ', 'Ω', 'γ', 'Σ', '₀', '₁', '₂', '⁻¹', '→'];
+const normal = s => String(s).replace(/\s+/g, '').toLowerCase();
+function vFormulario() {
+  app.innerHTML = `<div>
+    <div class="cab"><span class="eyebrow">Herramienta</span><h1 class="tit">Mi formulario (Top 50)</h1>
+      <p class="lead">El día del examen puedes llevar un formulario propio de 50 fórmulas como máximo, que se entrega junto con el examen. Constrúyelo aquí sin pasarte: la página cuenta por ti y te avisa al acercarte al límite.</p></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));align-items:start">
+      <div class="pila">
+        <div class="card">
+          <div class="entre"><div class="contador" id="f-cont"><b>0</b><span>/ ${LIMITE} fórmulas</span></div><span id="f-estado"></span></div>
+          <div class="barra" style="margin-top:12px"><i id="f-barra" style="width:0"></i></div>
+          <form id="f-nueva" class="fform no-print" style="margin-top:16px" autocomplete="off">
+            <div><label class="lab" for="f-n">Nombre</label><input type="text" id="f-n" maxlength="60" placeholder="Ej.: Fuerza de avance"></div>
+            <div><label class="lab" for="f-e">Fórmula</label><input type="text" id="f-e" maxlength="120" placeholder="Ej.: F = p · π D² / 4" required></div>
+            <div><label class="lab" for="f-b">Bloque</label><select id="f-b">${BLOQUES.map(b => `<option value="${b.id}">${b.letra}</option>`).join('')}</select></div>
+            <button class="btn pri" type="submit" id="f-add">${ico('mas')} Añadir</button>
+          </form>
+          <div class="syms no-print" aria-label="Insertar símbolo">${SYMS.map(s => `<button type="button" data-act="sym" data-s="${s}" title="Insertar ${s}">${s}</button>`).join('')}</div>
+        </div>
+        <div class="card">
+          <div class="entre no-print"><div class="seg" role="group" aria-label="Filtrar por bloque">
+            ${[['todas', 'Todas'], ...BLOQUES.map(b => [b.id, b.id === 'AEG' ? 'A+E+G' : b.id])].map(([v, l]) => `<button type="button" data-act="f-filtro" data-b="${v}" aria-pressed="${filtroF === v}">${l}</button>`).join('')}
+          </div>
+          <div class="fila">
+            <button class="icobtn" type="button" data-act="f-copiar" title="Copiar como texto" aria-label="Copiar como texto">${ico('copiar')}</button>
+            <button class="icobtn" type="button" data-act="f-imprimir" title="Imprimir" aria-label="Imprimir">${ico('impr')}</button>
+            <button class="icobtn del" type="button" data-act="f-vaciar" title="Vaciar" aria-label="Vaciar el formulario">${ico('papelera')}</button>
+          </div></div>
+          <ol class="flista" id="f-lista" style="margin-top:8px"></ol>
+        </div>
+      </div>
+      <div class="card no-print">
+        <h3>Sugerencias por bloque</h3>
+        <p class="small soft" style="margin-top:4px">Las fórmulas que más se usan en los problemas. Añádelas con un toque y luego quita las que ya te sepas de memoria: el hueco vale oro.</p>
+        <div class="nota warn" style="margin-top:10px;font-size:.86rem">Escribe <b>una fórmula por línea</b>. Si juntas varias en una sola, el recuento deja de estar claro.</div>
+        <div id="f-lib" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </div>`;
+  pintarFormulario();
+}
+function pintarFormulario() {
+  const n = FORM.length, cont = $('#f-cont'); if (!cont) return;
+  const nivel = n >= LIMITE ? 'bad' : n >= 40 ? 'warn' : '';
+  cont.className = 'contador ' + nivel; $('b', cont).textContent = n;
+  $('#f-barra').style.width = Math.min(100, n / LIMITE * 100) + '%';
+  $('#f-barra').style.background = nivel === 'bad' ? 'var(--bad)' : nivel === 'warn' ? 'var(--warn)' : 'var(--acc)';
+  $('#f-estado').innerHTML = nivel === 'bad' ? '<span class="tag bad">Límite alcanzado</span>' : nivel === 'warn' ? `<span class="tag warn">Te quedan ${LIMITE - n}</span>` : `<span class="tag ok">Te quedan ${LIMITE - n}</span>`;
+  $('#f-add').disabled = n >= LIMITE;
+  const vis = FORM.map((f, i) => ({f, i})).filter(x => filtroF === 'todas' || x.f.b === filtroF);
+  $('#f-lista').innerHTML = vis.length ? vis.map(({f, i}) => `<li class="fitem">
+      <div style="min-width:0"><div class="fn"><span class="tag blq" style="--c:${BL[f.b] ? BL[f.b].c : 'var(--acc)'}">${f.b === 'AEG' ? 'A+E+G' : esc(f.b)}</span>${esc(f.n || 'Sin nombre')}</div><div class="fe">${esc(f.e)}</div></div>
+      <div class="facc no-print">
+        <button class="icobtn" type="button" data-act="f-mover" data-i="${i}" data-d="-1" aria-label="Subir" ${i === 0 ? 'disabled' : ''}>${ico('arriba')}</button>
+        <button class="icobtn" type="button" data-act="f-mover" data-i="${i}" data-d="1" aria-label="Bajar" ${i === FORM.length - 1 ? 'disabled' : ''}>${ico('abajo')}</button>
+        <button class="icobtn del" type="button" data-act="f-borrar" data-i="${i}" aria-label="Quitar">${ico('papelera')}</button>
+      </div></li>`).join('') : `<li class="vacio">${FORM.length ? 'No hay fórmulas de este bloque.' : 'Tu formulario está vacío. Escribe una fórmula arriba o añade las sugerencias de la derecha.'}</li>`;
+  const tiene = new Set(FORM.map(f => normal(f.e)));
+  $('#f-lib').innerHTML = BLOQUES.map(b => {
+    const fs = LIB.filter(f => f.b === b.id); if (!fs.length) return '';
+    return `<details class="acc-lib" ${b.id === 'C' || b.id === 'D' ? 'open' : ''} style="margin-top:10px"><summary style="cursor:pointer;font-weight:600;padding:4px 0"><span class="tag blq" style="--c:${b.c}">${b.letra}</span> ${b.corto}</summary>
+      <div style="margin-top:8px">${fs.map(f => { const t = tiene.has(normal(f.e)); return `<div class="lib ${t ? 'tiene' : ''}"><div class="le"><b>${esc(f.n)}</b><code>${esc(f.e)}</code></div>
+        <button class="icobtn" type="button" data-act="f-lib" data-id="${f.id}" aria-label="${t ? 'Ya está en tu formulario' : 'Añadir ' + esc(f.n)}" ${t || n >= LIMITE ? 'disabled' : ''}>${ico(t ? 'check' : 'mas')}</button></div>`; }).join('')}</div></details>`;
+  }).join('');
+}
+function anadirFormula(f, silencio) {
+  if (FORM.length >= LIMITE) { toast('Has llegado a las 50 fórmulas. Quita alguna antes de añadir otra.'); return false; }
+  if (FORM.some(x => normal(x.e) === normal(f.e))) { if (!silencio) toast('Esa fórmula ya está en tu formulario.'); return false; }
+  FORM.push({id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), n: f.n, e: f.e, b: f.b});
+  return true;
+}
+
+/* =====================================================================
+   VISTA · TRAMPAS PAU
+   ===================================================================== */
+const QUIZ = [
+  {s:'Calcula bien la cilindrada, pero escribe «V<sub>T</sub> = 1598» sin unidades.', r:'uni', e:'Falta la unidad (cm³): −0,25. El resto del apartado vale.'},
+  {s:'Para el rendimiento de Carnot escribe η = 1 − 5/45, con las temperaturas en grados Celsius.', r:'conc', e:'Usar °C en Carnot es no entender la escala termodinámica: error de concepto, 0 puntos en el apartado.'},
+  {s:'Plantea bien X<sub>C</sub> = 1/(2π·f·C) y sustituye bien, pero teclea mal y obtiene 3,18 Ω en vez de 31,8 Ω.', r:'calc', e:'El concepto es correcto y el fallo es de calculadora: el apartado se queda en la mitad.'},
+  {s:'De r = (V<sub>u</sub> + V<sub>c</sub>)/V<sub>c</sub> despeja V<sub>c</sub> = V<sub>u</sub>/(r + 1).', r:'calc', e:'La fórmula de partida es correcta; el error está en el despeje: mitad de la puntuación.'},
+  {s:'En un lazo con realimentación negativa escribe M = G/(1 − G·H).', r:'conc', e:'El signo del denominador define el tipo de realimentación: error de concepto, 0 puntos.'},
+  {s:'Calcula la fuerza de retroceso de un cilindro con la sección completa del émbolo, sin restar el vástago.', r:'conc', e:'No tener en cuenta el vástago es no entender cómo trabaja el cilindro: error de concepto.'},
+  {s:'Da una energía consumida como «E = 24 kW».', r:'uni', e:'Unidad equivocada (debería ser kWh): −0,25.'},
+  {s:'En Karnaugh hace un grupo de tres unos.', r:'conc', e:'Los grupos han de ser potencias de 2: es un error de concepto del método.'}
+];
+const QOP = [['ok', 'Está bien'], ['uni', 'Unidades · −0,25'], ['calc', 'Cálculo · ½'], ['conc', 'Concepto · 0']];
+let QR = {};
+function vTrampas() {
+  app.innerHTML = `<div>
+    <div class="cab"><span class="eyebrow" style="--c:var(--bad)">Alerta de trampas PAU</span><h1 class="tit">Donde se escapan los puntos.</h1>
+      <p class="lead">Saberse el temario no basta: la nota depende de cómo te corrigen. Estos son los criterios que aplica el tribunal, y la forma de no caer en ellos.</p></div>
+    <div class="grid g3">
+      <div class="alerta bad"><span class="ai">${ico('cerrar', 'i', 2.6)}</span><div><div class="cifra">0 puntos</div><h3>Error de concepto</h3><p>Aplicar una ley equivocada, confundir magnitudes o plantear mal el problema invalida la pregunta, aunque todas las cuentas estén bien.</p></div></div>
+      <div class="alerta warn"><span class="ai">${ico('regla', 'i', 2.2)}</span><div><div class="cifra">−0,25</div><h3>¡Cuidado con las unidades!</h3><p>Cada error u omisión de unidades resta 0,25 puntos, hasta un máximo de 1 punto por actividad. Cuatro resultados sin unidad son un punto menos.</p></div></div>
+      <div class="alerta warn"><span class="ai">${ico('calc', 'i', 2.2)}</span><div><div class="cifra">÷ 2</div><h3>¡Revisa los despejes!</h3><p>Si el concepto es correcto pero te equivocas al calcular o al despejar, la puntuación del apartado se reduce a la mitad.</p></div></div>
+    </div>
+
+    <section class="bloque">
+      <h2 class="sub">Calculadora de penalizaciones</h2>
+      <p class="soft">Comprueba cuánto te costaría cada fallo en un apartado.</p>
+      <div class="card"><div class="grid g4" style="align-items:end">
+        <div><label class="lab" for="pen-v">Valor del apartado</label><input type="number" id="pen-v" min="0.25" max="5" step="0.25" value="1"></div>
+        <div><label class="lab" for="pen-t">Tipo de error</label><select id="pen-t" style="width:100%"><option value="ok">Ninguno</option><option value="calc">Cálculo o despeje</option><option value="conc">Concepto</option></select></div>
+        <div><label class="lab" for="pen-u">Errores de unidades</label><input type="number" id="pen-u" min="0" max="8" step="1" value="0"></div>
+        <div><p class="small soft">Te quedarías con</p><div class="resul" id="pen-r">1,00</div></div>
+      </div><p class="small soft" id="pen-x" style="margin-top:10px"></p></div>
+    </section>
+
+    <section class="bloque">
+      <h2 class="sub">¿Qué le pondrías? Corrige tú</h2>
+      <p class="soft">Situaciones reales de examen. Decide qué criterio se aplica.</p>
+      <div class="grid g2">${QUIZ.map((q, i) => `<div class="card quiz" data-q="${i}"><p class="q">${q.s}</p>
+        <div class="opcs">${QOP.map(([v, l]) => `<button type="button" data-act="quiz" data-i="${i}" data-v="${v}">${l}</button>`).join('')}</div><div class="exp"></div></div>`).join('')}</div>
+    </section>
+
+    <section class="bloque">
+      <h2 class="sub">Trampas típicas por bloque</h2>
+      <div class="grid g2" style="margin-top:12px">
+        ${BLOQUES.map(b => `<div class="card plano" style="border-top:3px solid ${b.c}"><span class="eyebrow" style="--c:${b.c}">${b.letra}</span><h3 style="margin-top:6px">${b.corto}</h3><p class="small" style="margin-top:6px">${b.trampa}</p></div>`).join('')}
+      </div>
+    </section>
+
+    <section class="bloque">
+      <h2 class="sub">Rutina de los últimos 10 minutos</h2>
+      <div class="card"><ol class="soft">
+        <li><b>Recorre cada resultado</b> y comprueba que tiene unidad, y que es la que pide el enunciado.</li>
+        <li><b>Repasa los despejes</b>: sustituye el resultado en la fórmula de partida y mira si cuadra.</li>
+        <li><b>Análisis dimensional</b> rápido: N/mm² son MPa, W/A son V, J/s son W.</li>
+        <li><b>¿Tiene sentido el número?</b> Un cilindro neumático de 50 mm no empuja 200 kN, ni un motor de coche da 3 kW.</li>
+        <li><b>Fórmula escrita antes de sustituir</b> en todos los apartados: si fallas una cuenta, que se vea que el concepto es correcto.</li>
+      </ol></div>
+    </section>
+  </div>`;
+  calcPen();
+  Object.entries(QR).forEach(([i, v]) => marcarQuiz(+i, v));
+}
+function calcPen() {
+  const v = Math.max(0, parseFloat(($('#pen-v') || {}).value) || 0), t = ($('#pen-t') || {}).value, u = Math.max(0, parseInt(($('#pen-u') || {}).value) || 0);
+  if (!$('#pen-r')) return;
+  const base = v * FACT[t], desc = Math.min(1, 0.25 * u), r = Math.max(0, base - desc);
+  $('#pen-r').textContent = nf2(r);
+  $('#pen-r').style.color = r === v ? 'var(--ok)' : r === 0 ? 'var(--bad)' : 'var(--warn)';
+  $('#pen-x').innerHTML = `Apartado: ${nf2(v)} × ${t === 'ok' ? '1' : t === 'calc' ? '½' : '0'} = ${nf2(base)}. Unidades: ${u} × 0,25 = ${nf2(0.25 * u)}${0.25 * u > 1 ? ', con tope de 1' : ''} → −${nf2(desc)}. <span class="muted">El descuento de unidades se aplica a la actividad entera, no a cada apartado.</span>`;
+}
+function marcarQuiz(i, v) {
+  const q = QUIZ[i], c = $(`.quiz[data-q="${i}"]`); if (!c) return;
+  $$('button', c).forEach(b => { b.classList.toggle('bien', b.dataset.v === q.r); b.classList.toggle('mal', b.dataset.v === v && v !== q.r); b.disabled = true; });
+  $('.exp', c).innerHTML = `<div class="nota ${v === q.r ? 'ok' : 'bad'}"><b class="t">${v === q.r ? '¡Bien visto!' : 'No exactamente'}</b>${q.e}</div>`;
+}
+
+/* =====================================================================
+   VISTA · PALETA
+   ===================================================================== */
+const PALETA = [
+  {n:'Papel', v:'--paper', c:['#F7F8FB', '#070B14'], r:'Fondo general. Un gris azulado muy claro cansa menos que el blanco puro en sesiones largas.'},
+  {n:'Superficie', v:'--surface', c:['#FFFFFF', '#101828'], r:'Tarjetas y paneles. El contraste suave con el papel agrupa la información sin líneas pesadas.'},
+  {n:'Tinta', v:'--ink', c:['#0F1A2A', '#EEF2F8'], r:'Texto principal. Azul casi negro: lectura nítida, sin la dureza del negro absoluto.'},
+  {n:'Tinta suave', v:'--ink-soft', c:['#35435A', '#C6D0DE'], r:'Explicaciones y textos secundarios, para que la jerarquía se lea de un vistazo.'},
+  {n:'Índigo (acento)', v:'--acc', c:['#4F46E5', '#818CF8'], r:'El único color de acción: botones, enlaces y el reloj. Los azules e índigos se asocian a calma y concentración.'},
+  {n:'Rojo trampa', v:'--bad', c:['#B91C1C', '#F87171'], r:'Solo para lo que te quita la pregunta entera: errores de concepto. Como aparece poco, salta a la vista.'},
+  {n:'Ámbar aviso', v:'--warn', c:['#B45309', '#FBBF24'], r:'Penalizaciones parciales: unidades, despejes y los últimos 15 minutos del reloj.'},
+  {n:'Verde acierto', v:'--ok', c:['#15803D', '#4ADE80'], r:'Apartados bien resueltos y margen libre en el formulario.'}
+];
+function vPaleta() {
+  app.innerHTML = `<div>
+    <div class="cab"><span class="eyebrow">Sobre la página</span><h1 class="tit">Paleta «Índigo de concentración»</h1>
+      <p class="lead">Profesional y pensada para estudiar muchas horas: fondos neutros que no distraen, un único acento índigo para todo lo interactivo y los colores intensos reservados para las alertas de corrección. Funciona igual en modo claro y oscuro, con el botón de la esquina.</p></div>
+    <h2 class="sub">Colores base</h2>
+    <p class="soft" style="margin:4px 0 12px">Cada muestra enseña el tono del modo claro (izquierda) y el del modo oscuro (derecha).</p>
+    <div class="grid g2">${PALETA.map(p => `<div class="sw"><span class="mu" aria-hidden="true"><i style="background:${p.c[0]}"></i><i style="background:${p.c[1]}"></i></span>
+      <div><b>${p.n}</b><code>${p.c[0]} · ${p.c[1]}</code><p>${p.r}</p></div></div>`).join('')}</div>
+    <section class="bloque"><h2 class="sub">Un color por bloque</h2>
+      <p class="soft">Sirven para orientarse: cada actividad del simulador y cada fórmula del formulario lleva el color de su bloque.</p>
+      <div class="grid g3">${BLOQUES.map(b => `<div class="sw" style="--c:${b.c}"><span class="mu" aria-hidden="true" style="grid-template-columns:1fr;background:${b.c}"></span><div><b>${b.letra}</b><p>${b.corto}</p></div></div>`).join('')}</div>
+    </section>
+    <section class="bloque"><h2 class="sub">Por qué así</h2>
+      <div class="card"><ul class="soft">
+        <li><b>Poca saturación en lo que se ve siempre.</b> Fondos y textos neutros bajan el ruido visual y dejan la atención para el contenido.</li>
+        <li><b>Un solo color para actuar.</b> Si todo lo que se puede pulsar es índigo, no hay que pensar dónde tocar.</li>
+        <li><b>Rojo y ámbar con significado fijo.</b> Rojo es «esto te deja a cero»; ámbar, «esto te resta». Igual que los criterios de corrección.</li>
+        <li><b>Contraste accesible.</b> El texto principal y el acento superan el contraste 4,5:1 sobre su fondo en los dos modos.</li>
+        <li><b>La misma base que el resto del portal.</b> Tipografías Space Grotesk e IBM Plex, ondas de fondo y el botón de tema compartidos con las otras asignaturas.</li>
+      </ul></div>
+    </section>
+  </div>`;
+}
+
+const VISTAS = {inicio: vInicio, simulador: vSimulador, formulario: vFormulario, trampas: vTrampas, paleta: vPaleta};
+
+/* =====================================================================
+   EVENTOS
+   ===================================================================== */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const act = el.dataset.act;
+  switch (act) {
+    case 'ir-sim': location.hash = '#simulador'; break;
+    case 'tip-sig': tipI++; pintarTip(); break;
+    case 'bloque': abrirBloque(el.dataset.id); break;
+    case 'dlg-cerrar': $('#dlg').close(); break;
+    case 'form-add-bloque': {
+      const b = BL[el.dataset.id]; let n = 0;
+      for (const id of b.formulas) { if (FORM.length >= LIMITE) break; if (anadirFormula(LIBI[id], true)) n++; }
+      guardarForm();
+      toast(n ? `Añadidas ${n} fórmulas. Llevas ${FORM.length} de ${LIMITE}.` : FORM.length >= LIMITE ? 'Tu formulario ya está lleno.' : 'Ya tenías todas estas fórmulas.');
+      break;
+    }
+    /* --- simulador --- */
+    case 'ex-nuevo': EX = nuevoExamen(); guardarEx(); vSimulador(); break;
+    case 'ex-otro':
+      if (EX && (EX.estado === 'curso' || EX.estado === 'pausa') && !confirm('Hay un examen en marcha. ¿Descartarlo y generar otro?')) break;
+      if (EX && EX.estado === 'corregir' && !confirm('No has guardado la nota de este simulacro. ¿Generar otro igualmente?')) break;
+      EX = nuevoExamen(); guardarEx(); zen(false); vSimulador(); window.scrollTo(0, 0); break;
+    case 'ex-empezar': case 'ex-empezar-zen':
+      EX.estado = 'curso'; EX.fin = Date.now() + EX.resta; guardarEx(); arrancarReloj();
+      if (act === 'ex-empezar-zen') zen(true);
+      vSimulador(); toast('¡Adelante! Escribe la fórmula antes de sustituir y pon unidades en cada resultado.'); break;
+    case 'ex-pausa':
+      if (EX && EX.estado === 'curso') { EX.resta = Math.max(0, EX.fin - Date.now()); EX.estado = 'pausa'; guardarEx(); pintarReloj(); if (location.hash.startsWith('#simulador')) vSimulador(); }
+      break;
+    case 'ex-reanudar':
+      if (EX && EX.estado === 'pausa') { EX.estado = 'curso'; EX.fin = Date.now() + EX.resta; guardarEx(); arrancarReloj(); if (location.hash.startsWith('#simulador')) vSimulador(); }
+      break;
+    case 'ex-terminar':
+      if (!confirm('¿Entregar el examen y pasar a la corrección?')) break;
+      EX.resta = restante(); EX.estado = 'corregir'; guardarEx(); clearInterval(tic); zen(false); vSimulador(); window.scrollTo(0, 0); break;
+    case 'zen-on': zen(true); break;
+    case 'zen-off': zen(false); break;
+    case 'op4': EX.elegido = el.value; guardarEx(); if (EX.estado === 'corregir' || EX.estado === 'hecho') vSimulador(); break;
+    case 'cal': {
+      const k = el.dataset.k; EX.cal[k] = EX.cal[k] === el.dataset.v ? undefined : el.dataset.v; guardarEx();
+      $$(`[data-act="cal"][data-k="${k}"]`).forEach(b => b.setAttribute('aria-pressed', EX.cal[k] === b.dataset.v));
+      refrescarNotas(); break;
+    }
+    case 'uni': {
+      const k = el.dataset.k; EX.uni[k] = Math.max(0, Math.min(8, (EX.uni[k] || 0) + +el.dataset.d)); guardarEx();
+      el.parentNode.querySelector('span').textContent = EX.uni[k]; refrescarNotas(); break;
+    }
+    case 'ex-guardar':
+      P.examenes.push({fecha: Date.now(), nota: Math.round(notaTotal() * 100) / 100}); guardarP();
+      EX.estado = 'hecho'; guardarEx(); toast('Nota guardada en tu historial.'); vSimulador(); break;
+    /* --- formulario --- */
+    case 'sym': {
+      const inp = document.activeElement && document.activeElement.id === 'f-n' ? $('#f-n') : $('#f-e');
+      const s = el.dataset.s, a = inp.selectionStart != null ? inp.selectionStart : inp.value.length, b2 = inp.selectionEnd != null ? inp.selectionEnd : a;
+      inp.value = inp.value.slice(0, a) + s + inp.value.slice(b2); inp.focus(); inp.setSelectionRange(a + s.length, a + s.length); break;
+    }
+    case 'f-filtro': filtroF = el.dataset.b; $$('[data-act="f-filtro"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.b === filtroF)); pintarFormulario(); break;
+    case 'f-lib': if (anadirFormula(LIBI[el.dataset.id])) { guardarForm(); pintarFormulario(); } break;
+    case 'f-borrar': FORM.splice(+el.dataset.i, 1); guardarForm(); pintarFormulario(); break;
+    case 'f-mover': { const i = +el.dataset.i, j = i + +el.dataset.d; if (j < 0 || j >= FORM.length) break; [FORM[i], FORM[j]] = [FORM[j], FORM[i]]; guardarForm(); pintarFormulario(); break; }
+    case 'f-vaciar': if (FORM.length && confirm('¿Borrar las ' + FORM.length + ' fórmulas del formulario?')) { FORM = []; guardarForm(); pintarFormulario(); } break;
+    case 'f-imprimir': filtroF = 'todas'; pintarFormulario(); window.print(); break;
+    case 'f-copiar': {
+      const txt = 'MI FORMULARIO · Tecnología e Ingeniería II (' + FORM.length + '/' + LIMITE + ')\n\n' +
+        BLOQUES.map(b => { const fs = FORM.filter(f => f.b === b.id); return fs.length ? '— ' + b.letra + ' —\n' + fs.map(f => (f.n ? f.n + ': ' : '') + f.e).join('\n') : ''; }).filter(Boolean).join('\n\n');
+      const ok = () => toast('Formulario copiado.');
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, () => toast('No se ha podido copiar.')); else toast('Tu navegador no deja copiar desde aquí.');
+      break;
+    }
+    /* --- trampas --- */
+    case 'quiz': QR[el.dataset.i] = el.dataset.v; marcarQuiz(+el.dataset.i, el.dataset.v); break;
+  }
+});
+function refrescarNotas() {
+  actsCorregibles().forEach(a => {
+    const card = $(`[data-act="uni"][data-k="${a.k}"]`); if (!card) return;
+    const n = card.closest('.uni').querySelector('.act-nota'); if (n) n.textContent = nf2(notaAct(a)) + ' / ' + nf2(a.pts);
+  });
+  pintarDesglose();
+}
+document.addEventListener('submit', e => {
+  if (e.target.id !== 'f-nueva') return;
+  e.preventDefault();
+  const n = $('#f-n').value.trim(), ex = $('#f-e').value.trim(), b = $('#f-b').value;
+  if (!ex) { $('#f-e').focus(); return; }
+  if (anadirFormula({n, e: ex, b})) { guardarForm(); $('#f-n').value = ''; $('#f-e').value = ''; $('#f-n').focus(); pintarFormulario(); toast('Añadida. Llevas ' + FORM.length + ' de ' + LIMITE + '.'); }
+});
+document.addEventListener('input', e => { if (/^pen-/.test(e.target.id)) calcPen(); });
+document.addEventListener('change', e => { if (/^pen-/.test(e.target.id)) calcPen(); });
+
+/* ---------- arranque ---------- */
+window.addEventListener('hashchange', ruta);
+pintarContadorNav();
+pintarTip(); rotarTips();
+ruta();
+if (EX && (EX.estado === 'curso' || EX.estado === 'pausa')) arrancarReloj(); else pintarReloj();
+})();
+</script>
+</body>
+</html>
